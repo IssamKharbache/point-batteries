@@ -1,8 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +14,9 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 
-const loginSchema = z.object({
+const signupSchema = z.object({
+  nom: z.string().min(1, "Nom est obligatoire"),
+  prenom: z.string().min(1, "Prenom est obligatoire"),
   email: z
     .string()
     .min(1, "Adresse email est obligatoire")
@@ -24,9 +24,9 @@ const loginSchema = z.object({
   password: z.string().min(1, "Mot de passe est obligatoire"),
 });
 
-const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+const SignupForm = () => {
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -34,11 +34,53 @@ const LoginForm = () => {
   });
   const handleSubmit = () => {};
   return (
-    <div className="space-y-4 bg-white p-10 rounded-md border-2 ">
-      <h1 className="text-xl text-start text-gray-600 ">Se connecter</h1>
+    <div className="space-y-2 bg-white p-10 rounded-md border-2 ">
+      <h1 className="text-xl text-start text-gray-600 ">Inscription</h1>
       <hr className="text-gray-400" />
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
+          <div className="flex flex-col gap-4 mt-4 md:flex-row">
+            <FormField
+              name="nom"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Nom</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className="mt-2 px-4"
+                        placeholder="Nom de famille"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="prenom"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Prénom</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className="mt-2 px-4"
+                        placeholder="Prénom"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
           <FormField
             name="email"
             control={form.control}
@@ -49,7 +91,7 @@ const LoginForm = () => {
                   <FormControl>
                     <Input
                       type="text"
-                      className="mt-2 px-4 "
+                      className="mt-2 px-4"
                       placeholder="Address email"
                       {...field}
                     />
@@ -69,8 +111,8 @@ const LoginForm = () => {
                   <FormControl>
                     <Input
                       type="password"
+                      className="mt-2 px-4"
                       placeholder="********"
-                      className="mt-2 px-4 "
                       {...field}
                     />
                   </FormControl>
@@ -81,26 +123,20 @@ const LoginForm = () => {
           />
           <Button
             type="submit"
-            className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full"
+            className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
           >
-            Se Connecter
+            S'inscrire
           </Button>
           <div className="flex flex-col gap-4">
             <div className="flex gap-2  text-[12px]  text-gray-500">
-              <p className="">Vous n'avez pas de compte ? </p>
+              <p className="">Vous avez deja un compte ? </p>
               <Link
-                href="/inscription"
+                href="/connecter"
                 className="hover:underline hover:text-black duration-200"
               >
-                S'inscrire
+                Se connecter
               </Link>
             </div>
-            <Link
-              className="flex text-[12px]  text-gray-500 hover:underline hover:text-black duration-200"
-              href="/forgot-password"
-            >
-              Mot de passe perdu ?
-            </Link>
           </div>
         </form>
       </Form>
@@ -108,4 +144,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;
