@@ -12,14 +12,17 @@ interface SearchBarProps {
 const SearchBar = ({ open, setOpen }: SearchBarProps) => {
   const searchBarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    let handler = (e: any) => {
-      if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-  }, []);
+  // useEffect(() => {
+  //   let handler = (e: any) => {
+  //     if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+  //       setOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handler);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handler);
+  //   };
+  // }, []);
   return (
     <motion.div
       ref={searchBarRef}

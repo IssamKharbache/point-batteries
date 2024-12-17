@@ -57,7 +57,9 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-      <SearchBar open={openSearchBar} setOpen={setOpenSearchBar} />
+      <div>
+        <SearchBar open={openSearchBar} setOpen={setOpenSearchBar} />
+      </div>
     </>
   );
 };

@@ -1,0 +1,101 @@
+"use client";
+import { Button } from "@/components/ui/button";
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import Link from "next/link";
+
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Adresse email est obligatoire")
+    .email("Address email invalide"),
+  password: z.string().min(1, "Mot de passe est obligatoire"),
+});
+
+const LoginForm = () => {
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const handleSubmit = () => {};
+  return (
+    <div className="space-y-4 bg-white p-10 rounded-md border-2 ">
+      <h1 className="text-xl text-start text-gray-600 ">Se connecter</h1>
+      <hr className="text-gray-400" />
+      <Form {...form}>
+        <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
+          <FormField
+            name="email"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>E-mail</FormLabel>
+                  <FormControl>
+                    <Input type="text" className="mt-2 px-4 " {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            name="password"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Mot de passe</FormLabel>
+                  <FormControl>
+                    <Input type="password" className="mt-2 px-4 " {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <Button
+            type="submit"
+            className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full"
+          >
+            Se Connecter
+          </Button>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-2  text-[12px]  text-gray-500">
+              <p className="">Vous n'avez pas de compte ? </p>
+              <Link
+                href="/inscription"
+                className="hover:underline hover:text-black duration-200"
+              >
+                S'inscrire
+              </Link>
+            </div>
+            <Link
+              className="flex text-[12px]  text-gray-500 hover:underline hover:text-black duration-200"
+              href="/forgot-password"
+            >
+              Mot de passe perdu ?
+            </Link>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+};
+
+export default LoginForm;
