@@ -8,3 +8,11 @@ export const signupSchema = z.object({
     .email("Address email invalide"),
   password: z.string().min(1, "Mot de passe est obligatoire"),
 });
+
+export const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Adresse email est obligatoire")
+    .email("Address email invalide"),
+  password: z.string().min(1, "Mot de passe est obligatoire"),
+});

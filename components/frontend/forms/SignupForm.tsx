@@ -47,7 +47,6 @@ const SignupForm = () => {
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error)) {
-        // AxiosError contains the response and other details
         setError(error.response?.data?.message || "Une erreur est survenue");
       } else {
         setError("Une erreur est survenue");

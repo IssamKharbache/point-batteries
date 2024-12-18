@@ -6,8 +6,11 @@ import SearchBar from "./SearchBar";
 import { FaPhoneAlt } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 const NavBar = () => {
   const [openSearchBar, setOpenSearchBar] = useState(false);
+  const { data: session, status } = useSession();
+
   return (
     <>
       <div className="flex items-center justify-center gap-4 bg-black w-full text-center py-2 text-white text-sm">
@@ -32,17 +35,22 @@ const NavBar = () => {
 
           <div className="flex items-center ">
             {/* connect button */}
+
             <div>
-              <Link
-                href="/connecter"
-                className="flex items-center gap-4  hover:bg-gray-100 p-2 rounded px-7"
-              >
-                <FaRegUser size={30} />
-                <div>
-                  <p className="text-sm text-gray-400">Se connecter</p>
-                  <p className="text-md">Mon compte</p>
-                </div>
-              </Link>
+              {status === "authenticated" ? (
+                <button onClick={() => signOut()}>Logout</button>
+              ) : (
+                <Link
+                  href="/connecter"
+                  className="flex items-center gap-4  hover:bg-gray-100 p-2 rounded px-7"
+                >
+                  <FaRegUser size={30} />
+                  <div>
+                    <p className="text-sm text-gray-400">Se connecter</p>
+                    <p className="text-md">Mon compte</p>
+                  </div>
+                </Link>
+              )}
             </div>
             {/* cart */}
             <div>

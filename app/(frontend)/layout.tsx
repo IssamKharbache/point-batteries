@@ -2,6 +2,7 @@ import NavBar from "@/components/frontend/navbar/NavBar";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../globals.css";
+import { AuthProvider } from "@/providers/Providers";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -19,8 +20,10 @@ export default function FrontLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <NavBar />
-        {children}
+        <AuthProvider>
+          <NavBar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
