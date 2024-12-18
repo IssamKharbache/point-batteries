@@ -3,7 +3,7 @@ import React from "react";
 
 const SignupPage = () => {
   return (
-    <section className="h-screen">
+    <section className="h-auto">
       <div className="flex flex-col items-center justify-center ">
         <SignupForm />
       </div>

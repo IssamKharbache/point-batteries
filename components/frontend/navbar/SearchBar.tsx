@@ -12,17 +12,17 @@ interface SearchBarProps {
 const SearchBar = ({ open, setOpen }: SearchBarProps) => {
   const searchBarRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   let handler = (e: any) => {
-  //     if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
-  //       setOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handler);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handler);
-  //   };
-  // }, []);
+  useEffect(() => {
+    let handler = (e: any) => {
+      if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, []);
   return (
     <motion.div
       ref={searchBarRef}
@@ -39,7 +39,7 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
         },
       }}
       exit={{ opacity: 0, y: -100 }}
-      className={`flex max-w-sm mx-auto items-center justify-between rounded bg-gray-200 mt-4`}
+      className={`flex max-w-sm mx-auto items-center justify-between rounded bg-gray-200 mt-2 mb-4`}
     >
       <div className="p-1 border-r border-gray-300">
         <button className="flex items-center justify-center text-black px-2 py-2 w-8 h-8 hover:bg-black duration-200 hover:text-white rounded-full bg-gray-200  ">
@@ -47,7 +47,7 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
         </button>
       </div>
       <Input
-        className="w-full placeholder:text-gray-400 outline-none  px-8 focus:bg-gray-300 h-11 hover:bg-gray-300 "
+        className="w-full placeholder:text-gray-400 outline-none  px-8 focus:bg-gray-300 h-11 hover:bg-gray-300 focus:border-none"
         placeholder="Recherche"
       />
       <div className="p-1  border-l border-gray-300">
