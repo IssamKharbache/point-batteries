@@ -8,7 +8,7 @@ import { useMonCompteStore } from "@/context/store";
 import MonCompte from "./mobile-menu/MonCompte";
 
 interface MobileMenuProps {
-  isOpen: boolean;
+  isOpen: boolean | null;
   setisOpen: (isOpen: boolean) => void;
 }
 

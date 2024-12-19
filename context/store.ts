@@ -19,3 +19,12 @@ export const useMonCompteStore = create<MonCompteStore>((set) => ({
   openMonCompte: false,
   setOpenMonCompte: (openMonCompte: boolean) => set({ openMonCompte }),
 }));
+//mobile menu store context
+type MobileMenuStore = {
+  openMobileMenu: boolean | null;
+  setOpenMobileMenu: (openMobileMenu: boolean) => void;
+};
+export const useMobileMenuStore = create<MobileMenuStore>((set) => ({
+  openMobileMenu: false,
+  setOpenMobileMenu: (openMobileMenu: boolean) => set({ openMobileMenu }),
+}));

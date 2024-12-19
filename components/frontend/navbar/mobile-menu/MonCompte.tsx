@@ -4,12 +4,18 @@ import { motion } from "framer-motion";
 import { menuItems, monCompteItems } from "@/data";
 import Link from "next/link";
 
-import { useMonCompteStore } from "@/context/store";
+import { useMobileMenuStore, useMonCompteStore } from "@/context/store";
 import { useSession } from "next-auth/react";
 
 const MonCompte = () => {
   const { openMonCompte, setOpenMonCompte } = useMonCompteStore();
+  const { setOpenMobileMenu } = useMobileMenuStore();
   const { data: session } = useSession();
+
+  const closeMenu = () => {
+    setOpenMobileMenu(false);
+    setOpenMonCompte(false);
+  };
 
   return (
     <motion.div
@@ -42,7 +48,7 @@ const MonCompte = () => {
         <h1 className="py-4 px-7">Mon compte</h1>
         <button
           className="border-l py-4 px-4 hover:bg-gray-200 duration-200"
-          onClick={() => setOpenMonCompte(false)}
+          onClick={closeMenu}
         >
           <X />
         </button>
@@ -51,17 +57,9 @@ const MonCompte = () => {
       <hr />
 
       <div className="flex flex-col  flex-grow   w-full py-8 ">
-        {monCompteItems.map((item, index) => (
-          <Link
-            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
-            key={index}
-            href={item.href}
-          >
-            {item.name}
-          </Link>
-        ))}
         {session ? (
           <Link
+            onClick={closeMenu}
             className="flex items-center justify-between gap-2 hover:bg-gray-100 w-full px-4 py-4 capitalize"
             href={"/mon-compte"}
           >
@@ -69,12 +67,23 @@ const MonCompte = () => {
           </Link>
         ) : (
           <Link
+            onClick={closeMenu}
             className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
             href={"/connecter"}
           >
             Se connecter
           </Link>
         )}
+        {monCompteItems.map((item, index) => (
+          <Link
+            onClick={closeMenu}
+            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
+            key={index}
+            href={item.href}
+          >
+            {item.name}
+          </Link>
+        ))}
       </div>
       <hr />
       <div className="flex flex-col items-center justify-center m-auto w-full h-16">

@@ -49,7 +49,7 @@ const UserAvatar = () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel className="text-gray-600 text-sm">
+        <DropdownMenuLabel className="text-gray-600 text-sm px-4 py-3">
           {session?.user.nom} {session?.user.prenom}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -24,3 +24,16 @@ export const monCompteItems = [
     href: "/favourites",
   },
 ];
+
+export const categoryData: string[] = [
+  "Batteries voiture",
+  "Batteries poids lourd",
+  "Batteries lithium-ion",
+  "Batteries alcalines",
+  "Batteries rechargeables",
+  "Batteries plomb-acide",
+  "Batteries au nickel-cadmium",
+  "Batteries au lithium-polymère",
+  "Batteries CR2032",
+  "Batteries 12V",
+];

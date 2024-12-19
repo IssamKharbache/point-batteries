@@ -38,7 +38,7 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
         },
       }}
       exit={{ opacity: 0, y: -100 }}
-      className={`flex w-full left-1/2  md:max-w-sm top-0 mx-auto items-center justify-between rounded bg-gray-200 md:mt-2`}
+      className={`flex w-full left-1/2  md:max-w-sm top-0 mx-auto items-center justify-between rounded bg-gray-200 `}
     >
       <div className="p-1 border-r border-gray-300 ">
         <button
