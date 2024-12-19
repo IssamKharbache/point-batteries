@@ -4,3 +4,8 @@ export const generateUsername = (nom: string, prenom: string): string => {
   const uniqueId = `${baseId}${uuidv4().slice(0, 8)}`;
   return uniqueId;
 };
+
+export const getInitials = (nom: string, prenom: string): string => {
+  const baseId = nom.toLowerCase()[0] + prenom.toLowerCase()[0];
+  return baseId;
+};

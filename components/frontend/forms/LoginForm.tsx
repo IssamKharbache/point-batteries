@@ -55,7 +55,7 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className="space-y-4 bg-white p-10 rounded-md border-2 ">
+    <div className="space-y-4 bg-white p-10 rounded-md border-2 m-4 md:m-2">
       <h1 className="text-xl text-start text-gray-600 ">Se connecter</h1>
       <hr className="text-gray-400" />
 

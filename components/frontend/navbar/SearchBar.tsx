@@ -1,11 +1,10 @@
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import React, { useEffect, useRef } from "react";
-import { HiMenuAlt2 } from "react-icons/hi";
 import { motion } from "framer-motion";
 
 interface SearchBarProps {
-  open: boolean;
+  open: boolean | null;
   setOpen: (open: boolean) => void;
 }
 
@@ -39,16 +38,19 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
         },
       }}
       exit={{ opacity: 0, y: -100 }}
-      className={`flex max-w-sm mx-auto items-center justify-between rounded bg-gray-200 mt-2 mb-4`}
+      className={`flex w-full left-1/2  md:max-w-sm top-0 mx-auto items-center justify-between rounded bg-gray-200 md:mt-2`}
     >
-      <div className="p-1 border-r border-gray-300">
-        <button className="flex items-center justify-center text-black px-2 py-2 w-8 h-8 hover:bg-black duration-200 hover:text-white rounded-full bg-gray-200  ">
-          <HiMenuAlt2 />
+      <div className="p-1 border-r border-gray-300 ">
+        <button
+          onClick={() => setOpen(false)}
+          className="flex items-center justify-center text-black px-2 py-2 w-8 h-8 hover:bg-red-500 duration-200 hover:text-white rounded-full bg-gray-200  "
+        >
+          <X />
         </button>
       </div>
       <Input
         className="w-full placeholder:text-gray-400 outline-none  px-8 focus:bg-gray-300 h-11 hover:bg-gray-300 focus:border-none"
-        placeholder="Recherche"
+        placeholder="Recherche..."
       />
       <div className="p-1  border-l border-gray-300">
         <button className="flex items-center justify-center text-black px-2 py-2 w-8 h-8 hover:bg-black duration-200 hover:text-white rounded-full bg-gray-200 ">
