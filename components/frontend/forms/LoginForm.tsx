@@ -20,11 +20,13 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import LoadingButton from "../buttons/LoadingButton";
+import PasswordInput from "../inputs/PasswordInput";
 
 const LoginForm = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -55,10 +57,9 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className="space-y-4 bg-white p-10 rounded-md border-2 m-4 md:m-2">
+    <div className="space-y-4 bg-white p-10 md:p-16 rounded-md border-2 m-4 md:m-2">
       <h1 className="text-xl text-start text-gray-600 ">Se connecter</h1>
       <hr className="text-gray-400" />
-
       {error && (
         <div>
           <p className="bg-red-500 text-white rounded p-2 text-center text-sm mt-6">
@@ -88,26 +89,8 @@ const LoginForm = () => {
               );
             }}
           />
-          <FormField
-            name="password"
-            control={form.control}
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Mot de passe</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      className="mt-2 px-4 "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+          <PasswordInput form={form} name="password" formType="login" />
+
           {loading ? (
             <LoadingButton bgColor="bg-black" textColor="text-white" />
           ) : (

@@ -17,10 +17,13 @@ import { signupSchema } from "@/lib/utils/validation";
 import axios from "axios";
 import { useState } from "react";
 import LoadingButton from "../buttons/LoadingButton";
+import PasswordInput from "../inputs/PasswordInput";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -43,6 +46,7 @@ const SignupForm = () => {
         setLoading(false);
         setError(null);
         form.reset();
+        router.push("/connecter");
       }
     } catch (error) {
       setLoading(false);
@@ -60,7 +64,6 @@ const SignupForm = () => {
       {error && (
         <div>
           <p className="bg-red-500 text-white rounded p-2 text-center text-sm mt-6">
-            {" "}
             {error}
           </p>
         </div>
@@ -129,26 +132,7 @@ const SignupForm = () => {
               );
             }}
           />
-          <FormField
-            name="password"
-            control={form.control}
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Mot de passe</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      className="mt-2 px-4"
-                      placeholder="********"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+          <PasswordInput form={form} name="password" formType="signup" />
           {loading ? (
             <LoadingButton textColor="text-white" bgColor="bg-black" />
           ) : (

@@ -8,6 +8,7 @@ export const signupSchema = z.object({
     .email("Address email invalide"),
   password: z.string().min(1, "Mot de passe est obligatoire"),
 });
+export type SignUpSchemaType = z.infer<typeof signupSchema>;
 
 export const loginSchema = z.object({
   email: z
@@ -16,3 +17,4 @@ export const loginSchema = z.object({
     .email("Address email invalide"),
   password: z.string().min(1, "Mot de passe est obligatoire"),
 });
+export type LoginSchemaType = z.infer<typeof loginSchema>;

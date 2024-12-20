@@ -16,6 +16,7 @@ import {
   ChevronDown,
   ChevronUp,
   Heart,
+  LayoutDashboard,
   Package,
   UserCheck,
   UserRound,
@@ -65,12 +66,21 @@ const UserAvatar = () => {
             <span>Votre commandes</span>
           </DropdownMenuItem>
         </Link>
+        {session?.user.role === "ADMIN" && (
+          <Link href="/dashboard">
+            <DropdownMenuItem className="cursor-pointer gap-4">
+              <LayoutDashboard className="" />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+          </Link>
+        )}
         <Link href="/mes-commandes">
           <DropdownMenuItem className="cursor-pointer gap-4">
             <Heart className="" />
             <span>Votre liste d'envies</span>
           </DropdownMenuItem>
         </Link>
+
         <Button
           onClick={() => signOut()}
           className="w-full mt-2 rounded bg-white text-black shadow-none hover:bg-black hover:text-white"

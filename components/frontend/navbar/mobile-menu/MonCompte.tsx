@@ -5,7 +5,7 @@ import { menuItems, monCompteItems } from "@/data";
 import Link from "next/link";
 
 import { useMobileMenuStore, useMonCompteStore } from "@/context/store";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const MonCompte = () => {
   const { openMonCompte, setOpenMonCompte } = useMonCompteStore();
@@ -57,23 +57,6 @@ const MonCompte = () => {
       <hr />
 
       <div className="flex flex-col  flex-grow   w-full py-8 ">
-        {session ? (
-          <Link
-            onClick={closeMenu}
-            className="flex items-center justify-between gap-2 hover:bg-gray-100 w-full px-4 py-4 capitalize"
-            href={"/mon-compte"}
-          >
-            Mon profile
-          </Link>
-        ) : (
-          <Link
-            onClick={closeMenu}
-            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
-            href={"/connecter"}
-          >
-            Se connecter
-          </Link>
-        )}
         {monCompteItems.map((item, index) => (
           <Link
             onClick={closeMenu}
@@ -84,6 +67,31 @@ const MonCompte = () => {
             {item.name}
           </Link>
         ))}
+        {session ? (
+          <>
+            <Link
+              onClick={closeMenu}
+              className="flex items-center justify-between gap-2 hover:bg-gray-100 w-full px-4 py-4 capitalize"
+              href={"/mon-compte"}
+            >
+              Mon profile
+            </Link>
+            <button
+              onClick={() => signOut()}
+              className="flex items-center justify-between gap-2 hover:bg-gray-100 w-full px-4 py-4 capitalize"
+            >
+              Deconnexion
+            </button>
+          </>
+        ) : (
+          <Link
+            onClick={closeMenu}
+            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
+            href={"/connecter"}
+          >
+            Se connecter
+          </Link>
+        )}
       </div>
       <hr />
       <div className="flex flex-col items-center justify-center m-auto w-full h-16">
