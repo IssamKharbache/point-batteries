@@ -1,13 +1,19 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import db from "./db";
-const authOptions = {
+import db from "@/lib/db";
+import { NextAuthOptions } from "next-auth";
+
+interface Credentials {
+  email: string;
+  password: string;
+}
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
       credentials: {},
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const { email, password } = credentials as Credentials;
         try {
           // Check if user credentials are Correct
           if (!email || !password) {
@@ -32,6 +38,7 @@ const authOptions = {
             };
           }
           const userData = {
+            id: user._id,
             username: user.identifiant,
             email: user.email,
             nom: user.nom,
@@ -54,14 +61,13 @@ const authOptions = {
     async session({ session, token }) {
       // Check if token contains user data
       if (token) {
-        // Merge token data into the session object
         session.user = {
           ...session.user,
-          username: token.username,
-          email: token.email,
-          nom: token.nom,
-          prenom: token.prenom,
-          role: token.role,
+          username: token.username as string,
+          email: token.email as string,
+          nom: token.nom as string,
+          prenom: token.prenom as string,
+          role: token.role as string,
         };
       }
       return session;
@@ -70,11 +76,11 @@ const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         // Store user data in the JWT token
-        token.username = user.username;
-        token.email = user.email;
-        token.nom = user.nom;
-        token.prenom = user.prenom;
-        token.role = user.role;
+        token.username = user.username as string;
+        token.email = user.email as string;
+        token.nom = user.nom as string;
+        token.prenom = user.prenom as string;
+        token.role = user.role as string;
       }
       return token;
     },
@@ -82,7 +88,6 @@ const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/connecter",
+    error: "/error",
   },
 };
-
-export { authOptions };
