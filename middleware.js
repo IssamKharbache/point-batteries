@@ -6,7 +6,10 @@ export default withAuth(
     if (!req.nextauth.token) {
       return NextResponse.redirect(new URL("/connecter", req.url));
     }
-    if (req.nextauth.token?.role !== "ADMIN") {
+    if (
+      req.nextauth.token?.role !== "ADMIN" &&
+      req.nextauth.token?.role !== "SMALLADMIN"
+    ) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
 

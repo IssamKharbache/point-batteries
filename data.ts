@@ -4,7 +4,9 @@ import {
   ShoppingBasket,
   Store,
   UserPen,
+  UserRoundPlus,
   Users,
+  UsersRound,
 } from "lucide-react";
 export const menuItems = [
   {
@@ -51,26 +53,43 @@ export const sideBarMenu = [
     name: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+    isMainAdmin: false,
   },
   {
     name: "Client",
     href: "/dashboard/client",
     icon: Users,
+    isMainAdmin: false,
   },
   {
     name: "Commande",
     href: "/dashboard/commande",
     icon: Package2,
+    isMainAdmin: false,
   },
   {
     name: "Produit",
     href: "/dashboard/produit",
     icon: ShoppingBasket,
+    isMainAdmin: false,
+  },
+  {
+    name: "Ajouter Admin",
+    href: "/dashboard/ajouter-admin",
+    icon: UserRoundPlus,
+    isMainAdmin: true,
+  },
+  {
+    name: "Notre staff",
+    href: "/dashboard/notre-staff",
+    icon: UsersRound,
+    isMainAdmin: true,
   },
   {
     name: "Shop",
     href: "/",
     icon: Store,
+    isMainAdmin: false,
   },
 ];
 

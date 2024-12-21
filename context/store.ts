@@ -35,6 +35,6 @@ type SideBarStore = {
   setOpenSideBar: (openSideBar: boolean) => void;
 };
 export const useSideBarStore = create<SideBarStore>((set) => ({
-  openSideBar: true,
+  openSideBar: false,
   setOpenSideBar: (openSideBar: boolean) => set({ openSideBar }),
 }));

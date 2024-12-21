@@ -11,7 +11,7 @@ const NavBar = () => {
   return (
     <nav
       className={`fixed  ${
-        openSideBar ? " left-0 lg:left-64" : "left-0"
+        openSideBar ? "left-0 lg:left-64" : "left-0"
       } border-b w-full px-4 h-20 flex items-center justify-between`}
     >
       <div className="flex items-center justify-between w-full ">
