@@ -21,8 +21,6 @@ export default async function BackendLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
@@ -31,7 +29,7 @@ export default async function BackendLayout({
             <SideBar />
             <div>
               <NavBar />
-              {children}
+              <div className="mt-24 ml-4">{children}</div>
             </div>
           </div>
         </AuthProvider>

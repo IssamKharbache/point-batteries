@@ -28,3 +28,13 @@ export const useMobileMenuStore = create<MobileMenuStore>((set) => ({
   openMobileMenu: false,
   setOpenMobileMenu: (openMobileMenu: boolean) => set({ openMobileMenu }),
 }));
+
+//sidebar store context
+type SideBarStore = {
+  openSideBar: boolean | null;
+  setOpenSideBar: (openSideBar: boolean) => void;
+};
+export const useSideBarStore = create<SideBarStore>((set) => ({
+  openSideBar: true,
+  setOpenSideBar: (openSideBar: boolean) => set({ openSideBar }),
+}));

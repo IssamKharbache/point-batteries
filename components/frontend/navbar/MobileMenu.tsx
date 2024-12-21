@@ -54,15 +54,15 @@ const MobileMenu = ({ isOpen, setisOpen }: MobileMenuProps) => {
         initial={{ x: "100%", width: 0 }}
         animate={{
           x: isOpen ? 0 : "100%",
-          width: isOpen ? "20rem" : 0, // Animate width when open/close
+          width: isOpen ? "20rem" : 0,
         }}
-        exit={{ x: "100%", width: 0 }} // Reset width when closing
+        exit={{ x: "100%", width: 0 }}
         transition={{
           type: "spring",
           stiffness: 300,
           damping: 30,
-          width: { duration: 0.3 }, // Smooth transition for width
-          x: { duration: 0.3 }, // Smooth transition for x (horizontal)
+          width: { duration: 0.3 },
+          x: { duration: 0.3 },
         }}
         style={{ overflow: "hidden" }}
       >

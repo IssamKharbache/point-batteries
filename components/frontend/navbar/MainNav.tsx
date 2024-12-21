@@ -62,7 +62,7 @@ const MainNav = () => {
           {/* cart */}
           <div>
             <Link
-              href="/pannier"
+              href="/mon-panier"
               className="flex items-center gap-4  hover:bg-gray-100 p-2 rounded px-7"
             >
               <IoCartOutline className="size-[22px] md:size-[30px]" />

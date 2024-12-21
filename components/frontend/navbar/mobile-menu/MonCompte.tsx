@@ -57,6 +57,15 @@ const MonCompte = () => {
       <hr />
 
       <div className="flex flex-col  flex-grow   w-full py-8 ">
+        {session?.user.role === "ADMIN" && (
+          <Link
+            onClick={closeMenu}
+            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
+            href={"/dashboard"}
+          >
+            Dashboard
+          </Link>
+        )}
         {monCompteItems.map((item, index) => (
           <Link
             onClick={closeMenu}

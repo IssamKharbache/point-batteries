@@ -5,7 +5,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 
 import { useSession } from "next-auth/react";
 
-import { useMobileMenuStore, useSearchBarStore } from "@/context/store";
+import { useSearchBarStore } from "@/context/store";
 import MainNav from "./MainNav";
 const NavBar = () => {
   const { data: session, status } = useSession();
@@ -20,7 +20,7 @@ const NavBar = () => {
       </div>
       {/* main navbar */}
       {status === "loading" ? (
-        <div className="text-center mt-4">Loading...</div>
+        <div className="h-20 skeleton-navbar"></div>
       ) : (
         <MainNav />
       )}

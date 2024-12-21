@@ -76,3 +76,21 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Skeleton CSS for Navbar */
+.skeleton-navbar {
+  background-color: #ddd;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #ddd;
+  }
+  50% {
+    background-color: #f4f4f4;
+  }
+  100% {
+    background-color: #ddd;
+  }
+}
