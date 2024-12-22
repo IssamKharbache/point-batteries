@@ -4,15 +4,34 @@ import { useSideBarStore } from "@/context/store";
 import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import UserAvatarBack from "./UserAvatarBack";
+import { useEffect, useState } from "react";
 
 const NavBar = () => {
   const path = usePathname();
   const { openSideBar, setOpenSideBar } = useSideBarStore();
+  const [isNavBarScrolled, setIsNavBarScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window && window.scrollY >= 80) {
+        setIsNavBarScrolled(true);
+      } else {
+        setIsNavBarScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <nav
-      className={`fixed  ${
+      className={`fixed py-4  ${
         openSideBar ? "left-0 lg:left-64" : "left-0"
-      } border-b w-full px-4 h-20 flex items-center justify-between`}
+      } border-b w-full px-4 h-20 flex items-center justify-between z-50 ${
+        isNavBarScrolled ? "bg-slate-900 text-white" : ""
+      } `}
     >
       <div className="flex items-center justify-between w-full ">
         <div className="flex items-center gap-4">

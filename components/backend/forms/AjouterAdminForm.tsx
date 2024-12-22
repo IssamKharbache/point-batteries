@@ -38,7 +38,7 @@ const AjouterAdminForm = () => {
     setLoading(true);
     const formData = {
       ...data,
-      role: "SMALLADMIN",
+      role: "STAFF",
     };
 
     try {
@@ -47,7 +47,7 @@ const AjouterAdminForm = () => {
         setLoading(false);
         setError(null);
         form.reset();
-        router.push("/notre-staff");
+        router.push("/dashboard/notre-staff");
       }
     } catch (error) {
       setLoading(false);

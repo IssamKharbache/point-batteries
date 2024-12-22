@@ -5,7 +5,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
   try {
     const staff = await db.user.findMany({
       where: {
-        role: "SMALLADMIN",
+        role: "STAFF",
       },
       select: {
         id: true,

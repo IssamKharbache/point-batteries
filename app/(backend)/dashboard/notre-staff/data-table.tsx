@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
+import TableActions from "@/components/backend/table/TableActions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,9 +58,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="rounded-md border ">
-        <div className="flex justify-between">
-          <h2 className="px-4 py-4 font-semibold text-2xl">{name}</h2>
+      <div className="rounded-md border hidden md:block">
+        <div className="flex flex-col md:flex-row justify-between md:items-center  border-b ">
+          <h2 className="md:px-4 md:py-4 font-semibold text-md md:text-2xl">
+            {name}
+          </h2>
           <div className="relative flex items-center py-4">
             <Input
               placeholder="Filtrer par nom..."
@@ -67,14 +70,14 @@ export function DataTable<TData, TValue>({
               onChange={(event) =>
                 table.getColumn("nom")?.setFilterValue(event.target.value)
               }
-              className="max-w-sm px-4 mr-8"
+              className="max-w-sm px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px]"
             />
-            <Filter size={15} className="absolute text-gray-600 right-12" />
+            <Filter size={15} className="absolute text-gray-400 right-12" />
           </div>
         </div>
 
         <Table>
-          <TableHeader>
+          <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -115,7 +118,63 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Aucun résultat
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      {/* responsive table */}
+      <div className="md:hidden rounded-md border">
+        <div className="flex justify-between items-center border-b">
+          <h2 className="px-4 py-4 font-semibold text-xl">{name}</h2>
+          <div className="relative flex items-center py-4">
+            <Input
+              placeholder="Filtrer par nom..."
+              value={(table.getColumn("nom")?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                table.getColumn("nom")?.setFilterValue(event.target.value)
+              }
+              className="w-36 px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-8 md:h-10"
+            />
+            <Filter
+              size={15}
+              className="absolute text-gray-400 right-10 md:right-12"
+            />
+          </div>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow className="py-4 px-4">
+              <TableHead>Nom</TableHead>
+              <TableHead>Prenom</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  <TableCell className="py-4 px-4" key="nom">
+                    {row.getValue("nom")}
+                  </TableCell>
+                  <TableCell className="py-4 px-4" key="prenom">
+                    {row.getValue("prenom")}
+                  </TableCell>
+
+                  <TableCell className="py-4 px-4">
+                    <TableActions />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={2} className="h-24 text-center">
+                  Aucun résultat
                 </TableCell>
               </TableRow>
             )}

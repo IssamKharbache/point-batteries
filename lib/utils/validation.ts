@@ -24,7 +24,8 @@ export const addAdminSchema = z.object({
   prenom: z.string().min(1, "Prenom est obligatoire"),
   tel: z
     .string() // it's generally better to handle phone numbers as strings because of formatting
-    .min(10, "Numero de telephone est invalide") // Check if it’s at least 9 digits
+    .min(10, "Numero de telephone est invalide")
+    .max(10, "Numero de telephone est invalide") // Check if it’s at least 9 digits
     .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
   email: z
     .string()

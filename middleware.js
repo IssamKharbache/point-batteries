@@ -8,7 +8,7 @@ export default withAuth(
     }
     if (
       req.nextauth.token?.role !== "ADMIN" &&
-      req.nextauth.token?.role !== "SMALLADMIN"
+      req.nextauth.token?.role !== "STAFF"
     ) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
