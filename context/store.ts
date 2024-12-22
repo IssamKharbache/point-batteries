@@ -38,3 +38,15 @@ export const useSideBarStore = create<SideBarStore>((set) => ({
   openSideBar: false,
   setOpenSideBar: (openSideBar: boolean) => set({ openSideBar }),
 }));
+
+//loading operation context
+
+type LoadingStore = {
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+};
+
+export const useLoadingStore = create<LoadingStore>((set) => ({
+  loading: false,
+  setLoading: (loading: boolean) => set({ loading }),
+}));

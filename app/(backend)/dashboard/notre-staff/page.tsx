@@ -1,4 +1,3 @@
-import axios from "axios";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getData } from "@/lib/getData";

@@ -6,9 +6,11 @@ interface ParamsProps {
 }
 export const DELETE = async (
   req: NextRequest,
-  { params: id }: { params: ParamsProps }
+  { params: { id } }: { params: ParamsProps }
 ) => {
   try {
+    console.log(id);
+
     const isExisting = await db.user.findUnique({
       where: {
         id,
@@ -33,7 +35,7 @@ export const DELETE = async (
       },
       {
         status: 200,
-        statusText: "Utilisateur supprimer avec succes",
+        statusText: "deleted",
       }
     );
   } catch (error) {
