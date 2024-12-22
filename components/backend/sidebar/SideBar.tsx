@@ -9,6 +9,7 @@ import { useSideBarStore } from "@/context/store";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import {
+  Layers,
   LayoutDashboard,
   Package2,
   ShoppingBasket,
@@ -46,6 +47,12 @@ const SideBar = () => {
       name: "Produit",
       href: "/dashboard/produit",
       icon: ShoppingBasket,
+      isMainAdmin: false,
+    },
+    {
+      name: "Catégorie",
+      href: "/dashboard/categorie",
+      icon: Layers,
       isMainAdmin: false,
     },
 

@@ -5,6 +5,8 @@ import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import UserAvatarBack from "./UserAvatarBack";
 import { useEffect, useState } from "react";
+import PbsLogo from "@/public/pbslogo.svg";
+import Image from "next/image";
 
 const NavBar = () => {
   const path = usePathname();
@@ -41,9 +43,19 @@ const NavBar = () => {
           >
             <MenuIcon size={25} className="mr-4" />
           </button>
-          <p className="capitalize font-semibold text-md md:text-xl">
+          <p className="capitalize font-semibold md:text-xl">
             {path === "/dashboard" ? path.replace("/", "") : path.split("/")[2]}
           </p>
+        </div>
+
+        <div className="lg:hidden">
+          <Image
+            src="/pbslogo.png"
+            alt="Logo"
+            width={500}
+            height={500}
+            className="w-28"
+          />
         </div>
         <div
           className={`${

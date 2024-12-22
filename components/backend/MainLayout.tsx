@@ -15,7 +15,7 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
       />
       <div
         className={`mt-24 ml-4 ${
-          openSideBar ? "ml-64" : "ml-4"
+          openSideBar ? "lg:ml-64" : "ml-4"
         } py-4 px-8 w-full `}
       >
         {children}
