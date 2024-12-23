@@ -61,14 +61,18 @@ type UserAvatar = {
 
 export const useUserAvatarStore = create<UserAvatar>((set) => ({
   // Initialize from localStorage if available
-  nom: localStorage.getItem("nom") || "",
-  prenom: localStorage.getItem("prenom") || "",
+  nom: (typeof window !== undefined && localStorage.getItem("nom")) || "",
+  prenom: (typeof window !== undefined && localStorage.getItem("prenom")) || "",
   setNom: (nom: string) => {
-    localStorage.setItem("nom", nom);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("nom", nom);
+    }
     set({ nom });
   },
   setPrenom: (prenom: string) => {
-    localStorage.setItem("prenom", prenom);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("prenom", prenom);
+    }
     set({ prenom });
   },
 }));
