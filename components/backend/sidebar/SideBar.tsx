@@ -57,7 +57,7 @@ const SideBar = () => {
     },
 
     {
-      name: "Shop",
+      name: "Boutique",
       href: "/",
       icon: Store,
       isMainAdmin: false,

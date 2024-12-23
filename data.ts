@@ -92,11 +92,3 @@ export const sideBarMenu = [
     isMainAdmin: false,
   },
 ];
-
-export const mobileBackEndUserMenu = [
-  {
-    name: "Editer mon profile",
-    href: "/dashboard/mon-compte",
-    icon: UserPen,
-  },
-];

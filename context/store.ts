@@ -39,7 +39,7 @@ export const useSideBarStore = create<SideBarStore>((set) => ({
   setOpenSideBar: (openSideBar: boolean) => set({ openSideBar }),
 }));
 
-//loading operation context
+//loading delete operation context
 
 type LoadingStore = {
   loading: boolean;
@@ -49,4 +49,26 @@ type LoadingStore = {
 export const useLoadingStore = create<LoadingStore>((set) => ({
   loading: false,
   setLoading: (loading: boolean) => set({ loading }),
+}));
+
+//useravatar name context
+type UserAvatar = {
+  nom: string;
+  prenom: string;
+  setNom: (nom: string) => void;
+  setPrenom: (prenom: string) => void;
+};
+
+export const useUserAvatarStore = create<UserAvatar>((set) => ({
+  // Initialize from localStorage if available
+  nom: localStorage.getItem("nom") || "",
+  prenom: localStorage.getItem("prenom") || "",
+  setNom: (nom: string) => {
+    localStorage.setItem("nom", nom);
+    set({ nom });
+  },
+  setPrenom: (prenom: string) => {
+    localStorage.setItem("prenom", prenom);
+    set({ prenom });
+  },
 }));

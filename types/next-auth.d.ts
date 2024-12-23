@@ -11,6 +11,7 @@ declare module "next-auth" {
     nom: string;
     prenom: string;
     role: string;
+    identifiant: string;
   }
 
   // Extending Session to include custom fields in user
@@ -25,5 +26,6 @@ declare module "next-auth" {
     nom: string;
     prenom: string;
     role: string;
+    identifiant: string;
   }
 }

@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
           });
           if (!user) {
             console.log("User not found");
-            throw { error: "User not found", status: 401 };
+            throw { error: "Wrong credentials", status: 401 };
           }
           const validPassword = await bcrypt.compare(password, user.password);
           if (!validPassword) {
@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
             nom: user.nom,
             prenom: user.prenom,
             role: user.role,
+            identifiant: user.identifiant,
           };
 
           return userData;
@@ -68,6 +69,7 @@ export const authOptions: NextAuthOptions = {
           nom: token.nom as string,
           prenom: token.prenom as string,
           role: token.role as string,
+          identifiant: token.identifiant as string,
         };
       }
       return session;
@@ -81,6 +83,7 @@ export const authOptions: NextAuthOptions = {
         token.nom = user.nom as string;
         token.prenom = user.prenom as string;
         token.role = user.role as string;
+        token.identifiant = user.identifiant as string;
       }
       return token;
     },

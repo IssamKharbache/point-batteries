@@ -51,6 +51,7 @@ const LoginForm = () => {
         return;
       }
       router.push("/");
+      form.reset();
     } catch (error) {
       setLoading(false);
       console.log(error);

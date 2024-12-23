@@ -8,27 +8,37 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { mobileBackEndUserMenu, sideBarMenu } from "@/data";
+import { useUserAvatarStore } from "@/context/store";
+import { sideBarMenu } from "@/data";
 import { getInitials } from "@/lib/utils/index";
-import { Icon } from "lucide-react";
+import { Icon, UserPen } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
 const UserAvatarBack = () => {
   const { data: session } = useSession();
+  const { nom, prenom } = useUserAvatarStore();
+
   if (!session || !session.user) return null;
+  const mobileBackEndUserMenu = [
+    {
+      name: "Editer mon profile",
+      href: `/dashboard/mon-compte/${session?.user?.identifiant}`,
+      icon: UserPen,
+    },
+  ];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center justify-center  font-semibold bg-slate-800 h-10 w-10 rounded-full text-white uppercase">
-          {getInitials(session?.user?.nom, session?.user?.prenom)}
+          {getInitials(nom, prenom)}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-4 w-52">
         <DropdownMenuLabel className="capitalize">
-          {session?.user?.nom} {session?.user?.prenom}
+          {nom || ""} {prenom || ""}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {/* mobile user avatar */}

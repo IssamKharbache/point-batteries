@@ -1,5 +1,7 @@
+import bcrypt from "bcryptjs";
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { signIn } from "next-auth/react";
 
 interface ParamsProps {
   id: string;
@@ -9,8 +11,6 @@ export const DELETE = async (
   { params: { id } }: { params: ParamsProps }
 ) => {
   try {
-    console.log(id);
-
     const isExisting = await db.user.findUnique({
       where: {
         id,
@@ -49,5 +49,98 @@ export const DELETE = async (
       { status: 500 }
     );
   }
-  return NextResponse.json({ id });
+};
+
+export const PUT = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) => {
+  try {
+    const id = (await context.params).id;
+    const { nom, prenom, password, email } = await req.json();
+    let hashedPassword;
+
+    const existingUser = await db.user.findUnique({
+      where: {
+        identifiant: id,
+      },
+    });
+    if (!existingUser) {
+      return NextResponse.json({
+        data: null,
+        message: "Utilisateur non trouvé",
+      });
+    }
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+    const updateUser = await db.user.update({
+      where: {
+        identifiant: id,
+      },
+      data: {
+        nom,
+        prenom,
+        password: password ? hashedPassword : existingUser.password,
+        email,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        data: updateUser,
+        message: "Utilisateur modifier avec succès",
+      },
+      {
+        status: 200,
+        statusText: "updated",
+      }
+    );
+  } catch (error) {
+    return NextResponse.json({
+      message:
+        "Erreur pendant la modification , essayez s'il vous plaît plus tard",
+      error,
+    });
+  }
+};
+
+export const GET = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) => {
+  try {
+    const id = (await context.params).id;
+
+    const user = await db.user.findFirst({
+      where: {
+        identifiant: id,
+      },
+      select: {
+        nom: true,
+        prenom: true,
+        email: true,
+        identifiant: true,
+        role: true,
+        tel: true,
+      },
+    });
+    if (!user) {
+      return NextResponse.json({
+        data: null,
+        message: "Utilisateur non trouvé",
+      });
+    }
+
+    return NextResponse.json({
+      data: user,
+      message: "Utilisateur trouve",
+    });
+  } catch (error) {
+    return NextResponse.json({
+      message:
+        "Erreur pendant la supprimation de staff , veuillez essayer apres.",
+      error,
+    });
+  }
 };
