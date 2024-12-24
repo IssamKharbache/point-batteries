@@ -89,7 +89,7 @@ const SideBar = () => {
     >
       {/* logo */}
       <div className="flex items-center justify-center py-4 border-b border-slate-800">
-        <PbsLogo alt="Logo" />
+        <PbsLogo alt="Logo" className="w-72" />
       </div>
       {/* side bar menus */}
       <div className="flex flex-col flex-grow space-y-12 ">

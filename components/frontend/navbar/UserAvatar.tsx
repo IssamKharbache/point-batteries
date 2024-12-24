@@ -22,10 +22,12 @@ import {
   UserRound,
 } from "lucide-react";
 import Link from "next/link";
+import { useUserAvatarStore } from "@/context/store";
 
 const UserAvatar = () => {
   const [open, setisOpen] = React.useState(false);
   const { data: session, status } = useSession();
+  const { nom, prenom } = useUserAvatarStore();
 
   const handleOpenChange = (open: boolean) => {
     setisOpen(open);
@@ -42,7 +44,7 @@ const UserAvatar = () => {
           <div>
             Bonjour,{" "}
             <span className="capitalize font-semibold ">
-              {session?.user.prenom}
+              {nom || session?.user.prenom}
             </span>
           </div>
           {open ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
@@ -51,10 +53,10 @@ const UserAvatar = () => {
 
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel className="text-gray-600 text-sm px-4 py-3">
-          {session?.user.nom} {session?.user.prenom}
+          {nom || session?.user.nom} {prenom || session?.user.prenom}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href="/mon-compte">
+        <Link href={`/mon-compte/${session?.user.identifiant}`}>
           <DropdownMenuItem className="cursor-pointer gap-4">
             <UserRound />
             <span>Votre compte</span>

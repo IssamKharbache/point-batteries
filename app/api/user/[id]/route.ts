@@ -71,6 +71,24 @@ export const PUT = async (
         message: "Utilisateur non trouvé",
       });
     }
+    if (email !== existingUser.email) {
+      const isEmailExists = await db.user.findUnique({
+        where: {
+          email,
+        },
+      });
+      if (isEmailExists) {
+        return NextResponse.json(
+          {
+            data: null,
+            message: "Email adresse déjà utilisé",
+          },
+          {
+            statusText: "conflict",
+          }
+        );
+      }
+    }
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
     }

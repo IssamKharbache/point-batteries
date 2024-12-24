@@ -7,10 +7,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { Loader2, MoreHorizontal, UserPen } from "lucide-react";
 import React from "react";
 import DeleteActionButton from "./DeleteActionButton";
-import EditActionButton from "./EditActionButton";
+import Link from "next/link";
 
 interface TableActionsProps {
   userData?: {
@@ -25,7 +25,16 @@ interface TableActionsProps {
 }
 
 const TableActions = ({ userData }: TableActionsProps) => {
+  if (!userData) {
+    return (
+      <div>
+        <Loader2 className="animate-spin text-black" />
+      </div>
+    );
+  }
+
   const endPoint = `/api/user/${userData?.id}`;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,12 +48,18 @@ const TableActions = ({ userData }: TableActionsProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem>
+        <DropdownMenuItem className="py-4 px-4">
           <DeleteActionButton endpoint={endPoint} title={`Supprimer`} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <EditActionButton />
+        <DropdownMenuItem className="py-4 px-4">
+          <Link
+            className="flex items-center gap-2"
+            href={`client/modifier/${userData?.identifiant}`}
+          >
+            <UserPen />
+            <span>Modifier</span>
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

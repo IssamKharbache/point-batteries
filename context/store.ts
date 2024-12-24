@@ -35,7 +35,7 @@ type SideBarStore = {
   setOpenSideBar: (openSideBar: boolean) => void;
 };
 export const useSideBarStore = create<SideBarStore>((set) => ({
-  openSideBar: false,
+  openSideBar: true,
   setOpenSideBar: (openSideBar: boolean) => set({ openSideBar }),
 }));
 
@@ -61,8 +61,9 @@ type UserAvatar = {
 
 export const useUserAvatarStore = create<UserAvatar>((set) => ({
   // Initialize from localStorage if available
-  nom: (typeof window !== undefined && localStorage.getItem("nom")) || "",
-  prenom: (typeof window !== undefined && localStorage.getItem("prenom")) || "",
+  nom: (typeof window !== "undefined" && localStorage.getItem("nom")) || "",
+  prenom:
+    (typeof window !== "undefined" && localStorage.getItem("prenom")) || "",
   setNom: (nom: string) => {
     if (typeof window !== "undefined") {
       localStorage.setItem("nom", nom);

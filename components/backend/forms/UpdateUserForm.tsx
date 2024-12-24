@@ -25,12 +25,14 @@ import * as z from "zod";
 
 interface UpdateUserProps {
   userData: User;
+  type?: string;
 }
 
 const UpdateUserForm = ({ userData }: UpdateUserProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isChangingPwd, setIsChangingPwd] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const router = useRouter();
   const { setNom, setPrenom } = useUserAvatarStore();
 
@@ -49,6 +51,7 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
   });
   const handleSubmit = async (data: z.infer<typeof signupSchema>) => {
     setLoading(true);
+
     try {
       //check if the data is same as the old one
       if (
@@ -57,11 +60,15 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
         data.prenom === userData.prenom &&
         !isChangingPwd
       ) {
+        setError("");
         setLoading(false);
         return;
       }
+
       const res = await axios.put(`/api/user/${userData.identifiant}`, data);
+
       if (res.statusText === "updated") {
+        setError("");
         localStorage.setItem("nom", data.nom);
         localStorage.setItem("prenom", data.prenom);
         setNom(data.nom);
@@ -69,8 +76,12 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
         setLoading(false);
         toast.success(res.data.message);
         router.refresh();
+      } else {
+        setLoading(false);
+        setError(res.data.message);
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -80,13 +91,13 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
         Modifier mon profile
       </h1>
       <hr className="text-gray-400 " />
-      {/* {error && (
-      <div>
-        <p className="bg-red-500 text-white rounded p-2 text-center text-sm mt-6">
-          {error}
-        </p>
-      </div>
-    )} */}
+      {error && (
+        <div className="">
+          <p className=" bg-red-500 text-white rounded p-2 text-center text-sm mt-6 font-semibold ">
+            {error}
+          </p>
+        </div>
+      )}
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
           <div className="flex flex-col gap-4 mt-4 md:flex-row">
@@ -164,7 +175,7 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
                         <Input
                           type={showPassword ? "text" : "password"}
                           className="mt-2 px-4"
-                          placeholder="******"
+                          placeholder="Mot de passe"
                           {...field}
                           autoComplete="new-password"
                         />

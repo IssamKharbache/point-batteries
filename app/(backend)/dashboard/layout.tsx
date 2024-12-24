@@ -5,6 +5,7 @@ import "../../globals.css";
 import BackendLayout from "@/components/backend/MainLayout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { Loader2 } from "lucide-react";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -19,11 +20,20 @@ export default async function RootBackendLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
         <AuthProvider>
-          <BackendLayout>{children}</BackendLayout>
+          <BackendLayout>
+            {session ? (
+              children
+            ) : (
+              <div className="flex items-center justify-center h-[calc(100vh-150px)]">
+                <Loader2 className="animate-spin" size={45} />
+              </div>
+            )}
+          </BackendLayout>
         </AuthProvider>
       </body>
     </html>

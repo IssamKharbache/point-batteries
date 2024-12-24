@@ -165,7 +165,7 @@ const AjouterAdminForm = () => {
                       <Input
                         type={showPassword ? "text" : "password"}
                         className="mt-2 px-4"
-                        placeholder="******"
+                        placeholder="Mot de passe"
                         {...field}
                       />
                       {showPassword ? (
