@@ -12,6 +12,8 @@ const MonCompte = () => {
   const { setOpenMobileMenu } = useMobileMenuStore();
   const { data: session } = useSession();
 
+  const role = session?.user.role;
+
   const closeMenu = () => {
     setOpenMobileMenu(false);
     setOpenMonCompte(false);
@@ -57,7 +59,7 @@ const MonCompte = () => {
       <hr />
 
       <div className="flex flex-col  flex-grow   w-full py-8 ">
-        {session?.user.role === "ADMIN" && (
+        {role === "ADMIN" && (
           <Link
             onClick={closeMenu}
             className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
@@ -66,6 +68,16 @@ const MonCompte = () => {
             Dashboard
           </Link>
         )}
+        {role === "STAFF" && (
+          <Link
+            onClick={closeMenu}
+            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
+            href={"/dashboard"}
+          >
+            Dashboard
+          </Link>
+        )}
+
         {monCompteItems.map((item, index) => (
           <Link
             onClick={closeMenu}
@@ -81,7 +93,7 @@ const MonCompte = () => {
             <Link
               onClick={closeMenu}
               className="flex items-center justify-between gap-2 hover:bg-gray-100 w-full px-4 py-4 capitalize"
-              href={"/mon-compte"}
+              href={`/mon-compte/${session?.user.identifiant}`}
             >
               Mon profile
             </Link>
