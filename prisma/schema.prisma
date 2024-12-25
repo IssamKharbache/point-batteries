@@ -14,14 +14,46 @@ enum Role {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   nom         String?
   prenom      String?
-  email       String   @unique
-  identifiant String   @unique
+  email       String  @unique
+  identifiant String  @unique
   password    String
-  role        Role     @default(USER)
+  role        Role    @default(USER)
   tel         String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  product   Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  slug         String  @unique
+  description  String?
+  imageUrl     String?
+  productPrice Float
+  productStock Int?
+
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId String   @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @db.ObjectId
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Category {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String    @unique
+  description String?
+  products    Product[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

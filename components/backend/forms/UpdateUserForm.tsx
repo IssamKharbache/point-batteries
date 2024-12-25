@@ -11,16 +11,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUserAvatarStore } from "@/context/store";
+import { useToast } from "@/hooks/use-toast";
 import { signupSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+
 import * as z from "zod";
 
 interface UpdateUserProps {
@@ -33,8 +33,9 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
   const [isChangingPwd, setIsChangingPwd] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const { update } = useSession();
   const router = useRouter();
-  const { setNom, setPrenom } = useUserAvatarStore();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(
@@ -69,13 +70,16 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
 
       if (res.statusText === "updated") {
         setError("");
-        localStorage.setItem("nom", data.nom);
-        localStorage.setItem("prenom", data.prenom);
-        setNom(data.nom);
-        setPrenom(data.prenom);
         setLoading(false);
-        toast.success(res.data.message);
+        toast({
+          title: "L'opération est terminée avec succès",
+          description: res.data.message,
+          variant: "success",
+          className: "toast-container",
+        });
         router.refresh();
+        //update the session after updating
+        update();
       } else {
         setLoading(false);
         setError(res.data.message);
@@ -86,7 +90,7 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
     }
   };
   return (
-    <div className="space-y-2 bg-white p-10 rounded-md border-2 ">
+    <div className="space-y-2 bg-white p-10 rounded-md border-2 m-6 md:m-0">
       <h1 className="text-xl text-start text-gray-600 ">
         Modifier mon profile
       </h1>

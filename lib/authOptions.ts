@@ -37,7 +37,8 @@ export const authOptions: NextAuthOptions = {
               statusMessage: "Password Incorrect",
             };
           }
-          const userData = {
+          // Return user object
+          return {
             id: user._id,
             username: user.identifiant,
             email: user.email,
@@ -46,8 +47,6 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             identifiant: user.identifiant,
           };
-
-          return userData;
         } catch (error) {
           console.log(error);
           throw { error: "Something went wrong", status: 401 };
@@ -64,6 +63,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user = {
           ...session.user,
+          id: token.id as string,
           username: token.username as string,
           email: token.email as string,
           nom: token.nom as string,
@@ -78,12 +78,25 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         // Store user data in the JWT token
+        token.id = user.id;
         token.username = user.username as string;
         token.email = user.email as string;
         token.nom = user.nom as string;
         token.prenom = user.prenom as string;
         token.role = user.role as string;
         token.identifiant = user.identifiant as string;
+      } else {
+        // Refresh user data from the database
+        const dbUser = await db.user.findUnique({
+          where: { identifiant: token.identifiant },
+        });
+        token.id = dbUser._id;
+        token.username = dbUser.identifiant;
+        token.email = dbUser.email;
+        token.nom = dbUser.nom;
+        token.prenom = dbUser.prenom;
+        token.role = dbUser.role;
+        token.identifiant = dbUser.identifiant;
       }
       return token;
     },

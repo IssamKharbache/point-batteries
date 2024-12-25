@@ -23,16 +23,16 @@ interface TableActionsProps {
     identifiant: string;
   };
 }
-
+export type UserData = {
+  id: string;
+  nom: string;
+  prenom: string;
+  role: string;
+  tel: string;
+  email: string;
+  identifiant: string;
+};
 const TableActions = ({ userData }: TableActionsProps) => {
-  if (!userData) {
-    return (
-      <div>
-        <Loader2 className="animate-spin text-black" />
-      </div>
-    );
-  }
-
   const endPoint = `/api/user/${userData?.id}`;
 
   return (

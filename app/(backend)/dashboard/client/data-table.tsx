@@ -24,20 +24,22 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Filter, Loader2 } from "lucide-react";
-import TableActions from "@/components/backend/table/TableActions";
+import TableActions, {
+  UserData,
+} from "@/components/backend/table/TableActions";
 import { useLoadingStore } from "@/context/store";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData, UserData> {
+  columns: ColumnDef<TData, UserData>[];
   data: TData[];
   name: string;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends UserData>({
   columns,
   data,
   name,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, UserData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -175,7 +177,7 @@ export function DataTable<TData, TValue>({
                   </TableCell>
 
                   <TableCell className="py-4 px-4">
-                    <TableActions />
+                    <TableActions userData={row.original} />
                   </TableCell>
                 </TableRow>
               ))

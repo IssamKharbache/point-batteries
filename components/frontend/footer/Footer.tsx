@@ -81,11 +81,17 @@ const Footer = () => {
 
         <p className="text-sm text-center text-gray-400">
           Développé par{" "}
-          <Link href="/" className="font-bold text-white text-[18px]">
+          <Link
+            href="/"
+            className="font-bold text-white text-[15px] md:text-[18px]"
+          >
             Issam Kharbache
           </Link>{" "}
           - Copyright © 2025{" "}
-          <Link href="/" className="font-bold text-white text-[18px]">
+          <Link
+            href="/"
+            className="font-bold text-white text-[15px] md:text-[18px]"
+          >
             PointsBatterie
           </Link>{" "}
           - All rights reserved.

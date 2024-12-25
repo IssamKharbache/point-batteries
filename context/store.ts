@@ -58,22 +58,3 @@ type UserAvatar = {
   setNom: (nom: string) => void;
   setPrenom: (prenom: string) => void;
 };
-
-export const useUserAvatarStore = create<UserAvatar>((set) => ({
-  // Initialize from localStorage if available
-  nom: (typeof window !== "undefined" && localStorage.getItem("nom")) || "",
-  prenom:
-    (typeof window !== "undefined" && localStorage.getItem("prenom")) || "",
-  setNom: (nom: string) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("nom", nom);
-    }
-    set({ nom });
-  },
-  setPrenom: (prenom: string) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("prenom", prenom);
-    }
-    set({ prenom });
-  },
-}));

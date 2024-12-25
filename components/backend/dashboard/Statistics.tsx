@@ -25,17 +25,19 @@ const Statistics = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data.map((item, index) => {
+        const Icon = item.icon;
         return (
           <div
             key={index}
-            className={`${item.bgColor} flex flex-col gap-4  py-12 rounded`}
+            className={`${item.bgColor} flex flex-col items-center gap-4  py-12 rounded`}
           >
+            <Icon size={40} />
+            <p className="text-center font-semibold text-gray-700">
+              {item.name}
+            </p>
             <p className="text-center text-6xl ">
               {item.number}
               {item.name === "Revenu total" && "$"}
-            </p>
-            <p className="text-center font-semibold text-gray-700">
-              {item.name}
             </p>
           </div>
         );

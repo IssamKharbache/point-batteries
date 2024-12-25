@@ -4,7 +4,7 @@ import { Poppins } from "next/font/google";
 import "../globals.css";
 import { AuthProvider } from "@/providers/Providers";
 import Footer from "@/components/frontend/footer/Footer";
-
+import { Toaster } from "@/components/ui/toaster";
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
@@ -23,8 +23,8 @@ export default function FrontLayout({
       <body className={`${poppins.className} antialiased`}>
         <AuthProvider>
           <NavBar />
+          <Toaster />
           <div className="min-h-[650px]"> {children}</div>
-
           <Footer />
         </AuthProvider>
       </body>

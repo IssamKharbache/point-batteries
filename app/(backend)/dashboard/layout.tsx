@@ -25,15 +25,7 @@ export default async function RootBackendLayout({
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
         <AuthProvider>
-          <BackendLayout>
-            {session ? (
-              children
-            ) : (
-              <div className="flex items-center justify-center h-[calc(100vh-150px)]">
-                <Loader2 className="animate-spin" size={45} />
-              </div>
-            )}
-          </BackendLayout>
+          <BackendLayout>{children}</BackendLayout>
         </AuthProvider>
       </body>
     </html>
