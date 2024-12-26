@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { addAdminSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -23,6 +24,8 @@ const AjouterAdminForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>("");
+
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof addAdminSchema>>({
     resolver: zodResolver(addAdminSchema),
     defaultValues: {
@@ -46,6 +49,12 @@ const AjouterAdminForm = () => {
       if (response.status === 201) {
         setLoading(false);
         setError(null);
+        toast({
+          title: "L'opération est terminée avec succès",
+          description: response.data.message,
+          variant: "success",
+          className: "toast-container",
+        });
         form.reset();
         router.push("/dashboard/notre-staff");
       }
@@ -193,7 +202,7 @@ const AjouterAdminForm = () => {
           ) : (
             <Button
               type="submit"
-              className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
+              className="mt-4 px-4 py-6  bg-black text-white w-full text-md"
             >
               Ajouter
             </Button>

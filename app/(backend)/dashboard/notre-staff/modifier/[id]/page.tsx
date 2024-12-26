@@ -22,7 +22,7 @@ const page = async ({ params }: PageProps) => {
       <h1 className="text-4xl mb-8 font-semibold capitalize">
         {userData?.nom} Compte
       </h1>
-      <UpdateUserForm typeForm="client" userData={userData} />
+      <UpdateUserForm userData={userData} />
     </section>
   );
 };

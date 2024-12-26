@@ -59,7 +59,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const user = row.original;
 
-      return <TableActions userData={user} />;
+      return <TableActions typeForm={"client"} userData={user} />;
     },
   },
 ];

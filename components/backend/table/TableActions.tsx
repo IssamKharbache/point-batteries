@@ -22,7 +22,9 @@ interface TableActionsProps {
     email: string;
     identifiant: string;
   };
+  typeForm?: string;
 }
+
 export type UserData = {
   id: string;
   nom: string;
@@ -32,7 +34,7 @@ export type UserData = {
   email: string;
   identifiant: string;
 };
-const TableActions = ({ userData }: TableActionsProps) => {
+const TableActions = ({ userData, typeForm }: TableActionsProps) => {
   const endPoint = `/api/user/${userData?.id}`;
 
   return (
@@ -52,15 +54,19 @@ const TableActions = ({ userData }: TableActionsProps) => {
           <DeleteActionButton endpoint={endPoint} title={`Supprimer`} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="py-4 px-4">
-          <Link
-            className="flex items-center gap-2"
-            href={`client/modifier/${userData?.identifiant}`}
-          >
+        <Link
+          className="w-full cursor-pointer"
+          href={`${
+            typeForm === "client"
+              ? `client/modifier/${userData?.identifiant}`
+              : `notre-staff/modifier/${userData?.identifiant}`
+          }`}
+        >
+          <DropdownMenuItem className="flex items-center gap-2 py-4 px-4">
             <UserPen />
             <span>Modifier</span>
-          </Link>
-        </DropdownMenuItem>
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );

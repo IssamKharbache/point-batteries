@@ -50,3 +50,11 @@ export const addProductSchema = z.object({
     .min(1, "Courant d’essai de décharge est obligatoire"),
   voltage: z.number(),
 });
+
+export const addCategorieSchema = z.object({
+  title: z.string().min(1, "Titre est obligatoire"),
+  description: z
+    .string()
+    .min(1, "Description est obligatoire")
+    .min(5, "Description est trop courte"),
+});

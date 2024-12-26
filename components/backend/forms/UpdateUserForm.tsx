@@ -25,10 +25,10 @@ import * as z from "zod";
 
 interface UpdateUserProps {
   userData: User;
-  type?: string;
+  typeForm?: string;
 }
 
-const UpdateUserForm = ({ userData }: UpdateUserProps) => {
+const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isChangingPwd, setIsChangingPwd] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,7 +36,6 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
   const { update } = useSession();
   const router = useRouter();
   const { toast } = useToast();
-
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(
       signupSchema.extend({
@@ -166,7 +165,7 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
               );
             }}
           />
-          {isChangingPwd && (
+          {typeForm !== "client" && isChangingPwd && (
             <FormField
               name="password"
               control={form.control}
@@ -204,13 +203,14 @@ const UpdateUserForm = ({ userData }: UpdateUserProps) => {
               }}
             />
           )}
-          <Button
-            type="button"
-            onClick={() => setIsChangingPwd((prev) => !prev)}
-          >
-            Changer le mot de passe
-          </Button>
-
+          {typeForm !== "client" && (
+            <Button
+              type="button"
+              onClick={() => setIsChangingPwd((prev) => !prev)}
+            >
+              Changer le mot de passe
+            </Button>
+          )}
           {loading ? (
             <LoadingButton textColor="text-white" bgColor="bg-black" />
           ) : (
