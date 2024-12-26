@@ -29,13 +29,18 @@ model User {
 }
 
 model Product {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  slug         String  @unique
-  description  String?
-  imageUrl     String?
-  productPrice Float
-  productStock Int?
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  slug             String   @unique
+  description      String?
+  imageUrl         String?
+  productPrice     Float
+  productStock     Int?
+  capacite         Int?
+  marque           String
+  variationProduct String
+  courantDessai    Int
+  garantie         Garantie @default(NOGARANTIE)
 
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId String   @db.ObjectId
@@ -45,6 +50,12 @@ model Product {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+enum Garantie {
+  NOGARANTIE
+  ONEYEAR
+  TWOYEARS
 }
 
 model Category {

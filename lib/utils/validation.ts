@@ -33,3 +33,20 @@ export const addAdminSchema = z.object({
     .email("Address email invalide"),
   password: z.string().min(1, "Mot de passe est obligatoire"),
 });
+
+export const addProductSchema = z.object({
+  title: z.string().min(1, "Titre est obligatoire"),
+  description: z
+    .string()
+    .min(1, "Description est obligatoire")
+    .min(10, "Description est trop courte"),
+  price: z.number().min(1, "Le prix doit être supérieur ou égal à 1"),
+  stock: z.number(),
+  marque: z.string().min(1, "Marque est obligatoire"),
+  capacite: z.string().min(1, "Capacité est obligatoire"),
+  variationsProduit: z.string().min(1, "Variations du produit est obligatoire"),
+  courantDessai: z
+    .number()
+    .min(1, "Courant d’essai de décharge est obligatoire"),
+  voltage: z.number(),
+});
