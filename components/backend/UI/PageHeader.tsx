@@ -8,7 +8,7 @@ interface PageHeaderProps {
 }
 const PageHeader = ({ name, href }: PageHeaderProps) => {
   return (
-    <div className="flex items-center justify-between p-6 max-w-6xl mx-auto bg-slate-100 rounded-sm">
+    <div className="flex items-center justify-between p-6 container mx-auto bg-slate-100 rounded-sm">
       <h1 className="text-md md:text-2xl font-semibold">{name}</h1>
       {href && (
         <Link

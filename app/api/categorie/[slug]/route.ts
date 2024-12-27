@@ -48,3 +48,86 @@ export const DELETE = async (
     );
   }
 };
+
+export const PUT = async (
+  req: NextRequest,
+  context: { params: Promise<{ slug: string }> }
+) => {
+  try {
+    const slug = (await context.params).slug;
+    const { title, description } = await req.json();
+    if (!title || !description) {
+      return NextResponse.json({
+        data: null,
+        message: "No changes",
+      });
+    }
+    const existCat = await db.category.findUnique({
+      where: {
+        slug,
+      },
+    });
+    if (!existCat) {
+      return NextResponse.json({
+        data: null,
+        message: "Categorie n'existe pas",
+      });
+    }
+    const updatedCategory = await db.category.update({
+      where: {
+        slug,
+      },
+      data: {
+        title,
+        description,
+      },
+    });
+    return NextResponse.json(
+      {
+        data: updatedCategory,
+        message: "Categorie modifier avec succès",
+      },
+      {
+        status: 200,
+        statusText: "updated",
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    NextResponse.json({
+      error,
+      message: "Error while trying to update category",
+    });
+  }
+};
+
+export const GET = async (
+  req: NextRequest,
+  context: { params: Promise<{ slug: string }> }
+) => {
+  try {
+    const slug = (await context.params).slug;
+
+    const category = await db.category.findUnique({
+      where: {
+        slug,
+      },
+    });
+    if (!category) {
+      return NextResponse.json({
+        data: null,
+        message: "Categorie not foudn",
+      });
+    }
+    return NextResponse.json({
+      data: category,
+      message: "Category found",
+    });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      error,
+      message: "Error while getting category data",
+    });
+  }
+};

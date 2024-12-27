@@ -75,7 +75,7 @@ export function DataTable<TData extends UserData>({
               onChange={(event) =>
                 table.getColumn("nom")?.setFilterValue(event.target.value)
               }
-              className="max-w-sm px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px]"
+              className="max-w-sm px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
             />
             <Filter size={15} className="absolute text-gray-400 right-12" />
           </div>
@@ -146,7 +146,7 @@ export function DataTable<TData extends UserData>({
               onChange={(event) =>
                 table.getColumn("nom")?.setFilterValue(event.target.value)
               }
-              className="w-36 px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-8 md:h-10"
+              className="w-36 px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
             />
             <Filter
               size={15}

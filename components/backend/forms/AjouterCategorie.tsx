@@ -15,21 +15,35 @@ import { useToast } from "@/hooks/use-toast";
 import { createSlug } from "@/lib/utils/index";
 import { addCategorieSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Category } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-const AjouterCategorieForm = () => {
+interface CategoryData {
+  id: string;
+  title: string;
+  description: string | null;
+  slug: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+}
+
+interface AjouterCategorieFormProps {
+  categoryData: CategoryData;
+}
+
+const AjouterCategorieForm = ({ categoryData }: AjouterCategorieFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const form = useForm<z.infer<typeof addCategorieSchema>>({
     resolver: zodResolver(addCategorieSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: categoryData?.title ?? "",
+      description: categoryData?.description ?? "",
     },
   });
 
@@ -39,19 +53,47 @@ const AjouterCategorieForm = () => {
     try {
       setLoading(true);
       const slug = createSlug(data.title);
-      const res = await axios.post("/api/categorie/add", {
-        ...data,
-        slug,
-      });
-      if (res.statusText === "created") {
-        setLoading(false);
-        toast({
-          title: "L'opération est terminée avec succès",
-          description: res.data.message,
-          variant: "success",
-          className: "toast-container",
+      if (categoryData) {
+        if (
+          data.title === categoryData.title &&
+          data.description === categoryData.description
+        ) {
+          setLoading(false);
+          return null;
+        }
+
+        const res = await axios.put(
+          `/api/categorie/${categoryData.slug}`,
+          data
+        );
+        if (res.statusText === "updated") {
+          setLoading(false);
+          toast({
+            title: "L'opération est terminée avec succès",
+            description: res.data.message,
+            variant: "success",
+            className: "toast-container",
+          });
+          router.push("/dashboard/categorie");
+        } else {
+          setLoading(false);
+          setError(res.data.message);
+        }
+      } else {
+        const res = await axios.post("/api/categorie/add", {
+          ...data,
+          slug,
         });
-        router.push("/dashboard/categorie");
+        if (res.statusText === "created") {
+          setLoading(false);
+          toast({
+            title: "L'opération est terminée avec succès",
+            description: res.data.message,
+            variant: "success",
+            className: "toast-container",
+          });
+          router.push("/dashboard/categorie");
+        }
       }
     } catch (error) {
       setLoading(false);
@@ -122,7 +164,7 @@ const AjouterCategorieForm = () => {
               type="submit"
               className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
             >
-              Ajouter categorie
+              {categoryData ? "Modifier" : " Ajouter"} categorie
             </Button>
           )}
         </form>

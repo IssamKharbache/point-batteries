@@ -77,7 +77,7 @@ export function DataTable<TData>({
               onChange={(event) =>
                 table.getColumn("title")?.setFilterValue(event.target.value)
               }
-              className="w-36 px-4 mr-8 py-1 h-10 md:h-14 md:w-60  placeholder:text-xs md:placeholder:text-[14px] "
+              className="w-36 px-4 mr-8 py-1 h-10 md:h-12 md:w-60  placeholder:text-xs md:placeholder:text-[14px] "
             />
             <Filter size={15} className="absolute text-gray-400 right-12" />
           </div>

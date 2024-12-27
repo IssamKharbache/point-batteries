@@ -30,10 +30,11 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
       if (result.isConfirmed) {
         setLoading(true);
         const response = await axios.delete(endpoint);
-        if (response.data) {
+        if (response.statusText === "deleted") {
           toast({
             title: "L'opération est terminée avec succès",
             variant: "success",
+            description: response.data.message,
             className: "toast-container",
           });
           setLoading(false);

@@ -19,13 +19,18 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ row }) => (
+      <div>
+        <p className="line-clamp-1 w-32 md:w-60">{row.original.description}</p>
+      </div>
+    ),
   },
   {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
       const categorie = row.original;
-      return <TableActions typeForm={"client"} categoryData={categorie} />;
+      return <TableActions categoryData={categorie} />;
     },
   },
 ];
