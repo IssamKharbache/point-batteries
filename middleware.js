@@ -15,8 +15,20 @@ export default withAuth(
       if (!token) {
         return NextResponse.redirect(new URL("/connecter", req.url));
       }
+      //not allowing normal users to access the dashboard
       if (token.role !== "ADMIN" && token.role !== "STAFF") {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
+      }
+    }
+    //not allowing staff to add staff member
+    if (req.nextUrl.pathname.startsWith("/dashboard/notre-staff")) {
+      if (!token) {
+        return NextResponse.redirect(new URL("/connecter", req.url));
+      }
+      if (token.role !== "ADMIN") {
+        return NextResponse.redirect(
+          new URL("/dashboard/unauthorized", req.url)
+        );
       }
     }
 

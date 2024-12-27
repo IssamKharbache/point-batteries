@@ -1,4 +1,5 @@
 import { useLoadingStore } from "@/context/store";
+import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { Loader2, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -13,6 +14,7 @@ interface DeleteActionButtonProps {
 const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
   const { loading, setLoading } = useLoadingStore();
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleDelete = async () => {
     Swal.fire({
@@ -28,8 +30,12 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
       if (result.isConfirmed) {
         setLoading(true);
         const response = await axios.delete(endpoint);
-        if (response.statusText === "deleted") {
-          toast.success("Utilisateur supprimer avec succes");
+        if (response.data) {
+          toast({
+            title: "L'opération est terminée avec succès",
+            variant: "success",
+            className: "toast-container",
+          });
           setLoading(false);
           router.refresh();
         }

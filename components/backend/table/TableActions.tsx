@@ -11,6 +11,7 @@ import { Loader2, MoreHorizontal, UserPen } from "lucide-react";
 import React from "react";
 import DeleteActionButton from "./DeleteActionButton";
 import Link from "next/link";
+import { Category } from "@prisma/client";
 
 interface TableActionsProps {
   userData?: {
@@ -22,6 +23,7 @@ interface TableActionsProps {
     email: string;
     identifiant: string;
   };
+  categoryData?: Category;
   typeForm?: string;
 }
 
@@ -34,8 +36,20 @@ export type UserData = {
   email: string;
   identifiant: string;
 };
-const TableActions = ({ userData, typeForm }: TableActionsProps) => {
-  const endPoint = `/api/user/${userData?.id}`;
+const TableActions = ({
+  userData,
+  typeForm,
+  categoryData,
+}: TableActionsProps) => {
+  const endPoint = categoryData
+    ? `/api/categorie/${categoryData?.slug}`
+    : `/api/user/${userData?.id}`;
+
+  const href = categoryData
+    ? `categorie/modifier/${categoryData.slug}`
+    : typeForm === "client"
+    ? `client/modifier/${userData?.identifiant}`
+    : `notre-staff/modifier/${userData?.identifiant}`;
 
   return (
     <DropdownMenu>
@@ -54,14 +68,7 @@ const TableActions = ({ userData, typeForm }: TableActionsProps) => {
           <DeleteActionButton endpoint={endPoint} title={`Supprimer`} />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <Link
-          className="w-full cursor-pointer"
-          href={`${
-            typeForm === "client"
-              ? `client/modifier/${userData?.identifiant}`
-              : `notre-staff/modifier/${userData?.identifiant}`
-          }`}
-        >
+        <Link className="w-full cursor-pointer" href={href}>
           <DropdownMenuItem className="flex items-center gap-2 py-4 px-4">
             <UserPen />
             <span>Modifier</span>
