@@ -13,11 +13,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { addProductSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import UploadImageButton from "../upload/UploadImageButton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Category } from "@/app/(backend)/dashboard/categorie/columns";
+import { CategorieData } from "@/app/(backend)/dashboard/produit/ajouter/page";
 
-const AjouterProduit = () => {
+const AjouterProduit = ({
+  categorieData,
+}: {
+  categorieData: CategorieData;
+}) => {
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
@@ -25,10 +38,18 @@ const AjouterProduit = () => {
       description: "",
       price: 0,
       stock: 0,
+      capacite: "",
+      courantDessai: 0,
+      marque: "",
+      variationsProduit: "",
+      voltage: 0,
+      categorie: "",
     },
   });
 
   const handleSubmit = (data: z.infer<typeof addProductSchema>) => {
+    console.log(data);
+
     console.log("submited");
   };
   return (
@@ -64,6 +85,7 @@ const AjouterProduit = () => {
               );
             }}
           />
+
           <FormField
             name="marque"
             control={form.control}
@@ -84,7 +106,56 @@ const AjouterProduit = () => {
               );
             }}
           />
-          <div className="flex justify-between">
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+            <Controller
+              name="categorie"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Categorie</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full md:w-[290px]">
+                        <SelectValue placeholder="Categorie" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categorieData.map((cat, idx) => (
+                          <SelectItem key={idx} value={cat.id}>
+                            {cat.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Controller
+              name="categorie"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Garantie</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full md:w-[290px]">
+                        <SelectValue placeholder="Categorie" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="NOGARANTIE">No garantie</SelectItem>
+                        <SelectItem value="ONEYEAR">1 an garantie</SelectItem>
+                        <SelectItem value="TWOYEARS">2 ans garantie</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
             <FormField
               name="price"
               control={form.control}
@@ -94,9 +165,11 @@ const AjouterProduit = () => {
                     <FormLabel>Prix</FormLabel>
                     <FormControl>
                       <Input
+                        type="number"
                         className="mt-2 px-4"
                         placeholder="Prix du produit"
                         {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage />
@@ -113,10 +186,11 @@ const AjouterProduit = () => {
                     <FormLabel>Stock</FormLabel>
                     <FormControl>
                       <Input
-                        type="text"
+                        type="number"
                         className="mt-2 px-4"
                         placeholder="Combien de produit en stock ?"
                         {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage />
@@ -125,7 +199,7 @@ const AjouterProduit = () => {
               }}
             />
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
             <FormField
               name="capacite"
               control={form.control}
@@ -154,9 +228,11 @@ const AjouterProduit = () => {
                     <FormLabel>Voltage</FormLabel>
                     <FormControl>
                       <Input
+                        type="number"
                         className="mt-2 px-4"
                         placeholder="Voltage (V) du produit"
                         {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage />
@@ -165,7 +241,7 @@ const AjouterProduit = () => {
               }}
             />
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-col md:flex-row justify-between x">
             <FormField
               name="variationsProduit"
               control={form.control}
@@ -194,9 +270,11 @@ const AjouterProduit = () => {
                     <FormLabel>Courant d’essai de décharge</FormLabel>
                     <FormControl>
                       <Input
+                        type="number"
                         className="mt-2 px-4"
                         placeholder="Courant d’essai de décharge à froid EN (A)"
                         {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage />
@@ -205,6 +283,7 @@ const AjouterProduit = () => {
               }}
             />
           </div>
+
           <FormField
             name="description"
             control={form.control}

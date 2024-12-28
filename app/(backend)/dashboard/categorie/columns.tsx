@@ -2,7 +2,7 @@
 import TableActions from "@/components/backend/table/TableActions";
 import { ColumnDef } from "@tanstack/react-table";
 
-interface Category {
+export interface Category {
   id: string;
   title: string;
   description: string | null;

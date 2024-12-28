@@ -24,9 +24,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Filter, Loader2 } from "lucide-react";
-import TableActions, {
-  UserData,
-} from "@/components/backend/table/TableActions";
 import { useLoadingStore } from "@/context/store";
 
 interface DataTableProps<TData> {

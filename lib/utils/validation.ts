@@ -41,7 +41,7 @@ export const addProductSchema = z.object({
     .min(1, "Description est obligatoire")
     .min(10, "Description est trop courte"),
   price: z.number().min(1, "Le prix doit être supérieur ou égal à 1"),
-  stock: z.number(),
+  stock: z.number().min(1, "Le stock doit être supérieur ou égal à 1"),
   marque: z.string().min(1, "Marque est obligatoire"),
   capacite: z.string().min(1, "Capacité est obligatoire"),
   variationsProduit: z.string().min(1, "Variations du produit est obligatoire"),
@@ -49,6 +49,8 @@ export const addProductSchema = z.object({
     .number()
     .min(1, "Courant d’essai de décharge est obligatoire"),
   voltage: z.number(),
+  categorie: z.string().min(1, "Categorie est obligatoire"),
+  garantie: z.string().min(1, "Garantie est obligatoire"),
 });
 
 export const addCategorieSchema = z.object({
