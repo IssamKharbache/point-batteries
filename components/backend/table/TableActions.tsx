@@ -56,7 +56,7 @@ const TableActions = ({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-8 w-8 p-2 focus:outline-none focus:border-none"
+          className="h-8 w-8 p-2 focus:outline-none focus:border-none py-4 mt-2 mr-2"
         >
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />

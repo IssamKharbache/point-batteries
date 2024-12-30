@@ -28,6 +28,8 @@ import { createSlug } from "@/lib/utils/index";
 import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import LoadingButton from "@/components/frontend/buttons/LoadingButton";
+import { useRouter } from "next/navigation";
 
 const AjouterProduit = ({
   categorieData,
@@ -36,7 +38,13 @@ const AjouterProduit = ({
 }) => {
   //states
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [image, setImage] = useState("");
+  const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   //
+  const router = useRouter();
+
+  //react hook form
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
@@ -52,7 +60,7 @@ const AjouterProduit = ({
       categoryId: "",
     },
   });
-  //sessiom data
+  //session data
   const { data: session } = useSession();
   const userId = session?.user.id;
 
@@ -60,17 +68,18 @@ const AjouterProduit = ({
   const { toast } = useToast();
 
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
+    setLoading(true);
     const productSlug = createSlug(data.title);
-    const imageUrl = "testsdsadasds";
     try {
       const res = await axios.post("/api/product/add", {
         ...data,
         slug: productSlug,
         userId,
-        imageUrl,
+        imageUrl: image,
         variationProduct: data.variationsProduit,
       });
       if (res.statusText === "created") {
+        setLoading(false);
         setError("");
         toast({
           title: "L'opération est terminée avec succès",
@@ -78,8 +87,10 @@ const AjouterProduit = ({
           variant: "success",
           className: "toast-container",
         });
+        router.push("/dashboard/produit");
       }
     } catch (error: any) {
+      setLoading(false);
       setError(
         "Une erreur s'est produite, réessayez plus tard ou contactez le support"
       );
@@ -179,7 +190,7 @@ const AjouterProduit = ({
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="w-full md:w-[290px]">
-                        <SelectValue placeholder="Categorie" />
+                        <SelectValue placeholder="Garantie" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="NOGARANTIE">No garantie</SelectItem>
@@ -300,25 +311,6 @@ const AjouterProduit = ({
           </div>
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
             <FormField
-              name="variationsProduit"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Variations du produit</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="mt-2 px-4"
-                        placeholder="Variations du produit"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
               name="courantDessai"
               control={form.control}
               render={({ field }) => {
@@ -336,6 +328,25 @@ const AjouterProduit = ({
                             e.target.value === "" ? "" : Number(e.target.value)
                           )
                         }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="variationsProduit"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Variations du produit</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="mt-2 px-4"
+                        placeholder="Variations du produit"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -366,16 +377,24 @@ const AjouterProduit = ({
           />
 
           <div>
-            <FormLabel>Image de produit</FormLabel>
-            <UploadImageButton />
+            <FormLabel>Image du produit</FormLabel>
+            <UploadImageButton
+              image={image}
+              setImage={setImage}
+              isImageUploading={isImageUploading}
+              setIsImageUploading={setIsImageUploading}
+            />
           </div>
-
-          <Button
-            type="submit"
-            className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
-          >
-            Ajouter produit
-          </Button>
+          {loading || isImageUploading ? (
+            <LoadingButton textColor="text-white" bgColor="bg-black" />
+          ) : (
+            <Button
+              type="submit"
+              className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
+            >
+              Ajouter produit
+            </Button>
+          )}
         </form>
       </Form>
     </div>
