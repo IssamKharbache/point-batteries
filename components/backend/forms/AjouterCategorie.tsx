@@ -32,7 +32,7 @@ interface CategoryData {
 }
 
 interface AjouterCategorieFormProps {
-  categoryData: CategoryData;
+  categoryData?: CategoryData;
 }
 
 const AjouterCategorieForm = ({ categoryData }: AjouterCategorieFormProps) => {

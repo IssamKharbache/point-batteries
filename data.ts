@@ -1,4 +1,5 @@
 import {
+  Layers,
   LayoutDashboard,
   Package2,
   ShoppingBasket,
@@ -74,8 +75,14 @@ export const sideBarMenu = [
     isMainAdmin: false,
   },
   {
+    name: "Categorie",
+    href: "/dashboard/categorie",
+    icon: Layers,
+    isMainAdmin: false,
+  },
+  {
     name: "Ajouter Admin",
-    href: "/dashboard/ajouter-admin",
+    href: "/dashboard/notre-staff/ajouter-admin",
     icon: UserRoundPlus,
     isMainAdmin: true,
   },

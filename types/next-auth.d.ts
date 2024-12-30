@@ -6,6 +6,7 @@ import { JWT as NextAuthJWT } from "next-auth";
 declare module "next-auth" {
   // Extending User to include custom fields
   interface User {
+    id: string;
     username: string;
     email: string;
     nom: string;
@@ -21,6 +22,7 @@ declare module "next-auth" {
 
   // Extending JWT to include custom fields
   interface JWT extends NextAuthJWT {
+    id: string;
     username: string;
     email: string;
     nom: string;

@@ -36,21 +36,26 @@ export const addAdminSchema = z.object({
 
 export const addProductSchema = z.object({
   title: z.string().min(1, "Titre est obligatoire"),
-  description: z
-    .string()
-    .min(1, "Description est obligatoire")
-    .min(10, "Description est trop courte"),
-  price: z.number().min(1, "Le prix doit être supérieur ou égal à 1"),
-  stock: z.number().min(1, "Le stock doit être supérieur ou égal à 1"),
-  marque: z.string().min(1, "Marque est obligatoire"),
-  capacite: z.string().min(1, "Capacité est obligatoire"),
-  variationsProduit: z.string().min(1, "Variations du produit est obligatoire"),
+  description: z.string().min(1, "Description est obligatoire"),
+  price: z
+    .number({ invalid_type_error: "Le prix doit être un nombre" })
+    .min(0, "Le prix doit être supérieur ou égal à 0"),
+  stock: z
+    .number({ invalid_type_error: "Le stock doit être un nombre" })
+    .min(0, "Le stock doit être supérieur ou égal à 0"),
+  capacite: z
+    .number({ invalid_type_error: "La capacite doit être un nombre" })
+    .min(0, "La capacite doit être supérieur ou égal à 0"),
   courantDessai: z
-    .number()
-    .min(1, "Courant d’essai de décharge est obligatoire"),
-  voltage: z.number(),
-  categorie: z.string().min(1, "Categorie est obligatoire"),
-  garantie: z.string().min(1, "Garantie est obligatoire"),
+    .number({ invalid_type_error: "Le courant d’essai doit être un nombre" })
+    .min(0, "Le courant d’essai doit être supérieur ou égal à 0"),
+  marque: z.string().min(1, "Marque est obligatoire"),
+  variationsProduit: z.string().min(1, "Variations du produit est obligatoire"),
+  voltage: z
+    .number({ invalid_type_error: "Le voltage doit être un nombre" })
+    .min(0, "Le voltage doit être supérieur ou égal à 0"),
+  categoryId: z.string().min(1, "Categorie est obligatoire"),
+  garantie: z.string().min(1, "Grantie est obligatoire"),
 });
 
 export const addCategorieSchema = z.object({

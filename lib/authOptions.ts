@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
           }
           // Return user object
           return {
-            id: user._id,
+            id: user.id,
             username: user.identifiant,
             email: user.email,
             nom: user.nom,
@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
         const dbUser = await db.user.findUnique({
           where: { identifiant: token.identifiant },
         });
-        token.id = dbUser._id;
+        token.id = dbUser.id;
         token.username = dbUser.identifiant;
         token.email = dbUser.email;
         token.nom = dbUser.nom;
