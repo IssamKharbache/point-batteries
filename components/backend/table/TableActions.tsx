@@ -11,7 +11,7 @@ import { Loader2, MoreHorizontal, UserPen } from "lucide-react";
 import React from "react";
 import DeleteActionButton from "./DeleteActionButton";
 import Link from "next/link";
-import { Category } from "@prisma/client";
+import { Category, Product } from "@prisma/client";
 
 interface TableActionsProps {
   userData?: {
@@ -24,6 +24,7 @@ interface TableActionsProps {
     identifiant: string;
   };
   categoryData?: Category;
+  productData: Product;
   typeForm?: string;
 }
 
@@ -40,12 +41,17 @@ const TableActions = ({
   userData,
   typeForm,
   categoryData,
+  productData,
 }: TableActionsProps) => {
-  const endPoint = categoryData
+  const endPoint = productData
+    ? `/api/product/${productData.slug}`
+    : categoryData
     ? `/api/categorie/${categoryData?.slug}`
     : `/api/user/${userData?.id}`;
 
-  const href = categoryData
+  const href = productData
+    ? `produit/modifier/${productData.slug}`
+    : categoryData
     ? `categorie/modifier/${categoryData.slug}`
     : typeForm === "client"
     ? `client/modifier/${userData?.identifiant}`

@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { addProductSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import UploadImageButton from "../upload/UploadImageButton";
@@ -25,22 +25,27 @@ import {
 } from "@/components/ui/select";
 import { CategorieData } from "@/app/(backend)/dashboard/produit/ajouter/page";
 import { createSlug } from "@/lib/utils/index";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { useRouter } from "next/navigation";
+import { Product } from "@prisma/client";
 
-const AjouterProduit = ({
-  categorieData,
-}: {
-  categorieData: CategorieData;
-}) => {
+interface ProductDataProps {
+  categorieData?: CategorieData;
+  productData?: Product;
+}
+const AjouterProduit = ({ categorieData, productData }: ProductDataProps) => {
+  console.log(productData);
+
   //states
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [image, setImage] = useState("");
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
+  //
+  const imageRef = useRef<HTMLInputElement>(null);
   //
   const router = useRouter();
 
@@ -55,7 +60,7 @@ const AjouterProduit = ({
       capacite: 0,
       courantDessai: 0,
       marque: "",
-      variationsProduit: "",
+      variationProduct: "",
       voltage: 0,
       categoryId: "",
     },
@@ -68,15 +73,26 @@ const AjouterProduit = ({
   const { toast } = useToast();
 
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
+    if (!image) {
+      toast({
+        title: "Image de produit est obligatoire",
+        variant: "destructive",
+      });
+      if (imageRef.current) {
+        imageRef.current.textContent = "Image de produit est obligatoire";
+      }
+      return;
+      return;
+    }
     setLoading(true);
     const productSlug = createSlug(data.title);
+
     try {
       const res = await axios.post("/api/product/add", {
         ...data,
         slug: productSlug,
         userId,
         imageUrl: image,
-        variationProduct: data.variationsProduit,
       });
       if (res.statusText === "created") {
         setLoading(false);
@@ -169,7 +185,7 @@ const AjouterProduit = ({
                         <SelectValue placeholder="Categorie" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categorieData.map((cat, idx) => (
+                        {categorieData?.map((cat, idx) => (
                           <SelectItem key={idx} value={cat.id}>
                             {cat.title}
                           </SelectItem>
@@ -336,7 +352,7 @@ const AjouterProduit = ({
               }}
             />
             <FormField
-              name="variationsProduit"
+              name="variationProduct"
               control={form.control}
               render={({ field }) => {
                 return (
@@ -378,6 +394,7 @@ const AjouterProduit = ({
 
           <div>
             <FormLabel>Image du produit</FormLabel>
+            <p ref={imageRef} className="text-red-500 text-sm"></p>
             <UploadImageButton
               image={image}
               setImage={setImage}

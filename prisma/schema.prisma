@@ -40,6 +40,7 @@ model Product {
   marque           String
   variationProduct String
   courantDessai    Int
+  voltage          Int
   garantie         Garantie @default(NOGARANTIE)
 
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)

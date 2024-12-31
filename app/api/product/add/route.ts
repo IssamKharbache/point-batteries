@@ -17,6 +17,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       garantie,
       categoryId,
       userId,
+      voltage,
     } = await req.json();
     //CHECK IF THE PRODUCT ALREADY EXISTS
     const alreadyExist = await db.product.findUnique({
@@ -42,6 +43,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         price: parseFloat(price),
         stock: parseInt(stock),
         capacite: parseInt(capacite),
+        voltage: parseInt(voltage),
         marque,
         variationProduct,
         courantDessai: parseInt(courantDessai),

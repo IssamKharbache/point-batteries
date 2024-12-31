@@ -50,7 +50,7 @@ export const addProductSchema = z.object({
     .number({ invalid_type_error: "Le courant d’essai doit être un nombre" })
     .min(0, "Le courant d’essai doit être supérieur ou égal à 0"),
   marque: z.string().min(1, "Marque est obligatoire"),
-  variationsProduit: z.string().min(1, "Variations du produit est obligatoire"),
+  variationProduct: z.string().min(1, "Variations du produit est obligatoire"),
   voltage: z
     .number({ invalid_type_error: "Le voltage doit être un nombre" })
     .min(0, "Le voltage doit être supérieur ou égal à 0"),

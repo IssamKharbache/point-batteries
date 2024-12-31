@@ -37,11 +37,15 @@ export const columns: ColumnDef<Product>[] = [
     ),
   },
   {
+    accessorKey: "marque",
+    header: "Marque",
+  },
+  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const categorie = row.original;
-      return <TableActions />;
+      const product = row.original;
+      return <TableActions typeForm="product" productData={product} />;
     },
   },
 ];
