@@ -24,7 +24,7 @@ interface TableActionsProps {
     identifiant: string;
   };
   categoryData?: Category;
-  productData: Product;
+  productData?: ProductData;
   typeForm?: string;
 }
 
@@ -36,6 +36,26 @@ export type UserData = {
   tel: string;
   email: string;
   identifiant: string;
+};
+export type ProductData = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null; // Ensure this is string | null
+  createdAt: Date;
+  updatedAt: Date | null;
+  imageUrl: string | null; // Ensure this is string | null
+  imageKey: string | null; // Ensure this is string | null
+  price: number;
+  stock: number | null;
+  capacite: number | null;
+  courantDessai: number | null;
+  marque: string;
+  variationProduct: string | null;
+  voltage: number | null;
+  garantie: string | null;
+  categoryId: string;
+  userId: string | null;
 };
 const TableActions = ({
   userData,

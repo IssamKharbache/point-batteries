@@ -8,6 +8,9 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "title",
     header: "Titre",
+    cell: ({ row }) => (
+      <div className="line-clamp-1 w-56">{row.original.title}</div>
+    ),
   },
   {
     accessorKey: "imageUrl",
@@ -21,7 +24,7 @@ export const columns: ColumnDef<Product>[] = [
             alt="produit image"
             width={500}
             height={500}
-            className="w-16 h-16 rounded-full object-contain"
+            className="w-16 h-16 rounded-full object-cover"
           />
         </div>
       );

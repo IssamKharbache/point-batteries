@@ -1,22 +1,49 @@
-import AjouterProduit from "@/components/backend/forms/AjouterProduit";
+import UpdateProductForm from "@/components/backend/forms/UpdateProductForm";
 import PageHeader from "@/components/backend/UI/PageHeader";
 import { getData } from "@/lib/getData";
+
 import React from "react";
+import { CategorieData } from "../../ajouter/page";
 interface PageParamsProps {
   params: {
     slug: string;
   };
 }
+export interface CategoryProduct {
+  id: string;
+  title: string;
+}
+
+export type ProductData = {
+  productData: {
+    id: string;
+    title: string;
+    capacite: number;
+    categoryId: string;
+    courantDessai: number;
+    description: string;
+    imageUrl: string;
+    marque: string;
+    price: number;
+    stock: number;
+    variationProduct: string;
+    voltage: number;
+    garantie: string;
+    slug: string;
+  };
+  categoryData: CategorieData;
+};
 const page = async ({ params }: PageParamsProps) => {
   const { slug } = await params;
+
   const product = await getData(`/product/${slug}`);
-  console.log(product);
+  const category = await getData(`/categorie`);
 
   return (
     <section>
       <PageHeader name="Modifier produit" />
       <div className="flex items-center justify-center mt-4">
-        <AjouterProduit productData={product} />
+        <UpdateProductForm productData={product} categoryData={category} />
       </div>
     </section>
   );

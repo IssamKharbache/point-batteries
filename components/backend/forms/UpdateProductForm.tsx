@@ -1,4 +1,6 @@
 "use client";
+import { CategorieData } from "@/app/(backend)/dashboard/produit/ajouter/page";
+import { ProductData } from "@/app/(backend)/dashboard/produit/modifier/[slug]/page";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,13 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { addProductSchema } from "@/lib/utils/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import UploadImageButton from "../upload/UploadImageButton";
 import {
   Select,
   SelectContent,
@@ -23,78 +18,69 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CategorieData } from "@/app/(backend)/dashboard/produit/ajouter/page";
-import { createSlug } from "@/lib/utils/index";
+import { Textarea } from "@/components/ui/textarea";
+import { addProductSchema } from "@/lib/utils/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import UploadImageButton from "../upload/UploadImageButton";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
-import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { useRouter } from "next/navigation";
+import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 
-interface ProductDataProps {
-  categorieData?: CategorieData;
-}
-const AjouterProduit = ({ categorieData }: ProductDataProps) => {
-  //states
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [image, setImage] = useState("");
+const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
+  const [image, setImage] = useState(productData.imageUrl);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const [imageKey, setImageKey] = useState("");
-  const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
-
-  //
-  const imageRef = useRef<HTMLInputElement>(null);
-  //
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   //react hook form
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-      stock: 0,
-      capacite: 0,
-      courantDessai: 0,
-      marque: "",
-      variationProduct: "",
-      voltage: 0,
-      categoryId: "",
-      garantie: "",
-    },
+    defaultValues: productData,
   });
-  //session data
-  const { data: session } = useSession();
-  const userId = session?.user.id;
 
-  //toast
+  const router = useRouter();
+
   const { toast } = useToast();
-
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
+    setLoading(true);
+    const allData = {
+      ...data,
+      imageUrl: image,
+      imageKey,
+    };
     if (!image) {
       toast({
-        title: "Image de produit est obligatoire",
-        variant: "destructive",
+        title: "L'image du produit est obligatoire",
+        variant: "error",
+        className: "toast-container",
       });
-      if (imageRef.current) {
-        imageRef.current.textContent = "Image de produit est obligatoire";
-      }
       return;
     }
-    setLoading(true);
-    const productSlug = createSlug(data.title);
+
+    if (
+      productData.title === allData.title &&
+      productData.marque === allData.marque &&
+      productData.categoryId === allData.categoryId &&
+      productData.price === allData.price &&
+      productData.stock === allData.stock &&
+      productData.capacite === allData.capacite &&
+      productData.voltage === allData.voltage &&
+      productData.courantDessai === allData.courantDessai &&
+      productData.variationProduct === allData.variationProduct &&
+      productData.description === allData.description &&
+      productData.garantie === allData.garantie &&
+      productData.imageUrl === allData.imageUrl
+    ) {
+      return;
+    }
     try {
-      const res = await axios.post("/api/product/add", {
-        ...data,
-        slug: productSlug,
-        userId,
-        imageUrl: image,
-        imageKey,
-      });
-      if (res.statusText === "created") {
+      const res = await axios.put(`/api/product/${productData.slug}`, allData);
+      if (res.statusText === "updated") {
         setLoading(false);
-        setError("");
         toast({
           title: "L'opération est terminée avec succès",
           description: res.data.message,
@@ -103,30 +89,22 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
         });
         router.push("/dashboard/produit");
       }
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false);
-      setError(
-        "Une erreur s'est produite, réessayez plus tard ou contactez le support"
-      );
+      console.log(error);
       toast({
         title: "Une erreur s'est produite",
-        description: "Réessayez plus tard ou contactez le support",
+        description: "",
         variant: "error",
+        className: "toast-container",
       });
-      console.log(error.response.data.message);
     }
   };
   return (
     <div className="space-y-2 bg-white p-10 rounded-md border-2 md:w-[750px] ">
       <h1 className="text-xl text-start text-gray-600 ">Ajouter produit</h1>
       <hr className="text-gray-400 " />
-      {error && (
-        <div>
-          <p className="bg-red-500 text-white rounded p-2 text-center text-md mt-6 mb-4">
-            {error}
-          </p>
-        </div>
-      )}
+
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
@@ -184,7 +162,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                       </SelectTrigger>
 
                       <SelectContent>
-                        {categorieData?.map((cat, idx) => (
+                        {categoryData?.map((cat, idx) => (
                           <SelectItem key={idx} value={cat.id}>
                             {cat.title}
                           </SelectItem>
@@ -395,19 +373,28 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
               );
             }}
           />
-
           <div>
-            <FormLabel className="mb-4   md:mb-2">Image du produit</FormLabel>
+            <div className="flex flex-col md:flex-row md:items-center justify-between">
+              <FormLabel className="mb-4   md:mb-2">Image du produit</FormLabel>
+              <Button
+                type="button"
+                onClick={() => {
+                  setImage("");
+                }}
+              >
+                Modifier l'image du produit
+              </Button>
+            </div>
 
-            <p ref={imageRef} className="text-red-500 text-sm"></p>
+            {/* <p ref={imageRef} className="text-red-500 text-sm"></p> */}
 
             <UploadImageButton
-              image={image}
-              setImage={setImage}
               imageKey={imageKey}
               setImageKey={setImageKey}
               isImageUploading={isImageUploading}
               setIsImageUploading={setIsImageUploading}
+              setImage={setImage}
+              image={image}
             />
           </div>
           {loading || isImageUploading ? (
@@ -417,7 +404,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
               type="submit"
               className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
             >
-              Ajouter produit
+              Modifier produit
             </Button>
           )}
         </form>
@@ -426,4 +413,4 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
   );
 };
 
-export default AjouterProduit;
+export default UpdateProductForm;

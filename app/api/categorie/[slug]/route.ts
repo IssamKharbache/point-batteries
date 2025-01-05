@@ -116,7 +116,7 @@ export const GET = async (
     if (!category) {
       return NextResponse.json({
         data: null,
-        message: "Categorie not foudn",
+        message: "Categorie not found",
       });
     }
     return NextResponse.json({

@@ -1,13 +1,16 @@
 "use client";
+
 import { UploadDropzone } from "@/lib/uploadthing";
 
 import Image from "next/image";
 
 interface UploadImageButtonProps {
-  image: string;
+  image?: string;
   setImage: (image: string) => void;
-  isImageUploading: boolean;
+  isImageUploading?: boolean;
   setIsImageUploading: (isImageUploading: boolean) => void;
+  imageKey?: string;
+  setImageKey: (imageKey: string) => void;
 }
 
 const UploadImageButton = ({
@@ -15,25 +18,30 @@ const UploadImageButton = ({
   setImage,
   isImageUploading,
   setIsImageUploading,
+  imageKey,
+  setImageKey,
 }: UploadImageButtonProps) => {
   return (
     <>
       {image ? (
-        <div className="mt-8">
+        <>
           <Image
             src={image}
-            alt="Item image"
+            alt="product image"
             width={1000}
             height={667}
-            className="w-full h-72 object-cover overflow-hidden rounded-md"
+            className="w-full h-72 object-cover overflow-hidden rounded-md mt-8"
           />
-        </div>
+        </>
       ) : (
         <UploadDropzone
-          onUploadBegin={() => setIsImageUploading(true)}
+          onUploadBegin={() => {
+            setIsImageUploading(true);
+          }}
           onUploadProgress={() => console.log("Uploading")}
           className="border-2 rounded-lg border-dashed border-slate-500 cursor-pointer  hover:bg-slate-200 duration-300"
           onClientUploadComplete={(res) => {
+            setImageKey(res[0].key);
             setImage(res[0].url);
             setIsImageUploading(false);
           }}

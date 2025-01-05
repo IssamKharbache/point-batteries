@@ -1,9 +1,106 @@
 import db from "@/lib/db";
+import { uatpi } from "@/lib/uploadthing-server";
+
 import { NextRequest, NextResponse } from "next/server";
 
 interface ParamsProps {
   slug: string;
 }
+
+export const PUT = async (
+  req: NextRequest,
+  context: { params: Promise<{ slug: string }> }
+) => {
+  try {
+    const slug = (await context.params).slug;
+    const {
+      title,
+      description,
+      imageUrl,
+      price,
+      stock,
+      capacite,
+      marque,
+      variationProduct,
+      courantDessai,
+      garantie,
+      categoryId,
+      userId,
+      voltage,
+      imageKey,
+    } = await req.json();
+    console.log(title);
+
+    if (
+      !title &&
+      !description &&
+      !imageUrl &&
+      !price &&
+      !stock &&
+      !capacite &&
+      !marque &&
+      variationProduct &&
+      !courantDessai &&
+      !garantie &&
+      !categoryId &&
+      !voltage &&
+      !userId
+    ) {
+      return NextResponse.json({
+        data: null,
+        message: "No changes",
+      });
+    }
+    const existProduct = await db.product.findUnique({
+      where: {
+        slug,
+      },
+    });
+    if (!existProduct) {
+      return NextResponse.json({
+        data: null,
+        message: "Produit n'existe pas",
+      });
+    }
+    const updatedProduct = await db.product.update({
+      where: {
+        slug,
+      },
+      data: {
+        title,
+        description,
+        imageUrl,
+        price,
+        stock,
+        capacite,
+        marque,
+        variationProduct,
+        courantDessai,
+        garantie,
+        categoryId,
+        userId,
+        voltage,
+        imageKey,
+      },
+    });
+    return NextResponse.json(
+      {
+        data: updatedProduct,
+        message: "Produit modifier avec succès",
+      },
+      {
+        status: 200,
+        statusText: "updated",
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    NextResponse.json({
+      error,
+      message: "Error while trying to update produit",
+    });
+  }
+};
 
 export const GET = async (
   req: NextRequest,
@@ -16,6 +113,7 @@ export const GET = async (
         slug,
       },
       select: {
+        slug: true,
         title: true,
         description: true,
         price: true,
@@ -26,6 +124,8 @@ export const GET = async (
         variationProduct: true,
         voltage: true,
         categoryId: true,
+        imageUrl: true,
+        garantie: true,
       },
     });
     if (!product) {
@@ -69,6 +169,11 @@ export const DELETE = async (
         { status: 404, statusText: "Produit n'existe pas " }
       );
     }
+
+    if (isExisting.imageKey) {
+      await uatpi.deleteFiles(isExisting.imageKey);
+    }
+
     await db.product.delete({
       where: {
         slug,

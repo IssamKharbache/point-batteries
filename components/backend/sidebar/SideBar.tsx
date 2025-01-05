@@ -67,7 +67,7 @@ const SideBar = () => {
     sideBarMenu.push(
       {
         name: "Ajouter Admin",
-        href: "/dashboard/ajouter-admin",
+        href: "/dashboard/notre-staff/ajouter-admin",
         icon: UserRoundPlus,
         isMainAdmin: true,
       },
