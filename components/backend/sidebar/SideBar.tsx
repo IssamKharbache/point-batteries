@@ -9,6 +9,7 @@ import { useSideBarStore } from "@/context/store";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import {
+  GalleryVertical,
   Layers,
   LayoutDashboard,
   Package2,
@@ -43,18 +44,6 @@ const SideBar = () => {
       icon: Package2,
       isMainAdmin: false,
     },
-    {
-      name: "Produit",
-      href: "/dashboard/produit",
-      icon: ShoppingBasket,
-      isMainAdmin: false,
-    },
-    {
-      name: "Catégorie",
-      href: "/dashboard/categorie",
-      icon: Layers,
-      isMainAdmin: false,
-    },
 
     {
       name: "Boutique",
@@ -66,15 +55,27 @@ const SideBar = () => {
   if (session.user.role === "ADMIN") {
     sideBarMenu.push(
       {
-        name: "Ajouter Admin",
-        href: "/dashboard/notre-staff/ajouter-admin",
-        icon: UserRoundPlus,
-        isMainAdmin: true,
+        name: "Produit",
+        href: "/dashboard/produit",
+        icon: ShoppingBasket,
+        isMainAdmin: false,
+      },
+      {
+        name: "Catégorie",
+        href: "/dashboard/categorie",
+        icon: Layers,
+        isMainAdmin: false,
       },
       {
         name: "Notre staff",
         href: "/dashboard/notre-staff",
         icon: UsersRound,
+        isMainAdmin: true,
+      },
+      {
+        name: "Bannière",
+        href: "/dashboard/banniere",
+        icon: GalleryVertical,
         isMainAdmin: true,
       }
     );

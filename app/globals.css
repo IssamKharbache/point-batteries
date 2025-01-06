@@ -94,3 +94,8 @@ body {
     background-color: #ddd;
   }
 }
+
+.swiper-pagination-bullet-active {
+  color: #ddd;
+  background-color: red;
+}

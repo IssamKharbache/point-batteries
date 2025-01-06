@@ -65,3 +65,8 @@ export const addCategorieSchema = z.object({
     .min(1, "Description est obligatoire")
     .min(5, "Description est trop courte"),
 });
+
+export const addBannerSchema = z.object({
+  title: z.string().min(1, "Titre est obligatoire"),
+  link: z.string().min(1, "Lien est obligatoire"),
+});

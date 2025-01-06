@@ -2,6 +2,7 @@ import NavBar from "@/components/frontend/navbar/NavBar";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../globals.css";
+import "swiper/css";
 import { AuthProvider } from "@/providers/Providers";
 import Footer from "@/components/frontend/footer/Footer";
 import { Toaster } from "@/components/ui/toaster";

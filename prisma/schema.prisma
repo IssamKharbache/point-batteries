@@ -43,6 +43,7 @@ model Product {
   courantDessai    Int
   voltage          Int
   garantie         Garantie @default(NOGARANTIE)
+  vente            Int?     @default(0)
 
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId String   @db.ObjectId
@@ -66,6 +67,18 @@ model Category {
   slug        String    @unique
   description String?
   products    Product[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Banner {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  title    String?
+  slug     String
+  link     String
+  imageUrl String
+  imageKey String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
