@@ -39,7 +39,7 @@ const UploadImageButton = ({
             setIsImageUploading(true);
           }}
           onUploadProgress={() => console.log("Uploading")}
-          className="border-2 rounded-lg border-dashed border-slate-500 cursor-pointer  hover:bg-slate-200 duration-300"
+          className="border-2 rounded-lg border-dashed border-slate-300 cursor-pointer  hover:bg-slate-100 duration-300"
           onClientUploadComplete={(res) => {
             setImageKey(res[0].key);
             setImage(res[0].url);

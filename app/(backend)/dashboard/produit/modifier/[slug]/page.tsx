@@ -30,6 +30,7 @@ export type ProductData = {
     voltage: number;
     garantie: string;
     slug: string;
+    imageKey: string;
   };
   categoryData: CategorieData;
 };

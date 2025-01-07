@@ -51,10 +51,13 @@ export const useLoadingStore = create<LoadingStore>((set) => ({
   setLoading: (loading: boolean) => set({ loading }),
 }));
 
-//useravatar name context
-type UserAvatar = {
-  nom: string;
-  prenom: string;
-  setNom: (nom: string) => void;
-  setPrenom: (prenom: string) => void;
+type BestProductSellsStore = {
+  filterBy: string;
+  setFilterBy: (filteryBy: string) => void;
 };
+export const useBestProductSellsStore = create<BestProductSellsStore>(
+  (set) => ({
+    filterBy: "voitures",
+    setFilterBy: (filterBy: string) => set({ filterBy }),
+  })
+);

@@ -34,30 +34,6 @@ export const addAdminSchema = z.object({
   password: z.string().min(1, "Mot de passe est obligatoire"),
 });
 
-export const addProductSchema = z.object({
-  title: z.string().min(1, "Titre est obligatoire"),
-  description: z.string().min(1, "Description est obligatoire"),
-  price: z
-    .number({ invalid_type_error: "Le prix doit être un nombre" })
-    .min(0, "Le prix doit être supérieur ou égal à 0"),
-  stock: z
-    .number({ invalid_type_error: "Le stock doit être un nombre" })
-    .min(0, "Le stock doit être supérieur ou égal à 0"),
-  capacite: z
-    .number({ invalid_type_error: "La capacite doit être un nombre" })
-    .min(0, "La capacite doit être supérieur ou égal à 0"),
-  courantDessai: z
-    .number({ invalid_type_error: "Le courant d’essai doit être un nombre" })
-    .min(0, "Le courant d’essai doit être supérieur ou égal à 0"),
-  marque: z.string().min(1, "Marque est obligatoire"),
-  variationProduct: z.string().min(1, "Variations du produit est obligatoire"),
-  voltage: z
-    .number({ invalid_type_error: "Le voltage doit être un nombre" })
-    .min(0, "Le voltage doit être supérieur ou égal à 0"),
-  categoryId: z.string().min(1, "Categorie est obligatoire"),
-  garantie: z.string().min(1, "Grantie est obligatoire"),
-});
-
 export const addCategorieSchema = z.object({
   title: z.string().min(1, "Titre est obligatoire"),
   description: z
@@ -69,4 +45,20 @@ export const addCategorieSchema = z.object({
 export const addBannerSchema = z.object({
   title: z.string().min(1, "Titre est obligatoire"),
   link: z.string().min(1, "Lien est obligatoire"),
+});
+
+export const addProductSchema = z.object({
+  title: z.string().min(1, "Titre est obligatoire"),
+  description: z.string().min(1, "Description est obligatoire"),
+  price: z.string().min(1, "Le prix doit être supérieur ou égal à 1"),
+  stock: z.string().min(1, "Le stock doit être supérieur ou égal à 1"),
+  capacite: z.string().min(1, "La capacite doit être supérieur ou égal à 1"),
+  courantDessai: z
+    .string()
+    .min(1, "Le courant d’essai doit être supérieur ou égal à 1"),
+  marque: z.string().min(1, "Marque est obligatoire"),
+  variationProduct: z.string().min(1, "Variations du produit est obligatoire"),
+  voltage: z.string().min(1, "Le voltage doit être supérieur ou égal à 1"),
+  categoryId: z.string().min(1, "Categorie est obligatoire"),
+  garantie: z.string().min(1, "Grantie est obligatoire"),
 });

@@ -6,9 +6,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import { CSSProperties } from "react";
-import { BannerType } from "@/app/(backend)/dashboard/banniere/columns";
 import Link from "next/link";
 
 interface CustomCSSProperties extends CSSProperties {
@@ -33,6 +32,7 @@ const Banner = ({ bannerData }: BannerProps) => {
   };
   return (
     <Swiper
+      modules={[Pagination]}
       className="h-full"
       draggable={true}
       spaceBetween={20}

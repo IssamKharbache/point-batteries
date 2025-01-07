@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { useSearchBarStore } from "@/context/store";
 import MainNav from "./MainNav";
 const NavBar = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const { setOpenBar, openBar } = useSearchBarStore();
 
   return (
@@ -25,7 +25,9 @@ const NavBar = () => {
         <MainNav />
       )}
       {/* Search bar  */}
-      <SearchBar open={openBar} setOpen={setOpenBar} />
+      <div className="bg-gray-50">
+        <SearchBar open={openBar} setOpen={setOpenBar} />
+      </div>
     </>
   );
 };

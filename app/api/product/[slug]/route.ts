@@ -29,8 +29,6 @@ export const PUT = async (
       voltage,
       imageKey,
     } = await req.json();
-    console.log(title);
-
     if (
       !title &&
       !description &&
@@ -68,19 +66,20 @@ export const PUT = async (
       },
       data: {
         title,
+        slug,
         description,
         imageUrl,
-        price,
-        stock,
-        capacite,
+        imageKey,
+        price: parseFloat(price),
+        stock: parseInt(stock),
+        capacite: parseInt(capacite),
+        voltage: parseInt(voltage),
         marque,
         variationProduct,
-        courantDessai,
+        courantDessai: parseInt(courantDessai),
         garantie,
         categoryId,
         userId,
-        voltage,
-        imageKey,
       },
     });
     return NextResponse.json(
@@ -126,6 +125,7 @@ export const GET = async (
         categoryId: true,
         imageUrl: true,
         garantie: true,
+        imageKey: true,
       },
     });
     if (!product) {

@@ -53,13 +53,13 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
     defaultValues: {
       title: "",
       description: "",
-      price: 0,
-      stock: 0,
-      capacite: 0,
-      courantDessai: 0,
+      price: "",
+      stock: "",
+      capacite: "",
+      courantDessai: "",
       marque: "",
       variationProduct: "",
-      voltage: 0,
+      voltage: "",
       categoryId: "",
       garantie: "",
     },
@@ -73,6 +73,8 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
 
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
     if (!image) {
+      console.log(data.price);
+
       toast({
         title: "Image de produit est obligatoire",
         variant: "destructive",
@@ -117,7 +119,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
     }
   };
   return (
-    <div className="space-y-2 bg-white p-10 rounded-md border-2 md:w-[750px] ">
+    <div className="space-y-2 bg-white p-10 rounded-md border-2 w-[300px] sm:w-[500px] md:w-[750px] ">
       <h1 className="text-xl text-start text-gray-600 ">Ajouter produit</h1>
       <hr className="text-gray-400 " />
       {error && (
@@ -171,15 +173,15 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
             }}
           />
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
-            <Controller
+            <FormField
               name="categoryId"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Categorie</FormLabel>
+                  <FormLabel className="text-sm">Categorie</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-full md:w-[290px]">
+                      <SelectTrigger className="w-full md:w-[290px] ">
                         <SelectValue placeholder="Categorie" />
                       </SelectTrigger>
 
@@ -196,12 +198,12 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                 </FormItem>
               )}
             />
-            <Controller
+            <FormField
               name="garantie"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Garantie</FormLabel>
+                  <FormLabel className="text-sm">Garantie</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="w-full md:w-[290px]">
@@ -231,15 +233,10 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4"
+                        className="mt-2 px-4 text-sm"
                         placeholder="Prix du produit"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -257,15 +254,10 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4"
+                        className="mt-2 px-4 text-sm"
                         placeholder="Combien de produit en stock ?"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -285,15 +277,10 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4"
+                        className="mt-2 px-4 text-sm"
                         placeholder="Capacité (Ah) du produit"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -311,15 +298,10 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4"
+                        className="mt-2 px-4 text-sm"
                         placeholder="Voltage (V) du produit"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -339,15 +321,10 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4"
+                        className="mt-2 px-4 text-sm"
                         placeholder="Courant d’essai de décharge à froid EN (A)"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />

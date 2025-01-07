@@ -21,11 +21,11 @@ export default function FrontLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased`}>
+      <body className={`${poppins.className} antialiased `}>
         <AuthProvider>
           <NavBar />
           <Toaster />
-          <div className="min-h-[650px]"> {children}</div>
+          <div className="min-h-[650px] bg-gray-50">{children}</div>
           <Footer />
         </AuthProvider>
       </body>

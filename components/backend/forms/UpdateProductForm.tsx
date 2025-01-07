@@ -33,13 +33,26 @@ import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
   const [image, setImage] = useState(productData.imageUrl);
   const [isImageUploading, setIsImageUploading] = useState(false);
-  const [imageKey, setImageKey] = useState("");
+  const [imageKey, setImageKey] = useState(productData.imageKey);
   const [loading, setLoading] = useState(false);
+
+  const priceToString = String(productData.price);
+  const capaciteToString = String(productData.capacite);
+  const stockToString = String(productData.stock);
+  const cdes = String(productData.courantDessai);
+  const voltageToString = String(productData.voltage);
 
   //react hook form
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
-    defaultValues: productData,
+    defaultValues: {
+      ...productData,
+      price: priceToString,
+      capacite: capaciteToString,
+      stock: stockToString,
+      courantDessai: cdes,
+      voltage: voltageToString,
+    },
   });
 
   const router = useRouter();
@@ -65,11 +78,11 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       productData.title === allData.title &&
       productData.marque === allData.marque &&
       productData.categoryId === allData.categoryId &&
-      productData.price === allData.price &&
-      productData.stock === allData.stock &&
-      productData.capacite === allData.capacite &&
-      productData.voltage === allData.voltage &&
-      productData.courantDessai === allData.courantDessai &&
+      productData.price === Number(allData.price) &&
+      productData.stock === Number(allData.stock) &&
+      productData.capacite === Number(allData.capacite) &&
+      productData.voltage === Number(allData.voltage) &&
+      productData.courantDessai === Number(allData.courantDessai) &&
       productData.variationProduct === allData.variationProduct &&
       productData.description === allData.description &&
       productData.garantie === allData.garantie &&
@@ -149,7 +162,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
             }}
           />
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
-            <Controller
+            <FormField
               name="categoryId"
               control={form.control}
               render={({ field }) => (
@@ -174,7 +187,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                 </FormItem>
               )}
             />
-            <Controller
+            <FormField
               name="garantie"
               control={form.control}
               render={({ field }) => (
@@ -213,11 +226,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Prix du produit"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -239,11 +247,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Combien de produit en stock ?"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -267,11 +270,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Capacité (Ah) du produit"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -293,11 +291,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Voltage (V) du produit"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -321,11 +314,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Courant d’essai de décharge à froid EN (A)"
                         min={0}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? "" : Number(e.target.value)
-                          )
-                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -385,8 +373,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                 Modifier l'image du produit
               </Button>
             </div>
-
-            {/* <p ref={imageRef} className="text-red-500 text-sm"></p> */}
 
             <UploadImageButton
               imageKey={imageKey}
