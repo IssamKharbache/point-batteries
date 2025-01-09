@@ -5,7 +5,10 @@ export const GET = async () => {
   try {
     const categorie = await db.category.findMany({
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
+      },
+      include: {
+        products: true,
       },
     });
 

@@ -50,14 +50,3 @@ export const useLoadingStore = create<LoadingStore>((set) => ({
   loading: false,
   setLoading: (loading: boolean) => set({ loading }),
 }));
-
-type BestProductSellsStore = {
-  filterBy: string;
-  setFilterBy: (filteryBy: string) => void;
-};
-export const useBestProductSellsStore = create<BestProductSellsStore>(
-  (set) => ({
-    filterBy: "voitures",
-    setFilterBy: (filterBy: string) => set({ filterBy }),
-  })
-);

@@ -1,34 +1,11 @@
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useBestProductSellsStore } from "@/context/store";
-
 interface SectionHeaderProps {
   header: string;
 }
 const SectionHeader = ({ header }: SectionHeaderProps) => {
-  const { filterBy, setFilterBy } = useBestProductSellsStore();
   return (
-    <div>
-      <div className="flex justify-between ">
-        <h1 className="font-semibold text-2xl mb-4">{header}</h1>
-        <div>
-          <Tabs defaultValue={filterBy} className="">
-            <TabsList>
-              <TabsTrigger
-                onClick={() => setFilterBy("voitures")}
-                value="voitures"
-              >
-                Voitures
-              </TabsTrigger>
-              <TabsTrigger onClick={() => setFilterBy("motos")} value="motos">
-                Motos
-              </TabsTrigger>
-              <TabsTrigger onClick={() => setFilterBy("pwl")} value="pwl">
-                Poit-Lourds
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
+    <div className="m-4">
+      <div className="flex flex-col items-center justify-between  md:mb-0 md:flex-row  ">
+        <h1 className="font-semibold text-2xl mb-4 capitalize">{header}</h1>
       </div>
       <hr className="h-[4px] bg-gray-200 rounded-full outline-none border-none" />
     </div>

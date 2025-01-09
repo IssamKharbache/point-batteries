@@ -56,7 +56,7 @@ export type ProductData = {
   garantie: string | null;
   categoryId: string;
   userId: string | null;
-  vente: number | null;
+  vente: number;
 };
 const TableActions = ({
   userData,

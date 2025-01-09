@@ -4,34 +4,67 @@ import SectionHeader from "./SectionHeader";
 import { ProductData } from "@/components/backend/table/TableActions";
 import { Navigation } from "swiper/modules";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { BiCartAdd } from "react-icons/bi";
+import { useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface BestSellingProductsProps {
   productsData: [ProductData];
 }
 const BestSellingProducts = ({ productsData }: BestSellingProductsProps) => {
+  const swiperRef = useRef<any>(null);
   return (
     <div className="mt-20">
-      <SectionHeader header="Meilleures Ventes" />
-      <div className="p-8 ">
+      <div className="m-8 2xl:m-0">
+        <div className="flex justify-between md:items-end md:justify-end gap-4 mb-4">
+          <button
+            onClick={() => swiperRef.current.slidePrev()}
+            className="bg-slate-900  text-white hover:bg-slate-700 duration-300"
+          >
+            <ChevronLeft />
+          </button>
+          <p className="md:hidden">Meilleures Ventes</p>
+          <button
+            onClick={() => swiperRef.current.slideNext()}
+            className="bg-slate-900  text-white hover:bg-slate-700 duration-300"
+          >
+            <ChevronRight />
+          </button>
+        </div>
         <Swiper
+          breakpoints={{
+            480: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            550: {
+              slidesPerView: 2,
+              spaceBetween: 40,
+            },
+            970: {
+              slidesPerView: 2,
+              spaceBetween: 40,
+            },
+            1200: {
+              slidesPerView: 4,
+              spaceBetween: 50,
+            },
+          }}
           modules={[Navigation]}
           draggable={true}
           spaceBetween={40}
-          slidesPerView={4}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
         >
           {productsData.map((product, idx) => (
-            <SwiperSlide
-              key={idx}
-              className="shadow p-6 bg-white  mb-8 group relative"
-            >
+            <SwiperSlide key={idx} className="shadow p-6 bg-white  mb-8 group ">
               <Image
                 src={product.imageUrl || ""}
                 alt="image du produit"
                 width={500}
                 height={500}
-                className="group-hover:scale-105 duration-300  object-contain mb-12 h-72 w-72 "
+                className="flex items-center justify-center group-hover:scale-105 duration-300  object-contain mb-12  "
               />
 
               <h1 className="line-clamp-1 w-60 font-semibold">
