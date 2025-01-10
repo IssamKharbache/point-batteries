@@ -10,11 +10,15 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface BestSellingProductsProps {
   productsData: [ProductData];
+  categoryTitle?: string;
 }
-const BestSellingProducts = ({ productsData }: BestSellingProductsProps) => {
+const BestSellingProducts = ({
+  productsData,
+  categoryTitle,
+}: BestSellingProductsProps) => {
   const swiperRef = useRef<any>(null);
   return (
-    <div className="mt-20">
+    <div className="mt-4">
       <div className="m-8 2xl:m-0">
         <div className="flex justify-between md:items-end md:justify-end gap-4 mb-4">
           <button
@@ -23,7 +27,10 @@ const BestSellingProducts = ({ productsData }: BestSellingProductsProps) => {
           >
             <ChevronLeft />
           </button>
-          <p className="md:hidden">Meilleures Ventes</p>
+
+          <p className="capitalize font-semibold text-xl md:hidden ">
+            {categoryTitle}
+          </p>
           <button
             onClick={() => swiperRef.current.slideNext()}
             className="bg-slate-900  text-white hover:bg-slate-700 duration-300"
