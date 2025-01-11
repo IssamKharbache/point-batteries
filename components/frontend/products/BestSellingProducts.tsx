@@ -7,6 +7,7 @@ import Image from "next/image";
 import { BiCartAdd } from "react-icons/bi";
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 interface BestSellingProductsProps {
   productsData: [ProductData];
@@ -66,17 +67,20 @@ const BestSellingProducts = ({
         >
           {productsData.map((product, idx) => (
             <SwiperSlide key={idx} className="shadow p-6 bg-white  mb-8 group ">
-              <Image
-                src={product.imageUrl || ""}
-                alt="image du produit"
-                width={500}
-                height={500}
-                className="flex items-center justify-center group-hover:scale-105 duration-300  object-contain mb-12  "
-              />
+              <Link href={`/produit/${product.slug}`}>
+                <Image
+                  src={product.imageUrl || ""}
+                  alt="image du produit"
+                  width={500}
+                  height={500}
+                  className="flex items-center justify-center group-hover:scale-105 duration-300  object-contain mb-12  "
+                />
 
-              <h1 className="line-clamp-1 w-60 font-semibold">
-                {product.title}
-              </h1>
+                <h1 className="line-clamp-1 w-60 font-semibold">
+                  {product.title}
+                </h1>
+              </Link>
+
               <div className="flex items-center justify-between mt-4">
                 <p className="font-semibold text-green-500 ">
                   {product.price}dhs

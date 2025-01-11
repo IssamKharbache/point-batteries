@@ -2,7 +2,6 @@ import BestSellingProducts from "@/components/frontend/products/BestSellingProdu
 import SectionHeader from "@/components/frontend/products/SectionHeader";
 import Banner from "@/components/frontend/sliders/Banner";
 import { getData } from "@/lib/getData";
-import { Category } from "@prisma/client";
 import { CategorieData } from "../(backend)/dashboard/produit/ajouter/page";
 
 const frontHomePage = async () => {
