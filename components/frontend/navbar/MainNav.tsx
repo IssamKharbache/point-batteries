@@ -2,12 +2,15 @@ import UserAvatar from "./UserAvatar";
 import Image from "next/image";
 import { Menu, Search } from "lucide-react";
 import MobileMenu from "./MobileMenu";
-import { HiMenuAlt2 } from "react-icons/hi";
 
 import Link from "next/link";
 import { FaRegUser } from "react-icons/fa6";
 import { IoCartOutline } from "react-icons/io5";
-import { useMobileMenuStore, useSearchBarStore } from "@/context/store";
+import {
+  useCartStore,
+  useMobileMenuStore,
+  useSearchBarStore,
+} from "@/context/store";
 import { useSession } from "next-auth/react";
 import CategoryDropDown from "./CategoryDropDown";
 
@@ -15,6 +18,8 @@ const MainNav = () => {
   const { data: session, status } = useSession();
   const { openMobileMenu, setOpenMobileMenu } = useMobileMenuStore();
   const { setOpenBar, openBar } = useSearchBarStore();
+  const { cartItems } = useCartStore();
+
   return (
     <nav className="h-25 border-b  shadow-sm ">
       <div className="flex items-center justify-between py-3 max-w-[1500px] mx-auto px-4 md:px-8 gap-8  ">
@@ -63,9 +68,13 @@ const MainNav = () => {
           <div>
             <Link
               href="/mon-panier"
-              className="flex items-center gap-4  hover:bg-gray-100 p-2 rounded px-7"
+              className="flex items-center gap-4  hover:bg-gray-100 p-2 rounded px-7 relative"
             >
-              <IoCartOutline className="size-[22px] md:size-[30px]" />
+              <IoCartOutline className="size-[22px] md:size-[30px] " />
+              <div className="absolute inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 text-[10px] md:text-[12px] font-bold text-white bg-red-500 rounded-full -top-[1px] md:-top-[2px] start-6">
+                {cartItems.length}
+              </div>
+
               <p className="text-md hidden md:block">Mon panier</p>
             </Link>
           </div>

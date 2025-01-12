@@ -8,6 +8,8 @@ import {
   WhatsappShareButton,
 } from "react-share";
 
+import { FaFacebookF } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 const ShareProduct = () => {
   const [copied, setCopied] = useState<boolean>(false);
 
@@ -36,20 +38,20 @@ const ShareProduct = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <FacebookShareButton url={currentUrl}>
-        <button className="flex gap-2 items-center justify-center px-4 rounded  bg-blue-600 hover:bg-blue-700 duration-300 py-1">
-          <FacebookIcon size={15} className="h-8 w-8 rounded-full p-1" />
+        <div className="flex gap-2 items-center justify-center px-4 rounded  bg-blue-600 hover:bg-blue-700 duration-300 py-2">
+          <FaFacebookF size={15} className="rounded-full text-white" />
           <span className="text-white font-medium text-sm">Partager</span>
-        </button>
+        </div>
       </FacebookShareButton>
       <WhatsappShareButton url={currentUrl}>
-        <button className="flex gap-2 items-center justify-center px-4 rounded  bg-green-500 hover:bg-green-600 duration-300 py-1">
-          <WhatsappIcon size={15} className="h-8 w-8 rounded-full p-1" />
+        <div className="flex gap-2 items-center justify-center px-4 rounded  bg-green-500 hover:bg-green-600 duration-300 py-2">
+          <FaWhatsapp size={15} className="rounded-full text-white" />
           <span className="text-white font-medium text-sm">Partager</span>
-        </button>
+        </div>
       </WhatsappShareButton>
       <button
         onClick={copyToClipboard}
-        className="flex items-center gap-2 bg-slate-800 rounded text-white font-semibold text-sm px-5"
+        className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 duration-300 rounded text-white font-semibold text-sm px-5"
       >
         {copied ? (
           <>

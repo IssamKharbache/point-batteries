@@ -12,7 +12,7 @@ const SectionHeader = ({
 }: SectionHeaderProps) => {
   return (
     <div className="mt-8">
-      <div className="flex flex-col items-center justify-between  md:mb-0 md:flex-row  ">
+      <div className="flex items-center justify-between  md:mb-0 md:flex-row  ">
         <h1 className="font-semibold text-2xl mb-4 capitalize">
           {header ?? categoryTitle}
         </h1>

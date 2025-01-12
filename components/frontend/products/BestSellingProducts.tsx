@@ -6,18 +6,21 @@ import { Navigation } from "swiper/modules";
 import Image from "next/image";
 import { BiCartAdd } from "react-icons/bi";
 import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import Link from "next/link";
+import { useCartStore } from "@/context/store";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
 
-interface BestSellingProductsProps {
+interface ProductsProps {
   productsData: [ProductData];
   categoryTitle?: string;
 }
-const BestSellingProducts = ({
-  productsData,
-  categoryTitle,
-}: BestSellingProductsProps) => {
+const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const swiperRef = useRef<any>(null);
+  const { setCartItems } = useCartStore();
+  const { data: session } = useSession();
+  const { toast } = useToast();
   return (
     <div className="mt-4">
       <div className="m-8 2xl:m-0">
@@ -80,13 +83,28 @@ const BestSellingProducts = ({
                   {product.title}
                 </h1>
               </Link>
-
+              <p className="font-semibold text-green-500 ">
+                {product.price}dhs
+              </p>
               <div className="flex items-center justify-between mt-4">
-                <p className="font-semibold text-green-500 ">
-                  {product.price}dhs
-                </p>
-
+                <button className="hover:bg-slate-100 p-2  border rounded group/heart duration-300">
+                  <Heart className="group-hover/heart:fill-red-500 group-hover/heart:text-red-500" />
+                </button>
                 <button
+                  onClick={() => {
+                    toast({
+                      title: "Produit ajouter au panier",
+                      variant: "success",
+                    });
+                    setCartItems({
+                      id: product.slug,
+                      title: product.title,
+                      imageUrl: product.imageUrl || "",
+                      price: product.price,
+                      qty: 1,
+                      userId: session?.user.id || "",
+                    });
+                  }}
                   className="flex items-center justify-center  rounded-full h-10 w-10 hover:!bg-blue-600  group-hover:bg-gray-800 group-hover:text-white duration-300
                 "
                 >
@@ -101,4 +119,4 @@ const BestSellingProducts = ({
   );
 };
 
-export default BestSellingProducts;
+export default ProductCard;

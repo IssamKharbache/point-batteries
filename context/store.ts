@@ -1,3 +1,4 @@
+import { title } from "process";
 import { create } from "zustand";
 
 //search bar store context
@@ -49,4 +50,87 @@ type LoadingStore = {
 export const useLoadingStore = create<LoadingStore>((set) => ({
   loading: false,
   setLoading: (loading: boolean) => set({ loading }),
+}));
+
+interface CartItem {
+  id: string;
+  title: string;
+  imageUrl: string;
+  price: number;
+  qty: number;
+  userId: string;
+}
+
+type CartStore = {
+  cartItems: CartItem[];
+  setCartItems: (newItem: CartItem) => void;
+  deleteItem: (id: string) => void;
+  incrementQty: (id: string) => void;
+  decrementQty: (id: string) => void;
+};
+
+export const useCartStore = create<CartStore>((set) => ({
+  cartItems: (typeof window !== "undefined" &&
+    JSON.parse(localStorage.getItem("cartItems") || "[]")) as CartItem[],
+  setCartItems: (newItem) => {
+    set((state) => {
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) => item.id === newItem.id
+      );
+
+      let updatedCartItems;
+      if (existingItemIndex !== -1) {
+        updatedCartItems = state.cartItems.map((item, index) =>
+          index === existingItemIndex
+            ? { ...item, qty: item.qty + newItem.qty }
+            : item
+        );
+      } else {
+        updatedCartItems = [...state.cartItems, newItem];
+      }
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      }
+
+      return { cartItems: updatedCartItems };
+    });
+  },
+  deleteItem: (id) => {
+    set((state) => {
+      const updatedCartItems = state.cartItems.filter((item) => item.id !== id);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      }
+
+      return { cartItems: updatedCartItems };
+    });
+  },
+  incrementQty: (id) => {
+    set((state) => {
+      const updatedCartItems = state.cartItems.map((item) =>
+        item.id === id ? { ...item, qty: item.qty + 1 } : item
+      );
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      }
+
+      return { cartItems: updatedCartItems };
+    });
+  },
+  decrementQty: (id) => {
+    set((state) => {
+      const updatedCartItems = state.cartItems.map((item) =>
+        item.id === id && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
+      );
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      }
+
+      return { cartItems: updatedCartItems };
+    });
+  },
 }));
