@@ -43,7 +43,7 @@ const MainNav = () => {
           />
         </Link>
 
-        <div className="flex items-center  md:gap-4 ">
+        <div className="flex items-center gap-2  md:gap-4 ">
           <button onClick={() => setOpenBar(true)} className="block md:hidden">
             <Search size={20} />
           </button>
@@ -68,14 +68,14 @@ const MainNav = () => {
           <div>
             <Link
               href="/mon-panier"
-              className="flex items-center gap-4  hover:bg-gray-100 p-2 rounded px-7 relative"
+              className="flex items-center gap-4  hover:bg-gray-100 py-2 rounded px-4 md:px-7 relative"
             >
-              <IoCartOutline className="size-[22px] md:size-[30px] " />
-              <div className="absolute inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 text-[10px] md:text-[12px] font-bold text-white bg-red-500 rounded-full -top-[1px] md:-top-[2px] start-6">
+              <IoCartOutline className="size-[22px] md:size-[25px] " />
+              <div className="absolute inline-flex items-center justify-center w-3 h-3 md:w-4 md:h-4  text-[10px] md:text-[12px] font-bold text-white bg-red-500 rounded-full top-[3px] md:top-[1px] start-3 md:start-6">
                 {cartItems.length}
               </div>
 
-              <p className="text-md hidden md:block">Mon panier</p>
+              <p className="text-md hidden xl:block">Mon panier</p>
             </Link>
           </div>
           <button onClick={() => setOpenMobileMenu(true)}>

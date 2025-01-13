@@ -12,11 +12,11 @@ const frontHomePage = async () => {
   const filteredData = categoryData.filter((cat) => cat.products.length >= 4);
 
   return (
-    <div className="max-w-[1500px] mx-auto ">
-      <div className="m-4 md:m-0">
+    <div className="max-w-[1200px] mx-auto ">
+      <div className="m-4 xl:m-0">
         <Banner bannerData={data} />
       </div>
-      <div className="mb-12 m-4 2xl:m-0">
+      <div className="mb-12 m-8 2xl:m-0">
         <SectionHeader header="Meilleures Ventes" />
         <BestSellingProducts productsData={products} />
       </div>

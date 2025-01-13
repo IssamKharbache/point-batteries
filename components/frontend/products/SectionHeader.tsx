@@ -13,7 +13,7 @@ const SectionHeader = ({
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between  md:mb-0 md:flex-row  ">
-        <h1 className="font-semibold text-2xl mb-4 capitalize">
+        <h1 className="font-semibold text-xl mb-4 capitalize">
           {header ?? categoryTitle}
         </h1>
         {isCategory && (

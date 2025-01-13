@@ -71,7 +71,7 @@ type CartStore = {
 
 export const useCartStore = create<CartStore>((set) => ({
   cartItems: (typeof window !== "undefined" &&
-    JSON.parse(localStorage.getItem("cartItems") || "[]")) as CartItem[],
+    JSON.parse(localStorage.getItem("cartItems") || "")) as CartItem[],
   setCartItems: (newItem) => {
     set((state) => {
       const existingItemIndex = state.cartItems.findIndex(
@@ -133,4 +133,14 @@ export const useCartStore = create<CartStore>((set) => ({
       return { cartItems: updatedCartItems };
     });
   },
+}));
+
+type BookmarkStore = {
+  isBookmarked: boolean;
+  setIsBookmarked: (isBookmarked: boolean) => void;
+};
+
+export const useBookmarkStore = create<BookmarkStore>((set) => ({
+  isBookmarked: false,
+  setIsBookmarked: (isBookmarked: boolean) => set({ isBookmarked }),
 }));

@@ -1,6 +1,5 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SectionHeader from "./SectionHeader";
 import { ProductData } from "@/components/backend/table/TableActions";
 import { Navigation } from "swiper/modules";
 import Image from "next/image";
@@ -8,9 +7,10 @@ import { BiCartAdd } from "react-icons/bi";
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import Link from "next/link";
-import { useCartStore } from "@/context/store";
+import { useBookmarkStore, useCartStore } from "@/context/store";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 
 interface ProductsProps {
   productsData: [ProductData];
@@ -21,6 +21,28 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const { setCartItems } = useCartStore();
   const { data: session } = useSession();
   const { toast } = useToast();
+
+  const { isBookmarked, setIsBookmarked } = useBookmarkStore();
+
+  const bookmarkProduct = async (productId: string) => {
+    setIsBookmarked(true);
+    const userId = session?.user.id;
+    try {
+      const res = await axios.post("/api/bookmark/add", {
+        productId,
+        userId,
+      });
+      if (res.statusText === "bookmarked") {
+        toast({
+          title: "Bookmarked successfully",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setIsBookmarked(false);
+    }
+  };
+
   return (
     <div className="mt-4">
       <div className="m-8 2xl:m-0">
@@ -87,8 +109,15 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                 {product.price}dhs
               </p>
               <div className="flex items-center justify-between mt-4">
-                <button className="hover:bg-slate-100 p-2  border rounded group/heart duration-300">
-                  <Heart className="group-hover/heart:fill-red-500 group-hover/heart:text-red-500" />
+                <button
+                  onClick={() => bookmarkProduct(product.id)}
+                  className="hover:bg-slate-100 p-2  border rounded group/heart duration-300"
+                >
+                  <Heart
+                    className={`group-hover/heart:fill-red-500 group-hover/heart:text-red-500 ${
+                      isBookmarked ? "fill-red-500 text-red-500" : ""
+                    }`}
+                  />
                 </button>
                 <button
                   onClick={() => {
