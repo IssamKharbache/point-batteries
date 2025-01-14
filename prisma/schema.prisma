@@ -149,4 +149,6 @@ model Bookmark {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }

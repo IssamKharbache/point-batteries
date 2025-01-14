@@ -41,11 +41,11 @@ export type ProductData = {
   id: string;
   title: string;
   slug: string;
-  description: string | null; // Ensure this is string | null
+  description: string | null;
   createdAt: Date;
   updatedAt: Date | null;
-  imageUrl: string | null; // Ensure this is string | null
-  imageKey: string | null; // Ensure this is string | null
+  imageUrl: string | null;
+  imageKey: string | null;
   price: number;
   stock: number | null;
   capacite: number | null;
@@ -57,6 +57,13 @@ export type ProductData = {
   categoryId: string;
   userId: string | null;
   vente: number;
+  bookmarks: [
+    {
+      id: string;
+      userId: string;
+      productId: string;
+    }
+  ];
 };
 const TableActions = ({
   userData,

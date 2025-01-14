@@ -1,10 +1,13 @@
 import db from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 export const GET = async () => {
   try {
     const product = await db.product.findMany({
       orderBy: {
         createdAt: "desc",
+      },
+      include: {
+        bookmarks: true,
       },
     });
 

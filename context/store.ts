@@ -136,11 +136,12 @@ export const useCartStore = create<CartStore>((set) => ({
 }));
 
 type BookmarkStore = {
-  isBookmarked: boolean;
-  setIsBookmarked: (isBookmarked: boolean) => void;
+  isBookmarkedByUser: boolean;
+  setIsBookmarkedByUser: (isBookmarkedByUser: boolean) => void;
 };
 
 export const useBookmarkStore = create<BookmarkStore>((set) => ({
-  isBookmarked: false,
-  setIsBookmarked: (isBookmarked: boolean) => set({ isBookmarked }),
+  isBookmarkedByUser: false,
+  setIsBookmarkedByUser: (isBookmarkedByUser: boolean) =>
+    set({ isBookmarkedByUser }),
 }));

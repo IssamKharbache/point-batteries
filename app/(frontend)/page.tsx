@@ -7,8 +7,8 @@ import { CategorieData } from "../(backend)/dashboard/produit/ajouter/page";
 const frontHomePage = async () => {
   const data = await getData("/banner");
   const products = await getData(`/product`);
-  const categoryData: CategorieData = await getData("/categorie");
 
+  const categoryData: CategorieData = await getData("/categorie");
   const filteredData = categoryData.filter((cat) => cat.products.length >= 4);
 
   return (
