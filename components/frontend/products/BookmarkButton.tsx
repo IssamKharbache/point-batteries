@@ -3,7 +3,7 @@ import { useBookmarkStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { Heart } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 interface BookmarkButtonProps {
   product: ProductData;
@@ -11,77 +11,87 @@ interface BookmarkButtonProps {
 }
 
 const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
-  const { isBookmarkedByUser, setIsBookmarkedByUser } = useBookmarkStore();
-
-  const [isProductBookmarkedByUser, setIsProductBookmarkedByUser] =
-    useState(false);
-
-  useEffect(() => {
-    // Set the initial state based on whether the product is bookmarked by the user
-    if (product?.bookmarks?.some((bookmark) => bookmark.userId === userId)) {
-      setIsProductBookmarkedByUser(true);
-    }
-  }, [product, userId]);
+  const { bookmarks, setBookmark } = useBookmarkStore();
   const { toast } = useToast();
 
-  const bookmarkProduct = async (productId: string) => {
+  // Get the bookmark state for this product
+  const isBookmarked = bookmarks[product.id] || false;
+
+  useEffect(() => {
+    // Fetch the bookmark state from the backend when the component mounts
+    const fetchBookmarkState = async () => {
+      try {
+        const response = await axios.get(`/api/bookmark/${product.id}`, {
+          data: { userId },
+        });
+        console.log(response);
+
+        setBookmark(product.id, response.data.isBookmarked);
+      } catch (error) {
+        console.error("Failed to fetch bookmark state", error);
+      }
+    };
+
+    if (userId) {
+      fetchBookmarkState();
+    }
+  }, [product.id, userId, setBookmark]);
+
+  const handleBookmark = async () => {
     if (!userId) {
       toast({
         title: "Vous devez être connecté",
         variant: "error",
       });
+      return;
     }
-    setIsProductBookmarkedByUser(!isProductBookmarkedByUser);
-    if (!isProductBookmarkedByUser) {
-      toast({
-        title: "Ajouté aux liste d'envies avec succès",
-        variant: "success",
-      });
-    } else {
-      toast({
-        title: "Supprimé de la liste d'envies avec succès",
-        variant: "success",
-      });
-    }
-    if (isProductBookmarkedByUser) {
-      try {
-        const res = await axios.delete(`/api/bookmark/${productId}`, {
-          data: JSON.stringify(userId),
+
+    // Optimistic update
+    const previousState = isBookmarked;
+    setBookmark(product.id, !isBookmarked);
+
+    try {
+      if (isBookmarked) {
+        // Unbookmark the product
+        await axios.delete(`/api/bookmark/${product.id}`, {
+          data: { userId },
         });
-      } catch (error) {
-        // Revert the state if the request fails
-        setIsProductBookmarkedByUser(true);
         toast({
-          title: "Erreur",
-          description: "Échec de la suppression de la liste d'envies",
-          variant: "destructive",
+          title: "Supprimé",
+          description: "Supprimé de la liste d'envies avec succès",
+          variant: "success",
+        });
+      } else {
+        // Bookmark the product
+        await axios.post(`/api/bookmark/${product.id}`, { userId });
+        toast({
+          title: "Ajouté",
+          description: "Ajouté à la liste d'envies avec succès",
+          variant: "success",
         });
       }
-    } else {
-      try {
-        const res = await axios.post(`/api/bookmark/${productId}`, { userId });
-      } catch (error) {
-        console.log(error);
-        // Revert the state if the request fails
-        setIsProductBookmarkedByUser(false);
-        toast({
-          title: "Erreur",
-          description: "Échec de l'ajout à la liste d'envies",
-          variant: "destructive",
-        });
-      }
+    } catch (error) {
+      // Revert state if the API call fails
+      setBookmark(product.id, previousState);
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite, veuillez réessayer",
+        variant: "destructive",
+      });
     }
   };
 
   return (
     <button
-      onClick={() => bookmarkProduct(product.id)}
-      className="hover:bg-slate-100 p-2  border rounded group/heart "
+      onClick={handleBookmark}
+      className="hover:bg-slate-100 p-2 border rounded group/heart"
     >
+      {isBookmarked ? "book" : "unbook"}
+
       <Heart
-        className={` group-hover/heart:fill-red-500 group-hover/heart:text-red-500 duration-300 ${
-          isProductBookmarkedByUser
-            ? "fill-red-500 text-red-500 group-hover/heart:fill-gray-300 group-hover/heart:text-gray-300"
+        className={`group-hover/heart:fill-red-500 group-hover/heart:text-red-500 duration-300 ${
+          isBookmarked
+            ? "fill-red-500 text-red-500 group-hover/heart:!fill-gray-300 group-hover/heart:!text-gray-300"
             : "fill-gray-300 text-gray-300"
         }`}
       />

@@ -9,7 +9,7 @@ const frontHomePage = async () => {
   const products = await getData(`/product`);
 
   const categoryData: CategorieData = await getData("/categorie");
-  const filteredData = categoryData.filter((cat) => cat.products.length >= 4);
+  const filteredData = categoryData?.filter((cat) => cat.products.length >= 4);
 
   return (
     <div className="max-w-[1200px] mx-auto ">

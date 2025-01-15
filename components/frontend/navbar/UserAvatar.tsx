@@ -81,7 +81,7 @@ const UserAvatar = () => {
             </DropdownMenuItem>
           </Link>
         )}
-        <Link href="/mes-commandes">
+        <Link href="/liste-denvies">
           <DropdownMenuItem className="cursor-pointer gap-4">
             <Heart className="" />
             <span>Votre liste d'envies</span>

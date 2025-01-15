@@ -5,39 +5,39 @@ export const GET = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
-  const productId = await (await context.params).id;
-  const userId = req.nextUrl.searchParams.get("userId");
+  const userId = (await context.params).id;
 
   try {
-    if (!userId) {
-      return NextResponse.json(
-        {
-          message: "You must be logged in",
-        },
-        {
-          status: 401,
-          statusText: "unauthorized",
-        }
-      );
-    }
-    const bookmarks = await db.bookmark.findUnique({
+    const bookmarks = await db.bookmark.findMany({
       where: {
-        userId_productId: {
-          userId,
-          productId,
-        },
-        include: {
-          user: true,
-        },
+        userId,
+      },
+      include: {
+        product: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
-    return NextResponse.json(bookmarks);
+    return NextResponse.json(
+      {
+        data: bookmarks,
+        message: "Favourites",
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
-    console.error(error);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    console.log(error);
+    return NextResponse.json({
+      error: error || "Internal Server Error",
+      message: "Error while trying to get favourites products",
+    });
   }
 };
+
 export const POST = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }

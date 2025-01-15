@@ -136,12 +136,17 @@ export const useCartStore = create<CartStore>((set) => ({
 }));
 
 type BookmarkStore = {
-  isBookmarkedByUser: boolean;
-  setIsBookmarkedByUser: (isBookmarkedByUser: boolean) => void;
+  bookmarks: { [productId: string]: boolean }; // Object to store bookmark states by product ID
+  setBookmark: (productId: string, isBookmarked: boolean) => void; // Function to update a bookmark
 };
 
 export const useBookmarkStore = create<BookmarkStore>((set) => ({
-  isBookmarkedByUser: false,
-  setIsBookmarkedByUser: (isBookmarkedByUser: boolean) =>
-    set({ isBookmarkedByUser }),
+  bookmarks: {}, // Initial state: no bookmarks
+  setBookmark: (productId, isBookmarked) =>
+    set((state) => ({
+      bookmarks: {
+        ...state.bookmarks,
+        [productId]: isBookmarked, // Update the bookmark state for the specific product
+      },
+    })),
 }));

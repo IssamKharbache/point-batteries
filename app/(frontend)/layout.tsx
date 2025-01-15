@@ -1,14 +1,14 @@
 import NavBar from "@/components/frontend/navbar/NavBar";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "../globals.css";
 import "swiper/css";
 import { AuthProvider } from "@/providers/Providers";
 import Footer from "@/components/frontend/footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
-const poppins = Poppins({
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  subsets: ["latin"],
+const poppins = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["cyrillic"],
 });
 export const metadata: Metadata = {
   title: "Point Batteries Service",
