@@ -3,7 +3,8 @@ import { useBookmarkStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { Heart } from "lucide-react";
-import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 interface BookmarkButtonProps {
   product: ProductData;
@@ -14,28 +15,10 @@ const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
   const { bookmarks, setBookmark } = useBookmarkStore();
   const { toast } = useToast();
 
-  // Get the bookmark state for this product
+  const router = useRouter();
+
+  // Determine if the product is bookmarked
   const isBookmarked = bookmarks[product.id] || false;
-
-  useEffect(() => {
-    // Fetch the bookmark state from the backend when the component mounts
-    const fetchBookmarkState = async () => {
-      try {
-        const response = await axios.get(`/api/bookmark/${product.id}`, {
-          data: { userId },
-        });
-        console.log(response);
-
-        setBookmark(product.id, response.data.isBookmarked);
-      } catch (error) {
-        console.error("Failed to fetch bookmark state", error);
-      }
-    };
-
-    if (userId) {
-      fetchBookmarkState();
-    }
-  }, [product.id, userId, setBookmark]);
 
   const handleBookmark = async () => {
     if (!userId) {
@@ -53,7 +36,7 @@ const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
     try {
       if (isBookmarked) {
         // Unbookmark the product
-        await axios.delete(`/api/bookmark/${product.id}`, {
+        const res = await axios.delete(`/api/bookmark/${product.id}`, {
           data: { userId },
         });
         toast({
@@ -61,6 +44,9 @@ const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
           description: "Supprimé de la liste d'envies avec succès",
           variant: "success",
         });
+        if (res.statusText === "removed") {
+          router.refresh();
+        }
       } else {
         // Bookmark the product
         await axios.post(`/api/bookmark/${product.id}`, { userId });
@@ -86,8 +72,6 @@ const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
       onClick={handleBookmark}
       className="hover:bg-slate-100 p-2 border rounded group/heart"
     >
-      {isBookmarked ? "book" : "unbook"}
-
       <Heart
         className={`group-hover/heart:fill-red-500 group-hover/heart:text-red-500 duration-300 ${
           isBookmarked

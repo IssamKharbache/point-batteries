@@ -1,7 +1,6 @@
 "use client";
 import { ProductData } from "@/components/backend/table/TableActions";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+
 import Image from "next/image";
 import React from "react";
 import BookmarkButton from "./BookmarkButton";
@@ -12,9 +11,10 @@ interface FavouriteProducts {
 }
 const FavouriteProducts = ({ product }: FavouriteProducts) => {
   const { data: session } = useSession();
+
   return (
-    <div className="flex flex-col justify-center md:flex-row    border-2 p-8 md:justify-between ">
-      <div className="flex flex-col md:flex-row gap-12">
+    <div className="flex flex-col  justify-center md:flex-row border-2 p-8 mb-6 md:justify-between bg-gray-200/20 rounded-xl ">
+      <div className="flex flex-col md:flex-row gap-12 ">
         {/* image */}
         <div>
           <Image

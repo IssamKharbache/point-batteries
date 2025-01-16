@@ -6,7 +6,6 @@ export const GET = async (
   context: { params: Promise<{ id: string }> }
 ) => {
   const userId = (await context.params).id;
-
   try {
     const bookmarks = await db.bookmark.findMany({
       where: {
@@ -42,7 +41,7 @@ export const POST = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
-  const productId = await (await context.params).id;
+  const productId = (await context.params).id;
   const { userId } = await req.json();
 
   try {
@@ -104,9 +103,9 @@ export const DELETE = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
-  const userId = await req.json();
+  const { userId } = await req.json();
 
-  const productId = await (await context.params).id;
+  const productId = (await context.params).id;
 
   try {
     if (!userId) {

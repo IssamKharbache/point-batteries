@@ -79,6 +79,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
         router.refresh();
         //update the session after updating
         update();
+        setIsChangingPwd(false);
       } else {
         setLoading(false);
         setError(res.data.message);
@@ -89,7 +90,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
     }
   };
   return (
-    <div className="space-y-2 bg-white p-10 rounded-md border-2 m-6 md:m-0">
+    <div className="space-y-2 bg-white p-10 rounded-md border-2 m-6 md:m-0 pb-12">
       <h1 className="text-xl text-start text-gray-600 ">
         Modifier mon profile
       </h1>
