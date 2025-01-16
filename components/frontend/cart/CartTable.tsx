@@ -59,11 +59,11 @@ const CartTable = ({ item }: CartItem) => {
         </div>
       </TableCell>
       <TableCell>
-        <p className="font-semibold">{Number(item.price).toFixed(2)} dhs</p>
+        <p className="font-semibold">{Number(item.price).toFixed(2)}</p>
       </TableCell>
       <TableCell className="text-right w-52">
         <p className="font-semibold w-full">
-          {(Number(item.qty) * Number(item.price)).toFixed(2)} dhs
+          {(Number(item.qty) * Number(item.price)).toFixed(2)}
         </p>
       </TableCell>
     </TableRow>

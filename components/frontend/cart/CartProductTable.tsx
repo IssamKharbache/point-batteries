@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,8 +14,17 @@ import ResponsiveCart from "./ResponsiveCart";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
 const CartProductTable = () => {
   const { cartItems } = useCartStore();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Check if the component has mounted (to prevent hydration mismatch)
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  if (!isHydrated) return null;
   if (cartItems.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-8">
@@ -39,6 +49,7 @@ const CartProductTable = () => {
       </div>
     );
   }
+
   return (
     <>
       <div className="hidden lg:block gap-4  m-8">
@@ -52,18 +63,16 @@ const CartProductTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {cartItems &&
-              cartItems.map((item, index) => (
-                <CartTable key={index} item={item} />
-              ))}
+            {cartItems.map((item, index) => (
+              <CartTable key={index} item={item} />
+            ))}
           </TableBody>
         </Table>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden">
-        {cartItems &&
-          cartItems.map((item, index) => (
-            <ResponsiveCart key={index} item={item} />
-          ))}
+        {cartItems.map((item, index) => (
+          <ResponsiveCart key={index} item={item} />
+        ))}
       </div>
     </>
   );
