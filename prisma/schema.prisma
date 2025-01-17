@@ -86,35 +86,33 @@ model Banner {
 }
 
 model Order {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String @db.ObjectId
-  user      User   @relation(fields: [userId], references: [id])
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
   //personal details
-  firstName String
-  lastName  String
-  email     String
+  prenom String
+  nom    String
 
-  phone         String
+  telephone     String
   //shipping details
-  streetAddress String
-  city          String
-  country       String
-  district      String
-  shippingCost  Float?
-
-  orderNumber String
+  adresse       String
+  ville         String
+  codePostal    String
+  notesCommande String
+  email         String
+  orderNumber   String @unique
 
   //order items
   orderItems  OrderItem[]
   //status
-  orderStatus OrderStatus @default(PROCESSING) //set default as pending
-  //relation
+  orderStatus OrderStatus @default(PENDING)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 enum OrderStatus {
+  PENDING
   PROCESSING
   SHIPPED
   DELIVERED

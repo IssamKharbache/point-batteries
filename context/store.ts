@@ -52,28 +52,45 @@ export const useLoadingStore = create<LoadingStore>((set) => ({
   setLoading: (loading: boolean) => set({ loading }),
 }));
 
-interface CartItem {
+export interface CartItem {
   id: string;
   title: string;
   imageUrl: string;
   price: number;
-  qty: number;
+  quantity: number;
   userId: string;
 }
 
 type CartStore = {
   cartItems: CartItem[];
+  total: number;
+  setTotal: (total: number) => void;
   setCartItems: (newItem: CartItem) => void;
   deleteItem: (id: string) => void;
   incrementQty: (id: string) => void;
   decrementQty: (id: string) => void;
-  total: number;
-  setTotal: (total: number) => void;
+  livraison: number;
+  setLivraison: (livraison: number) => void;
+  submitForm: boolean;
+  setSubmitForm: (submitForm: boolean) => void;
+  loadingOrder: boolean;
+  setLoadingOrder: (loadingOrder: boolean) => void;
 };
 
 export const useCartStore = create<CartStore>((set) => ({
-  cartItems: (typeof window !== "undefined" &&
-    JSON.parse(localStorage.getItem("cartItems") || "")) as CartItem[],
+  cartItems:
+    typeof window !== "undefined"
+      ? (() => {
+          try {
+            const storedItems = JSON.parse(
+              localStorage.getItem("cartItems") || "[]"
+            );
+            return Array.isArray(storedItems) ? storedItems : [];
+          } catch {
+            return [];
+          }
+        })()
+      : [],
   setCartItems: (newItem) => {
     set((state) => {
       const existingItemIndex = state.cartItems.findIndex(
@@ -84,7 +101,7 @@ export const useCartStore = create<CartStore>((set) => ({
       if (existingItemIndex !== -1) {
         updatedCartItems = state.cartItems.map((item, index) =>
           index === existingItemIndex
-            ? { ...item, qty: item.qty + newItem.qty }
+            ? { ...item, quantity: item.quantity + newItem.quantity }
             : item
         );
       } else {
@@ -98,8 +115,6 @@ export const useCartStore = create<CartStore>((set) => ({
       return { cartItems: updatedCartItems };
     });
   },
-  total: 0,
-  setTotal: (total: number) => set({ total }),
   deleteItem: (id) => {
     set((state) => {
       const updatedCartItems = state.cartItems.filter((item) => item.id !== id);
@@ -114,7 +129,7 @@ export const useCartStore = create<CartStore>((set) => ({
   incrementQty: (id) => {
     set((state) => {
       const updatedCartItems = state.cartItems.map((item) =>
-        item.id === id ? { ...item, qty: item.qty + 1 } : item
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       );
 
       if (typeof window !== "undefined") {
@@ -127,7 +142,9 @@ export const useCartStore = create<CartStore>((set) => ({
   decrementQty: (id) => {
     set((state) => {
       const updatedCartItems = state.cartItems.map((item) =>
-        item.id === id && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       );
 
       if (typeof window !== "undefined") {
@@ -137,6 +154,22 @@ export const useCartStore = create<CartStore>((set) => ({
       return { cartItems: updatedCartItems };
     });
   },
+  total: 0,
+  setTotal: (total: number) => set({ total }),
+  livraison:
+    typeof window !== "undefined"
+      ? Number(localStorage.getItem("livraison") || 0)
+      : 0,
+  setLivraison: (newLivraison) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("livraison", JSON.stringify(newLivraison));
+    }
+    set({ livraison: newLivraison });
+  },
+  submitForm: false,
+  setSubmitForm: (submitForm: boolean) => set({ submitForm }),
+  loadingOrder: false,
+  setLoadingOrder: (loadingOrder: boolean) => set({ loadingOrder }),
 }));
 
 type BookmarkStore = {

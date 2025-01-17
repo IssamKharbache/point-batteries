@@ -62,3 +62,22 @@ export const addProductSchema = z.object({
   categoryId: z.string().min(1, "Categorie est obligatoire"),
   garantie: z.string().min(1, "Grantie est obligatoire"),
 });
+
+export const orderDetailsSchema = z.object({
+  prenom: z.string().min(1, "Prenom est obligatoire"),
+  nom: z.string().min(1, "Nom est obligatoire"),
+  telephone: z
+    .string()
+    .min(10, "Numero de telephone est invalide")
+    .max(10, "Numero de telephone est invalide")
+    .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
+  //shipping details
+  adresse: z.string().min(1, "Adresse est obligatoire"),
+  ville: z.string().min(1, "Ville est obligatoire"),
+  codePostal: z.string().min(1, "Code postale est obligatoire"),
+  email: z
+    .string()
+    .min(1, "Adresse email est obligatoire")
+    .email("Address email invalide"),
+  notesCommande: z.optional(z.string()),
+});

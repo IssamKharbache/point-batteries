@@ -99,11 +99,11 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                         variant: "success",
                       });
                       setCartItems({
-                        id: product.slug,
+                        id: product.id,
                         title: product.title,
                         imageUrl: product.imageUrl || "",
                         price: product.price,
-                        qty: 1,
+                        quantity: 1,
                         userId: session?.user.id || "",
                       });
                     }}

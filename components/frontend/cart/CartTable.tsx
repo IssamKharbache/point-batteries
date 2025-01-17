@@ -10,7 +10,7 @@ interface CartItem {
     title: string;
     imageUrl: string;
     price: number;
-    qty: number;
+    quantity: number;
     userId: string;
   };
 }
@@ -48,7 +48,7 @@ const CartTable = ({ item }: CartItem) => {
               className="size-5 bg-gray-300 rounded-full cursor-pointer"
             />
           </button>
-          <p>{item.qty}</p>
+          <p>{item.quantity}</p>
           <button>
             {" "}
             <Plus
@@ -63,7 +63,7 @@ const CartTable = ({ item }: CartItem) => {
       </TableCell>
       <TableCell className="text-right w-52">
         <p className="font-semibold w-full">
-          {(Number(item.qty) * Number(item.price)).toFixed(2)}
+          {(Number(item.quantity) * Number(item.price)).toFixed(2)}
         </p>
       </TableCell>
     </TableRow>

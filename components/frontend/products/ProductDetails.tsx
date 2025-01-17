@@ -83,7 +83,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                     title: product.title,
                     imageUrl: product.imageUrl || "",
                     price: product.price,
-                    qty: quantity,
+                    quantity,
                     userId: session?.user.id || "",
                   });
                 }}

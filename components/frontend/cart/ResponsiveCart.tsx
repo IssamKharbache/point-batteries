@@ -9,7 +9,7 @@ interface CartItem {
     title: string;
     imageUrl: string;
     price: number;
-    qty: number;
+    quantity: number;
     userId: string;
   };
 }
@@ -54,7 +54,7 @@ const ResponsiveCart = ({ item }: CartItem) => {
                 className="size-5 bg-gray-300 rounded-full cursor-pointer"
               />
             </button>
-            <p>{item.qty}</p>
+            <p>{item.quantity}</p>
             <button>
               {" "}
               <Plus
@@ -68,7 +68,7 @@ const ResponsiveCart = ({ item }: CartItem) => {
       <div className="px-12 py-4">
         <div className="flex items-center justify-between font-semibold">
           <p>Sous-total</p>
-          <p> {(Number(item.qty) * Number(item.price)).toFixed(2)} dhs</p>
+          <p> {(Number(item.quantity) * Number(item.price)).toFixed(2)} dhs</p>
         </div>
       </div>
     </div>
