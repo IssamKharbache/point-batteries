@@ -74,7 +74,6 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
     if (!image) {
       console.log(data.price);
-
       toast({
         title: "Image de produit est obligatoire",
         variant: "destructive",

@@ -46,6 +46,20 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
             price: item.price,
           })),
         });
+        // Update product stock
+        for (const item of orderItems) {
+          await prisma.product.update({
+            where: {
+              id: item.id,
+            },
+            data: {
+              stock: {
+                decrement: item.quantity,
+              },
+            },
+          });
+        }
+
         return { newOrder, newOrderItems };
       }
     );

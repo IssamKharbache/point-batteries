@@ -12,6 +12,7 @@ interface CartItem {
     price: number;
     quantity: number;
     userId: string;
+    stock: number;
   };
 }
 
@@ -40,6 +41,7 @@ const CartTable = ({ item }: CartItem) => {
           <p className="w-56 line-clamp-1 font-semibold">{item.title}</p>
         </div>
       </TableCell>
+
       <TableCell>
         <div className="flex items-center gap-4 w-56">
           <button>
@@ -52,7 +54,13 @@ const CartTable = ({ item }: CartItem) => {
           <button>
             {" "}
             <Plus
-              onClick={() => incrementQty(item.id)}
+              onClick={() => {
+                if (item.stock <= item.quantity) {
+                  return;
+                } else {
+                  incrementQty(item.id);
+                }
+              }}
               className="size-5 bg-gray-300 rounded-full cursor-pointer"
             />
           </button>

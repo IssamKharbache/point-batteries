@@ -14,7 +14,7 @@ interface ProductDetailsProps {
   product: ProductData;
 }
 const ProductDetails = ({ product }: ProductDetailsProps) => {
-  const { cartItems, setCartItems } = useCartStore();
+  const { cartItems, addItem } = useCartStore();
   const { data: session } = useSession();
   const [quantity, setQuantity] = useState<number>(1);
   console.log(cartItems);
@@ -78,13 +78,14 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                     className: "custom-toast-container",
                     position: "top-left",
                   });
-                  setCartItems({
-                    id: product.slug,
+                  addItem({
+                    id: product.id,
                     title: product.title,
                     imageUrl: product.imageUrl || "",
                     price: product.price,
                     quantity,
                     userId: session?.user.id || "",
+                    stock: product.stock || 0,
                   });
                 }}
                 className="bg-slate-800 w-full py-3 mt-4 text-white font-semibold hover:bg-slate-900  px-5  duration-500"

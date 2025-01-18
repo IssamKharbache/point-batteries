@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,10 +14,10 @@ enum Role {
 }
 
 model User {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(uuid()) @db.Uuid
+  email       String  @unique
   nom         String?
   prenom      String?
-  email       String  @unique
   identifiant String  @unique
   password    String
   role        Role    @default(USER)
@@ -25,12 +25,13 @@ model User {
 
   order     Order[]
   bookmarks Bookmark[]
+  product   Product[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 model Product {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  id               String   @id @default(uuid()) @db.Uuid
   title            String
   slug             String   @unique
   description      String?
@@ -46,8 +47,11 @@ model Product {
   garantie         Garantie @default(NOGARANTIE)
   vente            Int?     @default(0)
 
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  categoryId String   @db.ObjectId
+  categoryId String   @db.Uuid
 
   orderItem OrderItem[]
   bookmarks Bookmark[]
@@ -63,7 +67,7 @@ enum Garantie {
 }
 
 model Category {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(uuid()) @db.Uuid
   title       String
   slug        String    @unique
   description String?
@@ -74,7 +78,7 @@ model Category {
 }
 
 model Banner {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  id       String  @id @default(uuid()) @db.Uuid
   title    String?
   slug     String
   link     String
@@ -86,8 +90,8 @@ model Banner {
 }
 
 model Order {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id])
   //personal details
   prenom String
@@ -105,25 +109,25 @@ model Order {
   //order items
   orderItems  OrderItem[]
   //status
-  orderStatus OrderStatus @default(PENDING)
+  orderStatus OrderStatus @default(EN_ATTENTE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
+  EN_ATTENTE
+  EN_COURS
+  EXPEDIE
+  LIVRE
 }
 
 model OrderItem {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  id    String  @id @default(uuid()) @db.Uuid
   title String?
 
-  orderId   String @db.ObjectId
-  productId String @db.ObjectId
+  orderId   String @db.Uuid
+  productId String @db.Uuid
   quantity  Int
   price     Float
 
@@ -138,12 +142,12 @@ model OrderItem {
 }
 
 model Bookmark {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(uuid()) @db.Uuid
 
-  userId String @db.ObjectId
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  productId String  @db.ObjectId
+  productId String  @db.Uuid
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())

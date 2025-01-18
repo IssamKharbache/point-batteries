@@ -25,8 +25,14 @@ import { generateOrderNumber } from "@/lib/utils/index";
 
 const OrderDetailsForm = () => {
   const [isAccepted, setIsAccepted] = useState(false);
-  const { submitForm, setSubmitForm, cartItems, setLoadingOrder } =
-    useCartStore();
+  const {
+    submitForm,
+    setSubmitForm,
+    cartItems,
+    setLoadingOrder,
+    setLivraison,
+    resetCart,
+  } = useCartStore();
   const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof orderDetailsSchema>>({
@@ -62,10 +68,12 @@ const OrderDetailsForm = () => {
       if (res.statusText === "created") {
         setLoadingOrder(false);
         if (typeof window !== "undefined") {
-          localStorage.removeItem("cartItems");
           localStorage.removeItem("orderDetails");
           localStorage.removeItem("livraison");
         }
+        resetCart();
+        setLivraison(0);
+
         router.push("/mes-commandes");
       }
     } catch (error) {

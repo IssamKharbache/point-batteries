@@ -162,7 +162,7 @@ const AjouterCategorieForm = ({ categoryData }: AjouterCategorieFormProps) => {
           ) : (
             <Button
               type="submit"
-              className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
+              className="mt-4 px-4 py-3 rounded-sm bg-black text-white w-full text-md"
             >
               {categoryData ? "Modifier" : " Ajouter"} categorie
             </Button>

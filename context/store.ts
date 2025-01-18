@@ -59,6 +59,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   userId: string;
+  stock: number;
 }
 
 type CartStore = {
@@ -66,6 +67,8 @@ type CartStore = {
   total: number;
   setTotal: (total: number) => void;
   setCartItems: (newItem: CartItem) => void;
+  addItem: (newItem: CartItem) => void;
+  resetCart: () => void;
   deleteItem: (id: string) => void;
   incrementQty: (id: string) => void;
   decrementQty: (id: string) => void;
@@ -91,7 +94,19 @@ export const useCartStore = create<CartStore>((set) => ({
           }
         })()
       : [],
-  setCartItems: (newItem) => {
+  setCartItems: (newItems) => {
+    set((state) => {
+      // Ensure newItems is always an array of CartItem
+      const updatedCartItems = Array.isArray(newItems) ? newItems : [newItems];
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      }
+
+      return { cartItems: updatedCartItems };
+    });
+  },
+  addItem: (newItem) => {
     set((state) => {
       const existingItemIndex = state.cartItems.findIndex(
         (item) => item.id === newItem.id
@@ -99,12 +114,14 @@ export const useCartStore = create<CartStore>((set) => ({
 
       let updatedCartItems;
       if (existingItemIndex !== -1) {
+        // Update quantity if item already exists
         updatedCartItems = state.cartItems.map((item, index) =>
           index === existingItemIndex
             ? { ...item, quantity: item.quantity + newItem.quantity }
             : item
         );
       } else {
+        // Add new item to the cart
         updatedCartItems = [...state.cartItems, newItem];
       }
 
@@ -152,6 +169,14 @@ export const useCartStore = create<CartStore>((set) => ({
       }
 
       return { cartItems: updatedCartItems };
+    });
+  },
+  resetCart: () => {
+    set((state) => {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("cartItems");
+      }
+      return { cartItems: [] };
     });
   },
   total: 0,

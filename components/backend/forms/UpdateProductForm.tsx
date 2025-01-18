@@ -59,7 +59,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
 
   const { toast } = useToast();
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
-    setLoading(true);
     const allData = {
       ...data,
       imageUrl: image,
@@ -90,6 +89,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
     ) {
       return;
     }
+    setLoading(true);
     try {
       const res = await axios.put(`/api/product/${productData.slug}`, allData);
       if (res.statusText === "updated") {
@@ -388,7 +388,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
           ) : (
             <Button
               type="submit"
-              className="mt-4 px-4 py-2 rounded-md bg-black text-white w-full text-md"
+              className="mt-4 px-4 h-12 rounded-sm bg-black text-white w-full text-md"
             >
               Modifier produit
             </Button>

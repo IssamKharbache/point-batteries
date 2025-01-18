@@ -17,7 +17,7 @@ interface ProductsProps {
 }
 const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const swiperRef = useRef<any>(null);
-  const { setCartItems } = useCartStore();
+  const { addItem } = useCartStore();
   const { data: session } = useSession();
   const { toast } = useToast();
 
@@ -92,26 +92,31 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                 </p>
                 <div className="flex items-center justify-between mt-4">
                   <BookmarkButton product={product} userId={session?.user.id} />
-                  <button
-                    onClick={() => {
-                      toast({
-                        title: "Produit ajouter au panier",
-                        variant: "success",
-                      });
-                      setCartItems({
-                        id: product.id,
-                        title: product.title,
-                        imageUrl: product.imageUrl || "",
-                        price: product.price,
-                        quantity: 1,
-                        userId: session?.user.id || "",
-                      });
-                    }}
-                    className="flex items-center justify-center  rounded-full h-10 w-10 hover:!bg-blue-600  group-hover:bg-gray-800 group-hover:text-white duration-300
+                  {product.stock && product.stock >= 1 ? (
+                    <button
+                      onClick={() => {
+                        toast({
+                          title: "Produit ajouter au panier",
+                          variant: "success",
+                        });
+                        addItem({
+                          id: product.id,
+                          title: product.title,
+                          imageUrl: product.imageUrl || "",
+                          price: product.price,
+                          quantity: 1,
+                          userId: session?.user.id || "",
+                          stock: product.stock || 0,
+                        });
+                      }}
+                      className="flex items-center justify-center  rounded-full h-10 w-10 hover:!bg-blue-600  group-hover:bg-gray-800 group-hover:text-white duration-300
                   "
-                  >
-                    <BiCartAdd className="text-2xl" />
-                  </button>
+                    >
+                      <BiCartAdd className="text-2xl" />
+                    </button>
+                  ) : (
+                    <p className="text-red-500">Rupture de stock</p>
+                  )}
                 </div>
               </SwiperSlide>
             );
