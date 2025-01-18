@@ -49,10 +49,10 @@ const OrderDetails = () => {
       {cartItems?.map((item, idx) => (
         <div
           key={idx}
-          className="mt-8  p-2 flex justify-between items-center font-medium text-gray-800"
+          className="mt-8  p-2 flex justify-between items-center font-medium text-gray-800 flex-wrap w-full gap-4"
         >
           <div>
-            <p className="line-clamp-1 w-52">{item.title}</p>
+            <p className="line-clamp-1 w-20">{item.title}</p>
             <p>x{item.quantity}</p>
           </div>
           <p>{item.price * item.quantity}dhs</p>
@@ -63,7 +63,7 @@ const OrderDetails = () => {
         <p>Frais de Livraison</p>
         <p>{livraison}dhs</p>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pt-6 flex-wrap">
         <p className="text-2xl font-medium">Total</p>
         <p className="font-medium text-2xl">{sousTotal + livraison}dhs</p>
       </div>

@@ -2,23 +2,12 @@
 
 import TableActions from "@/components/backend/table/TableActions";
 import { Button } from "@/components/ui/button";
+import { Order } from "@prisma/client";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Staff = {
-  id: string;
-  nom: string;
-  prenom: string;
-  role: string;
-  tel: string;
-  email: string;
-  identifiant: string;
-};
-
-export const columns: ColumnDef<Staff>[] = [
+export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "nom",
     header: ({ column }) => {
@@ -42,16 +31,21 @@ export const columns: ColumnDef<Staff>[] = [
     header: "Email",
   },
   {
-    accessorKey: "tel",
+    accessorKey: "telephone",
     header: "Telephone",
   },
   {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return <TableActions userData={user} />;
-    },
+    accessorKey: "orderStatus",
+    header: "Order status",
   },
+
+  //   {
+  //     id: "actions",
+  //     header: "Actions",
+  //     cell: ({ row }) => {
+  //       const user = row.original;
+
+  //       return <TableActions userData={user} />;
+  //     },
+  //   },
 ];

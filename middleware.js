@@ -42,5 +42,10 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/mon-compte/:path*", "/liste-denvies"],
+  matcher: [
+    "/dashboard/:path*",
+    "/mon-compte/:path*",
+    "/liste-denvies",
+    "/mes-commandes",
+  ],
 };

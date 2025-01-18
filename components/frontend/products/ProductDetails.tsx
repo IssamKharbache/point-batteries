@@ -14,39 +14,37 @@ interface ProductDetailsProps {
   product: ProductData;
 }
 const ProductDetails = ({ product }: ProductDetailsProps) => {
-  const { cartItems, addItem } = useCartStore();
+  const { addItem } = useCartStore();
   const { data: session } = useSession();
   const [quantity, setQuantity] = useState<number>(1);
-  console.log(cartItems);
-
   const { toast } = useToast();
 
   return (
     <div className="grid grid-cols-12 gap-4">
       {/* left part */}
-      <div className="flex flex-col gap-8 col-span-12 md:col-span-8  min-h-[430px]">
-        <div className="flex gap-12 bg-white p-4 ">
+      <div className="flex flex-col gap-8 col-span-12 lg:col-span-8  min-h-[430px] m-8 lg:m-0 ">
+        <div className="flex flex-col md:flex-row gap-12 bg-white p-4 ">
           <Image
             src={product.imageUrl || ""}
             alt={product.title}
             width={700}
             height={700}
-            className="w-72 object-contain"
+            className="w-72 object-contain self-center md:self-start"
           />
 
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 p-2">
             <div>
-              <h1 className="uppercase font-semibold text-2xl">
+              <h1 className="uppercase font-semibold text-2xl text-center md:text-start">
                 {product.title}
               </h1>
             </div>
 
             <div className="">
-              <p className="text-xl font-semibold text-green-500 mt-4">
+              <p className="text-center md:text-start text-2xl md:text-3xl font-semibold text-green-500 mt-4">
                 {product.price}dhs
               </p>
 
-              <div className="flex items-center justify-between gap-4 bg-gray-200 p-3 mt-4 w-[120px]">
+              <div className="flex items-center justify-between gap-4 bg-gray-200 p-3 mt-4 w-full md:w-[120px] ">
                 <Minus
                   onClick={() => {
                     if (quantity <= 1) {
@@ -105,26 +103,26 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col bg-white mb-5  ">
+        <div className="flex flex-col bg-white mb-5 ">
           <Tabs
             defaultValue="specs"
             className="flex flex-col  justify-center py-4"
           >
             <TabsList className="border-none">
               <TabsTrigger
-                className="data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-black"
+                className="data-[state=active]:bg-white data-[state=active]:border-b-4 data-[state=active]:border-blue-500 data-[state=active]:text-black"
                 value="specs"
               >
                 Spécification
               </TabsTrigger>
               <TabsTrigger
-                className=" data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-black "
+                className=" data-[state=active]:bg-white data-[state=active]:border-b-4 data-[state=active]:border-blue-500 data-[state=active]:text-black"
                 value="description"
               >
                 Description
               </TabsTrigger>
             </TabsList>
-            <hr />
+            <hr className="mt-[1px]" />
             <div className="mt-4 p-10">
               <TabsContent value="specs">
                 <ProductSpecification product={product} />
@@ -143,7 +141,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
       </div>
 
       {/* right part */}
-      <div className="flex flex-col  gap-8 col-span-4">
+      <div className="flex flex-col col-span-12  gap-8 lg:col-span-4 m-8 lg:m-0">
         {/* first */}
         <div className="bg-white ">
           {product.garantie !== "NOGARANTIE" &&

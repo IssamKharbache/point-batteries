@@ -18,7 +18,7 @@ const MesCommandes = async () => {
 
   return (
     <section className="mx-auto max-w-[1200px] ">
-      {orders.length === 0 && (
+      {orders?.length === 0 && (
         <div className="flex flex-col items-center justify-center p-8 space-y-8">
           <div className="bg-gray-200 p-6 rounded-full">
             <BaggageClaim size={40} />

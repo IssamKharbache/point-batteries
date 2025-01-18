@@ -40,7 +40,7 @@ const SideBar = () => {
     },
     {
       name: "Commande",
-      href: "/dashboard/commande",
+      href: "/dashboard/commandes",
       icon: Package2,
       isMainAdmin: false,
     },

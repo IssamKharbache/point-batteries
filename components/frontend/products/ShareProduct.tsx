@@ -36,7 +36,7 @@ const ShareProduct = () => {
   };
   const currentUrl = getCurrentUrl();
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 ">
       <FacebookShareButton url={currentUrl}>
         <div className="flex gap-2 items-center justify-center px-4 rounded  bg-blue-600 hover:bg-blue-700 duration-300 py-2">
           <FaFacebookF size={15} className="rounded-full text-white" />
@@ -51,7 +51,7 @@ const ShareProduct = () => {
       </WhatsappShareButton>
       <button
         onClick={copyToClipboard}
-        className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 duration-300 rounded text-white font-semibold text-sm px-5"
+        className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 duration-300 rounded text-white font-semibold text-sm px-5 py-2 justify-center"
       >
         {copied ? (
           <>

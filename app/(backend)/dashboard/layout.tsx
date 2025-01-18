@@ -20,7 +20,6 @@ export default async function RootBackendLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>

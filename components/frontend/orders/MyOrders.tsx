@@ -22,7 +22,7 @@ const MyOrders = ({ order }: OrderProps) => {
         {orderItems.map((orderItem, idx) => (
           <div key={orderItem.id}>
             <div className="flex space-y-4 justify-between  gap-2">
-              <div className="flex gap-4 items-center ">
+              <div className="flex gap-12 items-center ">
                 <div>
                   <Image
                     src={orderItem.imageUrl || ""}
@@ -32,19 +32,25 @@ const MyOrders = ({ order }: OrderProps) => {
                     className="w-10 m-4 rounded-full"
                   />
                 </div>
-                <h1>{orderItem.title}</h1>
-                <p className="font-medium text-md">
-                  x{orderItem.quantity}
-                  {idx !== order.orderItems.length - 1 && ", "}
-                </p>
+                <div className="flex flex-col md:flex-row">
+                  <h1 className="text-xl md:text-md line-clamp-1 w-60 ">
+                    {orderItem.title}
+                  </h1>
+                  <p className="font-medium text-md">
+                    x{orderItem.quantity}
+                    {idx !== order.orderItems.length - 1 && ", "}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
       <p className="font-semibold p-4 text-xl">{price}dhs</p>
-      <div>{getStatus(order.orderStatus)}</div>
-      <Button className="rounded-sm">Suivre la commande</Button>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+        <div>{getStatus(order.orderStatus)}</div>
+        <Button className="rounded-sm">Suivre la commande</Button>
+      </div>
     </div>
   );
 };

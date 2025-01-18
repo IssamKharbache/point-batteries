@@ -83,3 +83,24 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     );
   }
 };
+
+export const GET = async (req: NextRequest) => {
+  try {
+    const orders = await db.order.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json({
+      data: orders,
+      message: "Orders found",
+    });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      error,
+      message: "Error while getting order data",
+    });
+  }
+};
