@@ -224,3 +224,17 @@ export const useOrderDetailsStore = create<OrderDetailsDialog>((set) => ({
   setOpenDialog: (state) => set({ openDialog: state }),
   setSelectedOrder: (order) => set({ selectedOrder: order }),
 }));
+
+type OrderPaginationData = {
+  orderData: Order[];
+  setOrderData: (orderData: Order[]) => void;
+  page: number;
+  setPage: (page: number) => void;
+};
+
+export const useOrderPaginationStore = create<OrderPaginationData>((set) => ({
+  orderData: [],
+  setOrderData: (orderData) => set({ orderData }),
+  page: 1,
+  setPage: (page) => set({ page }),
+}));

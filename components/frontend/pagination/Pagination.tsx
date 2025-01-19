@@ -1,6 +1,4 @@
-"use client";
 import React from "react";
-
 import {
   Pagination,
   PaginationContent,
@@ -13,15 +11,23 @@ import {
 
 interface PaginationProps {
   currentPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
+  resultLength: number | undefined;
+  pageSize: number;
 }
 
-const PaginationComponent = ({
+const PaginationComponent: React.FC<PaginationProps> = ({
   currentPage,
+  totalPages,
   onPageChange,
-}: PaginationProps) => {
+  resultLength,
+  pageSize,
+}) => {
   const handleNextPage = () => {
-    onPageChange(currentPage + 1);
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
   };
 
   const handlePreviousPage = () => {
@@ -30,16 +36,29 @@ const PaginationComponent = ({
     }
   };
 
+  // Calculate the first and last index on the current page
+  const firstIndex = (currentPage - 1) * pageSize + 1;
+  const lastIndex = Math.min(currentPage * pageSize, resultLength || 0);
+
   return (
-    <Pagination>
+    <Pagination className="flex items-center justify-between p-4 bg-white rounded">
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious onClick={handlePreviousPage} href="#" />
+          <PaginationPrevious
+            className={
+              currentPage === 1
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer"
+            }
+            onClick={handlePreviousPage}
+          />
         </PaginationItem>
-        {[...Array(5)].map((_, index) => (
+
+        {/* Render page numbers dynamically */}
+        {Array.from({ length: totalPages }, (_, index) => (
           <PaginationItem key={index}>
             <PaginationLink
-              href="#"
+              className="cursor-pointer rounded"
               isActive={currentPage === index + 1}
               onClick={() => onPageChange(index + 1)}
             >
@@ -47,13 +66,32 @@ const PaginationComponent = ({
             </PaginationLink>
           </PaginationItem>
         ))}
+
+        {/* Conditionally render ellipsis for larger total pages */}
+        {totalPages > 5 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
         <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext onClick={handleNextPage} href="#" />
+          <PaginationNext
+            className={
+              currentPage === totalPages
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer"
+            }
+            onClick={handleNextPage}
+          />
         </PaginationItem>
       </PaginationContent>
+
+      {/* Display the first and last index on the page */}
+      <div className="text-sm">
+        <p>
+          Affichage de {firstIndex}–{lastIndex} sur {resultLength} résultats
+        </p>
+      </div>
     </Pagination>
   );
 };
