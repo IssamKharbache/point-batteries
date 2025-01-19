@@ -7,12 +7,12 @@ import { Toaster } from "@/components/ui/toaster";
 const BackendLayout = ({ children }: { children: React.ReactNode }) => {
   const { openSideBar } = useSideBarStore();
   return (
-    <div className="flex ">
+    <div className="flex">
       <Toaster />
       <div
-        className={`mt-24 ml-4 ${
+        className={`mt-24 ml-4   py-4 px-8 w-full ${
           openSideBar ? "lg:ml-64" : "ml-4"
-        } py-4 px-8 w-full `}
+        }  `}
       >
         {children}
       </div>

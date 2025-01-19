@@ -23,12 +23,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Filter, Loader2 } from "lucide-react";
-import TableActions, {
-  UserData,
-} from "@/components/backend/table/TableActions";
+import { Filter, Loader2, MoreHorizontal } from "lucide-react";
+
 import { useLoadingStore } from "@/context/store";
 import { Order } from "@prisma/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import OrderDetailsDialog from "@/components/backend/dialog/OrderDetailsDialog";
+import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
 
 interface DataTableProps<TData, Order> {
   columns: ColumnDef<TData, Order>[];
@@ -159,7 +167,7 @@ export function DataTable<TData extends Order>({
           <TableHeader>
             <TableRow className="py-4 px-4">
               <TableHead>Nom</TableHead>
-              <TableHead>Prenom</TableHead>
+              <TableHead>Telephone</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -173,13 +181,13 @@ export function DataTable<TData extends Order>({
                   <TableCell className="py-4 px-4" key="nom">
                     {row.getValue("nom")}
                   </TableCell>
-                  <TableCell className="py-4 px-4" key="prenom">
-                    {row.getValue("prenom")}
+                  <TableCell className="py-4 px-4" key="telephone">
+                    {row.getValue("telephone")}
                   </TableCell>
 
-                  {/* <TableCell className="py-4 px-4">
-                    <TableActions userData={row.original} />
-                  </TableCell> */}
+                  <TableCell className="py-4 px-4">
+                    <OrderDetailsActions order={row.original} />
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

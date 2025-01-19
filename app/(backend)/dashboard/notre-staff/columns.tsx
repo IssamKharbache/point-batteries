@@ -51,7 +51,12 @@ export const columns: ColumnDef<Staff>[] = [
     cell: ({ row }) => {
       const user = row.original;
 
-      return <TableActions userData={user} />;
+      return (
+        <TableActions
+          editEndpoint={`notre-staff/modifier/${user?.identifiant}`}
+          endpoint={`user/${user?.id}`}
+        />
+      );
     },
   },
 ];

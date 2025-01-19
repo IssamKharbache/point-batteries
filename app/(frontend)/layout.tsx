@@ -6,6 +6,7 @@ import "swiper/css";
 import { AuthProvider } from "@/providers/Providers";
 import Footer from "@/components/frontend/footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import NextTopLoader from "nextjs-toploader";
 const poppins = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["cyrillic"],
@@ -22,6 +23,7 @@ export default function FrontLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased `}>
+        <NextTopLoader color="#ffffff" height={5} />
         <AuthProvider>
           <NavBar />
           <Toaster />

@@ -177,7 +177,9 @@ export function DataTable<TData extends UserData>({
                   </TableCell>
 
                   <TableCell className="py-4 px-4">
-                    <TableActions userData={row.original} />
+                    <TableActions
+                      editEndpoint={`client/modifier/${row.original.identifiant}`}
+                    />
                   </TableCell>
                 </TableRow>
               ))

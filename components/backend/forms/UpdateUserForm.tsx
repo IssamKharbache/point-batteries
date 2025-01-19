@@ -80,6 +80,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
         //update the session after updating
         update();
         setIsChangingPwd(false);
+        router.push("/dashboard/client");
       } else {
         setLoading(false);
         setError(res.data.message);

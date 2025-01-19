@@ -1,15 +1,12 @@
 import bcrypt from "bcryptjs";
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { signIn } from "next-auth/react";
 
-interface ParamsProps {
-  id: string;
-}
 export const DELETE = async (
   req: NextRequest,
-  { params: { id } }: { params: ParamsProps }
+  context: { params: Promise<{ id: string }> }
 ) => {
+  const id = (await context.params).id;
   try {
     const isExisting = await db.user.findUnique({
       where: {

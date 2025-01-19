@@ -18,7 +18,7 @@ const page = async ({ params }: PageProps) => {
     );
   }
   return (
-    <section className="flex flex-col items-center justify-center ">
+    <section className="flex flex-col items-center justify-center  mb-8 ">
       <h1 className="text-4xl mb-8 font-semibold">Mon compte</h1>
       <UpdateUserForm userData={userData} />
     </section>

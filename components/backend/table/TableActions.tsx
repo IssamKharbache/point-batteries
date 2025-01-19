@@ -7,25 +7,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Loader2, MoreHorizontal, UserPen } from "lucide-react";
+import { MoreHorizontal, UserPen } from "lucide-react";
 import React from "react";
 import DeleteActionButton from "./DeleteActionButton";
 import Link from "next/link";
-import { Category, Product } from "@prisma/client";
 
 interface TableActionsProps {
-  userData?: {
-    id: string;
-    nom: string;
-    prenom: string;
-    role: string;
-    tel: string;
-    email: string;
-    identifiant: string;
-  };
-  categoryData?: Category;
-  productData?: ProductData;
-  typeForm?: string;
+  endpoint?: string;
+  editEndpoint?: string;
 }
 
 export type UserData = {
@@ -65,26 +54,7 @@ export type ProductData = {
     }
   ];
 };
-const TableActions = ({
-  userData,
-  typeForm,
-  categoryData,
-  productData,
-}: TableActionsProps) => {
-  const endPoint = productData
-    ? `/api/product/${productData.slug}`
-    : categoryData
-    ? `/api/categorie/${categoryData?.slug}`
-    : `/api/user/${userData?.id}`;
-
-  const href = productData
-    ? `produit/modifier/${productData.slug}`
-    : categoryData
-    ? `categorie/modifier/${categoryData.slug}`
-    : typeForm === "client"
-    ? `client/modifier/${userData?.identifiant}`
-    : `notre-staff/modifier/${userData?.identifiant}`;
-
+const TableActions = ({ endpoint, editEndpoint }: TableActionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -98,11 +68,16 @@ const TableActions = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem className="py-4 px-4">
-          <DeleteActionButton endpoint={endPoint} title={`Supprimer`} />
-        </DropdownMenuItem>
+        {endpoint && (
+          <DropdownMenuItem className="py-4 px-4">
+            <DeleteActionButton
+              endpoint={`/api/${endpoint}`}
+              title={`Supprimer`}
+            />
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
-        <Link className="w-full cursor-pointer" href={href}>
+        <Link className="w-full cursor-pointer" href={editEndpoint ?? ""}>
           <DropdownMenuItem className="flex items-center gap-2 py-4 px-4">
             <UserPen />
             <span>Modifier</span>

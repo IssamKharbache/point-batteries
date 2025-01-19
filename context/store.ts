@@ -1,3 +1,4 @@
+import { Order } from "@prisma/client";
 import { title } from "process";
 import { create } from "zustand";
 
@@ -41,17 +42,14 @@ export const useSideBarStore = create<SideBarStore>((set) => ({
 }));
 
 //loading delete operation context
-
 type LoadingStore = {
   loading: boolean;
   setLoading: (loading: boolean) => void;
 };
-
 export const useLoadingStore = create<LoadingStore>((set) => ({
   loading: false,
   setLoading: (loading: boolean) => set({ loading }),
 }));
-
 export interface CartItem {
   id: string;
   title: string;
@@ -79,7 +77,6 @@ type CartStore = {
   loadingOrder: boolean;
   setLoadingOrder: (loadingOrder: boolean) => void;
 };
-
 export const useCartStore = create<CartStore>((set) => ({
   cartItems:
     typeof window !== "undefined"
@@ -201,7 +198,6 @@ type BookmarkStore = {
   bookmarks: { [productId: string]: boolean }; // Object to store bookmark states by product ID
   setBookmark: (productId: string, isBookmarked: boolean) => void; // Function to update a bookmark
 };
-
 export const useBookmarkStore = create<BookmarkStore>((set) => ({
   bookmarks: {}, // Initial state: no bookmarks
   setBookmark: (productId, isBookmarked) =>
@@ -211,4 +207,20 @@ export const useBookmarkStore = create<BookmarkStore>((set) => ({
         [productId]: isBookmarked, // Update the bookmark state for the specific product
       },
     })),
+}));
+
+//backend store
+
+type OrderDetailsDialog = {
+  openDialog: boolean;
+  selectedOrder: Order | null;
+  setOpenDialog: (state: boolean) => void;
+  setSelectedOrder: (order: Order | null) => void;
+};
+
+export const useOrderDetailsStore = create<OrderDetailsDialog>((set) => ({
+  openDialog: false,
+  selectedOrder: null,
+  setOpenDialog: (state) => set({ openDialog: state }),
+  setSelectedOrder: (order) => set({ selectedOrder: order }),
 }));

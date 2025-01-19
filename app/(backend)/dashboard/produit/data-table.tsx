@@ -189,7 +189,10 @@ export function DataTable<TData extends ProductData>({
                   </TableCell>
 
                   <TableCell className="py-4 px-4">
-                    <TableActions productData={row.original} />
+                    <TableActions
+                      editEndpoint={`produit/modifier/${row.original.slug}`}
+                      endpoint={`product/${row.original.slug}`}
+                    />
                   </TableCell>
                 </TableRow>
               ))

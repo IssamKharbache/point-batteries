@@ -28,17 +28,30 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
       confirmButtonText: "Oui , supprimer!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        setLoading(true);
-        const response = await axios.delete(endpoint);
-        if (response.statusText === "deleted") {
+        try {
+          setLoading(true);
+          const response = await axios.delete(endpoint);
+          if (response.statusText === "deleted") {
+            toast({
+              title: "L'opération est terminée avec succès",
+              variant: "success",
+              description: response.data.message,
+              className: "toast-container",
+            });
+            setLoading(false);
+            router.refresh();
+          } else {
+            setLoading(false);
+          }
+        } catch (error) {
           toast({
-            title: "L'opération est terminée avec succès",
-            variant: "success",
-            description: response.data.message,
+            title: "Une erreur s'est produite",
+            variant: "error",
+            description: "Une erreur s'est produite contactez le staff",
             className: "toast-container",
           });
+
           setLoading(false);
-          router.refresh();
         }
       } else {
         setLoading(false);

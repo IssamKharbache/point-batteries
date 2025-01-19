@@ -30,7 +30,12 @@ export const columns: ColumnDef<Category>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const categorie = row.original;
-      return <TableActions categoryData={categorie} />;
+      return (
+        <TableActions
+          editEndpoint={`categorie/modifier/${categorie.slug}`}
+          endpoint={`categorie/${categorie.slug}`}
+        />
+      );
     },
   },
 ];

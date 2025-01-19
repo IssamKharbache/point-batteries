@@ -48,7 +48,12 @@ export const columns: ColumnDef<Product>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const product = row.original;
-      return <TableActions typeForm="product" productData={product} />;
+      return (
+        <TableActions
+          editEndpoint={`produit/modifier/${product.slug}`}
+          endpoint={`product/${product.slug}`}
+        />
+      );
     },
   },
 ];

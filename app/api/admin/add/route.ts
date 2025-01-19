@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from "@/lib/db";
-import { addAdminSchema } from "@/lib/utils/validation";
+
 import { NextRequest, NextResponse } from "next/server";
 import { generateUsername } from "@/lib/utils/index";
 
@@ -58,9 +58,4 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       message: "Une erreur s'est produite",
     });
   }
-
-  return NextResponse.json({
-    email,
-    password,
-  });
 };

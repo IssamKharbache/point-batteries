@@ -3,9 +3,7 @@ import { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../../globals.css";
 import BackendLayout from "@/components/backend/MainLayout";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOptions";
-import { Loader2 } from "lucide-react";
+import NextTopLoader from "nextjs-toploader";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -23,6 +21,7 @@ export default async function RootBackendLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
+        <NextTopLoader />
         <AuthProvider>
           <BackendLayout>{children}</BackendLayout>
         </AuthProvider>

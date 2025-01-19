@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { getStatus } from "@/lib/getStatus";
 import { Order, OrderItem } from "@prisma/client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
 
 interface OrderProps {
   order: Order & { orderItems: OrderItem[] };
@@ -15,7 +13,6 @@ const MyOrders = ({ order }: OrderProps) => {
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-
   return (
     <div className="flex flex-col md:flex-row justify-between md:items-center bg-gray-100 border p-4 rounded mb-8 gap-4">
       <div>

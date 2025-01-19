@@ -1,11 +1,13 @@
 "use client";
 
-import TableActions from "@/components/backend/table/TableActions";
 import { Button } from "@/components/ui/button";
 import { Order } from "@prisma/client";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+
+import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
+import UpdateStatus from "@/components/backend/table/UpdateStatus";
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -22,10 +24,7 @@ export const columns: ColumnDef<Order>[] = [
       );
     },
   },
-  {
-    accessorKey: "prenom",
-    header: "Prenom",
-  },
+
   {
     accessorKey: "email",
     header: "Email",
@@ -36,16 +35,19 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "orderStatus",
-    header: "Order status",
+    header: "Commande status",
+    cell: ({ row }) => {
+      const data = row.original;
+      return <UpdateStatus data={data} />;
+    },
   },
 
-  //   {
-  //     id: "actions",
-  //     header: "Actions",
-  //     cell: ({ row }) => {
-  //       const user = row.original;
-
-  //       return <TableActions userData={user} />;
-  //     },
-  //   },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const data = row.original as Order;
+      return <OrderDetailsActions order={data} />;
+    },
+  },
 ];

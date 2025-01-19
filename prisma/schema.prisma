@@ -92,7 +92,7 @@ model Banner {
 model Order {
   id     String @id @default(uuid()) @db.Uuid
   userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   //personal details
   prenom String
   nom    String
@@ -134,8 +134,8 @@ model OrderItem {
   imageUrl String?
 
   //relations
-  order   Order   @relation(fields: [orderId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -148,7 +148,7 @@ model Bookmark {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   productId String  @db.Uuid
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
 
   createdAt DateTime @default(now())
 

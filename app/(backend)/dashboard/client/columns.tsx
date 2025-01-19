@@ -58,8 +58,9 @@ export const columns: ColumnDef<User>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const user = row.original;
-
-      return <TableActions typeForm={"client"} userData={user} />;
+      return (
+        <TableActions editEndpoint={`client/modifier/${user.identifiant}`} />
+      );
     },
   },
 ];
