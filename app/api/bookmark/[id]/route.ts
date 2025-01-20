@@ -6,6 +6,9 @@ export const GET = async (
   context: { params: Promise<{ id: string }> }
 ) => {
   const userId = (await context.params).id;
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("pageNum") || "1");
+  const pageSize = parseInt(searchParams.get("pageSize") || "4");
   try {
     const bookmarks = await db.bookmark.findMany({
       where: {
@@ -17,12 +20,22 @@ export const GET = async (
       orderBy: {
         createdAt: "desc",
       },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+
+    // Get the total count of orders for pagination
+    const totalCount = await db.bookmark.count({
+      where: {
+        userId,
+      },
     });
 
     return NextResponse.json(
       {
         data: bookmarks,
         message: "Favourites",
+        totalCount: totalCount,
       },
       {
         status: 200,

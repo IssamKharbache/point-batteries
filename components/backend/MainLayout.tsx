@@ -10,7 +10,7 @@ const BackendLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex">
       <Toaster />
       <div
-        className={`mt-24 ml-4   py-4 px-8 w-full ${
+        className={`mt-24 ml-4   py-4 px-2 md:px-8 w-full ${
           openSideBar ? "lg:ml-64" : "ml-4"
         }  `}
       >

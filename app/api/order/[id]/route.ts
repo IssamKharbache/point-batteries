@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async (
   req: NextRequest,
   context: {
-    params: Promise<{ id: string; pageNum: string }>;
+    params: Promise<{ id: string }>;
   }
 ) => {
   try {
@@ -53,5 +53,45 @@ export const GET = async (
       error,
       message: "Error while getting order data",
     });
+  }
+};
+
+export const PUT = async (
+  req: NextRequest,
+  context: {
+    params: Promise<{ id: string }>;
+  }
+) => {
+  const id = (await context.params).id;
+  const { status } = await req.json();
+
+  try {
+    const updateOrder = await db.order.update({
+      where: {
+        id,
+      },
+      data: {
+        orderStatus: status,
+      },
+    });
+    return NextResponse.json(
+      {
+        message: "Commande status modifier avec success",
+      },
+      {
+        status: 200,
+        statusText: "updated",
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      {
+        message:
+          "Erreur pendant la modification du status du produit, veuillez essayer apres.",
+        error,
+      },
+      { status: 500 }
+    );
   }
 };

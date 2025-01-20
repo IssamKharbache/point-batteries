@@ -2,6 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import db from "@/lib/db";
 import { NextAuthOptions } from "next-auth";
+import { Role } from "@prisma/client";
 
 interface Credentials {
   email: string;
@@ -68,7 +69,7 @@ export const authOptions: NextAuthOptions = {
           email: token.email as string,
           nom: token.nom as string,
           prenom: token.prenom as string,
-          role: token.role as string,
+          role: token.role as Role,
           identifiant: token.identifiant as string,
         };
       }
@@ -83,20 +84,20 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email as string;
         token.nom = user.nom as string;
         token.prenom = user.prenom as string;
-        token.role = user.role as string;
+        token.role = user.role as Role;
         token.identifiant = user.identifiant as string;
       } else {
         // Refresh user data from the database
         const dbUser = await db.user.findUnique({
-          where: { identifiant: token.identifiant },
+          where: { identifiant: token.identifiant as string | undefined },
         });
-        token.id = dbUser.id;
-        token.username = dbUser.identifiant;
-        token.email = dbUser.email;
-        token.nom = dbUser.nom;
-        token.prenom = dbUser.prenom;
-        token.role = dbUser.role;
-        token.identifiant = dbUser.identifiant;
+        token.id = dbUser?.id;
+        token.username = dbUser?.identifiant;
+        token.email = dbUser?.email;
+        token.nom = dbUser?.nom;
+        token.prenom = dbUser?.prenom;
+        token.role = dbUser?.role;
+        token.identifiant = dbUser?.identifiant;
       }
       return token;
     },

@@ -15,11 +15,13 @@ interface UpdateStatusProps {
   data: Order;
 }
 const UpdateStatus = ({ data }: UpdateStatusProps) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(data.orderStatus);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { toast } = useToast();
-  const onChange = async (selectedValue: string) => {
+  const onChange = async (
+    selectedValue: "EN_ATTENTE" | "EN_COURS" | "EXPEDIE" | "LIVRE" | "ANNULLE"
+  ) => {
     setIsUpdating(true);
     setValue(selectedValue);
     if (selectedValue === data.orderStatus) {
@@ -55,14 +57,15 @@ const UpdateStatus = ({ data }: UpdateStatusProps) => {
   }
   return (
     <Select onValueChange={onChange} value={value}>
-      <SelectTrigger className="w-[150px] ">
+      <SelectTrigger className="w-[100px] md:w-[150px] ">
         <SelectValue placeholder={data.orderStatus} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="EN_ATTENTE">EN_ATTENTE</SelectItem>
-        <SelectItem value="EN_COURS">EN_COURS</SelectItem>
-        <SelectItem value="EXPEDIE">EXPEDIE</SelectItem>
-        <SelectItem value="LIVRE">LIVRE</SelectItem>
+        <SelectItem value="EN_ATTENTE">En attente</SelectItem>
+        <SelectItem value="EN_COURS">En cours</SelectItem>
+        <SelectItem value="EXPEDIE">Expedié</SelectItem>
+        <SelectItem value="LIVRE">Livré</SelectItem>
+        <SelectItem value="ANNULLE">Annulé</SelectItem>
       </SelectContent>
     </Select>
   );

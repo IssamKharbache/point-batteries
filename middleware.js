@@ -47,5 +47,6 @@ export const config = {
     "/mon-compte/:path*",
     "/liste-denvies",
     "/mes-commandes",
+    "/commander",
   ],
 };

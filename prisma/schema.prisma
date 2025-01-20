@@ -120,6 +120,7 @@ enum OrderStatus {
   EN_COURS
   EXPEDIE
   LIVRE
+  ANNULLE
 }
 
 model OrderItem {

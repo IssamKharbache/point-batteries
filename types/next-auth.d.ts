@@ -1,4 +1,5 @@
 // next-auth.d.ts
+import { Role } from "@prisma/client";
 import { DefaultSession, DefaultUser } from "next-auth";
 import { JWT as NextAuthJWT } from "next-auth";
 
@@ -9,10 +10,10 @@ declare module "next-auth" {
     id: string;
     username: string;
     email: string;
-    nom: string;
-    prenom: string;
-    role: string;
-    identifiant: string;
+    nom: string | null;
+    prenom: string | null;
+    role: Role;
+    identifiant?: string;
   }
 
   // Extending Session to include custom fields in user
@@ -27,7 +28,7 @@ declare module "next-auth" {
     email: string;
     nom: string;
     prenom: string;
-    role: string;
-    identifiant: string;
+    role: Role;
+    identifiant?: string;
   }
 }

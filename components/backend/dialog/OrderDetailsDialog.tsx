@@ -1,5 +1,6 @@
 "use client";
 
+import { OrderWithItems } from "@/app/(frontend)/mes-commandes/page";
 import {
   Dialog,
   DialogContent,
@@ -7,17 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useOrderDetailsStore } from "@/context/store";
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 const OrderDetailsDialog = () => {
   const { openDialog, setOpenDialog, selectedOrder } = useOrderDetailsStore();
@@ -27,6 +17,12 @@ const OrderDetailsDialog = () => {
   };
 
   if (!selectedOrder) return null;
+
+  const orderWithItems = selectedOrder as OrderWithItems;
+  const total = orderWithItems.orderItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <Dialog onOpenChange={onChange} open={openDialog}>
@@ -71,6 +67,10 @@ const OrderDetailsDialog = () => {
               </p>
             </div>
           )}
+          <div className="flex flex-wrap justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg">
+            <p>Total</p>
+            <p className=" font-bold text-xl">{total}dhs</p>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

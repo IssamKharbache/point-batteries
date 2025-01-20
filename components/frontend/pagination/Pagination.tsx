@@ -24,24 +24,32 @@ const PaginationComponent: React.FC<PaginationProps> = ({
   resultLength,
   pageSize,
 }) => {
+  const handlePageChange = (page: number) => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+    onPageChange(page);
+  };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
+      handlePageChange(currentPage + 1);
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
+      handlePageChange(currentPage - 1);
     }
   };
-
   // Calculate the first and last index on the current page
   const firstIndex = (currentPage - 1) * pageSize + 1;
   const lastIndex = Math.min(currentPage * pageSize, resultLength || 0);
 
   return (
-    <Pagination className="flex items-center justify-between p-4 bg-white rounded">
+    <Pagination className="flex flex-col md:flex-row gap-8 items-center justify-between p-4 bg-white rounded">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -68,7 +76,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
         ))}
 
         {/* Conditionally render ellipsis for larger total pages */}
-        {totalPages > 5 && (
+        {totalPages > pageSize && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
@@ -89,7 +97,9 @@ const PaginationComponent: React.FC<PaginationProps> = ({
       {/* Display the first and last index on the page */}
       <div className="text-sm">
         <p>
-          Affichage de {firstIndex}–{lastIndex} sur {resultLength} résultats
+          Affichage de <span className="font-semibold">{firstIndex}</span>–
+          <span className="font-semibold">{lastIndex}</span> sur{" "}
+          <span className="font-semibold">{resultLength}</span> résultats
         </p>
       </div>
     </Pagination>

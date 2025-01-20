@@ -1,5 +1,5 @@
 import { ProductData } from "@/components/backend/table/TableActions";
-import FavouriteProducts from "@/components/frontend/products/FavouriteProducts";
+import FavouriteProductsList from "@/components/frontend/products/FavouriteProductsList";
 import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/authOptions";
 import { getData } from "@/lib/getData";
@@ -9,11 +9,12 @@ import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import React from "react";
+import BreadcrumbComponent from "@/components/frontend/breadcrump/BreadCrumpComponent";
 
 export const metadata: Metadata = {
   title: "Votre liste d envies",
 };
-type bookmarkedData = [
+export type bookmarkedData = [
   {
     id: string;
     product: ProductData;
@@ -49,11 +50,12 @@ const page = async () => {
   return (
     <section className="max-w-[1100px] mx-auto  rounded">
       {userId && <FetchBookmarks userId={userId} />}
-      <h1 className="text-2xl mb-8 border-b p-4">Votre liste d'envies</h1>
-
-      {products?.map((product, idx) => (
-        <FavouriteProducts key={idx} product={product} />
-      ))}
+      <BreadcrumbComponent links={[{ name: "Ma liste d'envies" }]} />
+      <FavouriteProductsList
+        products={bookmarked}
+        userId={userId || ""}
+        pageSize={4}
+      />
     </section>
   );
 };

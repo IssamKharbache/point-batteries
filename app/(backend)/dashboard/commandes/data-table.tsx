@@ -23,22 +23,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Filter, Loader2, MoreHorizontal } from "lucide-react";
+import { Filter, Loader2, RefreshCw } from "lucide-react";
 
-import { useLoadingStore } from "@/context/store";
+import { useLoadingStore, useOrderBackendStore } from "@/context/store";
 import { Order } from "@prisma/client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import OrderDetailsDialog from "@/components/backend/dialog/OrderDetailsDialog";
 import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
+import UpdateStatus from "@/components/backend/table/UpdateStatus";
+import { getData } from "@/lib/getData";
 
-interface DataTableProps<TData, Order> {
+export interface DataTableProps<TData, Order> {
   columns: ColumnDef<TData, Order>[];
   data: TData[];
   name: string;
@@ -53,6 +46,10 @@ export function DataTable<TData extends Order>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  //store state
+  const { isRefresh, setIsRefresh } = useOrderBackendStore();
+  const { loading, setLoading } = useLoadingStore();
+
   const table = useReactTable({
     data,
     columns,
@@ -68,10 +65,20 @@ export function DataTable<TData extends Order>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  const { loading, setLoading } = useLoadingStore();
-
   return (
     <div>
+      <div className="flex justify-end items-end mb-4">
+        <Button
+          className="flex items-center justify-center"
+          onClick={() => {
+            setLoading(true);
+            setIsRefresh(true);
+          }}
+        >
+          <RefreshCw />
+          <span>Actualiser</span>
+        </Button>
+      </div>
       <div className="rounded-md border hidden md:block">
         <div className="flex flex-col md:flex-row justify-between md:items-center  border-b ">
           <h2 className="md:px-4 md:py-4 font-semibold text-md md:text-2xl">
@@ -167,7 +174,7 @@ export function DataTable<TData extends Order>({
           <TableHeader>
             <TableRow className="py-4 px-4">
               <TableHead>Nom</TableHead>
-              <TableHead>Telephone</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -182,7 +189,7 @@ export function DataTable<TData extends Order>({
                     {row.getValue("nom")}
                   </TableCell>
                   <TableCell className="py-4 px-4" key="telephone">
-                    {row.getValue("telephone")}
+                    <UpdateStatus data={row.original} />
                   </TableCell>
 
                   <TableCell className="py-4 px-4">

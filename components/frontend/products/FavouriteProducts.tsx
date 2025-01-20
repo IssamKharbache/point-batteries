@@ -16,13 +16,13 @@ const FavouriteProducts = ({ product }: FavouriteProducts) => {
     <div className="flex flex-col  justify-center md:flex-row border-2 p-8 mb-6 md:justify-between bg-gray-200/20 rounded-xl ">
       <div className="flex flex-col md:flex-row gap-12 ">
         {/* image */}
-        <div>
+        <div className="flex justify-center items-center">
           <Image
             src={product.imageUrl || ""}
             alt={product.title}
             width={500}
             height={500}
-            className="w-32 rounded"
+            className="w-full h-72 rounded object-cover md:w-32 md:h-full"
           />
         </div>
         {/* informations */}

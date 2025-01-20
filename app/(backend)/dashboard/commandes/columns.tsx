@@ -8,6 +8,7 @@ import { ArrowUpDown } from "lucide-react";
 
 import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
 import UpdateStatus from "@/components/backend/table/UpdateStatus";
+import { OrderWithItems } from "@/app/(frontend)/mes-commandes/page";
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -38,6 +39,7 @@ export const columns: ColumnDef<Order>[] = [
     header: "Commande status",
     cell: ({ row }) => {
       const data = row.original;
+
       return <UpdateStatus data={data} />;
     },
   },
@@ -46,7 +48,7 @@ export const columns: ColumnDef<Order>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const data = row.original as Order;
+      const data = row.original as OrderWithItems;
       return <OrderDetailsActions order={data} />;
     },
   },

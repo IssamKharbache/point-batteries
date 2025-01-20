@@ -1,8 +1,8 @@
 import PageHeader from "@/components/backend/UI/PageHeader";
 import { getData } from "@/lib/getData";
 import React from "react";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import Table from "./Table";
+import TableComponent from "./Table";
 
 const page = async () => {
   const data = await getData("/order");
@@ -10,9 +10,7 @@ const page = async () => {
   return (
     <section>
       <PageHeader name="Commandes" />
-      <div className="container mx-auto py-10 ">
-        <DataTable columns={columns} data={data} name={"Commande"} />
-      </div>
+      <TableComponent data={data} />
     </section>
   );
 };

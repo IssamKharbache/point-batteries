@@ -90,6 +90,9 @@ export const GET = async (req: NextRequest) => {
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        orderItems: true,
+      },
     });
 
     return NextResponse.json({

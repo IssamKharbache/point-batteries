@@ -209,6 +209,33 @@ export const useBookmarkStore = create<BookmarkStore>((set) => ({
     })),
 }));
 
+//
+type OrderPaginationData = {
+  page: number;
+  setPage: (page: number) => void;
+  trackOrder: boolean;
+  setTrackOrder: (trackOrder: boolean) => void;
+};
+
+export const useOrderPaginationStore = create<OrderPaginationData>((set) => ({
+  page: 1,
+  setPage: (page) => set({ page }),
+  trackOrder: false,
+  setTrackOrder: (trackOrder) => set({ trackOrder }),
+}));
+
+type FavouritePagination = {
+  page: number;
+  setPage: (page: number) => void;
+};
+
+export const useFavouritePaginationStore = create<FavouritePagination>(
+  (set) => ({
+    page: 1,
+    setPage: (page) => set({ page }),
+  })
+);
+
 //backend store
 
 type OrderDetailsDialog = {
@@ -225,16 +252,12 @@ export const useOrderDetailsStore = create<OrderDetailsDialog>((set) => ({
   setSelectedOrder: (order) => set({ selectedOrder: order }),
 }));
 
-type OrderPaginationData = {
-  orderData: Order[];
-  setOrderData: (orderData: Order[]) => void;
-  page: number;
-  setPage: (page: number) => void;
+type OrderBackendStore = {
+  isRefresh: boolean;
+  setIsRefresh: (isRefresh: boolean) => void;
 };
 
-export const useOrderPaginationStore = create<OrderPaginationData>((set) => ({
-  orderData: [],
-  setOrderData: (orderData) => set({ orderData }),
-  page: 1,
-  setPage: (page) => set({ page }),
+export const useOrderBackendStore = create<OrderBackendStore>((set) => ({
+  isRefresh: false,
+  setIsRefresh: (isRefresh) => set({ isRefresh }),
 }));

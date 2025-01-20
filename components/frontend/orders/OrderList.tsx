@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BaggageClaim } from "lucide-react";
+import { BaggageClaim, Loader2 } from "lucide-react";
 import Link from "next/link";
 import MyOrders from "@/components/frontend/orders/MyOrders";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,8 @@ interface OrderListProps {
 }
 
 const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
-  const { page, setPage } = useOrderPaginationStore(); // Store for current page
+  const { page, setPage, trackOrder, setTrackOrder } =
+    useOrderPaginationStore();
   const [orderData, setOrderData] = useState<OrderWithItems[]>(orders || []);
   const [totalPages, setTotalPages] = useState<number>(
     Math.ceil((orders?.length || 0) / pageSize)
@@ -38,6 +39,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
         const data = res.data.data;
         setOrderData(data);
         setResultLength(res.data.totalCount);
+        setTrackOrder(false);
       } catch (error) {
         console.error("Failed to fetch paginated orders:", error);
       } finally {
@@ -45,7 +47,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
       }
     };
     fetchPaginationData();
-  }, [page, userId, pageSize]);
+  }, [page, userId, pageSize, trackOrder]);
 
   return (
     <div>
@@ -67,28 +69,33 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
           </Link>
         </div>
       )}
-
       {/* Loading state */}
-      {loading && <div className="text-center p-8">Loading...</div>}
-
-      {/* Orders List */}
-      <div className="p-8">
-        {orderData.map((order, idx) => (
-          <MyOrders order={order} key={idx} />
-        ))}
-      </div>
-
-      {/* Pagination Component */}
-
-      <div className="p-8">
-        <PaginationComponent
-          pageSize={pageSize}
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-          resultLength={resultLength}
-        />
-      </div>
+      {loading ? (
+        <div className="flex items-center justify-center h-[550px]">
+          <Loader2 className="animate-spin" size={45} />
+        </div>
+      ) : (
+        <>
+          {/* Orders List */}
+          <div className="p-8">
+            {orderData.map((order, idx) => (
+              <MyOrders order={order} key={idx} />
+            ))}
+          </div>
+          {/* Pagination Component */}
+          {orders && orders?.length >= 1 && (
+            <div className="p-8">
+              <PaginationComponent
+                pageSize={pageSize}
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+                resultLength={resultLength}
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
