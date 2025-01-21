@@ -42,10 +42,10 @@ const MyOrders = ({ order }: OrderProps) => {
                     />
                   </div>
                   <div className="flex flex-col md:flex-row">
-                    <h1 className="text-xl md:text-md line-clamp-1 w-60 ">
+                    <h1 className="text-xl md:text-md line-clamp-1 w-60 font-semibold ">
                       {orderItem.title}
                     </h1>
-                    <p className="font-medium text-md">
+                    <p className="font-semibold text-md">
                       x{orderItem.quantity}
                       {idx !== order.orderItems.length - 1 && ", "}
                     </p>

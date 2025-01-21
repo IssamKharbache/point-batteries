@@ -5,13 +5,13 @@ import { Navigation } from "swiper/modules";
 import Image from "next/image";
 import { BiCartAdd } from "react-icons/bi";
 import { useRef } from "react";
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useBookmarkStore, useCartStore } from "@/context/store";
+import { useCartStore } from "@/context/store";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import BookmarkButton from "./BookmarkButton";
-interface ProductsProps {
+export interface ProductsProps {
   productsData: [ProductData];
   categoryTitle?: string;
 }
@@ -21,9 +21,11 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const { data: session } = useSession();
   const { toast } = useToast();
 
+  const bestSells = productsData.filter((product) => product.vente >= 5);
+
   return (
     <div className="mt-4">
-      <div className="m-8 2xl:m-0">
+      <div className="m-4 xl:m-0">
         <div className="flex justify-between md:items-end md:justify-end gap-4 mb-4">
           <button
             onClick={() => swiperRef.current.slidePrev()}
@@ -32,7 +34,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
             <ChevronLeft />
           </button>
 
-          <p className="capitalize font-semibold text-xl md:hidden ">
+          <p className="capitalize font-semibold text-md md:hidden ">
             {categoryTitle}
           </p>
           <button
@@ -68,7 +70,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
             swiperRef.current = swiper;
           }}
         >
-          {productsData.map((product, idx) => {
+          {bestSells.map((product, idx) => {
             return (
               <SwiperSlide
                 key={idx}

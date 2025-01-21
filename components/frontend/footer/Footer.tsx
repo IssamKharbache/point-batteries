@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-3 lg:col-span-2 lg:pr-8">
             <PbsLogo className="w-72" />
 
-            <p className="text-base leading-relaxed text-gray-600 mt-7">
+            <p className="text-sm leading-relaxed text-gray-600 mt-7">
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do
               amet sint. Velit officia consequat duis enim velit mollit.
             </p>
@@ -80,17 +80,11 @@ const Footer = () => {
 
         <p className="text-sm text-center text-gray-400">
           Développé par{" "}
-          <Link
-            href="/"
-            className="font-bold text-white text-[15px] md:text-[18px]"
-          >
+          <Link href="/" className="font-bold text-white ">
             Issam Kharbache
           </Link>{" "}
           - Copyright © 2025{" "}
-          <Link
-            href="/"
-            className="font-bold text-white text-[15px] md:text-[18px]"
-          >
+          <Link href="/" className="font-bold text-white ">
             PointsBatterie
           </Link>{" "}
           - All rights reserved.

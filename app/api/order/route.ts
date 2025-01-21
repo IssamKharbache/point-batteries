@@ -56,6 +56,9 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
               stock: {
                 decrement: item.quantity,
               },
+              vente: {
+                increment: item.quantity,
+              },
             },
           });
         }
