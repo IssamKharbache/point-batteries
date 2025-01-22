@@ -36,7 +36,11 @@ const frontHomePage = async () => {
         {/* category products */}
         {filteredData.slice(0, 3).map((cat, idx) => (
           <div key={idx}>
-            <SectionHeader isCategory={true} categoryTitle={cat.title} />
+            <SectionHeader
+              isCategory={true}
+              categoryTitle={cat.title}
+              catSlug={cat.slug}
+            />
             <ProductCard
               productsData={cat.products}
               categoryTitle={cat.title}

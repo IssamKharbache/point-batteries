@@ -9,6 +9,7 @@ export type CategorieData = [
     id: string;
     title: string;
     products: [ProductData];
+    slug: string;
   }
 ];
 const page = async () => {

@@ -112,6 +112,9 @@ export const GET = async (
       where: {
         slug,
       },
+      include: {
+        products: true,
+      },
     });
     if (!category) {
       return NextResponse.json({

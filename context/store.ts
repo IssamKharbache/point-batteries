@@ -236,6 +236,17 @@ export const useFavouritePaginationStore = create<FavouritePagination>(
   })
 );
 
+type ProductPaginationData = {
+  page: number;
+  setPage: (page: number) => void;
+};
+
+export const useProductPaginationData = create<ProductPaginationData>(
+  (set) => ({
+    page: 1,
+    setPage: (page: number) => set({ page }),
+  })
+);
 //backend store
 
 type OrderDetailsDialog = {
