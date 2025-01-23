@@ -21,7 +21,7 @@ export const PUT = async (
       stock,
       capacite,
       marque,
-      variationProduct,
+      designationProduit,
       courantDessai,
       garantie,
       categoryId,
@@ -37,7 +37,7 @@ export const PUT = async (
       !stock &&
       !capacite &&
       !marque &&
-      variationProduct &&
+      !designationProduit &&
       !courantDessai &&
       !garantie &&
       !categoryId &&
@@ -75,7 +75,7 @@ export const PUT = async (
         capacite: parseInt(capacite),
         voltage: parseInt(voltage),
         marque,
-        variationProduct,
+        designationProduit,
         courantDessai: parseInt(courantDessai),
         garantie,
         categoryId,
@@ -120,7 +120,7 @@ export const GET = async (
         capacite: true,
         courantDessai: true,
         marque: true,
-        variationProduct: true,
+        designationProduit: true,
         voltage: true,
         categoryId: true,
         imageUrl: true,

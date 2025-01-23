@@ -7,6 +7,10 @@ export const getData = async (endpoint: string) => {
     const data = response.data.data;
     return data;
   } catch (error) {
-    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.error("Response data:", error.response?.data?.message);
+    } else {
+      console.error("Unexpected error:", error);
+    }
   }
 };

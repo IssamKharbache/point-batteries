@@ -19,7 +19,7 @@ import {
 
 import Swal from "sweetalert2";
 
-const Filters = ({ slug }: { slug: string }) => {
+const Filters = ({ slug }: { slug?: string }) => {
   const form = useForm<z.infer<typeof filterPriceSchema>>({
     resolver: zodResolver(filterPriceSchema),
     defaultValues: {
@@ -34,6 +34,7 @@ const Filters = ({ slug }: { slug: string }) => {
   const max = useParams.get("max") || 0;
   const page = useParams.get("page") || 1;
   const sort = useParams.get("sort") || "asc";
+  const search = useParams.get("q") || "";
 
   //list of price ranges
   const priceRanges = [
@@ -57,14 +58,25 @@ const Filters = ({ slug }: { slug: string }) => {
       });
       return;
     }
-    const href = `/categorie/${slug}?${new URLSearchParams({
-      page: String(1),
-      min: data.min,
-      max: data.max,
-      sort,
-    }).toString()}`;
+    const href = search
+      ? `/search?q=${search}&${new URLSearchParams({
+          page: String(1),
+          min: data.min,
+          max: data.max,
+          sort,
+        }).toString()}`
+      : `/categorie/${slug}?${new URLSearchParams({
+          page: String(1),
+          min: data.min,
+          max: data.max,
+          sort,
+        }).toString()}`;
     router.push(href);
   };
+  //for deleting filters
+  const href = search
+    ? `/search/?q=${search}&pageNum=${page}&sort=asc&min=0`
+    : `/categorie/${slug}?pageNum=${page}&sort=asc&min=0`;
   return (
     <div className="space-y-8 bg-white mt-8 p-8 mb-8 m-8 md:m-0">
       <div className="">
@@ -74,10 +86,7 @@ const Filters = ({ slug }: { slug: string }) => {
       <div>
         <div className="flex items-center justify-between  mb-4">
           <h1 className="font-medium text-md ">Filtrer par tarif</h1>
-          <Link
-            href={`/categorie/${slug}?pageNum=${page}&pageSize=${1}&sort=asc&min=0`}
-            onClick={() => form.reset()}
-          >
+          <Link href={href} onClick={() => form.reset()}>
             <Button className="bg-red-500/90 hover:bg-red-600 font-semibold">
               Réinitialiser
             </Button>
@@ -86,12 +95,20 @@ const Filters = ({ slug }: { slug: string }) => {
         {/* Filters */}
         <div className="space-y-8">
           {priceRanges.map((range, i) => {
-            const href = `?${new URLSearchParams({
-              page: String(1),
-              min: range.min !== undefined ? String(range.min) : "",
-              max: range.max !== undefined ? String(range.max) : "",
-              sort,
-            }).toString()}`;
+            const href = search
+              ? `/search?${new URLSearchParams({
+                  q: search,
+                  page: String(1),
+                  min: range.min !== undefined ? String(range.min) : "",
+                  max: range.max !== undefined ? String(range.max) : "",
+                  sort,
+                }).toString()}`
+              : `?${new URLSearchParams({
+                  page: String(1),
+                  min: range.min !== undefined ? String(range.min) : "",
+                  max: range.max !== undefined ? String(range.max) : "",
+                  sort,
+                }).toString()}`;
 
             return (
               <div key={i}>

@@ -71,7 +71,7 @@ const CategoryProducts = ({
             height={500}
             className="w-40 self-center"
           />
-          <p className="text-center font-semibold text-xl mt-6">
+          <p className="text-center font-semibold text-xl mt-6 text-gray-500">
             Il n'y a aucun produit
           </p>
           <Link href="/">
