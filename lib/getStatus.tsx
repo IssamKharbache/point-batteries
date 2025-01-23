@@ -1,4 +1,4 @@
-import { CircleDashed, X } from "lucide-react";
+import { CalendarCheck, CircleDashed, X } from "lucide-react";
 import { FaTruck } from "react-icons/fa";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { FaArrowsRotate } from "react-icons/fa6";
@@ -11,6 +11,13 @@ export const getStatus = (status: string) => {
         <div className="flex gap-2 items-center text-sm font-semibold bg-gray-300 px-7 rounded-md text-black  py-2 text-center justify-center">
           <span>En attente</span>
           <MdOutlinePendingActions />
+        </div>
+      );
+    case "CONFIRMER":
+      return (
+        <div className="flex gap-2 items-center text-sm font-semibold bg-green-300 px-7 rounded-md text-black  py-2 text-center justify-center">
+          <span>Confirmer</span>
+          <CalendarCheck />
         </div>
       );
 

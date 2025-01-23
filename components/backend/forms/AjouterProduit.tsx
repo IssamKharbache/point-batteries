@@ -58,7 +58,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
       capacite: "",
       courantDessai: "",
       marque: "",
-      variationProduct: "",
+      designationProduit: "",
       voltage: "",
       categoryId: "",
       garantie: "",
@@ -114,7 +114,6 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
         description: "Réessayez plus tard ou contactez le support",
         variant: "error",
       });
-      console.log(error.response.data.message);
     }
   };
   return (
@@ -332,16 +331,16 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
               }}
             />
             <FormField
-              name="variationProduct"
+              name="designationProduit"
               control={form.control}
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Variations du produit</FormLabel>
+                    <FormLabel>Designation du produit</FormLabel>
                     <FormControl>
                       <Input
                         className="mt-2 px-4"
-                        placeholder="Variations du produit"
+                        placeholder="Designation du produit"
                         {...field}
                       />
                     </FormControl>

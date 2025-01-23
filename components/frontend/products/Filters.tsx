@@ -2,12 +2,33 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Circle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { filterPriceSchema } from "@/lib/utils/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+
+import Swal from "sweetalert2";
 
 const Filters = ({ slug }: { slug: string }) => {
+  const form = useForm<z.infer<typeof filterPriceSchema>>({
+    resolver: zodResolver(filterPriceSchema),
+    defaultValues: {
+      min: "",
+      max: "",
+    },
+  });
   const useParams = useSearchParams();
+  const router = useRouter();
   //params
   const min = useParams.get("min") || 0;
   const max = useParams.get("max") || 0;
@@ -25,9 +46,27 @@ const Filters = ({ slug }: { slug: string }) => {
     { displayName: "Entre 3000dhs and 4000dhs", min: 3000, max: 4000 },
     { displayName: "Plus de 4000", min: 4000 },
   ];
-
+  const submitPrice = (data: z.infer<typeof filterPriceSchema>) => {
+    const minInt = Number(data.min);
+    const maxInt = Number(data.max);
+    if (minInt >= maxInt) {
+      Swal.fire({
+        text: "Le prix minimum doit être inférieur au prix maximum",
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    const href = `/categorie/${slug}?${new URLSearchParams({
+      page: String(1),
+      min: data.min,
+      max: data.max,
+      sort,
+    }).toString()}`;
+    router.push(href);
+  };
   return (
-    <div className="space-y-8 bg-white mt-8 p-8 mb-8">
+    <div className="space-y-8 bg-white mt-8 p-8 mb-8 m-8 md:m-0">
       <div className="">
         <h1 className="font-semibold text-xl">Filtres</h1>
       </div>
@@ -37,6 +76,7 @@ const Filters = ({ slug }: { slug: string }) => {
           <h1 className="font-medium text-md ">Filtrer par tarif</h1>
           <Link
             href={`/categorie/${slug}?pageNum=${page}&pageSize=${1}&sort=asc&min=0`}
+            onClick={() => form.reset()}
           >
             <Button className="bg-red-500/90 hover:bg-red-600 font-semibold">
               Réinitialiser
@@ -88,14 +128,50 @@ const Filters = ({ slug }: { slug: string }) => {
         </div>
       </div>
       {/* custom price */}
-      <div className="space-y-4">
-        <h1 className="font-medium text-md mb-4">Prix personnalisée</h1>
-        <div className="flex items-center gap-8">
-          <Input placeholder="Min" className="px-4" />
-          <Input placeholder="Max" className="px-4" />
-        </div>
-        <Button className="w-full font-semibold">Filtrer</Button>
-      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(submitPrice)} className="space-y-4">
+          <h1 className="font-medium text-md mb-4">Prix personnalisée</h1>
+          <div className="flex items-center gap-8">
+            <FormField
+              name="min"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Min prix"
+                        className="px-4"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="max"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Max prix"
+                        className="px-4"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+          <Button className="w-full font-semibold">Filtrer</Button>
+        </form>
+      </Form>
     </div>
   );
 };

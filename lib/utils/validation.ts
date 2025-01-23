@@ -57,7 +57,9 @@ export const addProductSchema = z.object({
     .string()
     .min(1, "Le courant d’essai doit être supérieur ou égal à 1"),
   marque: z.string().min(1, "Marque est obligatoire"),
-  variationProduct: z.string().min(1, "Variations du produit est obligatoire"),
+  designationProduit: z
+    .string()
+    .min(1, "Variations du produit est obligatoire"),
   voltage: z.string().min(1, "Le voltage doit être supérieur ou égal à 1"),
   categoryId: z.string().min(1, "Categorie est obligatoire"),
   garantie: z.string().min(1, "Grantie est obligatoire"),
@@ -80,4 +82,9 @@ export const orderDetailsSchema = z.object({
     .min(1, "Adresse email est obligatoire")
     .email("Address email invalide"),
   notesCommande: z.optional(z.string()),
+});
+
+export const filterPriceSchema = z.object({
+  min: z.string().min(0, "Le prix doit être supérieur ou égal à 0"),
+  max: z.string().min(0, "Le prix doit être supérieur ou égal à 0"),
 });

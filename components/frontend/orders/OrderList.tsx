@@ -77,11 +77,16 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
       ) : (
         <>
           {/* Orders List */}
-          <div className="p-8">
-            {orderData.map((order, idx) => (
-              <MyOrders order={order} key={idx} />
-            ))}
-          </div>
+          {orders && orders?.length >= 1 && (
+            <div className="p-8">
+              <h1 className=" font-semibold text-2xl mb-8">Mes Commandes</h1>
+
+              {orderData.map((order, idx) => (
+                <MyOrders order={order} key={idx} />
+              ))}
+            </div>
+          )}
+
           {/* Pagination Component */}
           {orders && orders?.length >= 1 && (
             <div className="p-8">

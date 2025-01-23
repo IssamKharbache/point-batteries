@@ -16,7 +16,7 @@ interface PaginationTestProps {
   pageSize: number;
 }
 
-const PaginationTest = ({
+const PaginationWithFilters = ({
   totalPages,
   count,
   pageSize,
@@ -131,4 +131,4 @@ const PaginationTest = ({
   );
 };
 
-export default PaginationTest;
+export default PaginationWithFilters;

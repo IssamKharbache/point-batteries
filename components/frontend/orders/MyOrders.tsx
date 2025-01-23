@@ -41,8 +41,8 @@ const MyOrders = ({ order }: OrderProps) => {
                       className="w-10 m-4 rounded-full"
                     />
                   </div>
-                  <div className="flex flex-col md:flex-row">
-                    <h1 className="text-xl md:text-md line-clamp-1 w-60 font-semibold ">
+                  <div className="flex flex-col md:flex-row gap-4 md:items-center">
+                    <h1 className="text-sm md:text-md line-clamp-1 max-w-44 font-semibold ">
                       {orderItem.title}
                     </h1>
                     <p className="font-semibold text-md">

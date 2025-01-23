@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import BookmarkButton from "./BookmarkButton";
 export interface ProductsProps {
-  productsData: [ProductData];
+  productsData: ProductData[];
   categoryTitle?: string;
 }
 const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
@@ -20,8 +20,6 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const { addItem } = useCartStore();
   const { data: session } = useSession();
   const { toast } = useToast();
-
-  const bestSells = productsData.filter((product) => product.vente >= 5);
 
   return (
     <div className="mt-4">
@@ -70,7 +68,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
             swiperRef.current = swiper;
           }}
         >
-          {bestSells.map((product, idx) => {
+          {productsData.slice(0, 5).map((product, idx) => {
             return (
               <SwiperSlide
                 key={idx}
@@ -85,11 +83,11 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                     className="flex items-center justify-center group-hover:scale-105 duration-300  object-contain mb-12  "
                   />
 
-                  <h1 className="line-clamp-1 w-60 font-semibold">
+                  <h1 className="line-clamp-2 max-w-56 font-semibold">
                     {product.title}
                   </h1>
                 </Link>
-                <p className="font-semibold text-green-500 ">
+                <p className="font-semibold text-green-500 mt-8 ">
                   {product.price}dhs
                 </p>
                 <div className="flex items-center justify-between mt-4">

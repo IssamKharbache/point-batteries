@@ -20,7 +20,13 @@ const UpdateStatus = ({ data }: UpdateStatusProps) => {
 
   const { toast } = useToast();
   const onChange = async (
-    selectedValue: "EN_ATTENTE" | "EN_COURS" | "EXPEDIE" | "LIVRE" | "ANNULLE"
+    selectedValue:
+      | "CONFIRMER"
+      | "EN_ATTENTE"
+      | "EN_COURS"
+      | "EXPEDIE"
+      | "LIVRE"
+      | "ANNULLE"
   ) => {
     setIsUpdating(true);
     setValue(selectedValue);
@@ -62,6 +68,7 @@ const UpdateStatus = ({ data }: UpdateStatusProps) => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="EN_ATTENTE">En attente</SelectItem>
+        <SelectItem value="CONFIRMER">Confirmer</SelectItem>
         <SelectItem value="EN_COURS">En cours</SelectItem>
         <SelectItem value="EXPEDIE">Expedié</SelectItem>
         <SelectItem value="LIVRE">Livré</SelectItem>

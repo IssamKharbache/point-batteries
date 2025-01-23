@@ -25,24 +25,26 @@ const SpecialAndDemandingProducts = ({
         {specialOfferProducts.slice(0, 3).map((product, idx) => (
           <div
             key={idx}
-            className="flex flex-col p-4 text-center md:text-start md:p-0 md:flex-row items-center bg-white m-4 gap-12"
+            className="flex flex-col p-10 text-center md:text-start md:p-2 md:flex-row items-center bg-white m-4 gap-12"
           >
             {/* image */}
             <Link href={`/produit/${product.slug}`}>
-              <div>
+              <div className="p-2">
                 <Image
                   src={product.imageUrl || ""}
                   alt="Image produit"
                   width={500}
                   height={500}
-                  className="w-32"
+                  className="w-52 h-32 object-cover"
                 />
               </div>
             </Link>
 
-            <div className="space-y-4">
+            <div className="space-y-4 mr-8">
               <Link href={`/produit/${product.slug}`}>
-                <h1 className="font-semibold text-xl">{product.title}</h1>
+                <h1 className="font-semibold text-md line-clamp-2">
+                  {product.title}
+                </h1>
               </Link>
               <p className="text-green-500 font-semibold text-xl">
                 {product.price}dhs
@@ -57,23 +59,26 @@ const SpecialAndDemandingProducts = ({
         {bestDemandProducts.slice(0, 3).map((product, idx) => (
           <div
             key={idx}
-            className="flex flex-col p-4 text-center md:text-start md:p-0 md:flex-row items-center bg-white m-4 gap-12"
+            className="flex flex-col p-10  text-center md:text-start md:p-2 md:flex-row items-center bg-white m-4 gap-12"
           >
             {/* image */}
             <Link href={`/produit/${product.slug}`}>
-              <div>
+              <div className="p-2">
                 <Image
                   src={product.imageUrl || ""}
                   alt="Image produit"
                   width={500}
                   height={500}
-                  className="w-32"
+                  className="w-52 h-32 object-cover"
                 />
               </div>
             </Link>
-            <div className="space-y-4">
+
+            <div className="space-y-4 mr-8">
               <Link href={`/produit/${product.slug}`}>
-                <h1 className="font-semibold text-xl">{product.title}</h1>
+                <h1 className="font-semibold text-md line-clamp-2">
+                  {product.title}
+                </h1>
               </Link>
               <p className="text-green-500 font-semibold text-xl">
                 {product.price}dhs

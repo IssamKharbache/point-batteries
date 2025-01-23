@@ -44,7 +44,7 @@ export const GET = async (
 
     return NextResponse.json({
       data: orders,
-      totalCount: totalCount, // Add the total count here
+      totalCount: totalCount,
       message: "Orders found",
     });
   } catch (error) {

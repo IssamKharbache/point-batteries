@@ -22,9 +22,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCartStore } from "@/context/store";
 import { useSession } from "next-auth/react";
 import { generateOrderNumber } from "@/lib/utils/index";
+import Swal from "sweetalert2";
 
 const OrderDetailsForm = () => {
-  const [isAccepted, setIsAccepted] = useState(false);
   const {
     submitForm,
     setSubmitForm,
@@ -71,9 +71,13 @@ const OrderDetailsForm = () => {
           localStorage.removeItem("orderDetails");
           localStorage.removeItem("livraison");
         }
+        Swal.fire({
+          title: "Votre commande a été passée avec succès ",
+          text: "Notre équipe vous contactera dès que possible pour confirmer votre commande !",
+          icon: "success",
+        });
         resetCart();
         setLivraison(0);
-
         router.push("/mes-commandes");
       }
     } catch (error) {
@@ -122,13 +126,7 @@ const OrderDetailsForm = () => {
         Détails de facturation
       </h1>
       <hr className="text-gray-400" />
-      {/* {error && (
-      <div>
-        <p className="bg-red-500 text-white rounded p-2 text-center text-md mt-6">
-          {error}
-        </p>
-      </div>
-    )} */}
+
       <Form {...form}>
         <form className="space-y-8 " onSubmit={form.handleSubmit(submit)}>
           <div className="flex flex-col gap-4 mt-4 md:flex-row justify-between">

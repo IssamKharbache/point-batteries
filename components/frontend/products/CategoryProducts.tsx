@@ -8,12 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { BiCartAdd } from "react-icons/bi";
 import { useEffect, useState } from "react";
-import PaginationComponent from "../pagination/Pagination";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
-import PaginationTest from "../pagination/PaginationTest";
+import PaginationWithFilters from "../pagination/PaginationWithFilters";
 
 interface CategoryProductsProps {
   products: ProductData[];
@@ -29,7 +28,7 @@ const CategoryProducts = ({
   const searchParams = useSearchParams();
   // Pagination State
   const [productsState, setProductsState] = useState<ProductData[]>(products);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [resultLength, setResultLength] = useState<number>(0);
   const totalPages = Math.ceil(resultLength / pageSize);
@@ -42,7 +41,6 @@ const CategoryProducts = ({
   const { toast } = useToast();
 
   useEffect(() => {
-    setLoading(true);
     const fetchProducts = async () => {
       const res = await axios.get(
         `/api/product?catId=${catId}&pageNum=${currentPage}&min=${min}&max=${max}&pageSize=${pageSize}`
@@ -53,12 +51,18 @@ const CategoryProducts = ({
         setLoading(false);
       }
     };
+
     fetchProducts();
   }, [min, max, currentPage, catId, pageSize]);
 
   return (
     <div>
-      {productsState.length === 0 && (
+      {loading && (
+        <div className="flex items-center justify-center h-[500px] w-[500px]">
+          <Loader2 className="animate-spin" size={45} />
+        </div>
+      )}
+      {!loading && productsState.length === 0 && (
         <div className="flex flex-col gap-8  items-center">
           <Image
             src="/noproduct.png"
@@ -93,7 +97,7 @@ const CategoryProducts = ({
                   height={500}
                   className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12"
                 />
-                <h1 className="line-clamp-1 w-60 font-semibold">
+                <h1 className="line-clamp-1 w-48 font-semibold">
                   {product.title}
                 </h1>
               </Link>
@@ -131,7 +135,7 @@ const CategoryProducts = ({
 
       {productsState.length !== 0 && (
         <div className="mt-8">
-          <PaginationTest
+          <PaginationWithFilters
             count={resultLength}
             totalPages={totalPages}
             pageSize={pageSize}
