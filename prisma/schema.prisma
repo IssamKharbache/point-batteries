@@ -26,6 +26,7 @@ model User {
   order     Order[]
   bookmarks Bookmark[]
   product   Product[]
+  achat     Achat[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -155,4 +156,22 @@ model Bookmark {
   createdAt DateTime @default(now())
 
   @@unique([userId, productId])
+}
+
+model ProductAchat {
+  id               String    @id @default(uuid()) @db.Uuid
+  referenceProduit String    @unique
+  quantity         Int
+  achats           Achat[]   @relation("AchatToProductAchat")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
+}
+
+model Achat {
+  id        String         @id @default(uuid()) @db.Uuid
+  userId    String         @db.Uuid
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products  ProductAchat[] @relation("AchatToProductAchat")
+  createdAt DateTime       @default(now())
+  updatedAt DateTime?      @updatedAt
 }
