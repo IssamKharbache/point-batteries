@@ -46,6 +46,8 @@ export type ProductData = {
   categoryId: string;
   userId: string | null;
   vente: number;
+  refProduct: string | null;
+  isAchatProduct: boolean;
   bookmarks: [
     {
       id: string;

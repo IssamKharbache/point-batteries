@@ -19,6 +19,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       userId,
       voltage,
       imageKey,
+      refProduct,
+      isAchat,
     } = await req.json();
     //CHECK IF THE PRODUCT ALREADY EXISTS
     const alreadyExist = await db.product.findUnique({
@@ -26,6 +28,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         slug,
       },
     });
+
     if (alreadyExist) {
       return NextResponse.json(
         {
@@ -35,6 +38,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         { status: 409, statusText: "Product already exists" }
       );
     }
+
+    //creating normal product
     const newProduct = await db.product.create({
       data: {
         title,
@@ -52,6 +57,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         garantie,
         categoryId,
         userId,
+        refProduct,
+        isAchatProduct: isAchat ? true : false,
       },
     });
     return NextResponse.json(

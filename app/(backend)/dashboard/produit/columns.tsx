@@ -1,10 +1,11 @@
 "use client";
-import TableActions from "@/components/backend/table/TableActions";
-import { Product } from "@prisma/client";
+import TableActions, {
+  ProductData,
+} from "@/components/backend/table/TableActions";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<ProductData>[] = [
   {
     accessorKey: "title",
     header: "Titre",
@@ -31,11 +32,11 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "refProduct",
+    header: "Reference",
     cell: ({ row }) => (
       <div>
-        <p className="line-clamp-1 w-32 md:w-60">{row.original.description}</p>
+        <p className="line-clamp-1 w-32 md:w-60">{row.original.refProduct}</p>
       </div>
     ),
   },

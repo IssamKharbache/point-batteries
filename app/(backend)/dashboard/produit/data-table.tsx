@@ -71,12 +71,15 @@ export function DataTable<TData extends ProductData>({
           </h2>
           <div className="relative flex items-center py-4">
             <Input
-              placeholder="Filtrer par titre..."
+              placeholder="Filtrer par reference..."
               value={
-                (table.getColumn("title")?.getFilterValue() as string) ?? ""
+                (table.getColumn("refProduct")?.getFilterValue() as string) ??
+                ""
               }
               onChange={(event) =>
-                table.getColumn("title")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("refProduct")
+                  ?.setFilterValue(event.target.value)
               }
               className="w-36 px-4 mr-8 py-1 h-10 md:h-12 md:w-60  placeholder:text-xs md:placeholder:text-[14px] "
             />

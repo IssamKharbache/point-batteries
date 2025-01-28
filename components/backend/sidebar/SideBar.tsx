@@ -9,6 +9,7 @@ import { useSideBarStore } from "@/context/store";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import {
+  BaggageClaim,
   GalleryVertical,
   Layers,
   LayoutDashboard,
@@ -59,6 +60,12 @@ const SideBar = () => {
         href: "/dashboard/produit",
         icon: ShoppingBasket,
         isMainAdmin: false,
+      },
+      {
+        name: "Achat",
+        href: "/dashboard/achat",
+        icon: BaggageClaim,
+        isMainAdmin: true,
       },
       {
         name: "Catégorie",

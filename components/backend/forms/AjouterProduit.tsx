@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CategorieData } from "@/app/(backend)/dashboard/produit/ajouter/page";
-import { createSlug } from "@/lib/utils/index";
+import { createSlug, generateProductReference } from "@/lib/utils/index";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
@@ -33,8 +33,9 @@ import { useRouter } from "next/navigation";
 
 interface ProductDataProps {
   categorieData?: CategorieData;
+  isAchat?: boolean;
 }
-const AjouterProduit = ({ categorieData }: ProductDataProps) => {
+const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
   //states
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -72,6 +73,8 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
   const { toast } = useToast();
 
   const handleSubmit = async (data: z.infer<typeof addProductSchema>) => {
+    const refProduct = generateProductReference(data.marque);
+
     if (!image) {
       console.log(data.price);
       toast({
@@ -92,6 +95,8 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
         userId,
         imageUrl: image,
         imageKey,
+        refProduct,
+        isAchat,
       });
       if (res.statusText === "created") {
         setLoading(false);
