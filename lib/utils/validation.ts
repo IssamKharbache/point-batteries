@@ -88,3 +88,9 @@ export const filterPriceSchema = z.object({
   min: z.string().min(0, "Le prix doit être supérieur ou égal à 0"),
   max: z.string().min(0, "Le prix doit être supérieur ou égal à 0"),
 });
+
+export const addAchatSchema = z.object({
+  refProduct: z.string().min(1, "Reference produit est obligatoire"),
+  quantity: z.string().min(1, "Quantité est obligatoire"),
+  price: z.string().min(1, "Prix est obligatoire"),
+});

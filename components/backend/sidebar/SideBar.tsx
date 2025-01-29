@@ -10,16 +10,24 @@ import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import {
   BaggageClaim,
+  ChevronDown,
   GalleryVertical,
   Layers,
   LayoutDashboard,
+  Package,
   Package2,
+  Plus,
   ShoppingBasket,
   Store,
   UserRoundPlus,
   Users,
   UsersRound,
 } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 const SideBar = () => {
   const path = usePathname();
   const { openSideBar, setOpenSideBar } = useSideBarStore();
@@ -27,12 +35,6 @@ const SideBar = () => {
   if (!session || !session.user) return null;
 
   let sideBarMenu = [
-    {
-      name: "Dashboard",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-      isMainAdmin: false,
-    },
     {
       name: "Client",
       href: "/dashboard/client",
@@ -61,12 +63,7 @@ const SideBar = () => {
         icon: ShoppingBasket,
         isMainAdmin: false,
       },
-      {
-        name: "Achat",
-        href: "/dashboard/achat",
-        icon: BaggageClaim,
-        isMainAdmin: true,
-      },
+
       {
         name: "Catégorie",
         href: "/dashboard/categorie",
@@ -101,6 +98,52 @@ const SideBar = () => {
       </div>
       {/* side bar menus */}
       <div className="flex flex-col flex-grow space-y-12 ">
+        {session.user.role === "ADMIN" && (
+          <>
+            <Link
+              className={`flex items-center gap-4  w-full py-4 px-8 ${
+                "/dashboard" === path
+                  ? "bg-slate-800 border-l-8   duration-300"
+                  : ""
+              }`}
+              href="/dashboard"
+            >
+              <LayoutDashboard />
+              Dashboard
+            </Link>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
+                <div className="flex items-center gap-4">
+                  <BaggageClaim />
+                  <span>Achat</span>
+                </div>
+                <ChevronDown />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5 ">
+                <Link
+                  className={`flex items-center gap-4 hover:text-blue-400  w-full py-4 px-5 text-md duration-200 ${
+                    "/dashboard/achat/ajouter" === path ? "text-blue-400" : ""
+                  }`}
+                  href="/dashboard/achat"
+                >
+                  <BaggageClaim size={18} />
+                  Les achats
+                </Link>
+                <Link
+                  className={`flex items-center  gap-4 hover:text-blue-400  w-full py-4 px-5 text-sm duration-200 ${
+                    "/dashboard/achat/produit/ajouter" === path
+                      ? "text-blue-400"
+                      : ""
+                  }`}
+                  href="/dashboard/achat/produit/produit-achat"
+                >
+                  <Package size={18} />
+                  Les produits achat
+                </Link>
+              </CollapsibleContent>
+            </Collapsible>
+          </>
+        )}
         {sideBarMenu.map((menu, index) => {
           const Icon = menu.icon;
           return (

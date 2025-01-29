@@ -1,33 +1,20 @@
-import AjouterProduit from "@/components/backend/forms/AjouterProduit";
+import AddAchat from "@/components/backend/achat/AddAchat";
 import { ProductData } from "@/components/backend/table/TableActions";
 import PageHeader from "@/components/backend/UI/PageHeader";
+import { Input } from "@/components/ui/input";
 import { getData } from "@/lib/getData";
-import { Category } from "@prisma/client";
+import React from "react";
 
-export type CategorieData = [
-  categorie: {
-    id: string;
-    title: string;
-    products: [ProductData];
-    slug: string;
-  }
-];
 const page = async () => {
-  const categoriesData = await getData("/categorie");
-  //getting only id and name of the category
-  const categories = categoriesData.map((category: Category) => {
-    return {
-      id: category.id,
-      title: category.title,
-    };
-  });
-
+  const data: ProductData[] = await getData("/product");
+  //getting the products that have isAchat true
+  const filteredProduct = data.filter(
+    (product) => product.isAchatProduct === true
+  );
   return (
     <section>
-      <PageHeader name="Ajouter produit pour achat" />
-      <div className="flex flex-col items-center justify-center mt-8 w-full">
-        <AjouterProduit categorieData={categories} isAchat={true} />
-      </div>
+      <PageHeader name="Les produit achat" />
+      <AddAchat productsAchat={filteredProduct} />
     </section>
   );
 };

@@ -40,8 +40,7 @@ export const generateOrderNumber = (length: number) => {
 
 export const generateProductReference = (marque: string): string => {
   const prefix = "PB";
-  const timestamp = Date.now().toString(36); // Convert current time to base-36
   const randomString = Math.random().toString(36).substring(2, 6).toUpperCase();
-  const uniqueId = `${timestamp}-${randomString}`;
+  const uniqueId = `${randomString}`;
   return `${prefix}-${marque.toUpperCase()}-${uniqueId}`;
 };

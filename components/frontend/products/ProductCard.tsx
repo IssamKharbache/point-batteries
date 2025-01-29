@@ -21,6 +21,11 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const { data: session } = useSession();
   const { toast } = useToast();
 
+  //filtering the products with the one that not for achat
+
+  const notAchatProducts = productsData.filter(
+    (prod) => prod.isAchatProduct === false
+  );
   return (
     <div className="mt-4">
       <div className="m-4 xl:m-0">
@@ -68,7 +73,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
             swiperRef.current = swiper;
           }}
         >
-          {productsData.slice(0, 5).map((product, idx) => {
+          {notAchatProducts.slice(0, 5).map((product, idx) => {
             return (
               <SwiperSlide
                 key={idx}

@@ -29,7 +29,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ProductDataProps {
   categorieData?: CategorieData;
@@ -47,6 +47,7 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
   const imageRef = useRef<HTMLInputElement>(null);
   //
   const router = useRouter();
+  const pathName = usePathname();
 
   //react hook form
   const form = useForm<z.infer<typeof addProductSchema>>({
@@ -107,7 +108,11 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
           variant: "success",
           className: "toast-container",
         });
-        router.push("/dashboard/produit");
+        if (pathName.startsWith("/dashboard/achat")) {
+          router.push("/dashboard/achat/produit/produit-achat");
+        } else {
+          router.push("/dashboard/produit");
+        }
       }
     } catch (error: any) {
       setLoading(false);

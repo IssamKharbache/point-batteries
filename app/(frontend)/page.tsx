@@ -8,7 +8,7 @@ import FetchBookmarks from "@/lib/utils/FetchBookmarks";
 import ProductCard from "@/components/frontend/products/ProductCard";
 import SpecialAndDemandingProducts from "@/components/frontend/products/SpecialAndDemandingProducts";
 import Brands from "@/components/frontend/brands/Brands";
-import { ProductData } from "@/types/types";
+import { ProductData } from "@/components/backend/table/TableActions";
 
 const frontHomePage = async () => {
   const data = await getData("/banner");
@@ -21,7 +21,8 @@ const frontHomePage = async () => {
   const filteredData = categoryData?.filter((cat) => cat.products.length >= 1);
 
   const bestSelledProducts = products.filter(
-    (product: ProductData) => product.vente && product.vente >= 5
+    (product: ProductData) =>
+      product.vente && product.vente >= 5 && product.isAchatProduct === false
   );
 
   return (
