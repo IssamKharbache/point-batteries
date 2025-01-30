@@ -168,6 +168,7 @@ model Achat {
   userId    String         @db.Uuid
   user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   products  AchatProduct[]
+  refAchat  String         @unique
   createdAt DateTime       @default(now())
   updatedAt DateTime?      @updatedAt
 }
@@ -176,10 +177,9 @@ model AchatProduct {
   achatId   String @db.Uuid
   productId String @db.Uuid
   qty       Int
-  price     Float
 
   achat   Achat   @relation(fields: [achatId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@id([achatId, productId]) // Composite primary key
+  @@id([achatId, productId])
 }

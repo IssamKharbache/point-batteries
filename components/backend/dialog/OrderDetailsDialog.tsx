@@ -31,13 +31,15 @@ const OrderDetailsDialog = () => {
           <DialogTitle>Détails de la commande</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col mt-8 gap-8 text-xs md:text-lg">
-          <div className="flex flex-wrap justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg">
-            <p>Nom</p>
-            <p className="font-semibold">{selectedOrder.nom}</p>
-          </div>
-          <div className="flex flex-wrap justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg">
-            <p>Prenom</p>
-            <p className="font-semibold">{selectedOrder.prenom}</p>
+          <div className="flex items-center gap-8">
+            <div className="flex gap-4 flex-wrap justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg">
+              <p>Nom</p>
+              <p className="font-semibold">{selectedOrder.nom}</p>
+            </div>
+            <div className="flex flex-wrap gap-4 justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg">
+              <p>Prenom</p>
+              <p className="font-semibold">{selectedOrder.prenom}</p>
+            </div>
           </div>
           <div className="flex flex-wrap justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg">
             <p>Adresse</p>

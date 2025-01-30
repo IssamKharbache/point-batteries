@@ -4,19 +4,18 @@ import React, { useRef, useState } from "react";
 import { ProductData } from "../table/TableActions";
 import { Button } from "@/components/ui/button";
 import { omit } from "lodash";
-import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
+import { Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface addAchatProps {
   productsAchat: ProductData[];
 }
 
 interface ProductSelection {
-  price: string;
   quantity: string;
   selected: boolean;
 }
@@ -29,8 +28,6 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     React.useState<ProductData[]>(productsAchat);
-
-  const [isChecked, setIsChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   //use Effect to make search functionality
@@ -43,24 +40,28 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
       )
     );
   }, [search, productsAchat]);
-
+  //router
+  const router = useRouter();
+  //
   const { toast } = useToast();
   const { data: session } = useSession();
   const userId = session?.user.id;
 
   const handleSelectedProduct = (refProduct: string) => {
-    setProductsSelected((prev: { [key: string]: ProductSelection }) => ({
-      ...prev,
-      [refProduct]: {
-        ...prev[refProduct],
-        selected: !prev[refProduct]?.selected, // Toggle the selected state
-      },
-    }));
+    setProductsSelected((prev) => {
+      const prevProduct = prev[refProduct];
+      return prevProduct
+        ? omit(prev, refProduct)
+        : {
+            ...prev,
+            [refProduct]: { quantity: "", selected: true },
+          };
+    });
   };
 
   const handleInputChange = (
     refProduct: string | null | undefined,
-    field: "price" | "quantity",
+    field: "quantity",
     value: string
   ) => {
     if (!refProduct) return;
@@ -76,14 +77,13 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
 
   const resetInputs = () => {
     setProductsSelected({});
-    setIsChecked(false);
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     // Validate if all selected products have both price and quantity filled
     const incompleteProducts = Object.entries(productSelected).filter(
-      ([_, { price, quantity, selected }]) => selected && (!price || !quantity)
+      ([_, { quantity }]) => !quantity
     );
 
     if (incompleteProducts.length > 0) {
@@ -91,7 +91,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
       toast({
         title: "Erreur",
         description:
-          "Veuillez remplir le prix et la quantité pour chaque produit sélectionné.",
+          "Veuillez remplir la quantité pour chaque produit sélectionné.",
         variant: "error",
       });
       return;
@@ -99,7 +99,6 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
 
     const productsToSubmit = Object.keys(productSelected).map((refProduct) => ({
       refProduct,
-      price: productSelected[refProduct].price,
       quantity: productSelected[refProduct].quantity,
     }));
 
@@ -109,6 +108,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
         userId,
       });
       if (res.statusText === "created") {
+        router.push("/dashboard/achat");
         resetInputs();
         setLoading(false);
         setProductsSelected((prev) =>
@@ -174,17 +174,25 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
           {filteredProducts.map((product, idx) => (
             <div
               key={idx}
-              className="flex gap-4  bg-slate-100 m-4 rounded p-5 cursor-pointer hover:bg-slate-200"
+              className={`flex gap-4  bg-slate-100 m-4 rounded p-5 cursor-pointer `}
             >
-              <Checkbox
-                checked={
-                  productSelected[product.refProduct || ""]?.selected || false
-                }
-                onClick={() => {
-                  handleSelectedProduct(product.refProduct || "");
-                  setIsChecked(!isChecked);
-                }}
-              />
+              {productSelected[product?.refProduct || ""] ? (
+                <div
+                  onClick={() => {
+                    handleSelectedProduct(product.refProduct || "");
+                  }}
+                  className="flex items-center justify-center w-5 h-5 fill-black bg-black rounded"
+                >
+                  <Check className="text-white" size={15} />
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    handleSelectedProduct(product.refProduct || "");
+                  }}
+                  className="p-2 border-2 border-black/60 rounded h-5"
+                ></div>
+              )}
 
               <div className="space-y-4">
                 <h1 className="font-semibold">{product.title}</h1>
@@ -192,28 +200,11 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
                   <p>Ref : </p>
                   <p className="font-semibold">{product.refProduct}</p>
                 </div>
-                {isChecked && productSelected[product?.refProduct || ""] && (
+                {productSelected[product?.refProduct || ""] && (
                   <div className="flex items-center gap-8">
                     <Input
-                      placeholder="Prix"
-                      className="px-4 bg-white"
-                      type="number"
-                      min={0}
-                      value={
-                        productSelected[product.refProduct ?? ""]?.price || ""
-                      }
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) =>
-                        handleInputChange(
-                          product.refProduct,
-                          "price",
-                          e.target.value
-                        )
-                      }
-                    />
-                    <Input
                       placeholder="Quantite"
-                      className="px-4 bg-white"
+                      className="px-4 bg-white max-w-sm"
                       type="number"
                       min={0}
                       value={

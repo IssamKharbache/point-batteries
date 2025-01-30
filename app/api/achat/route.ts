@@ -1,5 +1,7 @@
+import { generateReferenceAchat } from "./../../../lib/utils/index";
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import db from "@/lib/db";
 
 const prisma = new PrismaClient();
 
@@ -32,16 +34,16 @@ export const POST = async (req: NextRequest) => {
     const productMap = new Map(
       existingProducts.map((p) => [p.refProduct, p.id])
     );
-
+    const refAchat = generateReferenceAchat();
     // Create the achat and link products
     const newAchat = await prisma.achat.create({
       data: {
         userId,
+        refAchat,
         products: {
           create: products.map((p: any) => ({
             productId: productMap.get(p.refProduct),
             qty: parseInt(p.quantity),
-            price: parseFloat(p.price),
           })),
         },
       },
@@ -61,6 +63,34 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (error) {
     console.error("Error creating achat:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+};
+
+export const GET = async () => {
+  try {
+    const achats = await db.achat.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        products: true,
+      },
+    });
+    return NextResponse.json(
+      {
+        data: achats,
+        message: "Achats",
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    console.error("Error getting achat:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

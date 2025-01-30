@@ -1,5 +1,5 @@
+import { ProductAchat } from "@/components/backend/achat/AchatProductsDetails";
 import { Order } from "@prisma/client";
-import { title } from "process";
 import { create } from "zustand";
 
 //search bar store context
@@ -272,3 +272,23 @@ export const useOrderBackendStore = create<OrderBackendStore>((set) => ({
   isRefresh: false,
   setIsRefresh: (isRefresh) => set({ isRefresh }),
 }));
+
+interface ProductAchatDialogStore {
+  open: boolean;
+  products: ProductAchat[];
+  setOpen: (open: boolean) => void;
+  setProducts: (products: ProductAchat[]) => void; // Ensure this is defined
+  refAchat: string;
+  setRefAchat: (refAchat: string) => void;
+}
+
+export const useProductAchatDialogStore = create<ProductAchatDialogStore>(
+  (set) => ({
+    open: false,
+    products: [],
+    setOpen: (open) => set({ open }),
+    setProducts: (products) => set({ products }), // Ensure this is implemented
+    refAchat: "",
+    setRefAchat: (refAchat: string) => set({ refAchat }),
+  })
+);

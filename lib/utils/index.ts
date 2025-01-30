@@ -44,3 +44,17 @@ export const generateProductReference = (marque: string): string => {
   const uniqueId = `${randomString}`;
   return `${prefix}-${marque.toUpperCase()}-${uniqueId}`;
 };
+
+export const generateReferenceAchat = () => {
+  const prefix = "ACHAT";
+  const uniqueId = Math.floor(10000 + Math.random() * 90000); // Generates a 5-digit number
+  return `${prefix}-${uniqueId}`;
+};
+
+export const formatDate = (inputDate: string | Date): string => {
+  const date = inputDate instanceof Date ? inputDate : new Date(inputDate);
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  return `${day}/${month}/${year}`;
+};
