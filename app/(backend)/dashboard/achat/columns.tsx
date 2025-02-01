@@ -47,6 +47,7 @@ export const columns: ColumnDef<AchatType>[] = [
           productIds={productIds}
           quantities={quantities}
           refAchat={row.original.refAchat}
+          date={row.original.createdAt}
         />
       );
     },

@@ -280,6 +280,8 @@ interface ProductAchatDialogStore {
   setProducts: (products: ProductAchat[]) => void; // Ensure this is defined
   refAchat: string;
   setRefAchat: (refAchat: string) => void;
+  date: Date | string;
+  setDate: (date: Date) => void;
 }
 
 export const useProductAchatDialogStore = create<ProductAchatDialogStore>(
@@ -290,5 +292,7 @@ export const useProductAchatDialogStore = create<ProductAchatDialogStore>(
     setProducts: (products) => set({ products }), // Ensure this is implemented
     refAchat: "",
     setRefAchat: (refAchat: string) => set({ refAchat }),
+    date: "",
+    setDate: (date: Date) => set({ date }),
   })
 );

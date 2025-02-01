@@ -10,12 +10,15 @@ export interface ProductAchat {
   title: string;
   price: number;
   quantity: string;
+  refProduct: string;
+  designationProduit: string;
 }
 
 interface AchatProductsDetailsProps {
   productIds: string[];
   quantities: string[];
   refAchat: string;
+  date: Date;
 }
 
 interface ApiResponse {
@@ -27,6 +30,7 @@ const AchatProductsDetails = ({
   productIds,
   quantities,
   refAchat,
+  date,
 }: AchatProductsDetailsProps) => {
   const [products, setProducts] = useState<ProductAchat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +39,7 @@ const AchatProductsDetails = ({
     setOpen,
     setProducts: setDialogProducts,
     setRefAchat,
+    setDate,
   } = useProductAchatDialogStore(); // Use the correct function name
 
   useEffect(() => {
@@ -74,6 +79,7 @@ const AchatProductsDetails = ({
     setDialogProducts(products);
     setOpen(true);
     setRefAchat(refAchat);
+    setDate(date);
   };
 
   if (loading) return <div>Chargement...</div>;
