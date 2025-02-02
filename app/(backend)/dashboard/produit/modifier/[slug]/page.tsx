@@ -26,7 +26,7 @@ export type ProductData = {
     marque: string;
     price: number;
     stock: number;
-    variationProduct: string;
+    designationProduit: string;
     voltage: number;
     garantie: string;
     slug: string;

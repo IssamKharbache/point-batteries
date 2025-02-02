@@ -112,6 +112,7 @@ export const GET = async (
         slug,
       },
       select: {
+        id: true,
         slug: true,
         title: true,
         description: true,

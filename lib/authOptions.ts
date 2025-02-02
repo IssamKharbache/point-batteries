@@ -18,7 +18,6 @@ export const authOptions: NextAuthOptions = {
         try {
           // Check if user credentials are Correct
           if (!email || !password) {
-            console.log("Not Inputs");
             throw { error: "No Inputs Found", status: 401 };
           }
           const user = await db.user.findUnique({
@@ -27,7 +26,6 @@ export const authOptions: NextAuthOptions = {
             },
           });
           if (!user) {
-            console.log("User not found");
             throw { error: "Wrong credentials", status: 401 };
           }
           const validPassword = await bcrypt.compare(password, user.password);
@@ -49,7 +47,6 @@ export const authOptions: NextAuthOptions = {
             identifiant: user.identifiant,
           };
         } catch (error) {
-          console.log(error);
           throw { error: "Something went wrong", status: 401 };
         }
       },

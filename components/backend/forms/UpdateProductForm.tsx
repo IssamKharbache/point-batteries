@@ -82,7 +82,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       productData.capacite === Number(allData.capacite) &&
       productData.voltage === Number(allData.voltage) &&
       productData.courantDessai === Number(allData.courantDessai) &&
-      productData.variationProduct === allData.variationProduct &&
+      productData.designationProduit === allData.designationProduit &&
       productData.description === allData.description &&
       productData.garantie === allData.garantie &&
       productData.imageUrl === allData.imageUrl
@@ -104,7 +104,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
       toast({
         title: "Une erreur s'est produite",
         description: "",
@@ -322,16 +321,16 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
               }}
             />
             <FormField
-              name="variationProduct"
+              name="designationProduit"
               control={form.control}
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Variations du produit</FormLabel>
+                    <FormLabel>Designation du produit</FormLabel>
                     <FormControl>
                       <Input
                         className="mt-2 px-4"
-                        placeholder="Variations du produit"
+                        placeholder="Designation du produit"
                         {...field}
                       />
                     </FormControl>

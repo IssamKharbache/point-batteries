@@ -77,7 +77,6 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
     const refProduct = generateProductReference(data.marque);
 
     if (!image) {
-      console.log(data.price);
       toast({
         title: "Image de produit est obligatoire",
         variant: "destructive",

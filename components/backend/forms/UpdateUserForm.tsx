@@ -86,7 +86,6 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
     }
   };
   return (

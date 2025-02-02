@@ -1,6 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import LoadingButton from "@/components/frontend/buttons/LoadingButton";
+
 import {
   Form,
   FormControl,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { addAdminSchema, orderDetailsSchema } from "@/lib/utils/validation";
+import { orderDetailsSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -33,6 +32,7 @@ const OrderDetailsForm = () => {
     setLivraison,
     resetCart,
   } = useCartStore();
+  const { toast } = useToast();
   const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof orderDetailsSchema>>({
@@ -81,8 +81,12 @@ const OrderDetailsForm = () => {
         router.push("/mes-commandes");
       }
     } catch (error) {
+      toast({
+        title: "Une erreur s'est produite",
+        description: "Réessayez plus tard ou contactez le support",
+        variant: "error",
+      });
       setLoadingOrder(false);
-      console.log(error);
     }
   };
   //checking if the button commander is triggred

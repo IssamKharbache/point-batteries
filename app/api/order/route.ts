@@ -76,8 +76,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         statusText: "created",
       }
     );
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error.message);
     return NextResponse.json(
       {
         message: "Error while creating order",
