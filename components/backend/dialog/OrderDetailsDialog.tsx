@@ -26,7 +26,7 @@ const OrderDetailsDialog = () => {
 
   return (
     <Dialog onOpenChange={onChange} open={openDialog}>
-      <DialogContent>
+      <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader className="text-start m-3">
           <DialogTitle>Détails de la commande</DialogTitle>
         </DialogHeader>

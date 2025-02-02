@@ -36,12 +36,6 @@ const SideBar = () => {
 
   let sideBarMenu = [
     {
-      name: "Client",
-      href: "/dashboard/client",
-      icon: Users,
-      isMainAdmin: false,
-    },
-    {
       name: "Commande",
       href: "/dashboard/commandes",
       icon: Package2,
@@ -57,6 +51,12 @@ const SideBar = () => {
   ];
   if (session.user.role === "ADMIN") {
     sideBarMenu.push(
+      {
+        name: "Client",
+        href: "/dashboard/client",
+        icon: Users,
+        isMainAdmin: false,
+      },
       {
         name: "Produit",
         href: "/dashboard/produit",
