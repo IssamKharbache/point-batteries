@@ -27,7 +27,7 @@ const CartProductTable = () => {
   if (!isHydrated) return null;
   if (cartItems.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8">
+      <div className="flex flex-col items-center justify-center p-8 ">
         <div>
           <Image
             src="/empty-cart.png"
@@ -52,7 +52,7 @@ const CartProductTable = () => {
 
   return (
     <>
-      <div className="hidden lg:block gap-4  m-8">
+      <div className="hidden lg:block gap-4  m-10 bg-white">
         <Table className="">
           <TableHeader>
             <TableRow>

@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
 
 const AchatProductsDetailsDialog = () => {
   const { open, setOpen, products, refAchat, date } =
@@ -62,7 +63,14 @@ const AchatProductsDetailsDialog = () => {
                   <h1 className="font-bold text-3xl">
                     Points batteries service
                   </h1>
-                  <p className="text-xl font-semibold"> Agence tanger</p>
+                  <Image
+                    src="/logopbsdark.png"
+                    alt="Logo"
+                    width={1000}
+                    height={1000}
+                    className="w-60 md:w-72"
+                    priority
+                  />
                 </div>
                 <p>
                   Tanger, le{" "}

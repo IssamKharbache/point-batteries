@@ -158,7 +158,7 @@ const Filters = ({ slug }: { slug?: string }) => {
                     <FormControl>
                       <Input
                         placeholder="Min prix"
-                        className="px-4"
+                        className="px-2 md:px-4 placeholder:text-xs"
                         {...field}
                       />
                     </FormControl>
@@ -176,7 +176,7 @@ const Filters = ({ slug }: { slug?: string }) => {
                     <FormControl>
                       <Input
                         placeholder="Max prix"
-                        className="px-4"
+                        className="px-2 md:px-4 placeholder:text-xs"
                         {...field}
                       />
                     </FormControl>

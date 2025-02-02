@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCartStore } from "@/context/store";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import { FaCartPlus } from "react-icons/fa6";
 
 interface ProductDetailsProps {
   product: ProductData;
@@ -86,9 +87,10 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                     stock: product.stock || 0,
                   });
                 }}
-                className="bg-slate-800 w-full py-3 mt-4 text-white font-semibold hover:bg-slate-900  px-5  duration-500"
+                className="flex gap-6 items-center justify-center bg-slate-800 w-full py-3 mt-4 text-white font-semibold hover:bg-slate-900  px-5  duration-500"
               >
-                Ajouter au panier
+                <span>Ajouter au panier</span>
+                <FaCartPlus />
               </button>
               <div className="mt-4">
                 {product.stock && product.stock == 0 && (

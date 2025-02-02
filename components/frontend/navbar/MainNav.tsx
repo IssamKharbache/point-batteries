@@ -34,11 +34,11 @@ const MainNav = () => {
         </div>
         <Link href="/">
           <Image
-            src="/pbslogo.png"
+            src="/logopbsdark.png"
             alt="Logo"
-            width={500}
-            height={500}
-            className=" w-24 md:w-32"
+            width={1000}
+            height={1000}
+            className="w-60 md:w-72"
             priority
           />
         </Link>

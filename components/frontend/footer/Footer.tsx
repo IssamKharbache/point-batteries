@@ -1,6 +1,7 @@
 import React from "react";
-import PbsLogo from "@/public/pbslogo.svg";
+import PbsLogo from "@/public/logopbslight.svg";
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -8,7 +9,14 @@ const Footer = () => {
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-6 gap-y-16 gap-x-12">
           <div className="col-span-2 md:col-span-3 lg:col-span-2 lg:pr-8">
-            <PbsLogo className="w-72" />
+            <Image
+              src="/logopbslight.png"
+              alt="Logo"
+              width={1000}
+              height={1000}
+              className="w-96"
+              priority
+            />
 
             <p className="text-sm leading-relaxed text-gray-600 mt-7">
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do

@@ -6,7 +6,7 @@ import TotalPanier from "./TotalPanier";
 const Cart = () => {
   const { cartItems } = useCartStore();
   return (
-    <div className="grid grid-cols-12 p-8 mb-6">
+    <div className="grid grid-cols-12 p-8 mb-6 ">
       <div
         className={`${
           cartItems.length === 0 ? "col-span-12" : "col-span-12 xl:col-span-8"

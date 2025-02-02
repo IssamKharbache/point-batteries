@@ -23,8 +23,8 @@ export default function FrontLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased `}>
-        <NextTopLoader color="#ffffff" height={5} />
         <AuthProvider>
+          <NextTopLoader color="#ffffff" height={5} />
           <NavBar />
           <Toaster />
           <div className="min-h-[650px] bg-gray-50">{children}</div>
