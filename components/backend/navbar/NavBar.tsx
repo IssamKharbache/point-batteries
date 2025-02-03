@@ -50,11 +50,11 @@ const NavBar = () => {
 
         <div className="lg:hidden">
           <Image
-            src="/pbslogo.png"
+            src="/logopbsdark.png"
             alt="Logo"
-            width={500}
-            height={500}
-            className="w-28"
+            width={1500}
+            height={1500}
+            className=" w-40 md:w-64"
           />
         </div>
         <div

@@ -28,6 +28,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import Image from "next/image";
 const SideBar = () => {
   const path = usePathname();
   const { openSideBar, setOpenSideBar } = useSideBarStore();
@@ -94,7 +95,13 @@ const SideBar = () => {
     >
       {/* logo */}
       <div className="flex items-center justify-center py-4 border-b border-slate-800">
-        <PbsLogo alt="Logo" className="w-72" />
+        <Image
+          src="/logopbslight.png"
+          alt="Logo"
+          width={1000}
+          height={1000}
+          className="w-52 h-12 object-contain"
+        />
       </div>
       {/* side bar menus */}
       <div className="flex flex-col flex-grow space-y-12 ">

@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { addProductSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import UploadImageButton from "../upload/UploadImageButton";
 import {
@@ -33,9 +33,8 @@ import { usePathname, useRouter } from "next/navigation";
 
 interface ProductDataProps {
   categorieData?: CategorieData;
-  isAchat?: boolean;
 }
-const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
+const AjouterProduit = ({ categorieData }: ProductDataProps) => {
   //states
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -97,7 +96,6 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
         imageUrl: image,
         imageKey,
         refProduct,
-        isAchat,
       });
       if (res.statusText === "created") {
         setLoading(false);
@@ -108,11 +106,7 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
           variant: "success",
           className: "toast-container",
         });
-        if (pathName.startsWith("/dashboard/achat")) {
-          router.push("/dashboard/achat/produit/produit-achat");
-        } else {
-          router.push("/dashboard/produit");
-        }
+        router.push("/dashboard/produit");
       }
     } catch (error: any) {
       setLoading(false);

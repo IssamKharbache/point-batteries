@@ -14,9 +14,11 @@ const SpecialAndDemandingProducts = ({
   product,
 }: BestDemandProductCardProps) => {
   const specialOfferProducts = product.filter(
-    (product) => product.price <= 1500
+    (product) => product.price <= 2000 && !product.isAchatProduct
   );
-  const bestDemandProducts = product.filter((product) => product.vente >= 5);
+  const bestDemandProducts = product.filter(
+    (product) => product.vente >= 5 && !product.isAchatProduct
+  );
   return (
     <div className="flex flex-col lg:flex-row  gap-12">
       {/* special offre */}

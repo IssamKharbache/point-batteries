@@ -28,6 +28,7 @@ export const PUT = async (
       userId,
       voltage,
       imageKey,
+      isAchatProduct,
     } = await req.json();
     if (
       !title &&
@@ -80,6 +81,7 @@ export const PUT = async (
         garantie,
         categoryId,
         userId,
+        isAchatProduct,
       },
     });
     return NextResponse.json(
@@ -127,6 +129,7 @@ export const GET = async (
         imageUrl: true,
         garantie: true,
         imageKey: true,
+        isAchatProduct: true,
       },
     });
     if (!product) {

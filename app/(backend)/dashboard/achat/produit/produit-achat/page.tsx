@@ -1,9 +1,9 @@
 import PageHeader from "@/components/backend/UI/PageHeader";
-import React from "react";
-import { DataTable } from "../../../produit/data-table";
-import { columns } from "../../../produit/columns";
+
 import { ProductData } from "@/components/backend/table/TableActions";
 import { getData } from "@/lib/getData";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 const page = async () => {
   const data: ProductData[] = await getData("/product");
@@ -11,6 +11,7 @@ const page = async () => {
   const filteredProduct = data.filter(
     (product) => product.isAchatProduct === true
   );
+
   return (
     <section>
       <PageHeader
@@ -19,9 +20,9 @@ const page = async () => {
       />
       <div className="container mx-auto py-10 ">
         <DataTable
-          columns={columns}
           data={filteredProduct}
-          name="Produits achat"
+          columns={columns}
+          name="Produit achat"
         />
       </div>
     </section>

@@ -1,3 +1,4 @@
+import AddProductAchat from "@/components/backend/achat/product/AddProductAchat";
 import AjouterProduit from "@/components/backend/forms/AjouterProduit";
 import { ProductData } from "@/components/backend/table/TableActions";
 import PageHeader from "@/components/backend/UI/PageHeader";
@@ -26,7 +27,7 @@ const page = async () => {
     <section>
       <PageHeader name="Ajouter produit pour achat" />
       <div className="flex flex-col items-center justify-center mt-8 w-full">
-        <AjouterProduit categorieData={categories} isAchat={true} />
+        <AddProductAchat categorieData={categories} />
       </div>
     </section>
   );

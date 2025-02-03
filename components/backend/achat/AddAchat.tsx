@@ -195,7 +195,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
               )}
 
               <div className="space-y-4">
-                <h1 className="font-semibold">{product.title}</h1>
+                <h1 className="font-semibold">{product.designationProduit}</h1>
                 <div className="flex items-center gap-4">
                   <p>Ref : </p>
                   <p className="font-semibold">{product.refProduct}</p>

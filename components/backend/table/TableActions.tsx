@@ -40,7 +40,7 @@ export type ProductData = {
   capacite: number | null;
   courantDessai: number | null;
   marque: string;
-  variationProduct: string | null;
+  designationProduit: string | null;
   voltage: number | null;
   garantie: string | null;
   categoryId: string;

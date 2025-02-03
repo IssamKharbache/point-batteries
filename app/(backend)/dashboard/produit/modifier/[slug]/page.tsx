@@ -31,6 +31,7 @@ export type ProductData = {
     garantie: string;
     slug: string;
     imageKey: string;
+    isAchatProduct: boolean;
   };
   categoryData: CategorieData;
 };
