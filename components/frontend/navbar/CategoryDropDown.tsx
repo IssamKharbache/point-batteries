@@ -34,7 +34,7 @@ const CategoryDropDown = () => {
       <DropdownMenuContent className="w-72">
         {categoryData?.map((cat, index) => (
           <Link href={`/categorie/${cat.slug}`} key={index}>
-            <DropdownMenuItem className="cursor-pointer w-full py-4 px-4">
+            <DropdownMenuItem className="cursor-pointer w-full py-4 px-4 capitalize">
               {cat.title}
             </DropdownMenuItem>
           </Link>

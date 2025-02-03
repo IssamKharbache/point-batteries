@@ -62,7 +62,10 @@ export const addProductSchema = z.object({
     .min(1, "Variations du produit est obligatoire"),
   voltage: z.string().min(1, "Le voltage doit être supérieur ou égal à 1"),
   categoryId: z.string().min(1, "Categorie est obligatoire"),
-  garantie: z.string().min(1, "Grantie est obligatoire"),
+  garantie: z.string().min(1, "Garantie est obligatoire"),
+  filterByCar: z
+    .string()
+    .min(1, "Les marque de voiture adapter a cette batterie sont obligatoire"),
 });
 
 export const orderDetailsSchema = z.object({

@@ -64,6 +64,7 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
       voltage: "",
       categoryId: "",
       garantie: "",
+      filterByCar: "",
     },
   });
   //session data
@@ -360,26 +361,46 @@ const AjouterProduit = ({ categorieData, isAchat }: ProductDataProps) => {
             />
           </div>
 
-          <FormField
-            name="description"
-            control={form.control}
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="mt-2 px-4"
-                      placeholder="Description du produit"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="mt-2 px-4"
+                        placeholder="Description du produit"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="filterByCar"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Marque de voiture pour cette batterie</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="mt-2 px-4"
+                        placeholder="Mercedes, audi, dacia..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
           <div>
             <FormLabel className="mb-4   md:mb-2">Image du produit</FormLabel>
 

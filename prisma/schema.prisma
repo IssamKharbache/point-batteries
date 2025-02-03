@@ -47,6 +47,7 @@ model Product {
   voltage            Int
   garantie           Garantie @default(NOGARANTIE)
   vente              Int?     @default(0)
+  filterByCar        String   @default("")
   isAchatProduct     Boolean  @default(false)
   refProduct         String   @unique
 

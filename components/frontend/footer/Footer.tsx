@@ -93,7 +93,7 @@ const Footer = () => {
           </Link>{" "}
           - Copyright © 2025{" "}
           <Link href="/" className="font-bold text-white ">
-            PointsBatterie
+            PointsBatterieServices
           </Link>{" "}
           - All rights reserved.
         </p>

@@ -34,6 +34,7 @@ export const GET = async (request: NextRequest) => {
       { title: { contains: search, mode: "insensitive" } }, // Search in product name
       { description: { contains: search, mode: "insensitive" } }, // Search in product description
       { marque: { contains: search, mode: "insensitive" } }, //search in product marque
+      { filterByCar: { contains: search, mode: "insensitive" } }, //search in product car brand
     ];
   }
 
