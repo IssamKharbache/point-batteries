@@ -29,6 +29,7 @@ export const PUT = async (
       voltage,
       imageKey,
       isAchatProduct,
+      filterByCar,
     } = await req.json();
     if (
       !title &&
@@ -43,7 +44,9 @@ export const PUT = async (
       !garantie &&
       !categoryId &&
       !voltage &&
-      !userId
+      !userId &&
+      !isAchatProduct &&
+      !filterByCar
     ) {
       return NextResponse.json({
         data: null,
@@ -82,6 +85,7 @@ export const PUT = async (
         categoryId,
         userId,
         isAchatProduct,
+        filterByCar,
       },
     });
     return NextResponse.json(
@@ -130,6 +134,7 @@ export const GET = async (
         garantie: true,
         imageKey: true,
         isAchatProduct: true,
+        filterByCar: true,
       },
     });
     if (!product) {

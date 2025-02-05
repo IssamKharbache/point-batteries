@@ -22,19 +22,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { addProductSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import UploadImageButton from "../upload/UploadImageButton";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
+import CheckBoxToggle from "./CheckBoxToggle";
+import { mutate } from "swr";
 
 const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
   const [image, setImage] = useState(productData.imageUrl);
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [imageKey, setImageKey] = useState(productData.imageKey);
   const [loading, setLoading] = useState(false);
+  //
+  const [isProductAchat, setIsProductAchat] = useState<boolean>(
+    productData.isAchatProduct
+  );
 
   const priceToString = String(productData.price);
   const capaciteToString = String(productData.capacite);
@@ -63,7 +69,9 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       ...data,
       imageUrl: image,
       imageKey,
+      isAchatProduct: isProductAchat,
     };
+
     if (!image) {
       toast({
         title: "L'image du produit est obligatoire",
@@ -85,14 +93,20 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       productData.designationProduit === allData.designationProduit &&
       productData.description === allData.description &&
       productData.garantie === allData.garantie &&
-      productData.imageUrl === allData.imageUrl
+      productData.imageUrl === allData.imageUrl &&
+      productData.filterByCar === allData.filterByCar &&
+      productData.isAchatProduct === allData.isAchatProduct
     ) {
+      console.log("test");
+
       return;
     }
     setLoading(true);
     try {
       const res = await axios.put(`/api/product/${productData.slug}`, allData);
       if (res.statusText === "updated") {
+        mutate("/api/product");
+        mutate("/api/categorie");
         setLoading(false);
         toast({
           title: "L'opération est terminée avec succès",
@@ -103,6 +117,8 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
         router.push("/dashboard/produit");
       }
     } catch (error) {
+      console.log(error);
+
       setLoading(false);
       toast({
         title: "Une erreur s'est produite",
@@ -114,7 +130,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
   };
   return (
     <div className="space-y-2 bg-white p-10 rounded-md border-2 md:w-[750px] ">
-      <h1 className="text-xl text-start text-gray-600 ">Ajouter produit</h1>
+      <h1 className="text-xl text-start text-gray-600 ">Modifier produit</h1>
       <hr className="text-gray-400 " />
 
       <Form {...form}>
@@ -341,24 +357,49 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
             />
           </div>
 
-          <FormField
-            name="description"
-            control={form.control}
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="mt-2 px-4"
-                      placeholder="Description du produit"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
+          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="mt-2 px-4"
+                        placeholder="Description du produit"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="filterByCar"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Marque de voiture pour cette batterie</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="mt-2 px-4"
+                        placeholder="Mercedes, audi, dacia..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+          <CheckBoxToggle
+            isChecked={isProductAchat}
+            setIsChecked={setIsProductAchat}
           />
           <div>
             <div className="flex flex-col md:flex-row md:items-center justify-between">

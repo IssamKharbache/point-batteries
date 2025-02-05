@@ -26,6 +26,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
   const notAchatProducts = productsData.filter(
     (prod) => prod.isAchatProduct === false
   );
+
   return (
     <div className="mt-4">
       <div className="m-4 xl:m-0">

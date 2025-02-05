@@ -8,10 +8,11 @@ import FetchBookmarks from "@/lib/utils/FetchBookmarks";
 import ProductCard from "@/components/frontend/products/ProductCard";
 import SpecialAndDemandingProducts from "@/components/frontend/products/SpecialAndDemandingProducts";
 import Brands from "@/components/frontend/brands/Brands";
-import { ProductData } from "@/components/backend/table/TableActions";
+import DynamicProductList from "@/components/frontend/products/DynamicProductList";
+import DynamicCategoryProducts from "@/components/frontend/products/DynamicCategoryProducts";
 
 const frontHomePage = async () => {
-  const data = await getData("/banner");
+  const banner = await getData("/banner");
   const products = await getData(`/product`);
 
   const session = await getServerSession(authOptions);
@@ -20,11 +21,6 @@ const frontHomePage = async () => {
   const categoryData: CategorieData = await getData("/categorie");
   const filteredData = categoryData?.filter((cat) => cat.products.length >= 1);
 
-  const bestSelledProducts = products.filter(
-    (product: ProductData) =>
-      product.vente && product.vente >= 5 && product.isAchatProduct === false
-  );
-
   return (
     <div>
       <div className="max-w-[1200px] mx-auto px-10 md:px-5 2xl:p-0">
@@ -32,27 +28,15 @@ const frontHomePage = async () => {
         {userId && <FetchBookmarks userId={userId} />}
         {/* banner */}
         <div>
-          <Banner bannerData={data} />
+          <Banner bannerData={banner} />
         </div>
         {/* best selling products */}
         <div>
           <SectionHeader header="Meilleures Ventes" />
-          <ProductCard productsData={bestSelledProducts} />
+          <DynamicProductList initialProducts={products} />
         </div>
         {/* category products */}
-        {filteredData.map((cat, idx) => (
-          <div key={idx}>
-            <SectionHeader
-              isCategory={true}
-              categoryTitle={cat.title}
-              catSlug={cat.slug}
-            />
-            <ProductCard
-              productsData={cat.products}
-              categoryTitle={cat.title}
-            />
-          </div>
-        ))}
+        <DynamicCategoryProducts initialCategorieData={categoryData} />
         {/* SpecialAndDemandingProducts */}
         <div>
           <SpecialAndDemandingProducts product={products} />

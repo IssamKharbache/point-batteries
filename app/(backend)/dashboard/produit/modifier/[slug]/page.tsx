@@ -32,6 +32,7 @@ export type ProductData = {
     slug: string;
     imageKey: string;
     isAchatProduct: boolean;
+    filterByCar: string;
   };
   categoryData: CategorieData;
 };

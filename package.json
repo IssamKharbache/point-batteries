@@ -45,6 +45,7 @@
     "sonner": "^1.7.1",
     "sweetalert2": "^11.15.3",
     "swiper": "^11.2.0",
+    "swr": "^2.3.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^7.4.1",
