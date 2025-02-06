@@ -22,9 +22,9 @@ const ProductSpecification = ({ product }: ProductSpecificationProps) => {
 
         <TableRow className="hover:bg-transparent">
           <TableCell className="font-medium p-5 ">
-            Variation du produit
+            Designation du produit
           </TableCell>
-          <TableCell>{product.variationProduct}</TableCell>
+          <TableCell>{product.designationProduit}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
