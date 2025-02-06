@@ -4,34 +4,26 @@ import CategoryProducts from "@/components/frontend/products/CategoryProducts";
 import Filters from "@/components/frontend/products/Filters";
 import SimilarProcuts from "@/components/frontend/products/SimilarProcuts";
 import { getData } from "@/lib/getData";
-import { Metadata } from "next";
+import React from "react";
 
-interface CatData {
+// Define the structure of the category data
+interface catData {
   id: string;
   title: string;
   products: ProductData[];
   slug: string;
 }
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-interface PageProps {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+const Page = async ({ params, searchParams }: Props) => {
+  const slug = (await params).slug;
+  const { sort = "asc", min = 0, max = "", page = 1 } = await searchParams;
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  // Add metadata generation if needed
-  return {
-    title: params.slug,
-  };
-}
+  const categorie: catData = await getData(`/categorie/${slug}`);
 
-const Page = async ({ params, searchParams }: PageProps) => {
-  const { slug } = params;
-  const { sort = "asc", min = 0, max = "", page = 1 } = searchParams;
-
-  const categorie: CatData = await getData(`/categorie/${slug}`);
   const products = await getData(
     `product?catId=${categorie.id}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
   );
@@ -44,11 +36,13 @@ const Page = async ({ params, searchParams }: PageProps) => {
       </h1>
 
       <div className="grid grid-cols-12">
+        {/*  filters */}
         <div className="col-span-12 md:col-span-4 mt-8">
           <Filters slug={slug} />
         </div>
 
-        <div className="col-span-12 md:col-span-8 p-8">
+        {/* product */}
+        <div className={"col-span-12 md:col-span-8 p-8 "}>
           <CategoryProducts
             products={products}
             catId={categorie.id}
