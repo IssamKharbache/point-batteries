@@ -1,13 +1,11 @@
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-interface ParamsProps {
-  slug: string;
-}
 export const DELETE = async (
-  req: NextRequest,
-  { params: { slug } }: { params: ParamsProps }
+  request: NextRequest,
+  context: { params: Promise<{ slug: string }> }
 ) => {
+  const slug = (await context.params).slug;
   try {
     const isExisting = await db.category.findUnique({
       where: {
