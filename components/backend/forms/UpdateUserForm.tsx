@@ -84,7 +84,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
         setLoading(false);
         setError(res.data.message);
       }
-    } catch (_) {
+    } catch (__error) {
       setLoading(false);
     }
   };

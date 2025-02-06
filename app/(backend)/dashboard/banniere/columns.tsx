@@ -37,7 +37,7 @@ export const columns: ColumnDef<BannerType>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
+    cell: () => {
       return <TableActions />;
     },
   },

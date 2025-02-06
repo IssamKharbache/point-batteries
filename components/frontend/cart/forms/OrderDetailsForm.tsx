@@ -14,7 +14,7 @@ import { orderDetailsSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,47 +49,60 @@ const OrderDetailsForm = () => {
     },
   });
   const router = useRouter();
-  //submit function
-  const submit = async (data: z.infer<typeof orderDetailsSchema>) => {
-    setLoadingOrder(true);
-    try {
-      const orderNumber = generateOrderNumber(10);
 
-      const fullData = {
-        formData: {
-          ...data,
-          userId: session?.user.id,
-          orderNumber,
-        },
-        orderItems: cartItems,
-      };
+  // Memoize the submit function to avoid re-creation on each render
+  const submit = useCallback(
+    async (data: z.infer<typeof orderDetailsSchema>) => {
+      setLoadingOrder(true);
+      try {
+        const orderNumber = generateOrderNumber(10);
 
-      const res = await axios.post("/api/order", fullData);
-      if (res.statusText === "created") {
-        setLoadingOrder(false);
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("orderDetails");
-          localStorage.removeItem("livraison");
+        const fullData = {
+          formData: {
+            ...data,
+            userId: session?.user.id,
+            orderNumber,
+          },
+          orderItems: cartItems,
+        };
+
+        const res = await axios.post("/api/order", fullData);
+        if (res.statusText === "created") {
+          setLoadingOrder(false);
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("orderDetails");
+            localStorage.removeItem("livraison");
+          }
+          Swal.fire({
+            title: "Votre commande a été passée avec succès ",
+            text: "Notre équipe vous contactera dès que possible pour confirmer votre commande !",
+            icon: "success",
+          });
+          resetCart();
+          setLivraison(0);
+          router.push("/mes-commandes");
         }
-        Swal.fire({
-          title: "Votre commande a été passée avec succès ",
-          text: "Notre équipe vous contactera dès que possible pour confirmer votre commande !",
-          icon: "success",
+      } catch (__error) {
+        toast({
+          title: "Une erreur s'est produite",
+          description: "Réessayez plus tard ou contactez le support",
+          variant: "error",
         });
-        resetCart();
-        setLivraison(0);
-        router.push("/mes-commandes");
+        setLoadingOrder(false);
       }
-    } catch (_) {
-      toast({
-        title: "Une erreur s'est produite",
-        description: "Réessayez plus tard ou contactez le support",
-        variant: "error",
-      });
-      setLoadingOrder(false);
-    }
-  };
-  //checking if the button commander is triggred
+    },
+    [
+      setLoadingOrder,
+      setLivraison,
+      resetCart,
+      cartItems,
+      session,
+      toast,
+      router,
+    ]
+  );
+
+  // Checking if the button commander is triggered
   useEffect(() => {
     if (submitForm) {
       form.handleSubmit(submit)();
@@ -121,7 +134,7 @@ const OrderDetailsForm = () => {
     const subscription = form.watch((value) => {
       saveToLocalStorage(value);
     });
-    return () => subscription.unsubscribe(); //clean up
+    return () => subscription.unsubscribe(); // Clean up
   }, [form]);
 
   return (

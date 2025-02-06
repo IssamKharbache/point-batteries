@@ -45,7 +45,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
       }
     };
     fetchPaginationData();
-  }, [page, userId, pageSize, trackOrder]);
+  }, [page, userId, pageSize, trackOrder, setTrackOrder]);
 
   return (
     <div>

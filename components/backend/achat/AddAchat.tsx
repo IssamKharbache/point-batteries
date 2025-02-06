@@ -126,7 +126,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
           className: "toast-container",
         });
       }
-    } catch (_) {
+    } catch (__error) {
       setLoading(false);
       toast({
         title: "Erreur",

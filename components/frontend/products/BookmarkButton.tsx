@@ -56,7 +56,7 @@ const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
           variant: "success",
         });
       }
-    } catch (_) {
+    } catch (__error) {
       // Revert state if the API call fails
       setBookmark(product.id, previousState);
       toast({

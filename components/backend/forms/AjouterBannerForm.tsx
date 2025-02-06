@@ -77,7 +77,7 @@ const AjouterBannerForm = () => {
         });
       }
       router.push("/dashboard/banniere");
-    } catch (_) {
+    } catch (__error) {
       setLoading(false);
       toast({
         title: "Une erreur s'est produite",
