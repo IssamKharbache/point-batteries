@@ -16,9 +16,7 @@ interface UploadImageButtonProps {
 const UploadImageButton = ({
   image,
   setImage,
-  isImageUploading,
   setIsImageUploading,
-  imageKey,
   setImageKey,
 }: UploadImageButtonProps) => {
   return (

@@ -76,6 +76,7 @@ export const PUT = async (
     });
     return NextResponse.json(
       {
+        data: updateOrder,
         message: "Commande status modifier avec success",
       },
       {

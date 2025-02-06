@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, X } from "lucide-react";
 
 import { motion } from "framer-motion";
-import { menuItems, monCompteItems } from "@/data";
+import { monCompteItems } from "@/data";
 import Link from "next/link";
 
 import { useMobileMenuStore, useMonCompteStore } from "@/context/store";

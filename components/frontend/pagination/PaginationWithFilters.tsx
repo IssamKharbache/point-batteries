@@ -23,7 +23,6 @@ const PaginationWithFilters = ({
 }: PaginationTestProps) => {
   const searchParams = useSearchParams();
 
-  const search = searchParams.get("search");
   const min = searchParams.get("min") || "0"; // Make sure min is a string
   const max = searchParams.get("max") || ""; // Make sure max is a string
   const sort = searchParams.get("sort") || "asc";

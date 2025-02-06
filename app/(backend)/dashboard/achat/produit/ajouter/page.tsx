@@ -1,5 +1,4 @@
 import AddProductAchat from "@/components/backend/achat/product/AddProductAchat";
-import AjouterProduit from "@/components/backend/forms/AjouterProduit";
 import { ProductData } from "@/components/backend/table/TableActions";
 import PageHeader from "@/components/backend/UI/PageHeader";
 import { getData } from "@/lib/getData";

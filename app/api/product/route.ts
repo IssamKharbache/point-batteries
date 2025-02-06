@@ -1,8 +1,10 @@
 import db from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
+  type ProductWhereInput = Prisma.ProductWhereInput;
 
   // Extract query parameters
   const categoryId = searchParams.get("catId");
@@ -14,7 +16,7 @@ export const GET = async (request: NextRequest) => {
   const pageSize = parseInt(searchParams.get("pageSize") || "10");
 
   // Build the `where` clause dynamically
-  let where: any = {};
+  const where: ProductWhereInput = {};
 
   // Filter by category
   if (categoryId) {
@@ -62,8 +64,8 @@ export const GET = async (request: NextRequest) => {
         status: 200,
       }
     );
-  } catch (error: any) {
-    console.error(error.message);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       {
         message: "Error while fetching products",

@@ -3,7 +3,7 @@ import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   const { orderItems, formData } = await req.json();
   const {
     prenom,
@@ -76,8 +76,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         statusText: "created",
       }
     );
-  } catch (error: any) {
-    console.log(error.message);
+  } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         message: "Error while creating order",
@@ -87,7 +87,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   }
 };
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     const orders = await db.order.findMany({
       orderBy: {

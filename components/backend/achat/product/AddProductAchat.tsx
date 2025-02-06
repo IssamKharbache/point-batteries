@@ -24,7 +24,7 @@ import { addProductAchatSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -74,7 +74,7 @@ const AddProductAchat = ({ categorieData }: ProductDataProps) => {
         });
         router.push("/dashboard/achat/produit/produit-achat");
       }
-    } catch (error: any) {
+    } catch (_error) {
       setLoading(false);
       setError(
         "Une erreur s'est produite, réessayez plus tard ou contactez le support"
@@ -91,7 +91,13 @@ const AddProductAchat = ({ categorieData }: ProductDataProps) => {
       <h1 className="text-xl text-start text-gray-600 ">
         Ajouter produit achat
       </h1>
+
       <hr className="text-gray-400 mb-4" />
+      {error && (
+        <p className="bg-red-500 text-white text-center p-2 font-semibold rounded mt-4 mb-4">
+          Une erreur est survenue
+        </p>
+      )}
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField

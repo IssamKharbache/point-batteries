@@ -1,4 +1,3 @@
-import { formatNumber } from "@/lib/utils/index";
 import { CircleDollarSign, ShoppingCart, User } from "lucide-react";
 import React from "react";
 

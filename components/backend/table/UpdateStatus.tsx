@@ -48,7 +48,7 @@ const UpdateStatus = ({ data }: UpdateStatusProps) => {
           className: "toast-container",
         });
       }
-    } catch (error) {
+    } catch (_error) {
       setIsUpdating(false);
       toast({
         title: "Erreur",

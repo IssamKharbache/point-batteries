@@ -25,7 +25,7 @@ const TableComponent = ({ data }: TableData) => {
       setIsRefresh(false);
     };
     refreshData();
-  }, [isRefresh]);
+  }, [isRefresh, setIsRefresh, setLoading]);
   return (
     <div className="container mx-auto py-10">
       <DataTable columns={columns} data={orderData} name={"Commande"} />

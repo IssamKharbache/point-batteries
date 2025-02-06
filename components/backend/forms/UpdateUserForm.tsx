@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -84,7 +84,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
         setLoading(false);
         setError(res.data.message);
       }
-    } catch (error) {
+    } catch (_error) {
       setLoading(false);
     }
   };

@@ -1,5 +1,4 @@
 import React from "react";
-import PbsLogo from "@/public/logopbslight.svg";
 import Link from "next/link";
 import Image from "next/image";
 

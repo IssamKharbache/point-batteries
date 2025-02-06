@@ -14,7 +14,7 @@ export default function DynamicProductList({
 }: {
   initialProducts: ProductData[];
 }) {
-  const { data, mutate } = useSWR("/api/product", fetcher, {
+  const { data } = useSWR("/api/product", fetcher, {
     fallbackData: initialProducts,
     refreshInterval: 10000, // Revalidate every 10 seconds
     revalidateOnFocus: true,

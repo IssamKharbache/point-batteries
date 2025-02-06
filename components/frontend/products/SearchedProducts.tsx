@@ -31,8 +31,8 @@ const SearchedProducts = ({ products }: SearchedProductsProps) => {
             className="w-40 self-center"
           />
           <p className="text-center font-semibold text-md mt-6 w-80 text-gray-500">
-            Nous n'avons trouvé aucun produit correspondant à cette recherche,
-            essayez avec d'autres mots-clés.
+            Nous n&apos;avons trouvé aucun produit correspondant à cette
+            recherche, essayez avec d&apos;autres mots-clés.
           </p>
           <Link href="/">
             <Button>Poursuivez vos achats</Button>

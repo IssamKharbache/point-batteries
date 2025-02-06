@@ -14,7 +14,7 @@ import { orderDetailsSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
@@ -80,7 +80,7 @@ const OrderDetailsForm = () => {
         setLivraison(0);
         router.push("/mes-commandes");
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Une erreur s'est produite",
         description: "Réessayez plus tard ou contactez le support",
@@ -95,7 +95,7 @@ const OrderDetailsForm = () => {
       form.handleSubmit(submit)();
       setSubmitForm(false);
     }
-  }, [submitForm]);
+  }, [submitForm, setSubmitForm, form]);
 
   // Utility function to save form data to localStorage
   const saveToLocalStorage = (

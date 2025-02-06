@@ -60,7 +60,7 @@ export function DataTable<TData extends ProductData>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  const { loading, setLoading } = useLoadingStore();
+  const { loading } = useLoadingStore();
 
   return (
     <div>

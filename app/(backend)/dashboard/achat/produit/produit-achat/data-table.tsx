@@ -28,7 +28,6 @@ import { useLoadingStore } from "@/context/store";
 import TableActions, {
   ProductData,
 } from "@/components/backend/table/TableActions";
-import Image from "next/image";
 
 interface DataTableProps<TData, ProductData> {
   columns: ColumnDef<TData, ProductData>[];
@@ -60,7 +59,7 @@ export function DataTable<TData extends ProductData>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  const { loading, setLoading } = useLoadingStore();
+  const { loading } = useLoadingStore();
 
   return (
     <div>

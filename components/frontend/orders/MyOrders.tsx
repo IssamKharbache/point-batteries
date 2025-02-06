@@ -5,8 +5,6 @@ import { getStatus } from "@/lib/getStatus";
 import { Order, OrderItem } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface OrderProps {
   order: Order & { orderItems: OrderItem[] };

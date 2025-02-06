@@ -30,7 +30,7 @@ const MobileMenu = ({ isOpen, setisOpen }: MobileMenuProps) => {
   const closeMenu = () => {
     setisOpen(false);
   };
-  const { openMonCompte, setOpenMonCompte } = useMonCompteStore();
+  const { setOpenMonCompte } = useMonCompteStore();
 
   return (
     <>

@@ -15,7 +15,6 @@ import { useToast } from "@/hooks/use-toast";
 import { createSlug } from "@/lib/utils/index";
 import { addCategorieSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";

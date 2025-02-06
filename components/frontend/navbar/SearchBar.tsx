@@ -17,8 +17,11 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    let handler = (e: any) => {
-      if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+    const handler = (e: MouseEvent) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -26,7 +29,7 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  }, []);
+  }, [setOpen]);
 
   const handleSearch = () => {
     setOpen(false);

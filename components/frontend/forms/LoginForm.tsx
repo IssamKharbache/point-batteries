@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,7 +51,7 @@ const LoginForm = () => {
       }
       router.push("/");
       form.reset();
-    } catch (error) {
+    } catch (_error) {
       setLoading(false);
     }
   };
@@ -103,12 +102,12 @@ const LoginForm = () => {
           )}
           <div className="flex flex-col gap-4">
             <div className="flex gap-2  text-[12px]  text-gray-500">
-              <p className="">Vous n'avez pas de compte ? </p>
+              <p className="">Vous n&apos;avez pas de compte ? </p>
               <Link
                 href="/inscription"
                 className="hover:underline hover:text-black duration-200"
               >
-                S'inscrire
+                S&apos;inscrire
               </Link>
             </div>
             <Link

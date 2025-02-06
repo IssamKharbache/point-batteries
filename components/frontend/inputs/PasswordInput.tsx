@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/form";
 
 import React, { useState } from "react";
-import { Path, useForm, UseFormReturn } from "react-hook-form";
+import { Path, UseFormReturn } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { loginSchema, signupSchema } from "@/lib/utils/validation";

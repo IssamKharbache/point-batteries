@@ -20,7 +20,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
   const { page, setPage, trackOrder, setTrackOrder } =
     useOrderPaginationStore();
   const [orderData, setOrderData] = useState<OrderWithItems[]>(orders || []);
-  const [totalPages, setTotalPages] = useState<number>(
+  const [totalPages, _setTotalPages] = useState<number>(
     Math.ceil((orders?.length || 0) / pageSize)
   );
   const [resultLength, setResultLength] = useState<number | undefined>(
@@ -58,7 +58,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
             <BaggageClaim size={40} />
           </div>
           <h1 className="font-semibold text-2xl md:text-4xl mt-8 text-center">
-            Vous n'avez placé aucune commande !
+            Vous n&apos;avez placé aucune commande !
           </h1>
           <p className="text-sm text-gray-400 mt-4 text-center">
             Toutes vos commandes seront sauvegardées ici pour que vous puissiez

@@ -1,9 +1,7 @@
 "use client";
 
-import { sideBarMenu } from "@/data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import PbsLogo from "@/public/pbslogo.svg";
 import LogoutButton from "@/components/frontend/buttons/LogoutButton";
 import { useSideBarStore } from "@/context/store";
 import { motion } from "framer-motion";
@@ -16,10 +14,8 @@ import {
   LayoutDashboard,
   Package,
   Package2,
-  Plus,
   ShoppingBasket,
   Store,
-  UserRoundPlus,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -31,11 +27,11 @@ import {
 import Image from "next/image";
 const SideBar = () => {
   const path = usePathname();
-  const { openSideBar, setOpenSideBar } = useSideBarStore();
+  const { openSideBar } = useSideBarStore();
   const { data: session } = useSession();
   if (!session || !session.user) return null;
 
-  let sideBarMenu = [
+  const sideBarMenu = [
     {
       name: "Commande",
       href: "/dashboard/commandes",

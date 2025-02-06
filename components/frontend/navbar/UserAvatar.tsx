@@ -25,7 +25,7 @@ import Link from "next/link";
 
 const UserAvatar = () => {
   const [open, setisOpen] = React.useState(false);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const handleOpenChange = (open: boolean) => {
     setisOpen(open);
   };
@@ -84,7 +84,7 @@ const UserAvatar = () => {
         <Link href="/liste-denvies">
           <DropdownMenuItem className="cursor-pointer gap-4">
             <Heart className="" />
-            <span>Votre liste d'envies</span>
+            <span>Votre liste d&apos;envies</span>
           </DropdownMenuItem>
         </Link>
 

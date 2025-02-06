@@ -59,7 +59,7 @@ const FavouriteProductsList = ({
         </div>
       ) : (
         <>
-          <h1 className=" font-semibold text-2xl mb-8">Liste d'envies</h1>
+          <h1 className=" font-semibold text-2xl mb-8">Liste d&apos;envies</h1>
           {favouriteData?.map((product, idx) => {
             return <FavouriteProducts key={idx} product={product.product} />;
           })}

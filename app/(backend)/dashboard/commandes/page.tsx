@@ -1,7 +1,6 @@
 import PageHeader from "@/components/backend/UI/PageHeader";
 import { getData } from "@/lib/getData";
 import React from "react";
-import Table from "./Table";
 import TableComponent from "./Table";
 
 const page = async () => {

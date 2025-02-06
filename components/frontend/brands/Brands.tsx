@@ -2,7 +2,7 @@
 import { images } from "@/lib/brandsImage";
 import Image from "next/image";
 import { CSSProperties } from "react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 interface CustomCSSProperties extends CSSProperties {

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { Loader2, LoaderPinwheel } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { FaHandshake } from "react-icons/fa";
 import LoadingButton from "../buttons/LoadingButton";
 
@@ -78,8 +78,8 @@ const OrderDetails = () => {
       </div>
       <p className="text-xs">
         Vos données personnelles seront utilisées pour traiter votre commande,
-        soutenir votre expérience sur ce site Web et à d'autres fins décrites
-        dans notre{" "}
+        soutenir votre expérience sur ce site Web et à d&apos;autres fins
+        décrites dans notre{" "}
         <Link
           className="text-blue-700 hover:underline font-medium"
           href="/politique"
@@ -98,7 +98,7 @@ const OrderDetails = () => {
           htmlFor="terms"
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
-          J'ai lu et j'accepte conditions générales{" "}
+          J&apos;ai lu et j&apos;accepte conditions générales{" "}
           <span className="text-red-500">*</span>
         </label>
       </div>

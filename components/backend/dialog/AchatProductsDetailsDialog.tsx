@@ -14,9 +14,7 @@ import { useReactToPrint } from "react-to-print";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -38,9 +36,10 @@ const AchatProductsDetailsDialog = () => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="rounded-lg">
           <DialogHeader className="text-start m-3">
-            <DialogTitle>Détails de l'achat</DialogTitle>
+            <DialogTitle>Détails de l&apos;achat</DialogTitle>
             <DialogDescription>
-              Voir plus de détails sur l'achat, imprimer ou télécharger aussi
+              Voir plus de détails sur l&apos;achat, imprimer ou télécharger
+              aussi
             </DialogDescription>
             <div className="flex justify-between items-center pt-4">
               <div className="flex items-center gap-4">

@@ -3,7 +3,7 @@ import db from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { generateUsername } from "@/lib/utils/index";
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     const { email, password, nom, prenom, role } = await req.json();
 

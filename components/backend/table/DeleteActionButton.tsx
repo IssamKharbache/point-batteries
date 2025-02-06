@@ -3,8 +3,6 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { Loader2, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
 import Swal from "sweetalert2";
 interface DeleteActionButtonProps {
   title: string;
@@ -43,7 +41,7 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
           } else {
             setLoading(false);
           }
-        } catch (error) {
+        } catch (_error) {
           toast({
             title: "Une erreur s'est produite",
             variant: "error",

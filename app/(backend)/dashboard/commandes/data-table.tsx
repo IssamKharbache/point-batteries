@@ -29,7 +29,6 @@ import { useLoadingStore, useOrderBackendStore } from "@/context/store";
 import { Order } from "@prisma/client";
 import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
 import UpdateStatus from "@/components/backend/table/UpdateStatus";
-import { getData } from "@/lib/getData";
 
 export interface DataTableProps<TData, Order> {
   columns: ColumnDef<TData, Order>[];
@@ -47,7 +46,7 @@ export function DataTable<TData extends Order>({
     []
   );
   //store state
-  const { isRefresh, setIsRefresh } = useOrderBackendStore();
+  const { setIsRefresh } = useOrderBackendStore();
   const { loading, setLoading } = useLoadingStore();
 
   const table = useReactTable({

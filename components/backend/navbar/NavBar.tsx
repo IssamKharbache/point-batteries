@@ -5,7 +5,6 @@ import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import UserAvatarBack from "./UserAvatarBack";
 import { useEffect, useState } from "react";
-import PbsLogo from "@/public/pbslogo.svg";
 import Image from "next/image";
 
 const NavBar = () => {

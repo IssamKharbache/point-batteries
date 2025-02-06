@@ -1,6 +1,8 @@
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-
+type bookmarkType = {
+  productId: string;
+};
 export const GET = async (req: NextRequest) => {
   const userId = req.nextUrl.searchParams.get("userId");
 
@@ -16,7 +18,7 @@ export const GET = async (req: NextRequest) => {
     });
 
     const bookmarkedProductIds = bookmarks.map(
-      (bookmark: any) => bookmark.productId
+      (bookmark: bookmarkType) => bookmark.productId
     );
 
     return NextResponse.json(

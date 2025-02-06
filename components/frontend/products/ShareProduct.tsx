@@ -1,12 +1,7 @@
 "use client";
 import { ClipboardCheck, Copy } from "lucide-react";
 import React, { useState } from "react";
-import {
-  FacebookIcon,
-  FacebookShareButton,
-  WhatsappIcon,
-  WhatsappShareButton,
-} from "react-share";
+import { FacebookShareButton, WhatsappShareButton } from "react-share";
 
 import { FaFacebookF } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";

@@ -1,11 +1,7 @@
 "use client";
 import AchatProductsDetails from "@/components/backend/achat/AchatProductsDetails";
-import { ProductData } from "@/components/backend/table/TableActions";
-import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils/index";
 import { ColumnDef } from "@tanstack/react-table";
-import axios from "axios";
-import { useState } from "react";
 
 export interface AchatType {
   id: string;

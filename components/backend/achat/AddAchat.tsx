@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { ProductData } from "../table/TableActions";
 import { Button } from "@/components/ui/button";
 import { omit } from "lodash";
@@ -83,7 +83,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
     setLoading(true);
     // Validate if all selected products have both price and quantity filled
     const incompleteProducts = Object.entries(productSelected).filter(
-      ([_, { quantity }]) => !quantity
+      ([, { quantity }]) => !quantity
     );
 
     if (incompleteProducts.length > 0) {
@@ -126,7 +126,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
           className: "toast-container",
         });
       }
-    } catch (error) {
+    } catch (_error) {
       setLoading(false);
       toast({
         title: "Erreur",

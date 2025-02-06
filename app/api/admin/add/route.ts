@@ -4,7 +4,7 @@ import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { generateUsername } from "@/lib/utils/index";
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   const { email, password, nom, prenom, role, tel } = await req.json();
 
   try {

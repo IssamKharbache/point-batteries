@@ -15,7 +15,8 @@ const Unauthorized = () => {
       />
       <h1 className="text-6xl font-semibold justify-start mt-4 ">Désolé</h1>
       <p className="text-center text-md">
-        Vous n'avez pas les autorisations nécessaires pour accéder à cette page
+        Vous n&apos;avez pas les autorisations nécessaires pour accéder à cette
+        page
       </p>
       <Link href="/" className="">
         <Button className="text-xl p-6">Accueil</Button>

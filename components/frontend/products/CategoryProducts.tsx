@@ -34,7 +34,6 @@ const CategoryProducts = ({
   const totalPages = Math.ceil(resultLength / pageSize);
   const min = searchParams.get("min") || "0"; // Make sure min is a string
   const max = searchParams.get("max") || ""; // Make sure max is a string
-  const sort = searchParams.get("sort") || "asc";
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const { data: session } = useSession();
   const { addItem } = useCartStore();
@@ -72,7 +71,7 @@ const CategoryProducts = ({
             className="w-40 self-center"
           />
           <p className="text-center font-semibold text-xl mt-6 text-gray-500">
-            Il n'y a aucun produit
+            Il n&apos;y a aucun produit
           </p>
           <Link href="/">
             <Button>Poursuivez vos achats</Button>

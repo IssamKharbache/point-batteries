@@ -1,12 +1,13 @@
 import NavBar from "@/components/frontend/navbar/NavBar";
 import type { Metadata } from "next";
-import { Lato, Montserrat, Oswald, Roboto } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "../globals.css";
 import "swiper/css";
 import { AuthProvider } from "@/providers/Providers";
 import Footer from "@/components/frontend/footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
+
 const poppins = Montserrat({
   weight: ["100", "300", "400", "700", "900"],
   subsets: ["latin"],

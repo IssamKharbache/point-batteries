@@ -29,7 +29,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface ProductDataProps {
   categorieData?: CategorieData;
@@ -46,7 +46,6 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
   const imageRef = useRef<HTMLInputElement>(null);
   //
   const router = useRouter();
-  const pathName = usePathname();
 
   //react hook form
   const form = useForm<z.infer<typeof addProductSchema>>({
@@ -108,7 +107,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
         });
         router.push("/dashboard/produit");
       }
-    } catch (error: any) {
+    } catch (_error) {
       setLoading(false);
       setError(
         "Une erreur s'est produite, réessayez plus tard ou contactez le support"

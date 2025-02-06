@@ -41,7 +41,7 @@ const CartProductTable = () => {
           Votre panier est vide
         </h1>
         <p className="text-sm text-gray-400 mt-4 text-center">
-          Il semble que vous n'ayez rien ajouté à votre panier
+          Il semble que vous n&apos;ayez rien ajouté à votre panier
         </p>
         <Link href="/" className="mt-4">
           <Button>Accueil</Button>

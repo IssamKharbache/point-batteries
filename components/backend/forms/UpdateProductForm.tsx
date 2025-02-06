@@ -1,5 +1,4 @@
 "use client";
-import { CategorieData } from "@/app/(backend)/dashboard/produit/ajouter/page";
 import { ProductData } from "@/app/(backend)/dashboard/produit/modifier/[slug]/page";
 import { Button } from "@/components/ui/button";
 import {
@@ -321,7 +320,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Courant d’essai de décharge</FormLabel>
+                    <FormLabel>Courant d&apos;essai de décharge</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

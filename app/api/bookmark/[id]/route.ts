@@ -152,6 +152,7 @@ export const DELETE = async (
     });
     return NextResponse.json(
       {
+        data: bookmark,
         message: "Removed from favourite successfully",
       },
       {

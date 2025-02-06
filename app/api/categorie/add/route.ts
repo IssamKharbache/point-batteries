@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     const { title, description, slug } = await req.json();
 
