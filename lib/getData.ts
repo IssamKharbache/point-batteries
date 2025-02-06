@@ -3,10 +3,14 @@ import axios from "axios";
 export const getData = async (endpoint: string) => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const response = await axios.get(`${baseUrl}/api/${endpoint}`);
-    const data = response.data.data;
-    return data;
+    if (!baseUrl) {
+      throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
+    }
+
+    const response = await axios.get(`${baseUrl}${endpoint}`);
+    return response.data.data;
   } catch (error) {
-    console.log(error);
+    console.error("Error in getData:", error);
+    throw error;
   }
 };
