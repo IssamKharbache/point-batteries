@@ -4,9 +4,7 @@ import { getData } from "@/lib/getData";
 import React from "react";
 
 interface PageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 const page = async ({ params }: PageProps) => {
