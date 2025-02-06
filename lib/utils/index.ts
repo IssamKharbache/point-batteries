@@ -58,3 +58,12 @@ export const formatDate = (inputDate: string | Date): string => {
   const year = date.getUTCFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export const formatNumber = (num: number): string => {
+  if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M"; // 1M, 1.2M
+  } else if (num >= 1_000) {
+    return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "k"; // 10k, 15.6k
+  }
+  return num.toString(); // Return as-is if less than 1k
+};

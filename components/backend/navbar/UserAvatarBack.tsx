@@ -31,7 +31,7 @@ const UserAvatarBack = () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center justify-center  font-semibold bg-slate-800 h-10 w-10 rounded-full text-white uppercase">
-          {getInitials(session.user.nom, session.user.prenom)}
+          {getInitials(session.user.nom || "", session.user.prenom || "")}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-4 w-52">

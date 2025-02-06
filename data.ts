@@ -4,7 +4,6 @@ import {
   Package2,
   ShoppingBasket,
   Store,
-  UserPen,
   UserRoundPlus,
   Users,
   UsersRound,
@@ -36,19 +35,6 @@ export const monCompteItems = [
   },
 ];
 
-export const categoryData: string[] = [
-  "Batteries voiture",
-  "Batteries poids lourd",
-  "Batteries lithium-ion",
-  "Batteries alcalines",
-  "Batteries rechargeables",
-  "Batteries plomb-acide",
-  "Batteries au nickel-cadmium",
-  "Batteries au lithium-polymère",
-  "Batteries CR2032",
-  "Batteries 12V",
-];
-
 export const sideBarMenu = [
   {
     name: "Dashboard",
@@ -63,8 +49,8 @@ export const sideBarMenu = [
     isMainAdmin: false,
   },
   {
-    name: "Commande",
-    href: "/dashboard/commande",
+    name: "Commandes",
+    href: "/dashboard/commandes",
     icon: Package2,
     isMainAdmin: false,
   },
@@ -93,7 +79,7 @@ export const sideBarMenu = [
     isMainAdmin: true,
   },
   {
-    name: "Shop",
+    name: "Boutique",
     href: "/",
     icon: Store,
     isMainAdmin: false,

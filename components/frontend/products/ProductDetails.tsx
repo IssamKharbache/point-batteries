@@ -23,7 +23,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
   return (
     <div className="grid grid-cols-12 gap-4">
       {/* left part */}
-      <div className="flex flex-col gap-8 col-span-12 lg:col-span-8  min-h-[430px] m-8 lg:m-0 ">
+      <div className="flex flex-col gap-8 col-span-12 lg:col-span-8  min-h-[430px] m-8  2xl:m-0 ">
         <div className="flex flex-col md:flex-row gap-12 bg-white p-4 ">
           <Image
             src={product.imageUrl || ""}
@@ -143,7 +143,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
       </div>
 
       {/* right part */}
-      <div className="flex flex-col col-span-12  gap-8 lg:col-span-4 m-8 lg:m-0">
+      <div className="flex flex-col col-span-12  gap-8 lg:col-span-4 m-8 2xl:m-0">
         {/* first */}
         <div className="bg-white ">
           {product.garantie !== "NOGARANTIE" &&

@@ -62,8 +62,8 @@ export const GET = async (request: NextRequest) => {
         status: 200,
       }
     );
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.error(error.message);
     return NextResponse.json(
       {
         message: "Error while fetching products",
