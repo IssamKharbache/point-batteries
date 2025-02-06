@@ -4,7 +4,6 @@ import CategoryProducts from "@/components/frontend/products/CategoryProducts";
 import Filters from "@/components/frontend/products/Filters";
 import SimilarProcuts from "@/components/frontend/products/SimilarProcuts";
 import { getData } from "@/lib/getData";
-
 import React from "react";
 
 interface catData {
@@ -13,15 +12,15 @@ interface catData {
   products: ProductData[];
   slug: string;
 }
-const page = async ({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ slug: string }>;
+
+interface PageProps {
+  params: { slug: string }; // Make sure this is not a promise here
   searchParams: { [key: string]: string | string[] | undefined };
-}) => {
-  const { slug } = await params;
-  const { sort = "asc", min = 0, max = "", page = 1 } = await searchParams;
+}
+
+const page = async ({ params, searchParams }: PageProps) => {
+  const { slug } = params; // No need to await since it's no longer a Promise
+  const { sort = "asc", min = 0, max = "", page = 1 } = searchParams;
 
   const categorie: catData = await getData(`/categorie/${slug}`);
 
