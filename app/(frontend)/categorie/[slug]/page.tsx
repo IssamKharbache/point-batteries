@@ -4,28 +4,34 @@ import CategoryProducts from "@/components/frontend/products/CategoryProducts";
 import Filters from "@/components/frontend/products/Filters";
 import SimilarProcuts from "@/components/frontend/products/SimilarProcuts";
 import { getData } from "@/lib/getData";
-import React from "react";
+import { Metadata } from "next";
 
-// Define the structure of the category data
-interface catData {
+interface CatData {
   id: string;
   title: string;
   products: ProductData[];
   slug: string;
 }
 
-const Page = async ({
-  params,
-  searchParams,
-}: {
+interface PageProps {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
-}) => {
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  // Add metadata generation if needed
+  return {
+    title: params.slug,
+  };
+}
+
+const Page = async ({ params, searchParams }: PageProps) => {
   const { slug } = params;
   const { sort = "asc", min = 0, max = "", page = 1 } = searchParams;
 
-  const categorie: catData = await getData(`/categorie/${slug}`);
-
+  const categorie: CatData = await getData(`/categorie/${slug}`);
   const products = await getData(
     `product?catId=${categorie.id}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
   );
@@ -38,13 +44,11 @@ const Page = async ({
       </h1>
 
       <div className="grid grid-cols-12">
-        {/*  filters */}
         <div className="col-span-12 md:col-span-4 mt-8">
           <Filters slug={slug} />
         </div>
 
-        {/* product */}
-        <div className={"col-span-12 md:col-span-8 p-8 "}>
+        <div className="col-span-12 md:col-span-8 p-8">
           <CategoryProducts
             products={products}
             catId={categorie.id}
