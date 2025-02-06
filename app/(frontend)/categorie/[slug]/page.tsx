@@ -6,6 +6,7 @@ import SimilarProcuts from "@/components/frontend/products/SimilarProcuts";
 import { getData } from "@/lib/getData";
 import React from "react";
 
+// Define the structure of the category data
 interface catData {
   id: string;
   title: string;
@@ -13,13 +14,14 @@ interface catData {
   slug: string;
 }
 
-interface PageProps {
+const Page = async ({
+  params,
+  searchParams,
+}: {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
-}
-
-const page = async ({ params, searchParams }: PageProps) => {
-  const { slug } = params; // No need to await since it's no longer a Promise
+}) => {
+  const { slug } = params;
   const { sort = "asc", min = 0, max = "", page = 1 } = searchParams;
 
   const categorie: catData = await getData(`/categorie/${slug}`);
@@ -56,4 +58,4 @@ const page = async ({ params, searchParams }: PageProps) => {
   );
 };
 
-export default page;
+export default Page;
