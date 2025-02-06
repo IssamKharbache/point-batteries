@@ -2,10 +2,9 @@ import UpdateUserForm from "@/components/backend/forms/UpdateUserForm";
 import { getData } from "@/lib/getData";
 
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
+
 const page = async ({ params }: PageProps) => {
   const { id } = await params;
 

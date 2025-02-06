@@ -2,9 +2,7 @@ import { getData } from "@/lib/getData";
 import ProductDetails from "@/components/frontend/products/ProductDetails";
 
 interface PageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 const page = async ({ params }: PageProps) => {

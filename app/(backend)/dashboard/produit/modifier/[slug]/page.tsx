@@ -5,10 +5,9 @@ import { getData } from "@/lib/getData";
 import React from "react";
 import { CategorieData } from "../../ajouter/page";
 interface PageParamsProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
+
 export interface CategoryProduct {
   id: string;
   title: string;
