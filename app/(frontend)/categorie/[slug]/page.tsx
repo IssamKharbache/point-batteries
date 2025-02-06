@@ -14,7 +14,7 @@ interface catData {
 }
 
 interface PageProps {
-  params: { slug: string }; // Make sure this is not a promise here
+  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
