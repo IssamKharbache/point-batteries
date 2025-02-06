@@ -80,7 +80,7 @@ const OrderDetailsForm = () => {
         setLivraison(0);
         router.push("/mes-commandes");
       }
-    } catch (_error) {
+    } catch (_) {
       toast({
         title: "Une erreur s'est produite",
         description: "Réessayez plus tard ou contactez le support",
@@ -95,7 +95,7 @@ const OrderDetailsForm = () => {
       form.handleSubmit(submit)();
       setSubmitForm(false);
     }
-  }, [submitForm, setSubmitForm, form]);
+  }, [submitForm, setSubmitForm, form, submit]);
 
   // Utility function to save form data to localStorage
   const saveToLocalStorage = (

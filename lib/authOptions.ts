@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             identifiant: user.identifiant,
           };
-        } catch (_error) {
+        } catch (_) {
           throw { error: "Something went wrong", status: 401 };
         }
       },

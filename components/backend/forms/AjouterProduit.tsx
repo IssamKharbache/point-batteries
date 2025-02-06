@@ -107,7 +107,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
         });
         router.push("/dashboard/produit");
       }
-    } catch (_error) {
+    } catch (_) {
       setLoading(false);
       setError(
         "Une erreur s'est produite, réessayez plus tard ou contactez le support"

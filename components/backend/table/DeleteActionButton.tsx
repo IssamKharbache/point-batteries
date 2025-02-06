@@ -41,7 +41,7 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
           } else {
             setLoading(false);
           }
-        } catch (_error) {
+        } catch (_) {
           toast({
             title: "Une erreur s'est produite",
             variant: "error",

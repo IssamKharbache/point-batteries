@@ -1,7 +1,6 @@
 import AddAchat from "@/components/backend/achat/AddAchat";
 import { ProductData } from "@/components/backend/table/TableActions";
 import PageHeader from "@/components/backend/UI/PageHeader";
-import { Input } from "@/components/ui/input";
 import { getData } from "@/lib/getData";
 import React from "react";
 

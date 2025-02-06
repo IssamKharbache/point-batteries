@@ -5,7 +5,6 @@ import { CategorieData } from "../(backend)/dashboard/produit/ajouter/page";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import FetchBookmarks from "@/lib/utils/FetchBookmarks";
-import ProductCard from "@/components/frontend/products/ProductCard";
 import SpecialAndDemandingProducts from "@/components/frontend/products/SpecialAndDemandingProducts";
 import Brands from "@/components/frontend/brands/Brands";
 import DynamicProductList from "@/components/frontend/products/DynamicProductList";
@@ -19,7 +18,6 @@ const frontHomePage = async () => {
   const userId = session?.user?.id;
 
   const categoryData: CategorieData = await getData("/categorie");
-  const filteredData = categoryData?.filter((cat) => cat.products.length >= 1);
 
   return (
     <div>

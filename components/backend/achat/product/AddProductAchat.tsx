@@ -74,7 +74,7 @@ const AddProductAchat = ({ categorieData }: ProductDataProps) => {
         });
         router.push("/dashboard/achat/produit/produit-achat");
       }
-    } catch (_error) {
+    } catch (_) {
       setLoading(false);
       setError(
         "Une erreur s'est produite, réessayez plus tard ou contactez le support"

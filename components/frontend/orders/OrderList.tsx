@@ -20,13 +20,11 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
   const { page, setPage, trackOrder, setTrackOrder } =
     useOrderPaginationStore();
   const [orderData, setOrderData] = useState<OrderWithItems[]>(orders || []);
-  const [totalPages, _setTotalPages] = useState<number>(
-    Math.ceil((orders?.length || 0) / pageSize)
-  );
   const [resultLength, setResultLength] = useState<number | undefined>(
     undefined
   );
   const [loading, setLoading] = useState(false);
+  const totalPages = Math.ceil((orders?.length || 0) / pageSize);
 
   // Fetch paginated data on page change
   useEffect(() => {

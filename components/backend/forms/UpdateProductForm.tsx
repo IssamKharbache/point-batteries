@@ -409,7 +409,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                   setImage("");
                 }}
               >
-                Modifier l'image du produit
+                Modifier l&apos;image du produit
               </Button>
             </div>
 
