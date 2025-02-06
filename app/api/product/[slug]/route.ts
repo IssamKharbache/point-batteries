@@ -109,9 +109,9 @@ export const PUT = async (
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: ParamsProps }
+  context: { params: Promise<{ slug: string }> }
 ) => {
-  const { slug } = await params;
+  const slug = (await context.params).slug;
   try {
     const product = await db.product.findUnique({
       where: {
@@ -160,9 +160,9 @@ export const GET = async (
 };
 export const DELETE = async (
   req: NextRequest,
-  { params }: { params: ParamsProps }
+  context: { params: Promise<{ slug: string }> }
 ) => {
-  const { slug } = await params;
+  const slug = (await context.params).slug;
 
   try {
     const isExisting = await db.product.findUnique({
