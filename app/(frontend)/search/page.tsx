@@ -11,18 +11,21 @@ interface SearchPageProps {
     sort: string;
   };
 }
-
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 // // Generate metadata dynamically based on searchParams
-export const generateMetadata = async ({ searchParams }: SearchPageProps) => {
-  const { q } = await searchParams;
+export const generateMetadata = async ({ searchParams }: Props) => {
+  const q = (await searchParams).q;
   return {
     title: `Résultats de recherche pour "${q}"`,
     description: `Search results for "${q}"`,
   };
 };
 
-const page = async ({ searchParams }: SearchPageProps) => {
-  const { q } = await searchParams;
+const page = async ({ searchParams }: Props) => {
+  const q = (await searchParams).q;
   const { sort = "asc", min = 0, max = "", page = 1 } = await searchParams;
   const products = await getData(
     `product?search=${q}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
