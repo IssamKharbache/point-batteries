@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getData } from "@/lib/getData";
 import ProductDetails from "@/components/frontend/products/ProductDetails";
 

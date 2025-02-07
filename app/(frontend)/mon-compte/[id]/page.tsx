@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import UpdateUserForm from "@/components/backend/forms/UpdateUserForm";
 import { getData } from "@/lib/getData";
 

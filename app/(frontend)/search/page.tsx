@@ -1,16 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import Filters from "@/components/frontend/products/Filters";
 import SearchedProducts from "@/components/frontend/products/SearchedProducts";
 import { getData } from "@/lib/getData";
 
-interface SearchPageProps {
-  searchParams: {
-    q: string;
-    max: string;
-    min: string;
-    page: number;
-    sort: string;
-  };
-}
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

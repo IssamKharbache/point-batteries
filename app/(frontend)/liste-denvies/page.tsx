@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ProductData } from "@/components/backend/table/TableActions";
 import FavouriteProductsList from "@/components/frontend/products/FavouriteProductsList";
 import { Button } from "@/components/ui/button";
