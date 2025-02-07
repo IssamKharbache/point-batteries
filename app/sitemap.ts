@@ -1,6 +1,5 @@
 import { ProductData } from "@/components/backend/table/TableActions";
 import { getData } from "@/lib/getData";
-import { CategorieData } from "./(backend)/dashboard/produit/ajouter/page";
 import { Category } from "@prisma/client";
 export default async function sitemap() {
   const baseUrl = "https://pointbatteries.com";

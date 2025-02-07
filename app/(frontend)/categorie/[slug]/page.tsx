@@ -20,7 +20,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetaData({
+export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
