@@ -22,7 +22,11 @@ export const monCompteItems = [
   },
   {
     name: "Ma liste d'envies",
-    href: "/favourites",
+    href: "/liste-denvies",
+  },
+  {
+    name: "Mes commandes",
+    href: "/mes-commandes",
   },
 ];
 

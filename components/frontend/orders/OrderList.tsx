@@ -24,7 +24,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders, userId, pageSize }) => {
     undefined
   );
   const [loading, setLoading] = useState(false);
-  const totalPages = Math.ceil((orders?.length || 0) / pageSize);
+  const totalPages = Math.ceil((resultLength || 0) / pageSize);
 
   // Fetch paginated data on page change
   useEffect(() => {
