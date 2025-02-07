@@ -59,7 +59,6 @@ export async function generateStaticParams() {
     }
     const products = res.data.data;
     if (products.length === 0) return [];
-    console.log(products);
 
     return products.map((product: ProductData) => ({
       slug: product.slug,
