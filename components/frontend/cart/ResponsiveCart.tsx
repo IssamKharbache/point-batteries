@@ -30,22 +30,22 @@ const ResponsiveCart = ({ item }: CartItem) => {
           alt={item.title}
           width={500}
           height={500}
-          className="w-52 rounded-full"
+          className="w-24 rounded-full"
         />
       </div>
-      <p className="text-center text-2xl line-clamp-1 font-semibold">
+      <p className="text-center w-full text-md line-clamp-1 font-semibold">
         {item.title}
       </p>
       <hr />
       <div className="border-b px-12 py-4">
-        <div className="flex items-center justify-between font-semibold">
+        <div className="flex flex-col gap-4 items-center sm:flex-row sm:gap-0 sm:items-center sm:justify-between font-semibold">
           <p>Prix</p>
           <p>{item.price}dhs</p>
         </div>
       </div>
 
       <div className="border-b px-12 py-4">
-        <div className="flex items-center justify-between font-semibold">
+        <div className="flex flex-col gap-4 items-center sm:flex-row sm:gap-0 sm:items-center sm:justify-between font-semibold">
           <p>Quantité</p>
           <div className="flex items-center gap-4 ">
             <button>
@@ -66,7 +66,7 @@ const ResponsiveCart = ({ item }: CartItem) => {
         </div>
       </div>
       <div className="px-12 py-4">
-        <div className="flex items-center justify-between font-semibold">
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-0 sm:items-center sm:justify-between font-semibold">
           <p>Sous-total</p>
           <p> {(Number(item.quantity) * Number(item.price)).toFixed(2)} dhs</p>
         </div>

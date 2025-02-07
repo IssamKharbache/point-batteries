@@ -46,8 +46,8 @@ const TotalPanier = () => {
     return null;
   }
   return (
-    <div className="bg-white col-span-12 xl:col-span-4 p-12 m-8">
-      <h1 className="text-xl font-semibold border-b p-2">Total panier</h1>
+    <div className="bg-white col-span-12 xl:col-span-4 m-8">
+      <h1 className="text-xl font-semibold border-b p-6">Total panier</h1>
       <div className="flex flex-col gap-4 mt-8 p-4 ">
         <div className="flex justify-between items-center font-medium">
           <p>Sous-total</p>
