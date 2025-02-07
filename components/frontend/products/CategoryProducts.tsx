@@ -44,6 +44,7 @@ const CategoryProducts = ({
       const res = await axios.get(
         `/api/product?catId=${catId}&pageNum=${currentPage}&min=${min}&max=${max}&pageSize=${pageSize}`
       );
+      console.log(res);
 
       setProductsState(res.data.data);
       setResultLength(res.data.totalCount);
