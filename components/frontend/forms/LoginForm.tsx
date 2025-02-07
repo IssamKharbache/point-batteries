@@ -56,7 +56,7 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className="space-y-4 bg-white p-10 md:p-16 rounded-md border-2 m-4 md:m-2 min-w-[500px]">
+    <div className="space-y-4 bg-white p-10 md:p-16 rounded-md border-2 m-4 md:m-2 md:min-w-[500px]">
       <h1 className="text-xl text-start text-gray-600 ">Se connecter</h1>
       <hr className="text-gray-400" />
       {error && (

@@ -19,7 +19,7 @@ const CategoryDropDown = () => {
       setCategorieData(cate);
     };
     fetchCat();
-  }, []);
+  }, [categoryData]);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
