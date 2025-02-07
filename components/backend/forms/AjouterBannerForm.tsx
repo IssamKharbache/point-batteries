@@ -20,11 +20,16 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
+import { Banner } from "@prisma/client";
 
-const AjouterBannerForm = () => {
-  const [image, setImage] = useState("");
+interface BannerFormProps {
+  bannerData?: Banner;
+}
+
+const AjouterBannerForm = ({ bannerData }: BannerFormProps) => {
+  const [image, setImage] = useState(bannerData?.imageUrl);
   const [IsImageUploading, setIsImageUploading] = useState(false);
-  const [imageKey, setImageKey] = useState("");
+  const [imageKey, setImageKey] = useState(bannerData?.imageKey);
   //loading state
   const [loading, setLoading] = useState(false);
   //router
@@ -34,8 +39,8 @@ const AjouterBannerForm = () => {
   const form = useForm<z.infer<typeof addBannerSchema>>({
     resolver: zodResolver(addBannerSchema),
     defaultValues: {
-      title: "",
-      link: "",
+      title: bannerData?.title ?? "",
+      link: bannerData?.link ?? "",
     },
   });
   //toast
@@ -56,6 +61,7 @@ const AjouterBannerForm = () => {
       return;
     }
     setLoading(true);
+
     //creating the unique slug for the banner
     const slug = createSlug(data.title);
     //adding some data
@@ -66,17 +72,39 @@ const AjouterBannerForm = () => {
       slug,
     };
     try {
-      const res = await axios.post("/api/banner/add", allData);
-      if (res.status === 201) {
-        setLoading(false);
-        toast({
-          title: "L'opération est terminée avec succès",
-          description: res.data.message,
-          variant: "success",
-          className: "toast-container",
-        });
+      if (bannerData) {
+        if (
+          allData.title === bannerData.title &&
+          allData.link === bannerData.link &&
+          allData.imageUrl === bannerData.imageUrl
+        ) {
+          setLoading(false);
+          return null;
+        }
+        const res = await axios.put(`/api/banner/${bannerData.slug}`, allData);
+        if (res.status === 201) {
+          setLoading(false);
+          toast({
+            title: "L'opération est terminée avec succès",
+            description: res.data.message,
+            variant: "success",
+            className: "toast-container",
+          });
+          router.push("/dashboard/banniere");
+        }
+      } else {
+        const res = await axios.post("/api/banner/add", allData);
+        if (res.status === 201) {
+          setLoading(false);
+          toast({
+            title: "L'opération est terminée avec succès",
+            description: res.data.message,
+            variant: "success",
+            className: "toast-container",
+          });
+        }
+        router.push("/dashboard/banniere");
       }
-      router.push("/dashboard/banniere");
     } catch (__error) {
       setLoading(false);
       toast({
@@ -135,6 +163,17 @@ const AjouterBannerForm = () => {
             />
           </div>
           <div>
+            {bannerData && (
+              <Button
+                className="flex items-end justify-end mb-6"
+                type="button"
+                onClick={() => {
+                  setImage("");
+                }}
+              >
+                Modifier l&apos;image du produit
+              </Button>
+            )}
             <p
               ref={imageRef}
               className="text-red-500 text-sm font-semibold"
@@ -156,7 +195,7 @@ const AjouterBannerForm = () => {
               type="submit"
               className="mt-4 px-4 py-6  bg-black text-white w-full text-md"
             >
-              Ajouter
+              {bannerData ? "Modifier" : "Ajouter "}
             </Button>
           )}
         </form>

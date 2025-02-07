@@ -88,7 +88,7 @@ model Category {
 model Banner {
   id       String  @id @default(uuid()) @db.Uuid
   title    String?
-  slug     String
+  slug     String  @unique
   link     String
   imageUrl String
   imageKey String

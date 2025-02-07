@@ -7,7 +7,7 @@ export const DELETE = async (
 ) => {
   const slug = (await context.params).slug;
   try {
-    const isExisting = await db.category.findUnique({
+    const isExisting = await db.banner.findUnique({
       where: {
         slug,
       },
@@ -15,19 +15,19 @@ export const DELETE = async (
     if (!isExisting) {
       return NextResponse.json(
         {
-          message: "Categorie non trouve",
+          message: "Banniere non trouve",
         },
-        { status: 404, statusText: "Categorie non trouve" }
+        { status: 404, statusText: "Banniere non trouve" }
       );
     }
-    await db.category.delete({
+    await db.banner.delete({
       where: {
         slug,
       },
     });
     return NextResponse.json(
       {
-        message: "Categorie supprimer avec succes",
+        message: "Banniere supprimer avec succes",
       },
       {
         status: 201,
@@ -39,7 +39,7 @@ export const DELETE = async (
     return NextResponse.json(
       {
         message:
-          "Erreur pendant la supprimation de categorie , veuillez essayer apres.",
+          "Erreur pendant la supprimation de Banniere , veuillez essayer apres.",
         error,
       },
       { status: 500 }
@@ -53,14 +53,14 @@ export const PUT = async (
 ) => {
   try {
     const slug = (await context.params).slug;
-    const { title, description } = await req.json();
-    if (!title && !description) {
+    const { title, link, imageUrl, imageKey } = await req.json();
+    if (!title && !link && !imageUrl && !imageKey) {
       return NextResponse.json({
         data: null,
         message: "No changes",
       });
     }
-    const existCat = await db.category.findUnique({
+    const existCat = await db.banner.findUnique({
       where: {
         slug,
       },
@@ -68,22 +68,24 @@ export const PUT = async (
     if (!existCat) {
       return NextResponse.json({
         data: null,
-        message: "Categorie n'existe pas",
+        message: "Banniere n'existe pas",
       });
     }
-    const updatedCategory = await db.category.update({
+    const updatedBanner = await db.banner.update({
       where: {
         slug,
       },
       data: {
         title,
-        description,
+        link,
+        imageUrl,
+        imageKey,
       },
     });
     return NextResponse.json(
       {
-        data: updatedCategory,
-        message: "Categorie modifier avec succès",
+        data: updatedBanner,
+        message: "Banniere modifier avec succès",
       },
       {
         status: 201,
@@ -106,23 +108,20 @@ export const GET = async (
   try {
     const slug = (await context.params).slug;
 
-    const category = await db.category.findUnique({
+    const banner = await db.banner.findUnique({
       where: {
         slug,
       },
-      include: {
-        products: true,
-      },
     });
-    if (!category) {
+    if (!banner) {
       return NextResponse.json({
         data: null,
-        message: "Categorie not found",
+        message: "Banner not found",
       });
     }
     return NextResponse.json({
-      data: category,
-      message: "Category found",
+      data: banner,
+      message: "Banniere found",
     });
   } catch (error) {
     console.log(error);
