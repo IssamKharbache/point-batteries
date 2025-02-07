@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import PageHeader from "@/components/backend/UI/PageHeader";
 
 import { ProductData } from "@/components/backend/table/TableActions";
