@@ -20,13 +20,11 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata({ params }: Props) {
   try {
-    const categorie: catData = await getData(`/categorie/${params.slug}`);
+    const slug = (await params).slug;
+    const categorie: catData = await getData(`/categorie/${slug}`);
+
     const products = await getData(`/product?catId=${categorie.id}`);
     if (products?.length === 0) {
       return {
@@ -34,18 +32,30 @@ export async function generateMetadata({
         description: "The page you are looking for does not exists",
       };
     }
+    const firstProduct = products[0];
     return {
       openGraph: {
-        title: products?.[0]?.title,
-        description: products?.[0]?.description,
-        images: products?.[0]?.imageUrl,
+        title: `${firstProduct.title} - Achat de batteries au Maroc`,
+        description: `Achetez ${firstProduct.title} en ligne au meilleur prix au Maroc. Livraison rapide à Casablanca, Marrakech, Fès et dans tout le pays.`,
+        keywords:
+          `batterie ${categorie.title}, acheter batterie ${categorie.title}, batterie voiture ${categorie.title}, batterie moto ${categorie.title}, batterie électronique ${categorie.title}, batteries Maroc, batterie longue durée, batterie puissante, batterie haute performance, meilleure batterie au Maroc, batterie pas chère, batterie pour ${categorie.title}, ` +
+          "بطارية سيارة المغرب, بطارية موتوسيكل المغرب, شراء بطارية اون لاين, أفضل بطاريات المغرب",
+        openGraph: {
+          title: `${firstProduct.title} - Batterie haute performance au Maroc`,
+          description: `Découvrez ${firstProduct.title}, une batterie de qualité avec une longue durée de vie et des performances optimales.`,
+          images: firstProduct.imageUrl,
+          type: "product",
+        },
       },
     };
   } catch (error) {
     console.error(error);
     return {
-      title: "Not found",
-      description: "The page you are looking for does not exists",
+      title: "Batterie non trouvée | Point Batteries Maroc",
+      description:
+        "Le produit recherché n'existe pas. Consultez nos batteries pour voitures, motos et équipements électroniques.",
+      keywords:
+        "batterie voiture Maroc, batterie moto Maroc, acheter batterie en ligne, batteries pas chères, batterie haute performance",
     };
   }
 }
