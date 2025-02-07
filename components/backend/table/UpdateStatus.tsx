@@ -39,7 +39,7 @@ const UpdateStatus = ({ data }: UpdateStatusProps) => {
       const res = await axios.put(endpoint, {
         status: selectedValue,
       });
-      if (res.statusText === "updated") {
+      if (res.status === 201) {
         setIsUpdating(false);
         toast({
           title: "L'opération est terminée avec succès",

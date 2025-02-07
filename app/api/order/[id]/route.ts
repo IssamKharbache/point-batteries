@@ -80,7 +80,7 @@ export const PUT = async (
         message: "Commande status modifier avec success",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "updated",
       }
     );
