@@ -28,7 +28,7 @@ const Page = async ({ params, searchParams }: Props) => {
   console.log(categorie);
 
   const products = await getData(
-    `product?catId=${categorie.id}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
+    `/product?catId=${categorie.id}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
   );
 
   return (
