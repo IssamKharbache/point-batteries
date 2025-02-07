@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import SectionHeader from "@/components/frontend/products/SectionHeader";
 import Banner from "@/components/frontend/sliders/Banner";
 import { getData } from "@/lib/getData";
