@@ -34,7 +34,7 @@ const OrdersStats = ({ orders }: OrderStatsProps) => {
   const ordersStats = [
     {
       title: "Total Commande",
-      orders: orders.length,
+      orders: orders.filter((order) => order.orderStatus !== "ANNULLE").length,
       iconBg: "bg-slate-500   text-white text-xl",
       icon: <IoCart />,
     },

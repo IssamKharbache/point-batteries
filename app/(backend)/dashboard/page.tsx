@@ -26,8 +26,12 @@ const MainPage = async () => {
     (order) => order.orderStatus !== "ANNULLE"
   );
 
+  const delivredOrders = orders.filter(
+    (order) => order.orderStatus === "EXPEDIE"
+  );
+
   //total revenue
-  const totalRevenue = orders.reduce((acc, order) => {
+  const totalRevenue = delivredOrders.reduce((acc, order) => {
     const orderTotal = order.orderItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
