@@ -1,4 +1,4 @@
-import React from "react";
+export const dynamic = "force-dynamic";
 
 import { getData } from "@/lib/getData";
 import { columns, User } from "./columns";

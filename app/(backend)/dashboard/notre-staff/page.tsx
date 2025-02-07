@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import PageHeader from "@/components/backend/UI/PageHeader";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";

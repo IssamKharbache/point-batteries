@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import OrdersStats from "@/components/backend/dashboard/OrdersStats";
 import Statistics from "@/components/backend/dashboard/Statistics";
 import { getData } from "@/lib/getData";
