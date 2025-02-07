@@ -65,7 +65,7 @@ const AjouterCategorieForm = ({ categoryData }: AjouterCategorieFormProps) => {
           `/api/categorie/${categoryData.slug}`,
           data
         );
-        if (res.status === 201) {
+        if (res.statusText === "updated") {
           setLoading(false);
           toast({
             title: "L'opération est terminée avec succès",
@@ -83,6 +83,7 @@ const AjouterCategorieForm = ({ categoryData }: AjouterCategorieFormProps) => {
           ...data,
           slug,
         });
+        console.log(res);
         if (res.statusText === "created") {
           setLoading(false);
           toast({
