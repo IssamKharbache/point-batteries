@@ -72,7 +72,7 @@ export const POST = async (req: NextRequest) => {
         data: result.newOrder,
       },
       {
-        status: 200,
+        status: 201,
         statusText: "created",
       }
     );

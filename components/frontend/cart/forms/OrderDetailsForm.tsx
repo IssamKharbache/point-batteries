@@ -67,7 +67,7 @@ const OrderDetailsForm = () => {
         };
 
         const res = await axios.post("/api/order", fullData);
-        if (res.statusText === "created") {
+        if (res.status === 201) {
           setLoadingOrder(false);
           if (typeof window !== "undefined") {
             localStorage.removeItem("orderDetails");
