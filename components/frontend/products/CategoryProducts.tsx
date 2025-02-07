@@ -44,7 +44,7 @@ const CategoryProducts = ({
       const res = await axios.get(
         `/api/product?catId=${catId}&pageNum=${currentPage}&min=${min}&max=${max}&pageSize=${pageSize}`
       );
-      if (res.data.message === "Products fetched successfully") {
+      if (res.status === 201) {
         setProductsState(res.data.data);
         setResultLength(res.data.totalCount);
         setLoading(false);
