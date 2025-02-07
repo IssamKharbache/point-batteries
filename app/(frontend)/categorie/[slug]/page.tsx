@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ProductData } from "@/components/backend/table/TableActions";
 import BreadCrumpComponent from "@/components/frontend/breadcrump/BreadCrumpComponent";
 import CategoryProducts from "@/components/frontend/products/CategoryProducts";
