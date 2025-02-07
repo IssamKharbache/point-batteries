@@ -28,7 +28,7 @@ const page = async () => {
   const session = await getServerSession(authOptions);
   const userId = session?.user.id;
 
-  const bookmarked: bookmarkedData = await getData(`bookmark/${userId}`);
+  const bookmarked: bookmarkedData = await getData(`/bookmark/${userId}`);
 
   const products = bookmarked?.map((bookmark) => bookmark.product);
   if (products.length === 0) {

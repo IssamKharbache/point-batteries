@@ -107,7 +107,7 @@ export const PUT = async (
         message: "Utilisateur modifier avec succès",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "updated",
       }
     );

@@ -21,7 +21,7 @@ const page = async ({ searchParams }: Props) => {
   const q = (await searchParams).q;
   const { sort = "asc", min = 0, max = "", page = 1 } = await searchParams;
   const products = await getData(
-    `product?search=${q}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
+    `/product?search=${q}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
   );
 
   return (
