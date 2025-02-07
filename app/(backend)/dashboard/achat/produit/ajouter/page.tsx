@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import AddProductAchat from "@/components/backend/achat/product/AddProductAchat";
 import { ProductData } from "@/components/backend/table/TableActions";
 import PageHeader from "@/components/backend/UI/PageHeader";
