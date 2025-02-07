@@ -47,15 +47,6 @@ const NavBar = () => {
           </p>
         </div>
 
-        <div className="lg:hidden">
-          <Image
-            src="/logopbsdark.png"
-            alt="Logo"
-            width={1500}
-            height={1500}
-            className=" w-40 md:w-64"
-          />
-        </div>
         <div
           className={`${
             openSideBar
