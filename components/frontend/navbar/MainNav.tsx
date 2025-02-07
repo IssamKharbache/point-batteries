@@ -22,14 +22,6 @@ const MainNav = () => {
   return (
     <nav className="h-25 border-b  shadow-sm ">
       <div className="flex items-center justify-between py-3 max-w-[1500px] mx-auto px-4 md:px-8 gap-8  ">
-        <div className="items-center gap-4 hidden lg:flex">
-          <button
-            onClick={() => setOpenBar(true)}
-            className="py-2 px-4 bg-black rounded text-white hover:bg-black/80 duration-200"
-          >
-            Recherche
-          </button>
-        </div>
         <Link href="/">
           <Image
             src="/logopbsdark.png"
@@ -40,6 +32,14 @@ const MainNav = () => {
             priority
           />
         </Link>
+        <div className="items-center gap-4 hidden lg:flex">
+          <button
+            onClick={() => setOpenBar(true)}
+            className="py-2 px-4 bg-black rounded text-white hover:bg-black/80 duration-200"
+          >
+            Recherche
+          </button>
+        </div>
 
         <div className="flex items-center gap-2  md:gap-4 ">
           <button onClick={() => setOpenBar(true)} className="block md:hidden">
