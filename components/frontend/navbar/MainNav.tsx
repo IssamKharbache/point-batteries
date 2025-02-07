@@ -12,7 +12,6 @@ import {
   useSearchBarStore,
 } from "@/context/store";
 import { useSession } from "next-auth/react";
-import CategoryDropDown from "./CategoryDropDown";
 
 const MainNav = () => {
   const { status } = useSession();
@@ -24,7 +23,6 @@ const MainNav = () => {
     <nav className="h-25 border-b  shadow-sm ">
       <div className="flex items-center justify-between py-3 max-w-[1500px] mx-auto px-4 md:px-8 gap-8  ">
         <div className="items-center gap-4 hidden lg:flex">
-          <CategoryDropDown />
           <button
             onClick={() => setOpenBar(true)}
             className="py-2 px-4 bg-black rounded text-white hover:bg-black/80 duration-200"
