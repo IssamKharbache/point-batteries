@@ -6,7 +6,7 @@ import { DataTable } from "./data-table";
 import { getData } from "@/lib/getData";
 
 export default async function page() {
-  const data = await getData("admin/our-staff");
+  const data = await getData("/admin/our-staff");
 
   return (
     <section>

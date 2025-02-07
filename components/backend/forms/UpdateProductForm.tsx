@@ -96,14 +96,12 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       productData.filterByCar === allData.filterByCar &&
       productData.isAchatProduct === allData.isAchatProduct
     ) {
-      console.log("test");
-
       return;
     }
     setLoading(true);
     try {
       const res = await axios.put(`/api/product/${productData.slug}`, allData);
-      if (res.statusText === "updated") {
+      if (res.status === 201) {
         mutate("/api/product");
         mutate("/api/categorie");
         setLoading(false);
@@ -115,9 +113,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
         });
         router.push("/dashboard/produit");
       }
-    } catch (error) {
-      console.log(error);
-
+    } catch (__error) {
       setLoading(false);
       toast({
         title: "Une erreur s'est produite",

@@ -30,7 +30,7 @@ export const DELETE = async (
         message: "Categorie supprimer avec succes",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "deleted",
       }
     );
@@ -86,7 +86,7 @@ export const PUT = async (
         message: "Categorie modifier avec succès",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "updated",
       }
     );

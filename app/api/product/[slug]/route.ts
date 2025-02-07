@@ -94,7 +94,7 @@ export const PUT = async (
         message: "Produit modifier avec succès",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "updated",
       }
     );
@@ -193,7 +193,7 @@ export const DELETE = async (
         message: "Produit supprimer avec succes",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "deleted",
       }
     );

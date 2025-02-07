@@ -66,6 +66,7 @@ export const POST = async (req: NextRequest) => {
         message: "Achat créé avec succès",
       },
       {
+        status: 201,
         statusText: "created",
       }
     );

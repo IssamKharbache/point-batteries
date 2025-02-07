@@ -67,7 +67,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
 
       const res = await axios.put(`/api/user/${userData.identifiant}`, data);
 
-      if (res.statusText === "updated") {
+      if (res.status === 201) {
         setError("");
         setLoading(false);
         toast({

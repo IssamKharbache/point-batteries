@@ -31,7 +31,7 @@ export const DELETE = async (
         message: "Utilisateur supprimer avec succes",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "deleted",
       }
     );

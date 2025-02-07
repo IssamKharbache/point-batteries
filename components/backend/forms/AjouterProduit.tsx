@@ -96,7 +96,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
         imageKey,
         refProduct,
       });
-      if (res.statusText === "created") {
+      if (res.status === 201) {
         setLoading(false);
         setError("");
         toast({

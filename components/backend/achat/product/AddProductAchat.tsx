@@ -63,7 +63,7 @@ const AddProductAchat = ({ categorieData }: ProductDataProps) => {
         refProduct,
         isAchat: true,
       });
-      if (res.statusText === "created") {
+      if (res.status === 201) {
         setLoading(false);
         setError("");
         toast({

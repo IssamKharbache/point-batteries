@@ -67,7 +67,7 @@ const AjouterBannerForm = () => {
     };
     try {
       const res = await axios.post("/api/banner/add", allData);
-      if (res.statusText === "created") {
+      if (res.status === 201) {
         setLoading(false);
         toast({
           title: "L'opération est terminée avec succès",

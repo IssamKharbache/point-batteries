@@ -41,7 +41,7 @@ export const POST = async (req: NextRequest) => {
         message: "Bannière créé avec succès",
       },
       {
-        status: 200,
+        status: 201,
         statusText: "created",
       }
     );

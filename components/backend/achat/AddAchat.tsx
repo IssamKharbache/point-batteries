@@ -107,7 +107,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
         products: productsToSubmit,
         userId,
       });
-      if (res.statusText === "created") {
+      if (res.status === 201) {
         router.push("/dashboard/achat");
         resetInputs();
         setLoading(false);
