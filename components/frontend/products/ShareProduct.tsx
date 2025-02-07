@@ -34,14 +34,12 @@ const ShareProduct = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 ">
       <FacebookShareButton url={currentUrl}>
         <div className="flex gap-2 items-center justify-center px-4 rounded  bg-blue-600 hover:bg-blue-700 duration-300 py-2">
-          <FaFacebookF size={15} className="rounded-full text-white" />
-          <span className="text-white font-medium text-sm">Partager</span>
+          <FaFacebookF size={25} className="rounded-full text-white" />
         </div>
       </FacebookShareButton>
       <WhatsappShareButton url={currentUrl}>
         <div className="flex gap-2 items-center justify-center px-4 rounded  bg-green-500 hover:bg-green-600 duration-300 py-2">
-          <FaWhatsapp size={15} className="rounded-full text-white" />
-          <span className="text-white font-medium text-sm">Partager</span>
+          <FaWhatsapp size={25} className="rounded-full text-white" />
         </div>
       </WhatsappShareButton>
       <button
