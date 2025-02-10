@@ -1,7 +1,7 @@
 "use client";
 import { ProductData } from "@/components/backend/table/TableActions";
 import BookmarkButton from "@/components/frontend/products/BookmarkButton";
-import { useCartStore } from "@/context/store";
+import { useCartStore, useCategoryProductPageStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import Link from "next/link";
 import { BiCartAdd } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import PaginationWithFilters from "../pagination/PaginationWithFilters";
@@ -25,10 +25,14 @@ const CategoryProducts = ({
   catId,
   pageSize,
 }: CategoryProductsProps) => {
-  const searchParams = useSearchParams();
   // Pagination State
   const [productsState, setProductsState] = useState<ProductData[]>(products);
   const [loading, setLoading] = useState<boolean>(true);
+  const searchParams = useSearchParams();
+
+  //store
+  const { loading: loadingStore, setLoading: setLoadingStore } =
+    useCategoryProductPageStore();
 
   const [resultLength, setResultLength] = useState<number>(0);
   const totalPages = Math.ceil(resultLength / pageSize);
@@ -38,6 +42,7 @@ const CategoryProducts = ({
   const { data: session } = useSession();
   const { addItem } = useCartStore();
   const { toast } = useToast();
+  const useParams = useSearchParams();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,8 +66,19 @@ const CategoryProducts = ({
     fetchProducts();
   }, [min, max, currentPage, catId, pageSize]);
 
+  useEffect(() => {
+    if (productsState.length > 0) {
+      setLoadingStore(false);
+    }
+  }, [useParams]);
+
   return (
     <div>
+      {loadingStore && (
+        <div className="flex items-center justify-center h-[500px] w-[500px]">
+          <Loader2 className="animate-spin" size={45} />
+        </div>
+      )}
       {loading && (
         <div className="flex items-center justify-center h-[500px] w-[500px]">
           <Loader2 className="animate-spin" size={45} />
@@ -93,6 +109,7 @@ const CategoryProducts = ({
           </div>
         )}
         {!loading &&
+          !loadingStore &&
           productsState.map((product) => (
             <div key={product.id} className="group bg-white p-5">
               <Link href={`/produit/${product.slug}`}>

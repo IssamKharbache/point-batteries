@@ -208,7 +208,16 @@ export const useBookmarkStore = create<BookmarkStore>((set) => ({
       },
     })),
 }));
-
+type CategoryProductPageType = {
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+};
+export const useCategoryProductPageStore = create<CategoryProductPageType>(
+  (set) => ({
+    loading: true,
+    setLoading: (loading: boolean) => set({ loading }),
+  })
+);
 //
 type OrderPaginationData = {
   page: number;
