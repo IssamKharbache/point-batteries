@@ -24,13 +24,26 @@ export const metadata: Metadata = {
   ],
   title: {
     default: "Point Batterie Service",
-    template: `%s | Pointbatterieservice`,
+    template: `%s | Point Batterie Service`,
   },
   openGraph: {
-    description: "Entreprise de vente de batteries de différentes catégories",
-    images: [""],
+    title: "Point Batterie Service - Vente de Batteries",
+    description:
+      "Entreprise de vente de batteries de différentes catégories au Maroc.",
+    url: "https://pointbatteries.com",
+    siteName: "Point Batterie Service",
+    images: [
+      {
+        url: "https://pointbatteries.com/og-image.jpg", // Replace with actual image
+        width: 1200,
+        height: 630,
+        alt: "Point Batterie Service",
+      },
+    ],
+    type: "website",
   },
 };
+
 export default function FrontLayout({
   children,
 }: Readonly<{
