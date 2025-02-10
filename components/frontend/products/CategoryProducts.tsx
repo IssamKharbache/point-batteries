@@ -53,7 +53,9 @@ const CategoryProducts = ({
         setProductsState(res.data.data);
         setResultLength(res.data.totalCount);
         setLoading(false);
+        setLoadingStore(false);
       } else {
+        setLoadingStore(false);
         setLoading(false);
         toast({
           title: "ERREUR",
@@ -68,7 +70,9 @@ const CategoryProducts = ({
 
   useEffect(() => {
     if (productsState.length > 0) {
-      setLoadingStore(false);
+      setTimeout(() => {
+        setLoadingStore(false);
+      }, 700);
     }
   }, [useParams]);
 
