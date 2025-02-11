@@ -81,6 +81,14 @@ const UserAvatar = () => {
             </DropdownMenuItem>
           </Link>
         )}
+        {session?.user.role === "CAISSIER" && (
+          <Link href="/dashboard">
+            <DropdownMenuItem className="cursor-pointer gap-4">
+              <LayoutDashboard className="" />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+          </Link>
+        )}
         <Link href="/liste-denvies">
           <DropdownMenuItem className="cursor-pointer gap-4">
             <Heart className="" />

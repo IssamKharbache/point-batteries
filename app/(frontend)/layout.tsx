@@ -11,7 +11,7 @@ import NextTopLoader from "nextjs-toploader";
 const montSerrat = Montserrat({
   weight: ["100", "300", "400", "700", "900"],
   subsets: ["latin"],
-  display: "swap", // Optional: Can be used to prevent FOUT (flash of unstyled text)
+  display: "swap",
 });
 export const metadata: Metadata = {
   metadataBase: new URL("https://pointbatteries.com"),

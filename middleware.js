@@ -22,7 +22,7 @@ export default withAuth(
       }
 
       // Restrict non-admin users from accessing any other /dashboard paths
-      if (token.role !== "ADMIN") {
+      if (token.role !== "ADMIN" && token.role !== "STAFF") {
         // Allow /dashboard/commandes, restrict others
         if (!req.nextUrl.pathname.startsWith("/dashboard/commandes")) {
           // Prevent redirect loop by checking if the user is already on the unauthorized page
@@ -31,6 +31,17 @@ export default withAuth(
               new URL("/dashboard/unauthorized", req.url)
             );
           }
+        }
+      }
+      if (token.role !== "ADMIN") {
+        if (
+          req.nextUrl.pathname.startsWith(
+            "/dashboard/notre-staff/ajouter-admin"
+          )
+        ) {
+          return NextResponse.redirect(
+            new URL("/dashboard/unauthorized", req.url)
+          );
         }
       }
     }

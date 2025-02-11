@@ -20,7 +20,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-const AjouterAdminForm = () => {
+interface AdminFormProps {
+  role: string;
+}
+
+const AjouterAdminForm = ({ role }: AdminFormProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>("");
@@ -41,7 +45,7 @@ const AjouterAdminForm = () => {
     setLoading(true);
     const formData = {
       ...data,
-      role: "STAFF",
+      role,
     };
 
     try {
@@ -69,7 +73,9 @@ const AjouterAdminForm = () => {
   };
   return (
     <div className="space-y-2 bg-white p-10 rounded-md border-2 ">
-      <h1 className="text-xl text-start text-gray-600 ">Ajouter admin</h1>
+      <h1 className="text-xl text-start text-gray-600 ">
+        Ajouter {role === "STAFF" ? "Staff" : "Caissier"}
+      </h1>
       <hr className="text-gray-400 " />
       {error && (
         <div>

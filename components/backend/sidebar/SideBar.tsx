@@ -46,7 +46,8 @@ const SideBar = () => {
       isMainAdmin: false,
     },
   ];
-  if (session.user.role === "ADMIN") {
+
+  if (session.user.role === "ADMIN" || session.user.role === "STAFF") {
     sideBarMenu.push(
       {
         name: "Client",
@@ -60,19 +61,19 @@ const SideBar = () => {
         icon: ShoppingBasket,
         isMainAdmin: false,
       },
-
-      {
-        name: "Catégorie",
-        href: "/dashboard/categorie",
-        icon: Layers,
-        isMainAdmin: false,
-      },
       {
         name: "Notre staff",
         href: "/dashboard/notre-staff",
         icon: UsersRound,
         isMainAdmin: true,
       },
+      {
+        name: "Catégorie",
+        href: "/dashboard/categorie",
+        icon: Layers,
+        isMainAdmin: false,
+      },
+
       {
         name: "Bannière",
         href: "/dashboard/banniere",
@@ -101,52 +102,53 @@ const SideBar = () => {
       </div>
       {/* side bar menus */}
       <div className="flex flex-col flex-grow space-y-12 ">
-        {session.user.role === "ADMIN" && (
-          <>
-            <Link
-              className={`flex items-center gap-4  w-full py-4 px-8 ${
-                "/dashboard" === path
-                  ? "bg-slate-800 border-l-8   duration-300"
-                  : ""
-              }`}
-              href="/dashboard"
-            >
-              <LayoutDashboard />
-              Dashboard
-            </Link>
-            <Collapsible>
-              <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
-                <div className="flex items-center gap-4">
-                  <BaggageClaim />
-                  <span>Achat</span>
-                </div>
-                <ChevronDown />
-              </CollapsibleTrigger>
-              <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5 ">
-                <Link
-                  className={`flex items-center gap-4 hover:text-blue-400  w-full py-4 px-5 text-md duration-200 ${
-                    "/dashboard/achat/ajouter" === path ? "text-blue-400" : ""
-                  }`}
-                  href="/dashboard/achat"
-                >
-                  <BaggageClaim size={18} />
-                  Les achats
-                </Link>
-                <Link
-                  className={`flex items-center  gap-4 hover:text-blue-400  w-full py-4 px-5 text-sm duration-200 ${
-                    "/dashboard/achat/produit/ajouter" === path
-                      ? "text-blue-400"
-                      : ""
-                  }`}
-                  href="/dashboard/achat/produit/produit-achat"
-                >
-                  <Package size={18} />
-                  Les produits achat
-                </Link>
-              </CollapsibleContent>
-            </Collapsible>
-          </>
-        )}
+        {session.user.role === "ADMIN" ||
+          (session.user.role === "STAFF" && (
+            <>
+              <Link
+                className={`flex items-center gap-4  w-full py-4 px-8 ${
+                  "/dashboard" === path
+                    ? "bg-slate-800 border-l-8   duration-300"
+                    : ""
+                }`}
+                href="/dashboard"
+              >
+                <LayoutDashboard />
+                Dashboard
+              </Link>
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
+                  <div className="flex items-center gap-4">
+                    <BaggageClaim />
+                    <span>Achat</span>
+                  </div>
+                  <ChevronDown />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5 ">
+                  <Link
+                    className={`flex items-center gap-4 hover:text-blue-400  w-full py-4 px-5 text-md duration-200 ${
+                      "/dashboard/achat/ajouter" === path ? "text-blue-400" : ""
+                    }`}
+                    href="/dashboard/achat"
+                  >
+                    <BaggageClaim size={18} />
+                    Les achats
+                  </Link>
+                  <Link
+                    className={`flex items-center  gap-4 hover:text-blue-400  w-full py-4 px-5 text-sm duration-200 ${
+                      "/dashboard/achat/produit/ajouter" === path
+                        ? "text-blue-400"
+                        : ""
+                    }`}
+                    href="/dashboard/achat/produit/produit-achat"
+                  >
+                    <Package size={18} />
+                    Les produits achat
+                  </Link>
+                </CollapsibleContent>
+              </Collapsible>
+            </>
+          ))}
         {sideBarMenu.map((menu, index) => {
           const Icon = menu.icon;
           return (
