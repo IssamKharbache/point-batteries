@@ -14,7 +14,6 @@ const Footer = () => {
               width={384}
               height={384}
               className="w-96"
-              priority
             />
 
             <p className="text-sm leading-relaxed text-gray-600 mt-7">

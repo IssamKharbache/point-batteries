@@ -8,9 +8,10 @@ import Footer from "@/components/frontend/footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
 
-const poppins = Montserrat({
+const montSerrat = Montserrat({
   weight: ["100", "300", "400", "700", "900"],
   subsets: ["latin"],
+  display: "swap", // Optional: Can be used to prevent FOUT (flash of unstyled text)
 });
 export const metadata: Metadata = {
   metadataBase: new URL("https://pointbatteries.com"),
@@ -51,7 +52,7 @@ export default function FrontLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased `}>
+      <body className={`${montSerrat.className} antialiased `}>
         <AuthProvider>
           <NextTopLoader color="#ffffff" height={5} />
           <NavBar />
