@@ -96,6 +96,7 @@ const CategoryProducts = ({
             width={500}
             height={500}
             className="w-40 self-center"
+            loading="eager"
           />
           <p className="text-center font-semibold text-xl mt-6 text-gray-500">
             Il n&apos;y a aucun produit

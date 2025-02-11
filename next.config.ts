@@ -23,6 +23,28 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async headers() {
+    return [
+      {
+        source: "/connecter",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store",
+          },
+        ],
+      },
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -51,6 +51,8 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
           </button>
         </div>
         <Swiper
+          observeParents={true}
+          watchSlidesProgress={true}
           breakpoints={{
             480: {
               slidesPerView: 1,
@@ -77,7 +79,10 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
           }}
         >
           {notAchatProducts.slice(0, 5).map((product, idx) => (
-            <SwiperSlide key={idx} className="shadow p-6 bg-white mb-8 group">
+            <SwiperSlide
+              key={idx}
+              className="shadow p-6 bg-white mb-8 group min-h-[400px]"
+            >
               <Link href={`/produit/${product.slug}`}>
                 <Image
                   src={product.imageUrl || ""}

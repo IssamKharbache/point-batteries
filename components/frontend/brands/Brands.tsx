@@ -32,13 +32,14 @@ const Brands = () => {
       >
         {images.map((image, idx) => (
           <SwiperSlide key={idx}>
-            <Image
-              src={image.href}
-              alt="brand image"
-              width={700}
-              height={700}
-              className="w-20 md:w-40 object-contain h-52"
-            />
+            <div className="relative w-20 md:w-40 h-52">
+              <Image
+                src={image.href}
+                alt="brand image"
+                fill
+                className="object-contain"
+              />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
