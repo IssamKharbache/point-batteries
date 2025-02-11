@@ -31,6 +31,8 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             width={700}
             height={700}
             className="w-72 object-contain self-center md:self-start"
+            blurDataURL="data:image/svg+xml;base64,..."
+            placeholder="blur"
           />
 
           <div className="flex flex-col gap-8 p-2">

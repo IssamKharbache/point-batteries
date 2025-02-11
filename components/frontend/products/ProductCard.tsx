@@ -85,7 +85,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
               className="shadow p-6 bg-white mb-8 group min-h-[400px]"
             >
               <Link href={`/produit/${product.slug}`}>
-                <div className="relative w-full h-0 pb-[100%]">
+                <div className="relative w-full h-0 pb-[100%] min-h-[300px]">
                   <Image
                     src={product.imageUrl || ""}
                     alt="image du produit"
@@ -94,6 +94,8 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                     className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12"
                     sizes="(max-width: 768px) 100vw, 500px"
                     priority
+                    blurDataURL="data:image/svg+xml;base64,..."
+                    placeholder="blur"
                   />
                 </div>
 

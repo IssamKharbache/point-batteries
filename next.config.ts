@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  compress: true,
   async headers() {
     return [
       // Apply no-store header only on sensitive pages like login

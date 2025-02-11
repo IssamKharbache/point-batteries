@@ -57,7 +57,9 @@ export default function FrontLayout({
           <NextTopLoader color="#ffffff" height={5} />
           <NavBar />
           <Toaster />
-          <main className="flex-grow min-h-[650px] bg-gray-50">{children}</main>
+          <main className="flex-grow min-h-[650px] bg-gray-50 flex flex-col">
+            {children}
+          </main>
           <Footer />
         </AuthProvider>
       </body>
