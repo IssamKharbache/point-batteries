@@ -51,7 +51,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
           </button>
         </div>
         <Swiper
-          slidesPerView={4}
+          slidesPerView={1}
           observeParents={true}
           watchSlidesProgress={true}
           breakpoints={{

@@ -15,27 +15,32 @@ export default withAuth(
       if (!token) {
         return NextResponse.redirect(new URL("/connecter", req.url));
       }
-      //not allowing normal users to access the dashboard
-      if (token.role !== "ADMIN" && token.role !== "STAFF") {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
+
+      // Allow non-admin users to access /dashboard (root page)
+      if (req.nextUrl.pathname === "/dashboard") {
+        return NextResponse.next();
       }
-    }
-    //not allowing staff to add staff member
-    if (req.nextUrl.pathname.startsWith("/dashboard/notre-staff")) {
-      if (!token) {
-        return NextResponse.redirect(new URL("/connecter", req.url));
-      }
+
+      // Restrict non-admin users from accessing any other /dashboard paths
       if (token.role !== "ADMIN") {
-        return NextResponse.redirect(
-          new URL("/dashboard/unauthorized", req.url)
-        );
+        // Allow /dashboard/commandes, restrict others
+        if (!req.nextUrl.pathname.startsWith("/dashboard/commandes")) {
+          // Prevent redirect loop by checking if the user is already on the unauthorized page
+          if (!req.nextUrl.pathname.startsWith("/dashboard/unauthorized")) {
+            return NextResponse.redirect(
+              new URL("/dashboard/unauthorized", req.url)
+            );
+          }
+        }
       }
     }
 
+    // Allow the request to continue if no conditions are met
     return NextResponse.next();
   },
   {
     callbacks: {
+      // Ensure only authorized users (with a token) can access protected routes
       authorized: ({ token }) => !!token,
     },
   }
@@ -43,10 +48,10 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
-    "/mon-compte/:path*",
-    "/liste-denvies",
-    "/mes-commandes",
-    "/commander",
+    "/dashboard/:path*", // Protect all routes under /dashboard
+    "/mon-compte/:path*", // Protect the user account page
+    "/liste-denvies", // Example of other protected routes
+    "/mes-commandes", // Example of other protected routes
+    "/commander", // Example of other protected routes
   ],
 };

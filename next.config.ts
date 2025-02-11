@@ -25,8 +25,9 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      // Apply no-store header only on sensitive pages like login
       {
-        source: "/connecter",
+        source: "/connecter", // or other sensitive pages
         headers: [
           {
             key: "Cache-Control",
@@ -34,12 +35,32 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Apply caching headers for public/static pages
       {
         source: "/",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=3600",
+            value: "public, max-age=3600", // Cache for 1 hour
+          },
+        ],
+      },
+      // Apply caching headers for other public pages (e.g., products, homepage)
+      {
+        source: "/categorie/:slug",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600", // Cache for 1 hour
+          },
+        ],
+      },
+      {
+        source: "/produit/:slug",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600", // Cache for 1 hour
           },
         ],
       },
