@@ -218,6 +218,21 @@ export const useCategoryProductPageStore = create<CategoryProductPageType>(
     setLoading: (loading: boolean) => set({ loading }),
   })
 );
+
+type StepFormType = {
+  currentStep: number;
+  setCurrentStep: (currentStep: number) => void;
+  productsToSubmit: { refProduct: string; quantity: string }[];
+  setProductsToSubmit: (
+    products: { refProduct: string; quantity: string }[]
+  ) => void;
+};
+export const useStepFormStore = create<StepFormType>((set) => ({
+  currentStep: 1,
+  setCurrentStep: (currentStep: number) => set({ currentStep }),
+  productsToSubmit: [],
+  setProductsToSubmit: (products) => set({ productsToSubmit: products }),
+}));
 //
 type OrderPaginationData = {
   page: number;

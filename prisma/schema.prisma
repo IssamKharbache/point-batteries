@@ -29,6 +29,7 @@ model User {
   bookmarks Bookmark[]
   product   Product[]
   achat     Achat[]
+  vente     Vente[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -64,6 +65,7 @@ model Product {
 
   orderItem OrderItem[]
   bookmarks Bookmark[]
+  ventes    VenteProduct[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -185,4 +187,39 @@ model AchatProduct {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@id([achatId, productId])
+}
+
+model Vente {
+  id           String  @id @default(uuid()) @db.Uuid
+  userId       String? @db.Uuid
+  user         User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clientNom    String
+  clientPrenom String
+  clientCin    String
+  clientTel    String?
+
+  venteRef    String      @unique
+  paymentType PaymentType
+
+  products VenteProduct[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model VenteProduct {
+  venteId   String @db.Uuid
+  productId String @db.Uuid
+  qty       Int
+
+  vente   Vente   @relation(fields: [venteId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([venteId, productId])
+}
+
+enum PaymentType {
+  ESPECE
+  CHECK
+  VIREMENT
 }

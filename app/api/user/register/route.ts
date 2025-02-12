@@ -31,9 +31,10 @@ export const POST = async (req: NextRequest) => {
     const username = generateUsername(nom, prenom);
     //Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const lowerCaseEmail = email.toLowerCase();
     const newUser = await db.user.create({
       data: {
-        email,
+        email: lowerCaseEmail,
         password: hashedPassword,
         nom,
         prenom,

@@ -19,6 +19,7 @@ import {
   Users,
   UsersRound,
 } from "lucide-react";
+import { FaCashRegister } from "react-icons/fa6";
 import {
   Collapsible,
   CollapsibleContent,
@@ -33,12 +34,11 @@ const SideBar = () => {
 
   const sideBarMenu = [
     {
-      name: "Commande",
-      href: "/dashboard/commandes",
-      icon: Package2,
+      name: "Vente",
+      href: "/dashboard/vente",
+      icon: FaCashRegister,
       isMainAdmin: false,
     },
-
     {
       name: "Boutique",
       href: "/",
@@ -53,6 +53,12 @@ const SideBar = () => {
         name: "Client",
         href: "/dashboard/client",
         icon: Users,
+        isMainAdmin: false,
+      },
+      {
+        name: "Commande",
+        href: "/dashboard/commandes",
+        icon: Package2,
         isMainAdmin: false,
       },
       {

@@ -5,6 +5,15 @@ export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
 
+    // Redirect logged-in users if they try to access /connecter or /inscription
+    if (
+      (req.nextUrl.pathname.startsWith("/connecter") ||
+        req.nextUrl.pathname.startsWith("/inscription")) &&
+      token
+    ) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
     // Protect /mon-compte path when there is no session
     if (req.nextUrl.pathname.startsWith("/mon-compte") && !token) {
       return NextResponse.redirect(new URL("/connecter", req.url));
@@ -24,7 +33,7 @@ export default withAuth(
       // Restrict non-admin users from accessing any other /dashboard paths
       if (token.role !== "ADMIN" && token.role !== "STAFF") {
         // Allow /dashboard/commandes, restrict others
-        if (!req.nextUrl.pathname.startsWith("/dashboard/commandes")) {
+        if (!req.nextUrl.pathname.startsWith("/dashboard/vente")) {
           // Prevent redirect loop by checking if the user is already on the unauthorized page
           if (!req.nextUrl.pathname.startsWith("/dashboard/unauthorized")) {
             return NextResponse.redirect(

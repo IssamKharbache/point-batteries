@@ -105,3 +105,14 @@ export const addProductAchatSchema = z.object({
   marque: z.string().min(1, "Marque est obligatoire"),
   categoryId: z.string().min(1, "Categorie est obligatoire"),
 });
+
+export const addClientVenteSchema = z.object({
+  clientPrenom: z.string().min(1, "Prenom est obligatoire"),
+  clientNom: z.string().min(1, "Nom est obligatoire"),
+  clientTel: z
+    .string()
+    .min(10, "Numero de telephone est invalide")
+    .max(10, "Numero de telephone est invalide")
+    .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
+  clientCin: z.string().min(1, "Nom est obligatoire"),
+});

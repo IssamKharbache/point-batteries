@@ -2,7 +2,7 @@ import { ProductData } from "@/components/backend/table/TableActions";
 import { getData } from "@/lib/getData";
 import { Category } from "@prisma/client";
 export default async function sitemap() {
-  const baseUrl = "https://pointbatteries.com";
+  const baseUrl = "https://www.pointbatteries.com";
   const products = await getData("/product");
   const cat = await getData("/categorie");
 

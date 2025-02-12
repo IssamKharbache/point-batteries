@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
+import db from "../db";
 
 export const generateUsername = (nom: string, prenom: string): string => {
   const baseId = nom.toLowerCase() + prenom.toLowerCase();
@@ -66,4 +67,30 @@ export const formatNumber = (num: number): string => {
     return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "k"; // 10k, 15.6k
   }
   return num.toString(); // Return as-is if less than 1k
+};
+
+export const generateUniqueVenteRef = async (): Promise<string> => {
+  const prefix = "V";
+  const datePart = new Date().toISOString().slice(2, 10).replace(/-/g, "");
+  const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+
+  let venteRef = `${prefix}${datePart}${randomPart}`;
+
+  let existingVente = await db.vente.findUnique({
+    where: { venteRef },
+  });
+
+  while (existingVente) {
+    const newRandomPart = Math.random()
+      .toString(36)
+      .substring(2, 6)
+      .toUpperCase();
+    venteRef = `${prefix}${datePart}${newRandomPart}`;
+
+    existingVente = await db.vente.findUnique({
+      where: { venteRef },
+    });
+  }
+
+  return venteRef;
 };

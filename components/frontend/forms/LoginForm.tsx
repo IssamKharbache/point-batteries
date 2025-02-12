@@ -35,7 +35,7 @@ const LoginForm = () => {
   });
   const handleSubmit = async (data: z.infer<typeof loginSchema>) => {
     setLoading(true);
-    const email = data.email;
+    const email = data.email.toLowerCase();
     const password = data.password;
 
     try {

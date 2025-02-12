@@ -2,8 +2,10 @@ export const dynamic = "force-dynamic";
 
 import OrdersStats from "@/components/backend/dashboard/OrdersStats";
 import Statistics from "@/components/backend/dashboard/Statistics";
+import { authOptions } from "@/lib/authOptions";
 import { getData } from "@/lib/getData";
 import { Order, User, OrderItem } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import React from "react";
 
 interface OrderWithItems extends Order {
@@ -11,6 +13,7 @@ interface OrderWithItems extends Order {
 }
 
 const MainPage = async () => {
+  const session = await getServerSession(authOptions);
   //users
   const users: User[] = await getData("/user");
   //getting only the users that are not admin and staff
@@ -38,7 +41,18 @@ const MainPage = async () => {
     );
     return acc + orderTotal;
   }, 0);
-
+  if (session?.user.role === "CAISSIER") {
+    return (
+      <div>
+        <h1 className="text-3xl">
+          Bonjour,{" "}
+          <span className="capitalize font-semibold text-3xl">
+            {session.user.nom}
+          </span>
+        </h1>
+      </div>
+    );
+  }
   return (
     <div>
       <h1 className="text-4xl font-semibold mb-8">Overview</h1>
