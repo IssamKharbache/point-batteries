@@ -1,5 +1,5 @@
 import { ProductAchat } from "@/components/backend/achat/AchatProductsDetails";
-import { Order } from "@prisma/client";
+import { Order, Vente } from "@prisma/client";
 import { create } from "zustand";
 
 //search bar store context

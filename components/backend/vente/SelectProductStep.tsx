@@ -108,6 +108,20 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   };
 
   const submit = () => {
+    const zeroQuantityProducts = Object.entries(productSelected).filter(
+      ([, { quantity }]) => parseInt(quantity) === 0
+    );
+
+    if (zeroQuantityProducts.length > 0) {
+      toast({
+        title: "Erreur",
+        description:
+          "La quantité de certains produits ne peut pas être égale à zéro.",
+        variant: "error",
+      });
+      return;
+    }
+
     // Validate if all selected products have both price and quantity filled
     const incompleteProducts = Object.entries(productSelected).filter(
       ([, { quantity }]) => !quantity
@@ -123,11 +137,32 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
       return;
     }
 
-    const productsToSubmit = Object.keys(productSelected).map((refProduct) => ({
-      refProduct,
-      quantity: productSelected[refProduct].quantity,
-    }));
+    // Include the price from productsVente
+    const productsToSubmit = Object.keys(productSelected)
+      .map((refProduct) => {
+        const product = productsVente.find((p) => p.refProduct === refProduct);
+        return product
+          ? {
+              refProduct,
+              quantity: productSelected[refProduct].quantity,
+              price: product.price,
+              designationProduit: product.designationProduit,
+            }
+          : null;
+      })
+      .filter(
+        (
+          product
+        ): product is {
+          refProduct: string;
+          quantity: string;
+          price: number;
+          designationProduit: string;
+        } => product !== null
+      );
+
     setProductsToSubmit(productsToSubmit);
+
     handleNext();
   };
 

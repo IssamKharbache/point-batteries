@@ -19,6 +19,7 @@ export const POST = async (req: NextRequest) => {
       clientCin,
       clientTel,
     } = await req.json();
+
     if (
       !userId ||
       !paymentType ||
@@ -32,6 +33,7 @@ export const POST = async (req: NextRequest) => {
         { status: 400 }
       );
     }
+
     if (!products || products.length === 0) {
       return NextResponse.json(
         { error: "Products list is empty" },
@@ -40,7 +42,9 @@ export const POST = async (req: NextRequest) => {
     }
 
     // Fetch the existing products using refProduct
-    const productRefs = products.map((p: Product) => p.refProduct);
+    const productRefs = products.map(
+      (p: { refProduct: string }) => p.refProduct
+    );
     const existingProducts = await db.product.findMany({
       where: { refProduct: { in: productRefs } },
     });
@@ -57,11 +61,18 @@ export const POST = async (req: NextRequest) => {
       existingProducts.map((p) => [p.refProduct, p.id])
     );
 
-    // Prepare the data for VenteProduct relation
+    // Prepare the data for VenteProduct relation, including price
     const productsData: CreateVenteProduct[] = products.map(
-      (p: { refProduct: string; quantity: string }) => ({
+      (p: {
+        refProduct: string;
+        quantity: string;
+        price: number;
+        designationProduit: string;
+      }) => ({
         productId: productMap.get(p.refProduct) as string,
         qty: parseInt(p.quantity),
+        price: p.price,
+        designationProduit: p.designationProduit,
       })
     );
 

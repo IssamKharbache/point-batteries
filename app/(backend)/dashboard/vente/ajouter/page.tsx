@@ -1,15 +1,18 @@
+import { ProductData } from "@/components/backend/table/TableActions";
 import PageHeader from "@/components/backend/UI/PageHeader";
 import AddVenteForm from "@/components/backend/vente/AddVenteForm";
 import { getData } from "@/lib/getData";
 import React from "react";
 
 const page = async () => {
-  const products = await getData("/product");
+  const products: ProductData[] = await getData("/product");
+
+  const filterProducts = products.filter((product) => !product.isAchatProduct);
 
   return (
     <section>
       <PageHeader name="Ajouter vente" />
-      <AddVenteForm productsVente={products} />
+      <AddVenteForm productsVente={filterProducts} />
     </section>
   );
 };

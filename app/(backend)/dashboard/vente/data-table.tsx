@@ -205,6 +205,7 @@ export function DataTable<TData>({
             <TableRow className="py-4 px-4">
               <TableHead>Ref vente</TableHead>
               <TableHead>CIN du client</TableHead>
+              <TableHead>Montent</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

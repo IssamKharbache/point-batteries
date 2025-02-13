@@ -125,7 +125,7 @@ const AchatProductsDetailsDialog = () => {
 
 export default AchatProductsDetailsDialog;
 
-function formatPrismaDate(isoDate: Date | string) {
+export function formatPrismaDate(isoDate: Date | string) {
   const months = [
     "janvier",
     "février",

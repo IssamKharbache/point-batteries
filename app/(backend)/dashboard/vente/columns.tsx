@@ -1,5 +1,6 @@
 "use client";
 
+import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
 import { UserCreatingVente } from "@/components/backend/vente/UserCreatingVente";
 import { formatDate } from "@/lib/utils/index";
 import { ColumnDef } from "@tanstack/react-table";
@@ -10,9 +11,18 @@ export interface VenteType {
   venteRef: string;
   paymentType: string;
   clientNom: string;
+  clientPrenom: string; // Add missing property
+  clientTel: string; // Add missing property
   clientCin: string;
+  products: VenteProduct[];
   createdAt: Date;
   updatedAt: Date | null;
+}
+interface VenteProduct {
+  productId: string;
+  qty: number;
+  price: number;
+  designationProduit: string;
 }
 
 export const columns: ColumnDef<VenteType>[] = [
@@ -41,6 +51,21 @@ export const columns: ColumnDef<VenteType>[] = [
     header: "CIN du client",
   },
   {
+    accessorKey: "products",
+    header: "Montant",
+    cell: ({ row }) => {
+      const products: VenteProduct[] = row.original.products;
+      const price = products.reduce((acc, product) => {
+        const validPrice = product.price || 0;
+        const validQty = product.qty || 0;
+        return acc + validPrice * validQty;
+      }, 0);
+
+      return <p className="font-semibold">{price}dhs</p>;
+    },
+  },
+
+  {
     accessorKey: "createdAt",
     header: "Date de creation",
     cell: ({ row }) => {
@@ -56,6 +81,13 @@ export const columns: ColumnDef<VenteType>[] = [
         rowDate.getMonth() === filterDate.getMonth() &&
         rowDate.getDate() === filterDate.getDate()
       );
+    },
+  },
+  {
+    id: "bondeliv",
+    header: "Bon de livraison",
+    cell: ({ row }) => {
+      return <BonDeLivraison rowData={row.original} />;
     },
   },
 ];
