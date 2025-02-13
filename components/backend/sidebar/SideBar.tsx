@@ -32,20 +32,23 @@ const SideBar = () => {
   const { data: session } = useSession();
   if (!session || !session.user) return null;
 
-  const sideBarMenu = [
-    {
-      name: "Vente",
-      href: "/dashboard/vente",
-      icon: FaCashRegister,
-      isMainAdmin: false,
-    },
-    {
-      name: "Boutique",
-      href: "/",
-      icon: Store,
-      isMainAdmin: false,
-    },
-  ];
+  const sideBarMenu = [];
+  if (session.user.role === "CAISSIER") {
+    sideBarMenu.push(
+      {
+        name: "Vente",
+        href: "/dashboard/vente",
+        icon: FaCashRegister,
+        isMainAdmin: false,
+      },
+      {
+        name: "Boutique",
+        href: "/",
+        icon: Store,
+        isMainAdmin: false,
+      }
+    );
+  }
 
   if (session.user.role === "ADMIN" || session.user.role === "STAFF") {
     sideBarMenu.push(
@@ -85,6 +88,18 @@ const SideBar = () => {
         href: "/dashboard/banniere",
         icon: GalleryVertical,
         isMainAdmin: true,
+      },
+      {
+        name: "Vente",
+        href: "/dashboard/vente",
+        icon: FaCashRegister,
+        isMainAdmin: false,
+      },
+      {
+        name: "Boutique",
+        href: "/",
+        icon: Store,
+        isMainAdmin: false,
       }
     );
   }
@@ -108,53 +123,52 @@ const SideBar = () => {
       </div>
       {/* side bar menus */}
       <div className="flex flex-col flex-grow space-y-12 ">
-        {session.user.role === "ADMIN" ||
-          (session.user.role === "STAFF" && (
-            <>
-              <Link
-                className={`flex items-center gap-4  w-full py-4 px-8 ${
-                  "/dashboard" === path
-                    ? "bg-slate-800 border-l-8   duration-300"
-                    : ""
-                }`}
-                href="/dashboard"
-              >
-                <LayoutDashboard />
-                Dashboard
-              </Link>
-              <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
-                  <div className="flex items-center gap-4">
-                    <BaggageClaim />
-                    <span>Achat</span>
-                  </div>
-                  <ChevronDown />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5 ">
-                  <Link
-                    className={`flex items-center gap-4 hover:text-blue-400  w-full py-4 px-5 text-md duration-200 ${
-                      "/dashboard/achat/ajouter" === path ? "text-blue-400" : ""
-                    }`}
-                    href="/dashboard/achat"
-                  >
-                    <BaggageClaim size={18} />
-                    Les achats
-                  </Link>
-                  <Link
-                    className={`flex items-center  gap-4 hover:text-blue-400  w-full py-4 px-5 text-sm duration-200 ${
-                      "/dashboard/achat/produit/ajouter" === path
-                        ? "text-blue-400"
-                        : ""
-                    }`}
-                    href="/dashboard/achat/produit/produit-achat"
-                  >
-                    <Package size={18} />
-                    Les produits achat
-                  </Link>
-                </CollapsibleContent>
-              </Collapsible>
-            </>
-          ))}
+        {session?.user?.role === "ADMIN" || session?.user?.role === "STAFF" ? (
+          <>
+            <Link
+              className={`flex items-center gap-4 w-full py-4 px-8 ${
+                "/dashboard" === path
+                  ? "bg-slate-800 border-l-8 duration-300"
+                  : ""
+              }`}
+              href="/dashboard"
+            >
+              <LayoutDashboard />
+              Dashboard
+            </Link>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
+                <div className="flex items-center gap-4">
+                  <BaggageClaim />
+                  <span>Achat</span>
+                </div>
+                <ChevronDown />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5">
+                <Link
+                  className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-md duration-200 ${
+                    "/dashboard/achat/ajouter" === path ? "text-blue-400" : ""
+                  }`}
+                  href="/dashboard/achat"
+                >
+                  <BaggageClaim size={18} />
+                  Les achats
+                </Link>
+                <Link
+                  className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-sm duration-200 ${
+                    "/dashboard/achat/produit/ajouter" === path
+                      ? "text-blue-400"
+                      : ""
+                  }`}
+                  href="/dashboard/achat/produit/produit-achat"
+                >
+                  <Package size={18} />
+                  Les produits achat
+                </Link>
+              </CollapsibleContent>
+            </Collapsible>
+          </>
+        ) : null}
         {sideBarMenu.map((menu, index) => {
           const Icon = menu.icon;
           return (

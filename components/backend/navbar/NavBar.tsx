@@ -5,12 +5,11 @@ import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import UserAvatarBack from "./UserAvatarBack";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 const NavBar = () => {
+  const [isNavBarScrolled, setIsNavBarScrolled] = useState(false);
   const path = usePathname();
   const { openSideBar, setOpenSideBar } = useSideBarStore();
-  const [isNavBarScrolled, setIsNavBarScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {

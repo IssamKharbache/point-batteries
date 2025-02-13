@@ -17,8 +17,16 @@ export const POST = async (req: NextRequest) => {
       clientNom,
       clientPrenom,
       clientCin,
+      clientTel,
     } = await req.json();
-    if (!userId || !paymentType || !clientNom || !clientPrenom || !clientCin) {
+    if (
+      !userId ||
+      !paymentType ||
+      !clientNom ||
+      !clientPrenom ||
+      !clientCin ||
+      !clientTel
+    ) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -69,6 +77,7 @@ export const POST = async (req: NextRequest) => {
         clientCin,
         venteRef,
         paymentType,
+        clientTel,
         products: {
           create: productsData,
         },
@@ -89,6 +98,29 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (error) {
     console.error("Error creating vente:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+};
+
+export const GET = async () => {
+  try {
+    const lesVentes = await db.vente.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        products: true,
+      },
+    });
+    return NextResponse.json({
+      data: lesVentes,
+      message: "Vente details",
+    });
+  } catch (error) {
+    console.error("Error getting vente:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

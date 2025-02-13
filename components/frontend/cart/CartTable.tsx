@@ -35,7 +35,7 @@ const CartTable = ({ item }: CartItem) => {
             alt={item.title}
             width={500}
             height={500}
-            className="w-16 rounded-full"
+            className="w-20 rounded-full object-cover"
           />
 
           <p className="w-56 line-clamp-1 font-semibold">{item.title}</p>

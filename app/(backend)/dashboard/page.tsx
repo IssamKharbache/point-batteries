@@ -16,10 +16,8 @@ const MainPage = async () => {
   const session = await getServerSession(authOptions);
   //users
   const users: User[] = await getData("/user");
-  //getting only the users that are not admin and staff
-  const filteredUsers = users.filter(
-    (user) => user.role !== "ADMIN" && user.role !== "STAFF"
-  );
+  //getting only the users that are normal clients
+  const filteredUsers = users.filter((user) => user.role === "USER");
 
   //orders
   const orders: OrderWithItems[] = await getData("/order");

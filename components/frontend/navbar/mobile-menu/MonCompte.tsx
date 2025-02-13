@@ -77,6 +77,15 @@ const MonCompte = () => {
             Dashboard
           </Link>
         )}
+        {role === "CAISSIER" && (
+          <Link
+            onClick={closeMenu}
+            className="hover:bg-gray-100 w-full px-4 py-4 capitalize"
+            href={"/dashboard"}
+          >
+            Dashboard
+          </Link>
+        )}
 
         {monCompteItems.map((item, index) => (
           <Link
