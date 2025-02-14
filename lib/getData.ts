@@ -7,8 +7,6 @@ export const getData = async (endpoint: string) => {
     if (!baseUrl) {
       throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
     }
-    const fullUrl = `${baseUrl}${endpoint}`;
-    console.log(fullUrl);
 
     const response = await axios.get(`${baseUrl}${endpoint}`);
     return response.data.data;
