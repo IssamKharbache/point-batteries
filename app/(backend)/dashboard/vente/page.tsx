@@ -6,6 +6,7 @@ import { getData } from "@/lib/getData";
 
 const page = async () => {
   const data = await getData("/vente");
+
   return (
     <section>
       <PageHeader name="Vente" href="vente/ajouter" />

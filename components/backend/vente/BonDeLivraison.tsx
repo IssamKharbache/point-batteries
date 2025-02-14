@@ -1,12 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -15,6 +8,7 @@ import { Download } from "lucide-react";
 import { useReactToPrint } from "react-to-print";
 import { formatPrismaDate } from "../dialog/AchatProductsDetailsDialog";
 import Image from "next/image";
+import "@/app/styles/ticket.css";
 
 interface BonDeLivraisonProps {
   rowData: VenteType;
@@ -47,17 +41,44 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
     }
   );
 
-  const contentRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLInputElement | null>(null);
   const reactToPrintFn = useReactToPrint({
     contentRef,
     documentTitle: `Vente_${clientNom}_${formatPrismaDate(rowData.createdAt)}`,
     pageStyle: `@media print {
       @page {
-        size:  80mm 150mm;
-        margin: 0;
-        padding:2;
+        size: auto;
+        margin: 0 !important;
+  }
+   body {
+        width: 80mm !important; /* Fixed width */
+        min-height: 50mm !important; /* Minimum height */
+        margin: 0 auto !important; /* Center content */
+        padding: 2mm !important;
+        transform: scale(1); /* Disable scaling */
+        transform-origin: top left;
       }
-    }`,
+      .thermal-receipt {
+        width: 80mm !important; 
+        margin: 0 auto !important; 
+        font-size: 9px;
+        padding:15px;
+      }
+      /* Firefox Fix */
+      @-moz-document url-prefix() {
+        body { 
+          width: 80mm !important;
+          height: auto !important;
+        }
+      }
+      /* Chrome/Safari Fix */
+      @media print and (-webkit-min-device-pixel-ratio:0) {
+        body {
+          width: 80mm !important;
+        }
+      }
+    }      
+  `,
   });
 
   return (
@@ -70,7 +91,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         open={isDialogOpen}
         onOpenChange={(open) => setIsDialogOpen(open)}
       >
-        <DialogContent className="min-w-[850px]">
+        <DialogContent>
           <DialogHeader className="text-start m-3">
             <DialogTitle>Bon de Livraison</DialogTitle>
           </DialogHeader>
@@ -87,88 +108,80 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               <span>Imprimer / Télécharger</span>
             </Button>
           </div>
-          <div className=" bg-white space-y-8  w-[350px]" ref={contentRef}>
-            <div className="thermal-receipt p-2">
-              {/* Header */}
-              <div className="text-center mb-4">
-                <Image
-                  src="/logopbsdark.png"
-                  alt="Logo"
-                  width={300}
-                  height={100}
-                  className="mx-auto w-70mm"
-                />
-                <div className="mt-2 text-[10px]">
-                  {" "}
-                  {/* Increased to 10px */}
-                  <p>Adresse:....</p>
-                  <p>Tél: +212 600-000000</p>
-                </div>
+          <div
+            className="thermal-receipt"
+            ref={contentRef}
+            style={{ width: "80mm" }}
+          >
+            <div className="text-center mb-4 mt-8">
+              <Image
+                src="/logopbsdark.png"
+                alt="Logo"
+                width={300}
+                height={100}
+                className="mx-auto"
+                style={{ maxWidth: "70mm" }}
+              />
+              <div className="mt-2 text-[10px]">
+                <p>Adresse:....</p>
+                <p>Tél: +212 600-000000</p>
               </div>
+            </div>
 
-              {/* Order Info */}
-              <div className="border-b border-black mb-2 pb-2">
-                <div className="flex justify-between text-[9px]">
-                  {" "}
-                  {/* Increased to 9px */}
-                  <span>Date: {formatISODate(rowData.createdAt)}</span>
-                  <span>Ref: {rowData.venteRef}</span>
-                </div>
-                <div className="text-[9px] mt-1">
-                  {" "}
-                  {/* Increased to 9px */}
-                  Client: {clientNom} {clientPrenom}
-                </div>
+            <div className="border-b border-black mb-2 pb-2">
+              <div className="flex justify-between text-[9px]">
+                <span>Date: {formatISODate(rowData.createdAt)}</span>
+                <span>Ref: {rowData.venteRef}</span>
               </div>
+              <div className="text-[9px] mt-1">
+                Client: {clientNom} {clientPrenom}
+              </div>
+            </div>
 
-              {/* Products Table */}
-              <table className="w-full text-[9px] mb-4">
-                {" "}
-                {/* Increased to 9px */}
-                <thead>
-                  <tr className="border-b border-black">
-                    <th className="text-left py-1">Produit</th>
-                    <th className="text-center py-1">Qty</th>
-                    <th className="text-right py-1">Prix</th>
-                    <th className="text-right py-1">Total</th>
+            {/* Products Table */}
+            <table className="w-full text-[9px] mb-4">
+              <thead>
+                <tr className="border-b border-black">
+                  <th className="text-left py-1">Produit</th>
+                  <th className="text-center py-1">Qty</th>
+                  <th className="text-right py-1">Prix UN</th>
+                  <th className="text-right py-1">Total</th>
+                </tr>
+              </thead>
+              <tbody className="text-[8px]">
+                {products.map((product, index) => (
+                  <tr key={index} className="border-b border-dashed">
+                    <td className="py-1">
+                      {product.designationProduit.split(" ")[0]}
+                    </td>
+                    <td className="text-center py-1">{product.qty}</td>
+                    <td className="text-right py-1">
+                      {product.price?.toFixed(2)} DH
+                    </td>
+                    <td className="text-right py-1">
+                      {(product.price * product.qty).toFixed(2)} DH
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {products.map((product, index) => (
-                    <tr key={index} className="border-b border-dashed">
-                      <td className="py-1">{product.designationProduit}</td>
-                      <td className="text-center py-1">{product.qty}</td>
-                      <td className="text-right py-1">
-                        {product.price?.toFixed(2)}
-                      </td>
-                      <td className="text-right py-1">
-                        {(product.price * product.qty).toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                ))}
+              </tbody>
+            </table>
 
-              {/* Total Section */}
-              <div className="text-[10px] font-bold border-t border-black pt-2">
-                {/* Increased to 10px */}
-                <div className="flex justify-between">
-                  <span>TOTAL:</span>
-                  <span>{overallTotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between mt-1">
-                  <span>Mode de paiement:</span>
-                  <span>{paymentType}</span>
-                </div>
+            {/* Total Section */}
+            <div className="text-[10px] font-bold border-t border-black pt-2">
+              <div className="flex justify-between">
+                <span>TOTAL:</span>
+                <span>{overallTotal.toFixed(2)} DH</span>
               </div>
+              <div className="flex justify-between mt-1">
+                <span>Mode de paiement:</span>
+                <span>{paymentType}</span>
+              </div>
+            </div>
 
-              {/* Footer */}
-              <div className="text-center text-[8px] mt-4">
-                {" "}
-                {/* Increased to 8px */}
-                <p>Merci pour votre confiance!</p>
-                <p>Service après-vente: +212 600-000000</p>
-              </div>
+            {/* Footer */}
+            <div className="text-center text-[8px] mt-4">
+              <p>Merci pour votre confiance!</p>
+              <p>Service après-vente: +212 600-000000</p>
             </div>
           </div>
         </DialogContent>
@@ -178,66 +191,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 };
 
 export default BonDeLivraison;
-{
-  /*
-  
-      <Table className="border-2">
-                <TableHeader className="border-2">
-                  <TableRow>
-                    <TableHead className="font-semibold border-r-2 text-md text-black">
-                      Designation prod
-                    </TableHead>
-                    <TableHead className="font-semibold border-r-2 text-md text-black">
-                      QTE
-                    </TableHead>
-                    <TableHead className="font-semibold border-r-2 text-md text-black">
-                      Prix
-                    </TableHead>
-
-                    <TableHead className="font-semibold border-r-2 text-md text-black">
-                      Montant
-                    </TableHead>
-                    <TableHead className="font-semibold border-r-2 text-md text-black">
-                      Mode de Paiement
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium border-r-2">
-                      {products.map((product, index) => (
-                        <div className="flex" key={index}>
-                          <p className="p-2">{product.designationProduit}</p>
-                        </div>
-                      ))}
-                    </TableCell>
-
-                    <TableCell className="font-medium border-r-2">
-                      {products.map((product, index) => (
-                        <div className="flex" key={index}>
-                          <p className="p-2">{product.qty}</p>
-                        </div>
-                      ))}
-                    </TableCell>
-                    <TableCell className="font-medium border-r-2">
-                      {products.map((product, index) => (
-                        <div className="flex" key={index}>
-                          <p className="p-2">{product.price}</p>
-                        </div>
-                      ))}
-                    </TableCell>
-                    <TableCell className="font-medium border-r-2">
-                      {montent}
-                    </TableCell>
-                    <TableCell className="font-medium border-r-2">
-                      {paymentType}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-  */
-}
 
 function formatISODate(isoDate: Date): string {
   const date = new Date(isoDate);
