@@ -8,7 +8,6 @@ import { Download } from "lucide-react";
 import { useReactToPrint } from "react-to-print";
 import { formatPrismaDate } from "../dialog/AchatProductsDetailsDialog";
 import Image from "next/image";
-import "@/app/styles/ticket.css";
 
 interface BonDeLivraisonProps {
   rowData: VenteType;
