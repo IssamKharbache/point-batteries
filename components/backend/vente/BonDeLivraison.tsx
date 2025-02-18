@@ -5,17 +5,19 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { useReactToPrint } from "react-to-print";
-import { formatPrismaDate } from "../dialog/AchatProductsDetailsDialog";
 import Image from "next/image";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 
 interface BonDeLivraisonProps {
   rowData: VenteType;
 }
 
 const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
-  const { clientNom, clientPrenom, products, paymentType } = rowData;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loadingPDF, setLoadingPDF] = useState(false);
+  const { clientNom, clientPrenom, products, paymentType } = rowData;
 
   const { individualTotals, overallTotal } = products.reduce(
     (acc, product) => {
@@ -41,44 +43,90 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
   );
 
   const contentRef = useRef<HTMLInputElement | null>(null);
-  const reactToPrintFn = useReactToPrint({
-    contentRef,
-    documentTitle: `Vente_${clientNom}_${formatPrismaDate(rowData.createdAt)}`,
-    pageStyle: `@media print {
-      @page {
-        size: auto;
-        margin: 0 !important;
-  }
-   body {
-        width: 80mm !important; /* Fixed width */
-        min-height: 50mm !important; /* Minimum height */
-        margin: 0 auto !important; /* Center content */
-        padding: 2mm !important;
-        transform: scale(1); /* Disable scaling */
-        transform-origin: top left;
-      }
-      .thermal-receipt {
-        width: 80mm !important; 
-        margin: 0 auto !important; 
-        font-size: 9px;
-        padding:15px;
-      }
-      /* Firefox Fix */
-      @-moz-document url-prefix() {
-        body { 
-          width: 80mm !important;
-          height: auto !important;
-        }
-      }
-      /* Chrome/Safari Fix */
-      @media print and (-webkit-min-device-pixel-ratio:0) {
-        body {
-          width: 80mm !important;
-        }
-      }
-    }      
-  `,
-  });
+
+  const downloadPdf = () => {
+    setLoadingPDF(true);
+
+    const dynamicHeight = 80 + products.length * 10;
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: [80, dynamicHeight], // Auto height
+    });
+
+    let y = 10; // Start Y position
+    const startX = 5;
+
+    // Store header
+    doc.setFont("Courier", "bold");
+    doc.setFontSize(12);
+    doc.text("Point batteries services", 35, y, { align: "center" });
+    y += 6;
+
+    doc.setFont("Courier", "normal");
+    doc.setFontSize(10);
+    doc.text(`Date: ${formatISODate(rowData.createdAt)}`, startX, y);
+    y += 6;
+    doc.text(`Vente Ref: ${rowData.venteRef}`, startX, y);
+    y += 6;
+    doc.text(`Client: ${clientNom} ${clientPrenom}`, startX, y);
+    y += 6;
+
+    doc.line(startX, y, 75, y); // Divider line (extended to full width)
+    y += 4;
+
+    // Table Headers
+    const headers = [["Produit", "QTY", "PRIX UN", "TOTAL"]];
+    const data = products.map((product) => [
+      product.designationProduit.split(" ")[0], // Product name
+      product.qty.toString(), // Quantity
+      product.price?.toFixed(2) + " DH", // Unit price
+      (product.price * product.qty).toFixed(2) + " DH", // Total
+    ]);
+
+    // Generate the table
+    doc.autoTable({
+      head: headers,
+      body: data,
+      startY: y,
+      theme: "grid",
+      styles: {
+        font: "courier",
+        fontSize: 9,
+        cellPadding: 1,
+        overflow: "linebreak",
+      },
+      headStyles: {
+        fillColor: [0, 0, 0],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+      },
+      columnStyles: {
+        0: { cellWidth: 20 }, // Product column width
+        1: { cellWidth: 10, halign: "right" }, // QTY column width
+        2: { cellWidth: 20, halign: "right" }, // PRIX column width
+        3: { cellWidth: 20, halign: "right" }, // TOTAL column width
+      },
+      margin: { left: startX }, // Align table with the left margin
+    });
+
+    y = doc.lastAutoTable.finalY + 6;
+
+    doc.setFont("Courier", "bold");
+    doc.text(`TOTAL: ${overallTotal.toFixed(2)} DH`, startX, y);
+    y += 6;
+    doc.text(`Mode de paiement: ${paymentType.toUpperCase()}`, startX, y);
+    y += 10;
+
+    doc.setFont("Courier", "italic");
+    doc.setFontSize(8);
+    doc.text("Merci pour votre confiance!", startX, y);
+    y += 6;
+    doc.text("Service après-vente: +212 600-000000", startX, y);
+
+    setLoadingPDF(false);
+    doc.save(`${rowData.venteRef}_${clientNom}.pdf`);
+  };
 
   return (
     <>
@@ -99,19 +147,18 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               Vente ref :{" "}
               <span className="font-semibold">{rowData.venteRef}</span>
             </h1>
-            <Button
-              onClick={() => reactToPrintFn()}
-              className="py-2 rounded text-sm"
-            >
+            <Button onClick={downloadPdf} className="py-2 rounded text-sm">
               <Download size={20} />
-              <span>Imprimer / Télécharger</span>
+              <span>
+                {loadingPDF ? (
+                  <LoadingButton bgColor="bg-black" textColor="text-white" />
+                ) : (
+                  "Télécharger"
+                )}
+              </span>
             </Button>
           </div>
-          <div
-            className="thermal-receipt"
-            ref={contentRef}
-            style={{ width: "80mm" }}
-          >
+          <div className="thermal-receipt" ref={contentRef}>
             <div className="text-center mb-4 mt-8">
               <Image
                 src="/logopbsdark.png"
@@ -121,24 +168,24 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
                 className="mx-auto"
                 style={{ maxWidth: "70mm" }}
               />
-              <div className="mt-2 text-[10px]">
+              <div className="mt-2 text-[8px]">
                 <p>Adresse:....</p>
                 <p>Tél: +212 600-000000</p>
               </div>
             </div>
 
             <div className="border-b border-black mb-2 pb-2">
-              <div className="flex justify-between text-[9px]">
+              <div className="flex justify-between text-[8px]">
                 <span>Date: {formatISODate(rowData.createdAt)}</span>
                 <span>Ref: {rowData.venteRef}</span>
               </div>
-              <div className="text-[9px] mt-1">
+              <div className="text-[8px] mt-1">
                 Client: {clientNom} {clientPrenom}
               </div>
             </div>
 
             {/* Products Table */}
-            <table className="w-full text-[9px] mb-4">
+            <table className="w-full text-[8px] mb-4">
               <thead>
                 <tr className="border-b border-black">
                   <th className="text-left py-1">Produit</th>
@@ -147,7 +194,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
                   <th className="text-right py-1">Total</th>
                 </tr>
               </thead>
-              <tbody className="text-[8px]">
+              <tbody className="text-[10px]">
                 {products.map((product, index) => (
                   <tr key={index} className="border-b border-dashed">
                     <td className="py-1">
@@ -166,7 +213,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
             </table>
 
             {/* Total Section */}
-            <div className="text-[10px] font-bold border-t border-black pt-2">
+            <div className="text-[12px] font-bold border-t border-black pt-2">
               <div className="flex justify-between">
                 <span>TOTAL:</span>
                 <span>{overallTotal.toFixed(2)} DH</span>
@@ -178,7 +225,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
             </div>
 
             {/* Footer */}
-            <div className="text-center text-[8px] mt-4">
+            <div className="text-center text-[7px] mt-4">
               <p>Merci pour votre confiance!</p>
               <p>Service après-vente: +212 600-000000</p>
             </div>

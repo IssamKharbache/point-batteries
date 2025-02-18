@@ -212,7 +212,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
             Produits Sélectionnés
           </h1>
           <hr className="text-gray-400 mb-4" />
-          <div className="container mx-auto py-10 h-[368px] overflow-scroll">
+          <div className="container mx-auto py-10 h-[345px] overflow-scroll">
             {Object.keys(productSelected).length === 0 ? (
               <div className="text-center font-semibold text-2xl text-gray-500">
                 Aucun produit sélectionné
