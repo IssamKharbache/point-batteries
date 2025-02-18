@@ -23,12 +23,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Filter, Loader2, RefreshCw } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Filter,
+  Loader2,
+  RefreshCw,
+} from "lucide-react";
 
 import { useLoadingStore, useOrderBackendStore } from "@/context/store";
 import { Order } from "@prisma/client";
 import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
 import UpdateStatus from "@/components/backend/table/UpdateStatus";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 export interface DataTableProps<TData, Order> {
   columns: ColumnDef<TData, Order>[];
@@ -206,24 +222,7 @@ export function DataTable<TData extends Order>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Suivant
-        </Button>
-      </div>
+      <PaginationDataTable table={table} />
     </div>
   );
 }

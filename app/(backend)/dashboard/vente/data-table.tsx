@@ -37,6 +37,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Filter, Loader2 } from "lucide-react";
 import { useLoadingStore } from "@/context/store";
+import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -234,24 +235,7 @@ export function DataTable<TData>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Suivant
-        </Button>
-      </div>
+      <PaginationDataTable table={table} />
     </div>
   );
 }

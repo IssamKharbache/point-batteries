@@ -28,6 +28,7 @@ import TableActions, {
   UserData,
 } from "@/components/backend/table/TableActions";
 import { useLoadingStore } from "@/context/store";
+import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 interface DataTableProps<TData, UserData> {
   columns: ColumnDef<TData, UserData>[];
@@ -194,24 +195,7 @@ export function DataTable<TData extends UserData>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Suivant
-        </Button>
-      </div>
+      <PaginationDataTable table={table} />
     </div>
   );
 }

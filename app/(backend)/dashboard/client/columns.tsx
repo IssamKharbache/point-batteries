@@ -53,14 +53,4 @@ export const columns: ColumnDef<User>[] = [
       }
     },
   },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      const user = row.original;
-      return (
-        <TableActions editEndpoint={`client/modifier/${user.identifiant}`} />
-      );
-    },
-  },
 ];

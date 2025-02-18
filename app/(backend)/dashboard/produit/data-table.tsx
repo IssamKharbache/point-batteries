@@ -29,6 +29,7 @@ import TableActions, {
   ProductData,
 } from "@/components/backend/table/TableActions";
 import Image from "next/image";
+import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 interface DataTableProps<TData, ProductData> {
   columns: ColumnDef<TData, ProductData>[];
@@ -209,24 +210,7 @@ export function DataTable<TData extends ProductData>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Suivant
-        </Button>
-      </div>
+      <PaginationDataTable table={table} />
     </div>
   );
 }
