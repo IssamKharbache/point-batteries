@@ -212,6 +212,7 @@ model VenteProduct {
   productId          String  @db.Uuid
   qty                Int
   price              Float?
+  discount           Float?
   designationProduit String?
 
   vente   Vente   @relation(fields: [venteId], references: [id], onDelete: Cascade)

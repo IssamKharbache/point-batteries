@@ -54,7 +54,6 @@ export function DataTable<TData>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [date, setDate] = React.useState<Date>();
   const table = useReactTable({
     data,
     columns,

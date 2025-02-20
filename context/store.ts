@@ -222,11 +222,16 @@ export const useCategoryProductPageStore = create<CategoryProductPageType>(
 type StepFormType = {
   currentStep: number;
   setCurrentStep: (currentStep: number) => void;
-  productsToSubmit: { refProduct: string; quantity: string }[];
+  productsToSubmit: {
+    refProduct: string;
+    quantity: string;
+    discount: string; // Add the discount to the product object
+  }[];
   setProductsToSubmit: (
-    products: { refProduct: string; quantity: string }[]
+    products: { refProduct: string; quantity: string; discount: string }[]
   ) => void;
 };
+
 export const useStepFormStore = create<StepFormType>((set) => ({
   currentStep: 1,
   setCurrentStep: (currentStep: number) => set({ currentStep }),

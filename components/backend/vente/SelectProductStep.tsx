@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 interface ProductSelection {
   quantity: string;
   selected: boolean;
+  discount: string; // New discount field for each selected product
 }
 interface SelectProductProps {
   productsVente: ProductData[];
@@ -22,6 +23,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     useState<ProductData[]>(productsVente);
+  const [discount, setDiscount] = useState(""); // Discount state for global discount
 
   const { currentStep, setCurrentStep, setProductsToSubmit } =
     useStepFormStore();
@@ -54,7 +56,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         ? omit(prev, refProduct)
         : {
             ...prev,
-            [refProduct]: { quantity: "", selected: true },
+            [refProduct]: { quantity: "", selected: true, discount: "" },
           };
 
       // Save the updated selection to localStorage
@@ -69,7 +71,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   // Handle changes to quantity input for a product
   const handleInputChange = (
     refProduct: string | null | undefined,
-    field: "quantity",
+    field: "quantity" | "discount",
     value: string
   ) => {
     if (!refProduct) return;
@@ -137,7 +139,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
       return;
     }
 
-    // Include the price from productsVente
+    // Include the price and discount from productsVente
     const productsToSubmit = Object.keys(productSelected)
       .map((refProduct) => {
         const product = productsVente.find((p) => p.refProduct === refProduct);
@@ -145,8 +147,12 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           ? {
               refProduct,
               quantity: productSelected[refProduct].quantity,
-              price: product.price,
+              price: calculateDiscountedPrice(
+                product.price,
+                productSelected[refProduct].discount
+              ),
               designationProduit: product.designationProduit,
+              discount: productSelected[refProduct].discount, // Add the discount here
             }
           : null;
       })
@@ -158,20 +164,31 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           quantity: string;
           price: number;
           designationProduit: string;
+          discount: string;
         } => product !== null
       );
 
+    // Update the store with productsToSubmit that includes discount
     setProductsToSubmit(productsToSubmit);
 
     handleNext();
+  };
+
+  // Calculate the discounted price
+  const calculateDiscountedPrice = (price: number, discount: string) => {
+    const discountValue = parseFloat(discount);
+    if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) {
+      return price; // Return the original price if the discount is invalid
+    }
+    return price - (price * discountValue) / 100;
   };
 
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center m-10 gap-8">
         {/* Right Side: Available Products */}
-        <div className=" bg-white p-8 rounded-md border-2 w-full   shadow-lg md:w-[50%] ">
-          <div className="flex flex-col md:flex-row  justify-between items-center gap-4 mb-5">
+        <div className=" bg-white p-8 rounded-md border-2 w-full shadow-lg md:w-[50%] ">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-5">
             <h1 className="text-xl font-semibold text-gray-600 mb-4">
               Produits Disponibles
             </h1>
@@ -219,7 +236,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
               </div>
             ) : (
               Object.entries(productSelected).map(
-                ([refProduct, { quantity }]) => {
+                ([refProduct, { quantity, discount }]) => {
                   const product = productsVente.find(
                     (p) => p.refProduct === refProduct
                   );
@@ -246,6 +263,24 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                                 handleInputChange(
                                   refProduct,
                                   "quantity",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          <div>
+                            <Input
+                              placeholder="Remise"
+                              className="px-4 bg-white w-full md:w-52 border-2 border-gray-300 rounded-md h-8 md:h-12 "
+                              type="number"
+                              min={0}
+                              value={discount}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  refProduct,
+                                  "discount",
                                   e.target.value
                                 )
                               }

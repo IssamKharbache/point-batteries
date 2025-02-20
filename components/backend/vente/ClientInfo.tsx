@@ -9,6 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useStepFormStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 import { addClientVenteSchema } from "@/lib/utils/validation";
@@ -22,6 +29,7 @@ import { z } from "zod";
 
 const ClientInfo = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [value, setValue] = useState("ESPECE");
   const { data: session } = useSession();
   const userId = session?.user.id;
   const form = useForm<z.infer<typeof addClientVenteSchema>>({
@@ -35,6 +43,7 @@ const ClientInfo = () => {
   });
   const { toast } = useToast();
   const { currentStep, setCurrentStep, productsToSubmit } = useStepFormStore();
+
   const handlePrevious = () => {
     if (currentStep === 1) {
       return;
@@ -49,19 +58,23 @@ const ClientInfo = () => {
     }
     form.reset();
   };
+  const onChange = (selectedValue: "ESPECE" | "CHECK" | "VIREMENT") => {
+    setValue(selectedValue);
+  };
 
   const handleSubmit = async (data: z.infer<typeof addClientVenteSchema>) => {
     setLoading(true);
     const allData = {
       ...data,
       userId,
-      paymentType: "ESPECE",
+      paymentType: value,
       products: productsToSubmit,
     };
 
     try {
       const res = await axios.post("/api/vente", allData);
       if (res.status === 201) {
+        setCurrentStep(0);
         setLoading(false);
         resetData();
         toast({
@@ -162,7 +175,7 @@ const ClientInfo = () => {
                       <Input
                         type="text"
                         className="mt-2 px-4"
-                        placeholder="carte d'itentite du client"
+                        placeholder="CIN du client"
                         {...field}
                       />
                     </FormControl>
@@ -171,6 +184,16 @@ const ClientInfo = () => {
                 );
               }}
             />
+            <Select onValueChange={onChange} value={value}>
+              <SelectTrigger className="w-[100px] md:w-[150px] ">
+                <SelectValue placeholder={"Espece"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ESPECE">Espece</SelectItem>
+                <SelectItem value="CHECK">Check</SelectItem>
+                <SelectItem value="VIREMENT">Virement</SelectItem>
+              </SelectContent>
+            </Select>
             {loading ? (
               <LoadingButton bgColor="bg-black" textColor="text-white" />
             ) : (
