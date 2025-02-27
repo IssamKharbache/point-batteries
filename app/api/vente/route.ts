@@ -13,6 +13,7 @@ export const POST = async (req: NextRequest) => {
     const {
       userId,
       products,
+      nomDuCaissier,
       paymentType,
       clientNom,
       clientPrenom,
@@ -26,7 +27,8 @@ export const POST = async (req: NextRequest) => {
       !clientNom ||
       !clientPrenom ||
       !clientCin ||
-      !clientTel
+      !clientTel ||
+      !nomDuCaissier
     ) {
       return NextResponse.json(
         { error: "All fields are required" },
@@ -91,6 +93,7 @@ export const POST = async (req: NextRequest) => {
         venteRef,
         paymentType,
         clientTel,
+        nomDuCaissier,
         products: {
           create: productsData,
         },

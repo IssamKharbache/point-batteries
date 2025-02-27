@@ -34,6 +34,7 @@ const ClientInfo = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user.id;
+  const nomDuCaissier = session?.user.nom;
   const form = useForm<z.infer<typeof addClientVenteSchema>>({
     resolver: zodResolver(addClientVenteSchema),
     defaultValues: {
@@ -71,6 +72,7 @@ const ClientInfo = () => {
       userId,
       paymentType: value,
       products: productsToSubmit,
+      nomDuCaissier,
     };
 
     try {
@@ -85,7 +87,7 @@ const ClientInfo = () => {
           variant: "success",
           className: "toast-container",
         });
-        router.push("dashboard/vente");
+        router.push("/dashboard/vente");
       }
     } catch (__error) {
       setLoading(false);

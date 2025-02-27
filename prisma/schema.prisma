@@ -190,13 +190,14 @@ model AchatProduct {
 }
 
 model Vente {
-  id           String  @id @default(uuid()) @db.Uuid
-  userId       String? @db.Uuid
-  user         User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-  clientNom    String
-  clientPrenom String
-  clientCin    String
-  clientTel    String?
+  id            String  @id @default(uuid()) @db.Uuid
+  userId        String? @db.Uuid
+  user          User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clientNom     String
+  clientPrenom  String
+  clientCin     String
+  clientTel     String?
+  nomDuCaissier String?
 
   venteRef    String      @unique
   paymentType PaymentType

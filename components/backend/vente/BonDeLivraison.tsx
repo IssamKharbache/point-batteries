@@ -13,26 +13,37 @@ interface BonDeLivraisonProps {
 
 const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { clientNom, clientPrenom, products, paymentType } = rowData;
+  const { clientNom, clientPrenom, products, paymentType, nomDuCaissier } =
+    rowData;
 
-  const { individualTotals, overallTotal } = products.reduce(
+  const { individualTotals, overallTotal, totalRemise } = products.reduce(
     (acc, product) => {
       const validPrice = product.price || 0;
       const validQty = product.qty || 0;
+      const remise = product.discount || 0; // Ensure remise exists
+
       const productTotal = validPrice * validQty;
+      const productAfterRemise = productTotal - remise;
 
       acc.individualTotals.push({
         productId: product.productId,
-        total: productTotal,
+        total: productAfterRemise,
+        remise,
       });
 
-      acc.overallTotal += productTotal;
+      acc.totalRemise += remise;
+      acc.overallTotal += productAfterRemise;
 
       return acc;
     },
     {
-      individualTotals: [] as { productId: string; total: number }[],
+      individualTotals: [] as {
+        productId: string;
+        total: number;
+        remise: number;
+      }[],
       overallTotal: 0,
+      totalRemise: 0,
     }
   );
 
@@ -53,6 +64,18 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
       const config = qz.configs.create("NCR 7197 Receipt");
 
+      const columnWidth = 20; // Adjust as needed for alignment
+
+      const totalLine =
+        `TOTAL:`.padEnd(columnWidth, " ") +
+        `${overallTotal.toFixed(2)} DH\n`.padStart(15);
+      const remiseLine =
+        `REMISE TOTALE:`.padEnd(columnWidth, " ") +
+        `-${totalRemise.toFixed(2)} DH\n`.padStart(15);
+      const finalTotalLine =
+        `TOTAL FINAL:`.padEnd(columnWidth, " ") +
+        `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
+
       const data = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
@@ -68,19 +91,23 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         `Date: ${formatISODate(rowData.createdAt)}\n`, // Date
         `Ref: ${rowData.venteRef}\n`, // Reference
         `Client: ${clientNom} ${clientPrenom}\n`, // Client name
+        `Servi par: ${nomDuCaissier} \n`, // Cashier name
         "\n",
         "--------------------------------------------\n",
         ...products.map(
           (product) =>
             `${product.designationProduit.toUpperCase()}\n` + // Product name
-            `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Quantity and price aligned
-            `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total aligned
+            `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Qty & price
+            `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total price aligned
+            `Remise: ${product.discount?.toFixed(2)} DH\n`.padStart(40) + // Show Remise below price
             "--------------------------------------------\n"
         ),
         "\n",
-        "\x1B\x61\x01", // Center alignment for total
-        "\x1B\x21\x20", // Set larger text size
-        `TOTAL: ${overallTotal.toFixed(2)} DH\n`, // Display the total in larger text
+        "\x1B\x61\x01",
+        "\x1B\x21\x10",
+        totalLine,
+        remiseLine,
+        finalTotalLine,
         "\x1B\x21\x00", // Reset text size
         "\n",
         "\x1B\x61\x01", // Center alignment for footer
@@ -94,6 +121,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "\n",
         "\x1D\x56\x41\x10", // Full cut
       ];
+
       await qz.print(config, data);
       await qz.websocket.disconnect();
     } catch (error: any) {
@@ -197,14 +225,31 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               </tbody>
             </table>
 
+            {/* Show Remise Information */}
+            <div style={{ marginTop: "10px", textAlign: "right" }}>
+              {products.map((product, index) =>
+                product.discount ? (
+                  <p key={index} style={{ fontSize: "12px", color: "red" }}>
+                    Remise sur {product.designationProduit}: -
+                    {product.discount.toFixed(2)} DH
+                  </p>
+                ) : null
+              )}
+            </div>
+
+            {/* Show Total, Remise Totale, and Final Total */}
             <div className="total-section" style={{ marginTop: "10px" }}>
               <div className="flex justify-between">
-                <span>TOTAL:</span>
-                <span>{overallTotal.toFixed(2)} DH</span>
+                <span>Total:</span>
+                <span>{(overallTotal + totalRemise).toFixed(2)} DH</span>
               </div>
               <div className="flex justify-between mt-1">
-                <span>Mode de paiement:</span>
-                <span>{paymentType.toUpperCase()}</span>
+                <span>Remise Totale:</span>
+                <span>-{totalRemise.toFixed(2)} DH</span>
+              </div>
+              <div className="flex justify-between mt-1 font-bold">
+                <span>Total Final:</span>
+                <span>{overallTotal.toFixed(2)} DH</span>
               </div>
             </div>
 

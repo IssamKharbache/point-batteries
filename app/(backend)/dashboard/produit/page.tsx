@@ -10,14 +10,13 @@ import { ProductData } from "@/components/backend/table/TableActions";
 
 const page = async () => {
   const data: ProductData[] = await getData("/product");
-  const filteredProduct = data.filter(
-    (product) => product.isAchatProduct === false
-  );
+  const filteredProducts = data.filter((product) => !product.isAchatProduct);
+
   return (
     <section>
       <PageHeader href="produit/ajouter" name="Tous les produits" />
       <div className="container mx-auto py-10 ">
-        <DataTable columns={columns} data={filteredProduct} name="Produits" />
+        <DataTable columns={columns} data={filteredProducts} name="Produits" />
       </div>
     </section>
   );

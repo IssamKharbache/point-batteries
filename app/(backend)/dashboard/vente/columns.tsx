@@ -14,6 +14,7 @@ export interface VenteType {
   clientPrenom: string; // Add missing property
   clientTel: string; // Add missing property
   clientCin: string;
+  nomDuCaissier: string;
   products: VenteProduct[];
   createdAt: Date;
   updatedAt: Date | null;
@@ -23,6 +24,7 @@ interface VenteProduct {
   qty: number;
   price: number;
   designationProduit: string;
+  discount: number;
 }
 
 export const columns: ColumnDef<VenteType>[] = [

@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Footer = () => {
+  const currentTime = new Date();
+  const year = currentTime.getFullYear();
   return (
     <section className="min-h-[430px] py-10 bg-black sm:pt-16 lg:pt-24 relative ">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
@@ -17,8 +19,9 @@ const Footer = () => {
             />
 
             <p className="text-sm leading-relaxed text-gray-600 mt-7">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
+              Bienvenue sur Point Batteries Services, votre partenaire de
+              confiance pour la vente de batteries de haute qualité. Nous
+              proposons une large gamme de batteries adaptées à divers besoins.
             </p>
 
             <ul className="flex items-center space-x-3 mt-9">
@@ -28,7 +31,7 @@ const Footer = () => {
 
           <div>
             <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase">
-              Company
+              Notre Société
             </p>
 
             <ul className="mt-6 space-y-4">
@@ -47,7 +50,12 @@ const Footer = () => {
 
           <div>
             <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase">
-              Help
+              Contactez-nous
+            </p>
+
+            <p className="text-sm font-semibold tracking-widest text-gray-400">
+              Bonjour, nous sommes toujours ouverts à la coopération et aux
+              suggestions, contactez-nous de l'une des manières ci-dessous:
             </p>
 
             <ul className="mt-6 space-y-4">
@@ -63,33 +71,20 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
-          <div className="col-span-2 md:col-span-1 lg:col-span-2 lg:pl-8">
-            <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase">
-              Subscribe to newsletter
-            </p>
-
-            <form action="#" method="POST" className="mt-6">
-              {/* form */}
-
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center px-6 py-4 mt-3 font-semibold text-white transition-all duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:bg-blue-700"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
         </div>
 
         <hr className="mt-16 mb-10 border-gray-200" />
 
         <p className="text-sm text-center text-gray-400">
           Développé par{" "}
-          <Link href="/" className="font-bold text-white ">
+          <Link
+            target="_blank"
+            href="https://kharbache.vercel.app/"
+            className="font-bold text-white "
+          >
             Issam Kharbache
           </Link>{" "}
-          - Copyright © 2025{" "}
+          - Copyright © {year}{" "}
           <Link href="/" className="font-bold text-white ">
             PointsBatterieServices
           </Link>{" "}
