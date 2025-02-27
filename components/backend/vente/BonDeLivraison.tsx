@@ -51,10 +51,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         throw new Error("No printers found.");
       }
 
-      const printerName = printers[3]; // Adjust the printer selection as needed
-      console.log(`Selected printer: ${printerName}`);
-
-      const config = qz.configs.create(printerName);
+      const config = qz.configs.create("NCR 7197 Receipt");
 
       const data = [
         "\x1B\x40", // Reset printer
