@@ -103,7 +103,7 @@ export function DataTable<TData>({
               <Calendar
                 mode="single"
                 selected={filterDate}
-                onSelect={(date) =>
+                onSelect={(date: Date | undefined) =>
                   table.getColumn("createdAt")?.setFilterValue(date)
                 }
                 initialFocus

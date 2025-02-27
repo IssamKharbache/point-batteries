@@ -91,7 +91,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                     alt="image du produit"
                     width={500}
                     height={500}
-                    className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12"
+                    className="flex items-center justify-center group-hover:scale-105 duration-300 object-cover mb-12 h-52"
                     sizes="(max-width: 768px) 100vw, 500px"
                     priority
                     blurDataURL="data:image/svg+xml;base64,..."
@@ -99,7 +99,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                   />
                 </div>
 
-                <h1 className="line-clamp-2 max-w-56 font-semibold">
+                <h1 className="line-clamp-2 max-w-56 font-semibold uppercase">
                   {product.title}
                 </h1>
               </Link>
