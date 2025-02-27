@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,6 +31,7 @@ import { z } from "zod";
 const ClientInfo = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [value, setValue] = useState("ESPECE");
+  const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user.id;
   const form = useForm<z.infer<typeof addClientVenteSchema>>({
@@ -83,6 +85,7 @@ const ClientInfo = () => {
           variant: "success",
           className: "toast-container",
         });
+        router.push("dashboard/vente");
       }
     } catch (__error) {
       setLoading(false);

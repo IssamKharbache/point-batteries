@@ -5,6 +5,8 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import Image from "next/image";
+import qz from "qz-tray";
+
 interface BonDeLivraisonProps {
   rowData: VenteType;
 }
@@ -36,7 +38,82 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
   const contentRef = useRef<HTMLInputElement | null>(null);
 
-  const handlePrint = () => {};
+  const handlePrint = async () => {
+    try {
+      console.log("Connecting to QZ Tray...");
+      await qz.websocket.connect();
+      console.log("Connected to QZ Tray.");
+
+      const printers = await qz.printers.find();
+      console.log("Available printers:", printers);
+
+      if (!printers || printers.length === 0) {
+        throw new Error("No printers found.");
+      }
+
+      const printerName = printers[3]; // Adjust the printer selection as needed
+      console.log(`Selected printer: ${printerName}`);
+
+      const config = qz.configs.create(printerName);
+
+      const data = [
+        "\x1B\x40", // Reset printer
+        "\x1B\x61\x01", // Center alignment
+        "\x1B\x21\x30", // Double height and width text
+        "Point Batteries\n", // Company name in large font
+        "Services\n",
+        "\x1B\x21\x00", // Reset text size
+        "\n",
+        "\x1B\x61\x01", // Center alignment for title
+        "Bon de Livraison\n", // Title
+        "\n",
+        "\x1B\x61\x01", // Center alignment for header data
+        `Date: ${formatISODate(rowData.createdAt)}\n`, // Date
+        `Ref: ${rowData.venteRef}\n`, // Reference
+        `Client: ${clientNom} ${clientPrenom}\n`, // Client name
+        "\n",
+        "--------------------------------------------\n",
+        ...products.map(
+          (product) =>
+            `${product.designationProduit.toUpperCase()}\n` + // Product name
+            `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Quantity and price aligned
+            `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total aligned
+            "--------------------------------------------\n"
+        ),
+        "\n",
+        "\x1B\x61\x01", // Center alignment for total
+        "\x1B\x21\x20", // Set larger text size
+        `TOTAL: ${overallTotal.toFixed(2)} DH\n`, // Display the total in larger text
+        "\x1B\x21\x00", // Reset text size
+        "\n",
+        "\x1B\x61\x01", // Center alignment for footer
+        `Mode de paiement: ${paymentType.toUpperCase()}\n`, // Payment method
+        "\n",
+        "\x1B\x61\x01", // Center alignment for footer
+        "Merci pour votre confiance!\n", // Thank you message
+        "\x1B\x61\x01", // Center alignment for footer
+        "Service apres-vente: \n", // Contact info
+        "Tel : 0656307044 Fix : 0531510011\n",
+        "\n",
+        "\x1D\x56\x41\x10", // Full cut
+      ];
+      await qz.print(config, data);
+      await qz.websocket.disconnect();
+    } catch (error: any) {
+      console.error("Error during printing:", error);
+
+      if (error.message.includes("No printers found")) {
+        alert("No printers found. Please ensure a printer is connected.");
+      } else if (error.message.includes("Connection to QZ Tray failed")) {
+        alert(
+          "Failed to connect to QZ Tray. Please ensure QZ Tray is running."
+        );
+      } else {
+        alert("An error occurred while printing. Please try again.");
+      }
+    }
+  };
+
   return (
     <>
       <Button onClick={() => setIsDialogOpen(true)}>Bon de livraison</Button>
@@ -109,7 +186,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
                 {products.map((product, index) => (
                   <tr key={index}>
                     <td style={{ textAlign: "left" }}>
-                      {product.designationProduit.split(" ")[0]}
+                      {product.designationProduit}
                     </td>
                     <td style={{ textAlign: "center" }}>{product.qty}</td>
                     <td style={{ textAlign: "right" }}>
