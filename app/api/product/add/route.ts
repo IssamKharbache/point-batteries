@@ -52,7 +52,7 @@ export const POST = async (req: NextRequest) => {
         stock: parseInt(stock),
         capacite: parseInt(capacite),
         voltage: parseInt(voltage),
-        marque,
+        marque: marque.toLowerCase(),
         designationProduit,
         courantDessai: parseInt(courantDessai),
         garantie,

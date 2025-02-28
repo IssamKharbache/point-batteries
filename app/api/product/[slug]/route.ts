@@ -3,10 +3,6 @@ import { uatpi } from "@/lib/uploadthing-server";
 
 import { NextRequest, NextResponse } from "next/server";
 
-interface ParamsProps {
-  slug: string;
-}
-
 export const PUT = async (
   req: NextRequest,
   context: { params: Promise<{ slug: string }> }

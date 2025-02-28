@@ -1,6 +1,5 @@
 export const dynamic = "force-dynamic";
 
-import SectionHeader from "@/components/frontend/products/SectionHeader";
 import Banner from "@/components/frontend/sliders/Banner";
 import { getData } from "@/lib/getData";
 import { CategorieData } from "../(backend)/dashboard/produit/ajouter/page";
@@ -8,9 +7,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import FetchBookmarks from "@/lib/utils/FetchBookmarks";
 import SpecialAndDemandingProducts from "@/components/frontend/products/SpecialAndDemandingProducts";
-import Brands from "@/components/frontend/brands/Brands";
 import DynamicProductList from "@/components/frontend/products/DynamicProductList";
 import DynamicCategoryProducts from "@/components/frontend/products/DynamicCategoryProducts";
+import BrandsShop from "@/components/backend/UI/BrandsShop";
 
 const frontHomePage = async () => {
   const banner = await getData("/banner");
@@ -24,6 +23,7 @@ const frontHomePage = async () => {
   return (
     <div>
       <div className="max-w-[1200px] mx-auto px-10 md:px-5 2xl:p-0">
+        <BrandsShop />
         {/* Fetch bookmarks specifically for the logged in user */}
         {userId && <FetchBookmarks userId={userId} />}
         {/* banner */}
@@ -39,8 +39,6 @@ const frontHomePage = async () => {
           <SpecialAndDemandingProducts product={products} />
         </div>
       </div>
-      {/* brands */}
-      <Brands />
     </div>
   );
 };

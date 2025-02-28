@@ -9,7 +9,7 @@ import Link from "next/link";
 import { BiCartAdd } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import PaginationWithFilters from "../pagination/PaginationWithFilters";
@@ -116,16 +116,16 @@ const CategoryProducts = ({
         {!loading &&
           !loadingStore &&
           productsState.map((product) => (
-            <div key={product.id} className="group bg-white p-5">
+            <div key={product.id} className="group bg-white p-5 ">
               <Link href={`/produit/${product.slug}`}>
                 <Image
                   src={product.imageUrl || ""}
                   alt="image du produit"
                   width={500}
                   height={500}
-                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12"
+                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-cover mb-12 h-40 w-40  "
                 />
-                <h1 className="line-clamp-1 w-48 font-semibold">
+                <h1 className="line-clamp-2 w-48 font-semibold uppercase">
                   {product.title}
                 </h1>
               </Link>

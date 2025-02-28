@@ -148,8 +148,13 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
       <div className="flex flex-col col-span-12  gap-8 lg:col-span-4 m-8 2xl:m-0">
         {/* first */}
         <div className="bg-white ">
-          {product.garantie !== "NOGARANTIE" &&
-          product.garantie === "ONEYEAR" ? (
+          {product.garantie === "NOGARANTIE" && (
+            <div className="flex items-center gap-4 mt-4 p-5 text-red-500">
+              <X />
+              <span className="text-xl font-semibold">Sans Garantie</span>
+            </div>
+          )}
+          {product.garantie === "ONEYEAR" && (
             <div className="flex items-center  gap-4 mt-4 p-5">
               <Image
                 src="/1yearwarranty.png"
@@ -160,7 +165,9 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
               />
               <p className="font-semibold text-lg">Garantie 12 mois</p>
             </div>
-          ) : (
+          )}
+
+          {product.garantie === "TWOYEARS" && (
             <div className="flex items-center gap-4 mt-4 p-5">
               <Image
                 src="/2yearwarranty.png"
