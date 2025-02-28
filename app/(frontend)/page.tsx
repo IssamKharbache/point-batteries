@@ -31,10 +31,7 @@ const frontHomePage = async () => {
           <Banner bannerData={banner} />
         </div>
         {/* best selling products */}
-        <div>
-          <SectionHeader header="Meilleures Ventes" />
-          <DynamicProductList initialProducts={products} />
-        </div>
+        <DynamicProductList initialProducts={products} />
         {/* category products */}
         <DynamicCategoryProducts initialCategorieData={categoryData} />
         {/* SpecialAndDemandingProducts */}
