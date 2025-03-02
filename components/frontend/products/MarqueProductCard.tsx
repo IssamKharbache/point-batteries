@@ -1,62 +1,59 @@
 "use client";
 import { ProductData } from "@/components/backend/table/TableActions";
-import BookmarkButton from "@/components/frontend/products/BookmarkButton";
-import { useCartStore, useCategoryProductPageStore } from "@/context/store";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useSession } from "next-auth/react";
+import axios from "axios";
+import { useSearchParams } from "next/navigation";
+import PaginationWithFilters from "../pagination/PaginationWithFilters";
+import { Loader2 } from "lucide-react";
+import { useCartStore, useCategoryProductPageStore } from "@/context/store";
 import Image from "next/image";
 import Link from "next/link";
-import { BiCartAdd } from "react-icons/bi";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
-import axios from "axios";
-import { Loader2 } from "lucide-react";
-import PaginationWithFilters from "../pagination/PaginationWithFilters";
-
-interface CategoryProductsProps {
+import BookmarkButton from "./BookmarkButton";
+import { useSession } from "next-auth/react";
+import { BiCartAdd } from "react-icons/bi";
+interface MarqueProductCardProps {
   products: ProductData[];
-  catId: string;
-  pageSize: number;
+  marque: string;
 }
-
-const CategoryProducts = ({
-  products,
-  catId,
-  pageSize,
-}: CategoryProductsProps) => {
-  // Pagination State
+const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
   const [productsState, setProductsState] = useState<ProductData[]>(products);
-  const [loading, setLoading] = useState<boolean>(true);
-  const searchParams = useSearchParams();
 
-  //store
+  const [loading, setLoading] = useState<boolean>(true);
+  const { toast } = useToast();
   const { loading: loadingStore, setLoading: setLoadingStore } =
     useCategoryProductPageStore();
+  const searchParams = useSearchParams();
+  // Filtering the products with the ones that are not for achat
+  const notAchatProducts = products.filter(
+    (prod) => prod.isAchatProduct === false
+  );
+  const { data: session } = useSession();
+  const { addItem } = useCartStore();
+
+  const pageSize = 10;
 
   const [resultLength, setResultLength] = useState<number>(0);
   const totalPages = Math.ceil(resultLength / pageSize);
   const min = searchParams.get("min") || "0"; // Make sure min is a string
   const max = searchParams.get("max") || ""; // Make sure max is a string
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
-  const { data: session } = useSession();
-  const { addItem } = useCartStore();
-  const { toast } = useToast();
-  const useParams = useSearchParams();
 
   useEffect(() => {
     const fetchProducts = async () => {
       const res = await axios.get(
-        `/api/product?catId=${catId}&pageNum=${currentPage}&min=${min}&max=${max}&pageSize=${pageSize}`
+        `/api/product/marque?marque=${marque}&min=${min}&max=${max}&pageSize=${pageSize}`
       );
       if (res.status === 201) {
+        setLoading(false);
+        setLoadingStore(false);
         setProductsState(res.data.data);
         setResultLength(res.data.totalCount);
-        setLoading(false);
-        setLoadingStore(false);
       } else {
-        setLoadingStore(false);
         setLoading(false);
+        setLoadingStore(false);
+
         toast({
           title: "ERREUR",
           variant: "error",
@@ -66,7 +63,7 @@ const CategoryProducts = ({
     };
 
     fetchProducts();
-  }, [min, max, currentPage, catId, pageSize]);
+  }, [min, max, currentPage, pageSize]);
 
   useEffect(() => {
     if (productsState.length > 0) {
@@ -74,10 +71,13 @@ const CategoryProducts = ({
         setLoadingStore(false);
       }, 700);
     }
-  }, [useParams]);
+  }, [searchParams]);
 
   return (
     <div>
+      <h1 className="p-2 bg-slate-200 rounded text-center font-semibold mb-8 capitalize text-3xl">
+        {marque}
+      </h1>
       {loadingStore && (
         <div className="flex items-center justify-center h-[500px] w-[500px]">
           <Loader2 className="animate-spin" size={45} />
@@ -88,7 +88,7 @@ const CategoryProducts = ({
           <Loader2 className="animate-spin" size={45} />
         </div>
       )}
-      {!loading && productsState.length === 0 && (
+      {!loading && !loadingStore && productsState.length === 0 && (
         <div className="flex flex-col gap-8  items-center">
           <Image
             src="/noproduct.png"
@@ -106,7 +106,6 @@ const CategoryProducts = ({
           </Link>
         </div>
       )}
-      {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading && (
           <div className="flex items-center justify-center h-[500px] w-[500px]">
@@ -161,17 +160,19 @@ const CategoryProducts = ({
           ))}
       </div>
 
-      {productsState.length !== 0 && (
-        <div className="mt-8">
-          <PaginationWithFilters
-            count={resultLength}
-            totalPages={totalPages}
-            pageSize={pageSize}
-          />
-        </div>
-      )}
+      <div>
+        {!loading && productsState.length !== 0 && (
+          <div className="mt-8 mb-8">
+            <PaginationWithFilters
+              count={resultLength}
+              totalPages={totalPages}
+              pageSize={pageSize}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-export default CategoryProducts;
+export default MarqueProductCard;

@@ -38,7 +38,6 @@ const ClientInfo = () => {
   const form = useForm<z.infer<typeof addClientVenteSchema>>({
     resolver: zodResolver(addClientVenteSchema),
     defaultValues: {
-      clientCin: "",
       clientNom: "",
       clientPrenom: "",
       clientTel: "",
@@ -161,26 +160,6 @@ const ClientInfo = () => {
                         type="text"
                         className="mt-2 px-4"
                         placeholder="Telephone du client"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              name="clientCin"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>CIN</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        className="mt-2 px-4"
-                        placeholder="CIN du client"
                         {...field}
                       />
                     </FormControl>

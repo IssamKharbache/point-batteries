@@ -1,3 +1,4 @@
+"use client";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react"; // Correct import for Swiper
 import { ProductData } from "@/components/backend/table/TableActions";
 import { Navigation } from "swiper/modules";
@@ -130,7 +131,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                     <BiCartAdd className="text-2xl" />
                   </button>
                 ) : (
-                  <p className="text-red-500">Rupture de stock</p>
+                  <p className="text-red-500 text-xs">Rupture de stock</p>
                 )}
               </div>
             </SwiperSlide>

@@ -195,7 +195,6 @@ model Vente {
   user          User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   clientNom     String
   clientPrenom  String
-  clientCin     String
   clientTel     String?
   nomDuCaissier String?
 

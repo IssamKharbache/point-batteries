@@ -10,6 +10,7 @@ export default withUt({
   theme: {
     extend: {
       colors: {
+        customDarkBlue: "#131343",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         lightBlack: "#111112",

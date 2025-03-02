@@ -131,6 +131,7 @@ export const GET = async (
         imageKey: true,
         isAchatProduct: true,
         filterByCar: true,
+        refProduct: true,
       },
     });
     if (!product) {

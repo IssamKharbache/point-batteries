@@ -17,7 +17,7 @@ export const POST = async (req: NextRequest) => {
       paymentType,
       clientNom,
       clientPrenom,
-      clientCin,
+
       clientTel,
     } = await req.json();
 
@@ -26,7 +26,6 @@ export const POST = async (req: NextRequest) => {
       !paymentType ||
       !clientNom ||
       !clientPrenom ||
-      !clientCin ||
       !clientTel ||
       !nomDuCaissier
     ) {
@@ -89,7 +88,6 @@ export const POST = async (req: NextRequest) => {
         userId,
         clientNom,
         clientPrenom,
-        clientCin,
         venteRef,
         paymentType,
         clientTel,

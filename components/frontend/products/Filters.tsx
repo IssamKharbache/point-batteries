@@ -20,7 +20,7 @@ import Swal from "sweetalert2";
 
 import { useCategoryProductPageStore } from "@/context/store";
 
-const Filters = ({ slug }: { slug?: string }) => {
+const Filters = ({ slug, marque }: { slug?: string; marque?: string }) => {
   const form = useForm<z.infer<typeof filterPriceSchema>>({
     resolver: zodResolver(filterPriceSchema),
     defaultValues: {
@@ -69,7 +69,14 @@ const Filters = ({ slug }: { slug?: string }) => {
           max: data.max,
           sort,
         }).toString()}`
-      : `/categorie/${slug}?${new URLSearchParams({
+      : slug
+      ? `/categorie/${slug}?${new URLSearchParams({
+          page: String(1),
+          min: data.min,
+          max: data.max,
+          sort,
+        }).toString()}`
+      : `/produits/marque/${marque}?${new URLSearchParams({
           page: String(1),
           min: data.min,
           max: data.max,
@@ -80,7 +87,9 @@ const Filters = ({ slug }: { slug?: string }) => {
   //for deleting filters
   const href = search
     ? `/search/?q=${search}&pageNum=${page}&sort=asc&min=0`
-    : `/categorie/${slug}?pageNum=${page}&sort=asc&min=0`;
+    : slug
+    ? `/categorie/${slug}?pageNum=${page}&sort=asc&min=0`
+    : `/produits/marque/${marque}?pageNum=${page}&sort=asc&min=0`;
 
   return (
     <div className="space-y-8 bg-white mt-8 p-8 mb-8 m-8 md:m-0   relative">

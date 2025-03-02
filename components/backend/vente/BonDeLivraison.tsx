@@ -51,12 +51,8 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
   const handlePrint = async () => {
     try {
-      console.log("Connecting to QZ Tray...");
       await qz.websocket.connect();
-      console.log("Connected to QZ Tray.");
-
       const printers = await qz.printers.find();
-      console.log("Available printers:", printers);
 
       if (!printers || printers.length === 0) {
         throw new Error("No printers found.");
@@ -126,7 +122,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       await qz.websocket.disconnect();
     } catch (error: any) {
       console.error("Error during printing:", error);
-
       if (error.message.includes("No printers found")) {
         alert("No printers found. Please ensure a printer is connected.");
       } else if (error.message.includes("Connection to QZ Tray failed")) {
@@ -176,10 +171,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
                 height={80}
                 className="mx-auto"
               />
-              <div className="mt-1">
-                <p>Adresse: Rue Principale, Casablanca</p>
-                <p>Tél: +212 600-000000</p>
-              </div>
             </div>
 
             <div className="meta-info" style={{ marginTop: "10px" }}>

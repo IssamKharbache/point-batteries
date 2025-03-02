@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { signupSchema } from "@/lib/utils/validation";
+import { addAdminSchema, signupSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
@@ -26,9 +26,10 @@ import * as z from "zod";
 interface UpdateUserProps {
   userData: User;
   typeForm?: string;
+  isStaff?: boolean;
 }
 
-const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
+const UpdateUserForm = ({ userData, typeForm, isStaff }: UpdateUserProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isChangingPwd, setIsChangingPwd] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,9 +37,9 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
   const { update } = useSession();
   const router = useRouter();
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof signupSchema>>({
+  const form = useForm<z.infer<typeof addAdminSchema>>({
     resolver: zodResolver(
-      signupSchema.extend({
+      addAdminSchema.extend({
         password: isChangingPwd
           ? z.string().min(1, "Mot de passe est obligatoire")
           : z.string().optional(),
@@ -49,7 +50,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
       password: "",
     },
   });
-  const handleSubmit = async (data: z.infer<typeof signupSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof addAdminSchema>) => {
     setLoading(true);
 
     try {
@@ -124,6 +125,7 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
                 );
               }}
             />
+
             <FormField
               name="prenom"
               control={form.control}
@@ -165,6 +167,28 @@ const UpdateUserForm = ({ userData, typeForm }: UpdateUserProps) => {
               );
             }}
           />
+          {isStaff ? (
+            <FormField
+              name="tel"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Tel</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className="mt-2 px-4"
+                        placeholder="Address email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          ) : null}
           {typeForm !== "client" && isChangingPwd && (
             <FormField
               name="password"

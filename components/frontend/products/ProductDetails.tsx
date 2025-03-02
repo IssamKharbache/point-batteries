@@ -1,5 +1,14 @@
 "use client";
-import { Headset, Minus, Plus, ShieldCheck, Truck, X } from "lucide-react";
+import {
+  CheckCheck,
+  Copy,
+  Headset,
+  Minus,
+  Plus,
+  ShieldCheck,
+  Truck,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import ShareProduct from "@/components/frontend/products/ShareProduct";
@@ -15,10 +24,32 @@ interface ProductDetailsProps {
   product: ProductData;
 }
 const ProductDetails = ({ product }: ProductDetailsProps) => {
+  const [copied, setCopied] = useState<boolean>(false);
+
   const { addItem } = useCartStore();
   const { data: session } = useSession();
   const [quantity, setQuantity] = useState<number>(1);
   const { toast } = useToast();
+
+  const copyToClipboard = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard
+        .writeText(product.refProduct || "")
+        .then(() => {
+          toast({
+            title: "Copié",
+            description: "La référence du produit a été copiée",
+            variant: "success",
+            duration: 4000,
+          });
+          setCopied(true);
+          setTimeout(() => setCopied(false), 4000);
+        })
+        .catch((error) => {
+          console.error("Failed to copy: ", error);
+        });
+    }
+  };
 
   return (
     <div className="grid grid-cols-12 gap-4">
@@ -94,6 +125,25 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                 <span>Ajouter au panier</span>
                 <FaCartPlus />
               </button>
+
+              {session?.user.role !== "USER" ? (
+                <div>
+                  {!copied ? (
+                    <button
+                      onClick={copyToClipboard}
+                      className="flex items-center gap-4 bg-slate-200 mt-4 rounded px-4 py-2 hover:text-blue-500 cursor-pointer text-sm"
+                    >
+                      <Copy size={20} />
+                      Ref du produit
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-4 bg-slate-200 mt-4 rounded px-4 py-2 hover:text-blue-500 cursor-pointer text-sm w-fit">
+                      <CheckCheck size={20} />
+                      <span>Copié</span>
+                    </div>
+                  )}
+                </div>
+              ) : null}
               <div className="mt-4">
                 {product.stock && product.stock == 0 && (
                   <p className="flex items-center  gap-2 bg-red-600 rounded text-center text-white px-5 py-2 w-fit">
