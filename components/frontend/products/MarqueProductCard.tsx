@@ -79,12 +79,12 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
         {marque}
       </h1>
       {loadingStore && (
-        <div className="flex items-center justify-center h-[500px] w-[500px]">
+        <div className="flex items-center justify-center ">
           <Loader2 className="animate-spin" size={45} />
         </div>
       )}
       {loading && (
-        <div className="flex items-center justify-center h-[500px] w-[500px]">
+        <div className="flex items-center justify-center">
           <Loader2 className="animate-spin" size={45} />
         </div>
       )}
@@ -108,7 +108,7 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading && (
-          <div className="flex items-center justify-center h-[500px] w-[500px]">
+          <div className="flex items-center justify-center">
             <Loader2 className="animate-spin" size={45} />
           </div>
         )}

@@ -95,7 +95,7 @@ const Filters = ({ slug, marque }: { slug?: string; marque?: string }) => {
     <div className="space-y-8 bg-white mt-8 p-8 mb-8 m-8 md:m-0   relative">
       <div
         className={`bg-white ${
-          loading ? "opacity-20 pointer-events-none" : ""
+          loading ? "opacity-20 pointer-events-none " : ""
         }`}
       >
         <div>
@@ -220,7 +220,7 @@ const Filters = ({ slug, marque }: { slug?: string; marque?: string }) => {
 
       {/* Full opacity loader */}
       {loading && (
-        <div className="flex items-center justify-center absolute right-48 top-52 opacity-100 pointer-events-auto">
+        <div className="flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-100 pointer-events-auto">
           <Loader2 className="animate-spin" size={45} />
         </div>
       )}
