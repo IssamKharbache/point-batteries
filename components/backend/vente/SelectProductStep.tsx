@@ -23,7 +23,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     useState<ProductData[]>(productsVente);
-  const [discount, setDiscount] = useState(""); // Discount state for global discount
 
   const { currentStep, setCurrentStep, setProductsToSubmit } =
     useStepFormStore();

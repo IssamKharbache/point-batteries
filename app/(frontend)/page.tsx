@@ -9,6 +9,7 @@ import FetchBookmarks from "@/lib/utils/FetchBookmarks";
 import DynamicProductList from "@/components/frontend/products/DynamicProductList";
 import DynamicCategoryProducts from "@/components/frontend/products/DynamicCategoryProducts";
 import BrandsShop from "@/components/backend/UI/BrandsShop";
+import WhatsAppPopup from "@/components/frontend/UI/WhatsAppPopup";
 
 const frontHomePage = async () => {
   const banner = await getData("/banner");
@@ -33,10 +34,7 @@ const frontHomePage = async () => {
         <DynamicProductList initialProducts={products} />
         {/* category products */}
         <DynamicCategoryProducts initialCategorieData={categoryData} />
-        {/* SpecialAndDemandingProducts */}
-        {/* <div>
-          <SpecialAndDemandingProducts product={products} />
-        </div> */}
+        <WhatsAppPopup />
       </div>
     </div>
   );
