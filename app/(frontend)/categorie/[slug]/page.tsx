@@ -110,8 +110,6 @@ const Page = async ({ params, searchParams }: Props) => {
           />
         </div>
       </div>
-
-      <SimilarProcuts />
     </section>
   );
 };

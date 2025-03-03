@@ -95,7 +95,7 @@ const CategoryProducts = ({
             alt="Icon"
             width={500}
             height={500}
-            className="w-40 self-center"
+            className="w-40 self-center "
             loading="eager"
           />
           <p className="text-center font-semibold text-xl mt-6 text-gray-500">
@@ -123,9 +123,9 @@ const CategoryProducts = ({
                   alt="image du produit"
                   width={500}
                   height={500}
-                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-cover mb-12 h-40 w-40  "
+                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12 h-72 w-full"
                 />
-                <h1 className="line-clamp-2 w-48 font-semibold uppercase">
+                <h1 className="line-clamp-2 font-semibold uppercase text-start md:text-center mb-4 text-sm">
                   {product.title}
                 </h1>
               </Link>

@@ -122,9 +122,9 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
                   alt="image du produit"
                   width={500}
                   height={500}
-                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-cover mb-12 h-40 w-40  "
+                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12 h-40 w-full "
                 />
-                <h1 className="line-clamp-2 w-48 font-semibold uppercase">
+                <h1 className="line-clamp-2  font-semibold uppercase ">
                   {product.title}
                 </h1>
               </Link>

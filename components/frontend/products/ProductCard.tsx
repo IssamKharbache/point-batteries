@@ -92,7 +92,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                     alt="image du produit"
                     width={700}
                     height={700}
-                    className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12 h-52"
+                    className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12 h-52 w-full"
                     sizes="(max-width: 768px) 100vw, 500px"
                     priority
                     blurDataURL="data:image/svg+xml;base64,..."
