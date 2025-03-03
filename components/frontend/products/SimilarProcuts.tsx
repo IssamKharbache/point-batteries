@@ -18,7 +18,7 @@ const SimilarProcuts = () => {
 
   return (
     <div className="m-8 xl:m-0">
-      <SectionHeader header="Meilleures Ventes" />
+      <SectionHeader header="Produits similaire" />
       <ProductCard productsData={products} />
     </div>
   );

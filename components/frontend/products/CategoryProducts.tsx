@@ -107,7 +107,7 @@ const CategoryProducts = ({
         </div>
       )}
       {/* Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 x gap-6">
         {loading && (
           <div className="flex items-center justify-center h-[500px] w-[500px]">
             <Loader2 className="animate-spin" size={45} />

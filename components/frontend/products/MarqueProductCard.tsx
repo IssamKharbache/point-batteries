@@ -78,16 +78,13 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
       <h1 className="p-2 bg-slate-200 rounded text-center font-semibold mb-8 capitalize text-3xl">
         {marque}
       </h1>
-      {loadingStore && (
-        <div className="flex items-center justify-center ">
-          <Loader2 className="animate-spin" size={45} />
-        </div>
-      )}
-      {loading && (
-        <div className="flex items-center justify-center">
-          <Loader2 className="animate-spin" size={45} />
-        </div>
-      )}
+      {loadingStore ||
+        (loading && (
+          <div className="flex items-center justify-center ">
+            <Loader2 className="animate-spin" size={45} />
+          </div>
+        ))}
+
       {!loading && !loadingStore && productsState.length === 0 && (
         <div className="flex flex-col gap-8  items-center">
           <Image
@@ -106,12 +103,13 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
           </Link>
         </div>
       )}
+      {loadingStore && (
+        <div className="flex items-center justify-center ">
+          <Loader2 className="animate-spin" size={45} />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {loading && (
-          <div className="flex items-center justify-center">
-            <Loader2 className="animate-spin" size={45} />
-          </div>
-        )}
         {!loading &&
           !loadingStore &&
           productsState.map((product) => (
@@ -161,7 +159,7 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
       </div>
 
       <div>
-        {!loading && productsState.length !== 0 && (
+        {!loading && !loadingStore && productsState.length !== 0 ? (
           <div className="mt-8 mb-8">
             <PaginationWithFilters
               count={resultLength}
@@ -169,7 +167,7 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
               pageSize={pageSize}
             />
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
