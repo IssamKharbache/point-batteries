@@ -7,6 +7,8 @@ import { AuthProvider } from "@/providers/Providers";
 import Footer from "@/components/frontend/footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 const montSerrat = Montserrat({
   weight: ["100", "300", "400", "700", "900"],
@@ -45,11 +47,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FrontLayout({
+export default async function FrontLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${montSerrat.className} antialiased `}>
@@ -60,7 +63,7 @@ export default function FrontLayout({
           <main className="flex-grow min-h-[650px] bg-gray-50 flex flex-col">
             {children}
           </main>
-          <Footer />
+          <Footer username={session?.user.identifiant || ""} />
         </AuthProvider>
       </body>
     </html>

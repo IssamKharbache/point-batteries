@@ -1,15 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-
-const Footer = () => {
+interface FooterProps {
+  username: string;
+}
+const Footer = ({ username }: FooterProps) => {
   const currentTime = new Date();
   const year = currentTime.getFullYear();
   return (
     <section className="min-h-[430px] py-10 bg-black sm:pt-16 lg:pt-24 relative ">
-      <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-6 gap-y-16 gap-x-12">
-          <div className="col-span-2 md:col-span-3 lg:col-span-2 lg:pr-8">
+      <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-[1500px]">
+        <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="">
             <Image
               src="/logopbslight.png"
               alt="Logo"
@@ -30,7 +32,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase">
+            <p className="text-sm font-semibold tracking-widest text-white uppercase">
               Notre Société
             </p>
 
@@ -40,36 +42,83 @@ const Footer = () => {
                 <Link
                   href="#"
                   title=""
-                  className="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                  className="flex  text-gray-400 hover:text-white transition-all duration-200 font-semibold "
                 >
-                  About
+                  Qui sommes nous
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase">
-              Contactez-nous
-            </p>
-
-            <p className="text-sm font-semibold tracking-widest text-gray-400">
-              Bonjour, nous sommes toujours ouverts à la coopération et aux
-              suggestions, contactez-nous de l'une des manières ci-dessous:
-            </p>
-
-            <ul className="mt-6 space-y-4">
               <li>
                 <Link
                   href="#"
                   title=""
-                  className="flex text-base text-white transition-all duration-200 600"
+                  className="flex  text-gray-400 hover:text-white transition-all duration-200 font-semibold "
                 >
-                  {" "}
-                  Customer Support{" "}
+                  Nos Marques
                 </Link>
               </li>
             </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold tracking-widest text-white uppercase">
+              Mon Compte
+            </p>
+
+            <ul className="mt-6 space-y-4">
+              {/* links */}
+              <li>
+                <Link
+                  href={`/mon-compte/${username}`}
+                  title=""
+                  className="flex  text-gray-400 hover:text-white transition-all duration-200 font-semibold "
+                >
+                  Votre compte
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/mes-commandes"
+                  title=""
+                  className="flex  text-gray-400 hover:text-white transition-all duration-200 font-semibold "
+                >
+                  Historique de mes commandes
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold tracking-widest text-white uppercase">
+              Contactez-nous
+            </p>
+
+            <p className="text-sm  tracking-widest text-gray-400 mt-6 ">
+              Bonjour, nous sommes toujours ouverts à la coopération et aux
+              suggestions, contactez-nous de l'une des manières ci-dessous:
+            </p>
+
+            <div className="flex justify-between mt-8 text-sm font-semibold">
+              {/* left part */}
+              <div className="flex flex-col space-y-8">
+                <div className="text-white">
+                  <p className="text-gray-400">Numéro de Téléphone</p>
+                  <p className="text-white">
+                    +212 656 307 044 / +212 531 510 011
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-400">Notre Adresse</p>
+                  <p className="text-white">
+                    131. Av Hafid Ibn Abdel bar B 94.R Lots Azahra N13 Souani
+                    Tanger
+                  </p>
+                </div>
+                <div className="flex flex-col space-y-8">
+                  <div>
+                    <p className="text-gray-400">Horaires de Travail</p>
+                    <p className="text-white">Lun-Sam 09:00 - 20:00</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
