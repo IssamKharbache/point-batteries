@@ -12,6 +12,7 @@ import {
   GalleryVertical,
   Layers,
   LayoutDashboard,
+  Notebook,
   Package,
   Package2,
   ShoppingBasket,
@@ -53,15 +54,9 @@ const SideBar = () => {
   if (session.user.role === "ADMIN" || session.user.role === "STAFF") {
     sideBarMenu.push(
       {
-        name: "Client",
-        href: "/dashboard/client",
-        icon: Users,
-        isMainAdmin: false,
-      },
-      {
-        name: "Commande",
-        href: "/dashboard/commandes",
-        icon: Package2,
+        name: "Catégorie",
+        href: "/dashboard/categorie",
+        icon: Layers,
         isMainAdmin: false,
       },
       {
@@ -76,10 +71,17 @@ const SideBar = () => {
         icon: UsersRound,
         isMainAdmin: true,
       },
+
       {
-        name: "Catégorie",
-        href: "/dashboard/categorie",
-        icon: Layers,
+        name: "Client",
+        href: "/dashboard/client",
+        icon: Users,
+        isMainAdmin: false,
+      },
+      {
+        name: "Commande",
+        href: "/dashboard/commandes",
+        icon: Package2,
         isMainAdmin: false,
       },
 
@@ -89,12 +91,7 @@ const SideBar = () => {
         icon: GalleryVertical,
         isMainAdmin: true,
       },
-      {
-        name: "Vente",
-        href: "/dashboard/vente",
-        icon: FaCashRegister,
-        isMainAdmin: false,
-      },
+
       {
         name: "Boutique",
         href: "/",
@@ -164,6 +161,37 @@ const SideBar = () => {
                 >
                   <Package size={18} />
                   Les produits achat
+                </Link>
+              </CollapsibleContent>
+            </Collapsible>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
+                <div className="flex items-center gap-4">
+                  <FaCashRegister />
+                  <span>Vente</span>
+                </div>
+                <ChevronDown />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5">
+                <Link
+                  className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-md duration-200 ${
+                    "/dashboard/vente" === path ? "text-blue-400" : ""
+                  }`}
+                  href="/dashboard/vente"
+                >
+                  <FaCashRegister size={18} />
+                  Les Ventes
+                </Link>
+                <Link
+                  className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-sm duration-200 ${
+                    "/dashboard/vente/journal-ventes" === path
+                      ? "text-blue-400"
+                      : ""
+                  }`}
+                  href="/dashboard/vente/journal-ventes"
+                >
+                  <Notebook size={18} />
+                  Journal des ventes
                 </Link>
               </CollapsibleContent>
             </Collapsible>

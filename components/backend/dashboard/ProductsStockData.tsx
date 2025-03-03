@@ -72,8 +72,8 @@ const ProductsStockData = () => {
           <TableBody>
             {products.length > 0 ? (
               products.map((product, idx) => (
-                <TableRow key={idx}>
-                  <TableCell className="font-medium p-2">
+                <TableRow key={idx} className="border-b">
+                  <TableCell className="font-medium p-5 ">
                     {product.designationProduit}
                   </TableCell>
                   <TableCell>{product.stock}</TableCell>

@@ -22,23 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Filter,
-  Loader2,
-} from "lucide-react";
+import { Filter, Loader2 } from "lucide-react";
 import { useLoadingStore } from "@/context/store";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 interface DataTableProps<TData> {

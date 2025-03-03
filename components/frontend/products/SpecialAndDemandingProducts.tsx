@@ -27,24 +27,24 @@ const SpecialAndDemandingProducts = ({
         {specialOfferProducts.slice(0, 3).map((product, idx) => (
           <div
             key={idx}
-            className="flex flex-col p-10 text-center md:text-start md:p-2 md:flex-row md:items-center bg-white m-4"
+            className="flex flex-col p-10 text-center md:text-start md:p-2 md:flex-row md:items-center bg-white m-4 justify-center"
           >
             {/* image */}
-            <Link href={`/produit/${product.slug}`}>
-              <div className="w-32">
+            <Link href={`/produit/${product.slug}`} className="w-80">
+              <div className="w-52 h-60">
                 <Image
                   src={product.imageUrl || ""}
                   alt="Image produit"
                   width={500}
                   height={500}
-                  className="w-full h-52  object-contain "
+                  className="object-contain w-full h-full"
                 />
               </div>
             </Link>
 
             <div className="space-y-4 mr-8">
               <Link href={`/produit/${product.slug}`}>
-                <h1 className="font-semibold text-md line-clamp-2 uppercase ">
+                <h1 className="font-semibold text-md line-clamp-2 uppercase text-center ">
                   {product.title}
                 </h1>
               </Link>

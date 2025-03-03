@@ -6,7 +6,6 @@ import { CategorieData } from "../(backend)/dashboard/produit/ajouter/page";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import FetchBookmarks from "@/lib/utils/FetchBookmarks";
-import SpecialAndDemandingProducts from "@/components/frontend/products/SpecialAndDemandingProducts";
 import DynamicProductList from "@/components/frontend/products/DynamicProductList";
 import DynamicCategoryProducts from "@/components/frontend/products/DynamicCategoryProducts";
 import BrandsShop from "@/components/backend/UI/BrandsShop";
@@ -35,9 +34,9 @@ const frontHomePage = async () => {
         {/* category products */}
         <DynamicCategoryProducts initialCategorieData={categoryData} />
         {/* SpecialAndDemandingProducts */}
-        <div>
+        {/* <div>
           <SpecialAndDemandingProducts product={products} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
