@@ -9,7 +9,7 @@ const BrandsShop = () => {
       <SectionHeader header="Nos Marque" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  mt-8">
         {/* Bosch */}
-        <div className="bg-yellow-300 p-4 flex justify-center">
+        <div className="bg-yellow-300 opacity-70 p-4 flex justify-center hover:opacity-100 duration-200">
           <Link href="/produits/marque/bosch">
             <Image
               width={500}
@@ -22,7 +22,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Exide */}
-        <div className="bg-purple-300 p-4 flex justify-center">
+        <div className="bg-purple-300 p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/exide">
             <Image
               width={500}
@@ -35,7 +35,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Leoch */}
-        <div className="bg-blue-300 p-4 flex justify-center">
+        <div className="bg-blue-300 p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/leoch">
             <Image
               width={500}
@@ -48,7 +48,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Varta */}
-        <div className="bg-purple-200 p-4 flex justify-center">
+        <div className="bg-purple-200 p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/varta">
             <Image
               width={500}
@@ -61,7 +61,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Amaron */}
-        <div className="bg-white p-4 flex justify-center">
+        <div className="bg-white p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/amaron">
             <Image
               width={500}
@@ -74,7 +74,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Fiamm */}
-        <div className="bg-black p-4 flex justify-center">
+        <div className="bg-black p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/fiamm">
             <Image
               width={500}
@@ -87,7 +87,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Banner */}
-        <div className="bg-white p-4 flex justify-center">
+        <div className="bg-white p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/banner">
             <Image
               width={500}
@@ -100,7 +100,7 @@ const BrandsShop = () => {
         </div>
 
         {/* AD */}
-        <div className="bg-[#131343] p-4 flex justify-center">
+        <div className="bg-[#131343] p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/ad">
             <Image
               width={500}
@@ -113,7 +113,7 @@ const BrandsShop = () => {
         </div>
 
         {/* Almabat */}
-        <div className="bg-red-400 p-4 flex justify-center">
+        <div className="bg-red-400 p-4 flex justify-center opacity-75 hover:opacity-100 duration-200">
           <Link href="/produits/marque/almabat">
             <Image
               width={500}
