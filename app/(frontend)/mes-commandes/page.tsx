@@ -17,7 +17,7 @@ const MesCommandes = async () => {
   const orders = await getData(`/order/${session?.user.id}`);
 
   return (
-    <section className="mx-auto max-w-[1200px]">
+    <section className="max-w-[1200px] mx-auto px-10 md:px-5 2xl:p-0">
       <BreadcrumbComponent
         links={[{ name: "Mes Commandes", href: "/mes-commandes" }]}
       />

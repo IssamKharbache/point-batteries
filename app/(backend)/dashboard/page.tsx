@@ -1,15 +1,20 @@
 export const dynamic = "force-dynamic";
 
 import OrdersStats from "@/components/backend/dashboard/OrdersStats";
+import ProductsStockData from "@/components/backend/dashboard/ProductsStockData";
 import Statistics from "@/components/backend/dashboard/Statistics";
+import { ProductData } from "@/components/backend/table/TableActions";
 import { authOptions } from "@/lib/authOptions";
 import { getData } from "@/lib/getData";
-import { Order, User, OrderItem } from "@prisma/client";
+import { Order, User, OrderItem, VenteProduct, Vente } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import React from "react";
 
 interface OrderWithItems extends Order {
   orderItems: OrderItem[];
+}
+interface VenteWithProducts extends Vente {
+  products: VenteProduct[];
 }
 
 const MainPage = async () => {
@@ -30,15 +35,35 @@ const MainPage = async () => {
   const delivredOrders = orders.filter(
     (order) => order.orderStatus === "EXPEDIE"
   );
+  //products
+  const products = await getData("/product");
+  const filteredProducts = products.filter(
+    (product: ProductData) => !product.isAchatProduct
+  );
 
-  //total revenue
-  const totalRevenue = delivredOrders.reduce((acc, order) => {
+  // Fetching ventes
+  const ventes: VenteWithProducts[] = await getData("/vente");
+
+  // Calculate total revenue from orders
+  const orderRevenue = delivredOrders.reduce((acc, order) => {
     const orderTotal = order.orderItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
     return acc + orderTotal;
   }, 0);
+
+  // Calculate total revenue from ventes
+  const venteRevenue = ventes.reduce((acc, vente) => {
+    const venteTotal = vente.products.reduce(
+      (sum, product) => sum + (product.price ?? 0) * product.qty,
+      0
+    );
+    return acc + venteTotal;
+  }, 0);
+
+  // Final total revenue
+  const totalRevenue = orderRevenue + venteRevenue;
   if (session?.user.role === "CAISSIER") {
     return (
       <div>
@@ -60,6 +85,7 @@ const MainPage = async () => {
         total={totalRevenue}
       />
       <OrdersStats orders={orders} />
+      <ProductsStockData />
     </div>
   );
 };

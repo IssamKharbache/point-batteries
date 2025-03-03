@@ -33,25 +33,14 @@ export const columns: ColumnDef<VenteType>[] = [
     header: "Ref vente",
   },
   {
-    accessorKey: "userId",
+    accessorKey: "nomDuCaissier",
     header: "Nom du caissier",
-
-    cell: ({ row, table }) => {
-      const data = table.getRowModel().rows.map((r) => r.original);
-      return (
-        <UserCreatingVente currentUserId={row.original.userId} rowData={data} />
-      );
-    },
   },
   {
     accessorKey: "clientNom",
     header: "Nom du client",
   },
 
-  {
-    accessorKey: "clientCin",
-    header: "CIN du client",
-  },
   {
     accessorKey: "products",
     header: "Montant",

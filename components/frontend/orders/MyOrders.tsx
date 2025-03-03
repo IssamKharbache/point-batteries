@@ -29,14 +29,14 @@ const MyOrders = ({ order }: OrderProps) => {
           orderItems.map((orderItem, idx) => (
             <div key={orderItem.id}>
               <div className="flex space-y-4 justify-between  gap-2">
-                <div className="flex gap-12 items-center ">
-                  <div>
+                <div className="flex flex-col md:flex-row gap-12 items-center ">
+                  <div className=" w-32">
                     <Image
                       src={orderItem.imageUrl || ""}
                       alt="produit"
                       width={500}
                       height={500}
-                      className="w-10 m-4 rounded-full"
+                      className="flex items-center justify-center m-4 rounded-full"
                     />
                   </div>
                   <div className="flex flex-col md:flex-row gap-4 md:items-center">

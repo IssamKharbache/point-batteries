@@ -204,8 +204,8 @@ export function DataTable<TData>({
           <TableHeader>
             <TableRow className="py-4 px-4">
               <TableHead>Ref vente</TableHead>
-              <TableHead>CIN du client</TableHead>
-              <TableHead>Montent</TableHead>
+              <TableHead>Servi par</TableHead>
+              <TableHead>Client</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -218,8 +218,11 @@ export function DataTable<TData>({
                   <TableCell className="py-4 px-4" key="venteRef">
                     {row.getValue("venteRef")}
                   </TableCell>
-                  <TableCell className="py-4 px-4" key="clientCin">
-                    {row.getValue("clientCin")}
+                  <TableCell className="py-4 px-4" key="nomDuCaissier">
+                    {row.getValue("nomDuCaissier")}
+                  </TableCell>
+                  <TableCell className="py-4 px-4" key="clientNom">
+                    {row.getValue("clientNom")}
                   </TableCell>
                 </TableRow>
               ))

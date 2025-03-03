@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, Product } from "@prisma/client";
 import db from "@/lib/db";
 import { generateUniqueVenteRef } from "@/lib/utils/index";
 
 type CreateVenteProduct = {
   productId: string;
   qty: number;
+  price: number;
+  designationProduit: string;
+  discount: number;
 };
 
 export const POST = async (req: NextRequest) => {
@@ -17,7 +19,6 @@ export const POST = async (req: NextRequest) => {
       paymentType,
       clientNom,
       clientPrenom,
-
       clientTel,
     } = await req.json();
 
@@ -82,23 +83,38 @@ export const POST = async (req: NextRequest) => {
     // Generate a unique vente reference
     const venteRef = await generateUniqueVenteRef();
 
-    // Create the vente and link products
-    const newVente = await db.vente.create({
-      data: {
-        userId,
-        clientNom,
-        clientPrenom,
-        venteRef,
-        paymentType,
-        clientTel,
-        nomDuCaissier,
-        products: {
-          create: productsData,
+    // Create the vente and link products, then update stock & vente count
+    const newVente = await db.$transaction(async (prisma) => {
+      const createdVente = await prisma.vente.create({
+        data: {
+          userId,
+          clientNom,
+          clientPrenom,
+          venteRef,
+          paymentType,
+          clientTel,
+          nomDuCaissier,
+          products: {
+            create: productsData,
+          },
         },
-      },
-      include: {
-        products: true,
-      },
+        include: {
+          products: true,
+        },
+      });
+
+      // Update product stock and vente count
+      for (const item of productsData) {
+        await prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: { decrement: item.qty },
+            vente: { increment: item.qty },
+          },
+        });
+      }
+
+      return createdVente;
     });
 
     return NextResponse.json(

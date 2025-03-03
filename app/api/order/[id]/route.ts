@@ -74,10 +74,28 @@ export const PUT = async (
         orderStatus: status,
       },
     });
+
+    // If status is updated to "confirmed", update stock and sales
+    if (status === "EXPEDIE") {
+      const orderItems = await db.orderItem.findMany({
+        where: { orderId: id },
+      });
+
+      for (const item of orderItems) {
+        await db.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: { decrement: item.quantity },
+            vente: { increment: item.quantity },
+          },
+        });
+      }
+    }
+
     return NextResponse.json(
       {
         data: updateOrder,
-        message: "Commande status modifier avec success",
+        message: "Commande status modifié avec succès",
       },
       {
         status: 201,
@@ -89,7 +107,7 @@ export const PUT = async (
     return NextResponse.json(
       {
         message:
-          "Erreur pendant la modification du status du produit, veuillez essayer apres.",
+          "Erreur pendant la modification du status du produit, veuillez essayer après.",
         error,
       },
       { status: 500 }
