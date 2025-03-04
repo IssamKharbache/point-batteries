@@ -115,3 +115,13 @@ export const addClientVenteSchema = z.object({
     .max(10, "Numero de telephone est invalide")
     .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
 });
+
+export const addClientRepSchema = z.object({
+  nom: z.string().min(1, "Nom est obligatoire"),
+  prenom: z.string().min(1, "Prenom est obligatoire"),
+  tel: z
+    .string() // it's generally better to handle phone numbers as strings because of formatting
+    .min(10, "Numero de telephone est invalide")
+    .max(10, "Numero de telephone est invalide") // Check if it’s at least 9 digits
+    .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
+});

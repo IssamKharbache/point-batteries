@@ -19,6 +19,7 @@ import {
   Store,
   Users,
   UsersRound,
+  Contact,
 } from "lucide-react";
 import { FaCashRegister } from "react-icons/fa6";
 import {
@@ -69,6 +70,12 @@ const SideBar = () => {
         name: "Notre staff",
         href: "/dashboard/notre-staff",
         icon: UsersRound,
+        isMainAdmin: true,
+      },
+      {
+        name: "Client Repititive",
+        href: "/dashboard/client-rep",
+        icon: Contact,
         isMainAdmin: true,
       },
 
@@ -123,9 +130,9 @@ const SideBar = () => {
         {session?.user?.role === "ADMIN" || session?.user?.role === "STAFF" ? (
           <>
             <Link
-              className={`flex items-center gap-4 w-full py-4 px-8 ${
+              className={`flex items-center gap-4 w-full py-4 px-8 hover:bg-slate-800${
                 "/dashboard" === path
-                  ? "bg-slate-800 border-l-8 duration-300"
+                  ? "bg-slate-800 border-l-8  hover:bg-slate-700 duration-300"
                   : ""
               }`}
               href="/dashboard"

@@ -83,7 +83,6 @@ const AjouterCategorieForm = ({ categoryData }: AjouterCategorieFormProps) => {
           ...data,
           slug,
         });
-        console.log(res);
         if (res.status === 201) {
           setLoading(false);
           toast({

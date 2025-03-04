@@ -23,6 +23,9 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     useState<ProductData[]>(productsVente);
+  const [validationErrors, setValidationErrors] = useState<{
+    [refProduct: string]: string;
+  }>({});
 
   const { currentStep, setCurrentStep, setProductsToSubmit } =
     useStepFormStore();
@@ -36,19 +39,26 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     }
   }, []);
 
-  // useEffect to filter products based on search input
   useEffect(() => {
     setFilteredProducts(
       productsVente.filter(
         (product) =>
-          product.refProduct &&
-          product.refProduct.toLowerCase().includes(search.toLowerCase())
+          product.stock &&
+          product.stock > 0 &&
+          ((product.refProduct &&
+            product.refProduct.toLowerCase().includes(search.toLowerCase())) ||
+            product.designationProduit
+              ?.toLocaleLowerCase()
+              .includes(search.toLowerCase()))
       )
     );
   }, [search, productsVente]);
 
   // Handle selecting or deselecting a product
   const handleSelectedProduct = (refProduct: string) => {
+    const product = productsVente.find((p) => p.refProduct === refProduct);
+    if (product && product.stock === 0) return;
+
     setProductsSelected((prev) => {
       const prevProduct = prev[refProduct];
       const newSelection = prevProduct
@@ -75,6 +85,27 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   ) => {
     if (!refProduct) return;
 
+    // Get the product details to check the stock
+    const product = productsVente.find((p) => p.refProduct === refProduct);
+
+    // If field is 'quantity' and exceeds stock, show error message
+    if (field === "quantity" && product) {
+      const quantity = parseInt(value);
+      if (product.stock && quantity > product.stock) {
+        setValidationErrors((prev) => ({
+          ...prev,
+          [refProduct]: `La quantité ne peut pas dépasser le stock disponible (${product.stock}).`,
+        }));
+        return;
+      } else {
+        setValidationErrors((prev) => ({
+          ...prev,
+          [refProduct]: "", // Clear error if valid
+        }));
+      }
+    }
+
+    // Continue with normal input update
     setProductsSelected((prev) => {
       const updatedSelection = {
         ...prev,
@@ -109,6 +140,28 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   };
 
   const submit = () => {
+    let hasErrors = false;
+    const newValidationErrors: { [refProduct: string]: string } = {};
+
+    // Check if the quantity exceeds stock for any product
+    Object.entries(productSelected).forEach(([refProduct, { quantity }]) => {
+      const product = productsVente.find((p) => p.refProduct === refProduct);
+      if (product?.stock && parseInt(quantity) > product.stock) {
+        newValidationErrors[
+          refProduct
+        ] = `La quantité ne peut pas dépasser le stock disponible (${product.stock}).`;
+        hasErrors = true;
+      }
+    });
+
+    if (hasErrors) {
+      setValidationErrors((prev) => ({
+        ...prev,
+        ...newValidationErrors,
+      }));
+      return; // Prevent form submission if errors exist
+    }
+
     const zeroQuantityProducts = Object.entries(productSelected).filter(
       ([, { quantity }]) => parseInt(quantity) === 0
     );
@@ -170,7 +223,16 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     // Update the store with productsToSubmit that includes discount
     setProductsToSubmit(productsToSubmit);
 
-    handleNext();
+    const isAnyProductSelected = Object.keys(productSelected).length > 0;
+    if (isAnyProductSelected) {
+      handleNext();
+    } else {
+      toast({
+        title: "Erreur",
+        description: "Veuillez  sélectionner un produit au minimum.",
+        variant: "error",
+      });
+    }
   };
 
   // Calculate the discounted price
@@ -188,12 +250,12 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         {/* Right Side: Available Products */}
         <div className=" bg-white p-8 rounded-md border-2 w-full shadow-lg md:w-[50%] ">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-5">
-            <h1 className="text-xl font-semibold text-gray-600 mb-4">
+            <h1 className="text-xl font-semibold text-gray-600 ">
               Produits Disponibles
             </h1>
             <Input
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Chercher par référence..."
+              placeholder="Chercher par référence our designation..."
               className="max-w-sm px-4 border border-gray-300 rounded-md focus:ring-[1px] focus:ring-primary"
             />
           </div>
@@ -214,7 +276,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                 onClick={() => handleSelectedProduct(product.refProduct || "")}
               >
                 <div className="space-y-4">
-                  <h1 className="font-semibold text-gray-700 text-xs md:text-md">
+                  <h1 className="font-semibold text-gray-700 text-xs md:text-md uppercase">
                     {product.designationProduit}
                   </h1>
                 </div>
@@ -246,7 +308,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                         className="flex gap-4 bg-slate-100 m-4 rounded-lg p-5 shadow-md"
                       >
                         <div className="flex flex-col gap-2">
-                          <h1 className="font-semibold text-gray-700 text-sm md:text-md ">
+                          <h1 className="font-semibold text-gray-700 text-sm md:text-md uppercase ">
                             {product.designationProduit}
                           </h1>
 
@@ -256,6 +318,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               className="px-4 bg-white w-full md:w-52 border-2 border-gray-300 rounded-md h-8 md:h-12 "
                               type="number"
                               min={0}
+                              max={product.stock || 0}
                               value={quantity}
                               onClick={(e) => e.stopPropagation()}
                               onChange={(e) =>
@@ -265,7 +328,13 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                                   e.target.value
                                 )
                               }
+                              disabled={product.stock === 0} // Disable input if stock is 0
                             />
+                            {validationErrors[refProduct] && (
+                              <div className="text-red-500 text-sm mt-1">
+                                {validationErrors[refProduct]}
+                              </div>
+                            )}
                           </div>
 
                           <div>
@@ -295,19 +364,18 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center items-center gap-10">
-        <Button disabled={currentStep === 1} onClick={handlePrevious}>
-          <ChevronLeft />
-          <span>Précédent</span>
-        </Button>
+      <div className="flex justify-between items-center mt-4">
         <Button
-          disabled={Object.values(productSelected).every(
-            (product) => !product.selected
-          )}
-          onClick={submit}
+          variant="outline"
+          className="w-full md:w-32"
+          onClick={handlePrevious}
         >
-          <span>Suivant</span>
-          <ChevronRight />
+          <ChevronLeft size={18} />
+          Précédent
+        </Button>
+        <Button className="w-full md:w-32" onClick={submit}>
+          Valider
+          <ChevronRight size={18} />
         </Button>
       </div>
     </div>

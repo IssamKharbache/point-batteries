@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -18,23 +19,45 @@ import {
 } from "@/components/ui/select";
 import { useStepFormStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
+import { getData } from "@/lib/getData";
 import { addClientVenteSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CompanyClient } from "@prisma/client";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const ClientInfo = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [value, setValue] = useState("ESPECE");
+  const [companyClient, setCompanyClients] = useState<CompanyClient[]>([]);
+  const [isChoosingFromClient, setIsChoosingFromClient] =
+    useState<boolean>(false);
+  const [selectedClient, setSelectedClient] = useState<CompanyClient | null>(
+    null
+  );
+
+  useEffect(() => {
+    const fetchCompanyClient = async () => {
+      try {
+        const companyClients = await getData("/user/companyClient");
+        setCompanyClients(companyClients);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCompanyClient();
+  }, []);
+
   const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user.id;
   const nomDuCaissier = session?.user.nom;
+
   const form = useForm<z.infer<typeof addClientVenteSchema>>({
     resolver: zodResolver(addClientVenteSchema),
     defaultValues: {
@@ -43,6 +66,7 @@ const ClientInfo = () => {
       clientTel: "",
     },
   });
+
   const { toast } = useToast();
   const { currentStep, setCurrentStep, productsToSubmit } = useStepFormStore();
 
@@ -60,8 +84,20 @@ const ClientInfo = () => {
     }
     form.reset();
   };
+
   const onChange = (selectedValue: "ESPECE" | "CHECK" | "VIREMENT") => {
     setValue(selectedValue);
+  };
+
+  const handleSelectClient = (clientId: string) => {
+    const selected = companyClient.find((client) => client.id === clientId);
+    if (selected) {
+      setSelectedClient(selected);
+      // Fill the form with selected client data
+      form.setValue("clientNom", selected.nom);
+      form.setValue("clientPrenom", selected.prenom);
+      form.setValue("clientTel", selected.tel);
+    }
   };
 
   const handleSubmit = async (data: z.infer<typeof addClientVenteSchema>) => {
@@ -121,6 +157,7 @@ const ClientInfo = () => {
                         className="mt-2 px-4"
                         placeholder="Nom du client"
                         {...field}
+                        disabled={isChoosingFromClient} // Disable input when selecting client
                       />
                     </FormControl>
                     <FormMessage />
@@ -141,6 +178,7 @@ const ClientInfo = () => {
                         className="mt-2 px-4"
                         placeholder="Prenom du client"
                         {...field}
+                        disabled={isChoosingFromClient} // Disable input when selecting client
                       />
                     </FormControl>
                     <FormMessage />
@@ -161,6 +199,7 @@ const ClientInfo = () => {
                         className="mt-2 px-4"
                         placeholder="Telephone du client"
                         {...field}
+                        disabled={isChoosingFromClient} // Disable input when selecting client
                       />
                     </FormControl>
                     <FormMessage />
@@ -168,16 +207,46 @@ const ClientInfo = () => {
                 );
               }}
             />
-            <Select onValueChange={onChange} value={value}>
-              <SelectTrigger className="w-[100px] md:w-[150px] ">
-                <SelectValue placeholder={"Espece"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ESPECE">Espece</SelectItem>
-                <SelectItem value="CHECK">Check</SelectItem>
-                <SelectItem value="VIREMENT">Virement</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-12 items-center">
+              <div>
+                <Label>Mode de paiment</Label>
+                <Select onValueChange={onChange} value={value}>
+                  <SelectTrigger className="w-[100px] md:w-[150px] ">
+                    <SelectValue placeholder={"Espece"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ESPECE">Espece</SelectItem>
+                    <SelectItem value="CHECK">Check</SelectItem>
+                    <SelectItem value="VIREMENT">Virement</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                type="button"
+                onClick={() => setIsChoosingFromClient((prev) => !prev)}
+                className="mt-6"
+              >
+                Choisir parmi les clients enregistrés
+              </Button>
+
+              {isChoosingFromClient ? (
+                <div>
+                  <Label>Client enregistré</Label>
+                  <Select onValueChange={handleSelectClient}>
+                    <SelectTrigger className="w-[100px] md:w-[150px] ">
+                      <SelectValue placeholder={"Sélectionner un client"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {companyClient.map((client, idx) => (
+                        <SelectItem key={idx} value={client.id}>
+                          {client.nom} {client.prenom}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : null}
+            </div>
             {loading ? (
               <LoadingButton bgColor="bg-black" textColor="text-white" />
             ) : (

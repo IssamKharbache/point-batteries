@@ -28,14 +28,15 @@ import TableActions, {
 } from "@/components/backend/table/TableActions";
 import { useLoadingStore } from "@/context/store";
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
+import { CompanyClient } from "@prisma/client";
 
-interface DataTableProps<TData, UserData> {
-  columns: ColumnDef<TData, UserData>[];
+interface DataTableProps<TData, CompanyClient> {
+  columns: ColumnDef<TData, CompanyClient>[];
   data: TData[];
   name: string;
 }
 
-export function DataTable<TData extends UserData>({
+export function DataTable<TData extends CompanyClient>({
   columns,
   data,
   name,

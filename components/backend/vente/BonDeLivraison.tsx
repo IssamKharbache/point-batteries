@@ -3,7 +3,7 @@ import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Printer } from "lucide-react";
 import Image from "next/image";
 import qz from "qz-tray";
 
@@ -92,7 +92,10 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "--------------------------------------------\n",
         ...products.map(
           (product) =>
-            `${product.designationProduit.toUpperCase()}\n` + // Product name
+            `${product.designationProduit
+              .toUpperCase()
+              .replace(/batterie/gi, "")
+              .trim()}\n` + // Product name
             `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Qty & price
             `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total price aligned
             `Remise: ${product.discount?.toFixed(2)} DH\n`.padStart(40) + // Show Remise below price
@@ -148,8 +151,8 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               <span className="font-semibold">{rowData.venteRef}</span>
             </h1>
             <Button onClick={handlePrint} className="py-2 rounded text-sm">
-              <Download size={20} />
-              Télécharger
+              <Printer size={20} />
+              Imprimer
             </Button>
           </div>
 
@@ -230,6 +233,10 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
             {/* Show Total, Remise Totale, and Final Total */}
             <div className="total-section" style={{ marginTop: "10px" }}>
+              <div className="flex justify-between mt-1 font-bold">
+                <span>Mode:</span>
+                <span>{paymentType}</span>
+              </div>
               <div className="flex justify-between">
                 <span>Total:</span>
                 <span>{(overallTotal + totalRemise).toFixed(2)} DH</span>
@@ -249,7 +256,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               style={{ marginTop: "10px", textAlign: "center" }}
             >
               <p>Merci pour votre confiance!</p>
-              <p>Service après-vente: +212 600-000000</p>
+              <p>Service après-vente: Tel : 0656307044 Fix : 0531510011</p>
             </div>
           </div>
         </DialogContent>

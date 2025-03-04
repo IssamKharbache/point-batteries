@@ -16,7 +16,7 @@ const NavBar = () => {
       {/* informations navbar */}
       <div className="flex items-center justify-center gap-4 bg-black w-full text-center py-2 text-white text-lg">
         <FaPhoneAlt />
-        <p>+212531510011</p>
+        <p>+212 531 510 011</p>
       </div>
       {/* main navbar */}
       {status === "loading" ? (
