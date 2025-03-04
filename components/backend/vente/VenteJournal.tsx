@@ -117,10 +117,10 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
             <TableHead>Vendue par</TableHead>
           </TableRow>
         </TableHeader>
-        {filteredVentes.length > 0 ? (
-          filteredVentes.map((vente) => (
-            <TableBody className="border" key={vente.id}>
-              {vente.products.map((product, index) => (
+        <TableBody className="border">
+          {filteredVentes.length > 0 ? (
+            filteredVentes.map((vente) =>
+              vente.products.map((product, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium p-5 line-clamp-2">
                     {product.designationProduit}
@@ -129,16 +129,16 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
                   <TableCell>{product.price}</TableCell>
                   <TableCell>{vente.nomDuCaissier}</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={10} className="h-24 text-center">
-              Aucun résultat
-            </TableCell>
-          </TableRow>
-        )}
+              ))
+            )
+          ) : (
+            <TableRow>
+              <TableCell colSpan={10} className="h-24 text-center">
+                Aucun résultat
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
     </div>
   );
