@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const BrandsShop = () => {
   return (
-    <div>
+    <div className="mb-8">
       <SectionHeader header="Nos Marque" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  mt-8">
         {/* Bosch */}
