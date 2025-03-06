@@ -76,7 +76,7 @@ export const PUT = async (
     });
 
     // If status is updated to "confirmed", update stock and sales
-    if (status === "EXPEDIE") {
+    if (status === "CONFIRMER") {
       const orderItems = await db.orderItem.findMany({
         where: { orderId: id },
       });

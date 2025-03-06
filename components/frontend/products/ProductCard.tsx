@@ -11,6 +11,7 @@ import { useCartStore } from "@/context/store";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import BookmarkButton from "./BookmarkButton";
+import { Button } from "@/components/ui/button";
 
 export interface ProductsProps {
   productsData: ProductData[];
@@ -113,8 +114,17 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                   <button
                     onClick={() => {
                       toast({
-                        title: "Produit ajouter au panier",
+                        title: "Produit ajouté au panier",
                         variant: "success",
+                        description: `Produit a été ajouté au panier`,
+                        action: (
+                          <Link
+                            href="/mon-panier"
+                            className="bg-white py-2 rounded-lg px-4 text-center text-sm"
+                          >
+                            Mon Panier
+                          </Link>
+                        ),
                       });
                       addItem({
                         id: product.id,

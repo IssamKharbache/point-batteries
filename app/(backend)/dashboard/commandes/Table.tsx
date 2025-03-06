@@ -5,6 +5,7 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { getData } from "@/lib/getData";
 import { useLoadingStore, useOrderBackendStore } from "@/context/store";
+import axios from "axios";
 
 type TableData = {
   data: Order[];
@@ -17,15 +18,17 @@ const TableComponent = ({ data }: TableData) => {
 
   React.useEffect(() => {
     const refreshData = async () => {
-      setTimeout(() => {
+      try {
+        const res = await axios.get("/api/order");
+        setOrderData(res.data.data);
+        setIsRefresh(false);
         setLoading(false);
-      }, 500);
-      const data = await await getData("/order");
-      setOrderData(data);
-      setIsRefresh(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
     refreshData();
-  }, [isRefresh, setIsRefresh, setLoading]);
+  }, [isRefresh, setIsRefresh]);
   return (
     <div className="container mx-auto py-10">
       <DataTable columns={columns} data={orderData} name={"Commande"} />

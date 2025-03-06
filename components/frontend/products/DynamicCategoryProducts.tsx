@@ -21,7 +21,7 @@ const DynamicCategoryProducts = ({
     revalidateOnFocus: true,
   });
 
-  const filteredCatData = data?.filter((cat) => cat.products.length > 1);
+  const filteredCatData = data?.filter((cat) => cat.products.length >= 1);
 
   return (
     <div>

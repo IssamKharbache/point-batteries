@@ -23,27 +23,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Filter,
-  Loader2,
-  RefreshCw,
-} from "lucide-react";
+import { Filter, Loader2, RefreshCw } from "lucide-react";
 
 import { useLoadingStore, useOrderBackendStore } from "@/context/store";
 import { Order } from "@prisma/client";
 import OrderDetailsActions from "@/components/backend/dialog/OrderDetailsActions";
 import UpdateStatus from "@/components/backend/table/UpdateStatus";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 export interface DataTableProps<TData, Order> {
@@ -62,7 +48,7 @@ export function DataTable<TData extends Order>({
     []
   );
   //store state
-  const { setIsRefresh } = useOrderBackendStore();
+  const { setIsRefresh, isRefresh } = useOrderBackendStore();
   const { loading, setLoading } = useLoadingStore();
 
   const table = useReactTable({
@@ -111,7 +97,7 @@ export function DataTable<TData extends Order>({
             <Filter size={15} className="absolute text-gray-400 right-12" />
           </div>
         </div>
-        {loading ? (
+        {loading || isRefresh ? (
           <div className="flex items-center justify-center py-4 h-52">
             <Loader2 className="text-center animate-spin" />
           </div>
