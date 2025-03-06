@@ -94,3 +94,37 @@ export const generateUniqueVenteRef = async (): Promise<string> => {
 
   return venteRef;
 };
+
+export function formatFrenchDate(isoDate: Date) {
+  const days = [
+    "dimanche",
+    "lundi",
+    "mardi",
+    "mercredi",
+    "jeudi",
+    "vendredi",
+    "samedi",
+  ];
+  const months = [
+    "janvier",
+    "février",
+    "mars",
+    "avril",
+    "mai",
+    "juin",
+    "juillet",
+    "août",
+    "septembre",
+    "octobre",
+    "novembre",
+    "décembre",
+  ];
+
+  const date = new Date(isoDate);
+  const dayOfWeek = days[date.getDay()];
+  const dayOfMonth = String(date.getDate()).padStart(2, "0");
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${dayOfWeek} ${dayOfMonth} ${month} ${year}`;
+}

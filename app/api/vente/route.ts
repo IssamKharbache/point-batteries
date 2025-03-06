@@ -20,6 +20,8 @@ export const POST = async (req: NextRequest) => {
       clientNom,
       clientPrenom,
       clientTel,
+      generateFacture, // Add this field
+      factureCode, // Add this field
     } = await req.json();
 
     if (
@@ -94,6 +96,8 @@ export const POST = async (req: NextRequest) => {
           paymentType,
           clientTel,
           nomDuCaissier,
+          generateFacture, // Include generateFacture
+          factureCode: generateFacture ? factureCode : null, // Include factureCode if generateFacture is true
           products: {
             create: productsData,
           },

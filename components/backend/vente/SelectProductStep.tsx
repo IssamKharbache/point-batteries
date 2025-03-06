@@ -180,7 +180,8 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     const incompleteProducts = Object.entries(productSelected).filter(
       ([, { quantity }]) => !quantity
     );
-
+    console.log("Product Selected:", productSelected);
+    console.log("Zero Quantity Products:", zeroQuantityProducts);
     if (incompleteProducts.length > 0) {
       toast({
         title: "Erreur",

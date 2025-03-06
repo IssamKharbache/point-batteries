@@ -114,6 +114,7 @@ export const addClientVenteSchema = z.object({
     .min(10, "Numero de telephone est invalide")
     .max(10, "Numero de telephone est invalide")
     .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
+  generateFacture: z.boolean().default(false), // Add this field
 });
 
 export const addClientRepSchema = z.object({

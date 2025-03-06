@@ -2,8 +2,10 @@
 
 import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
 import { UserCreatingVente } from "@/components/backend/vente/UserCreatingVente";
+import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils/index";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 
 export interface VenteType {
   id: string;
@@ -16,6 +18,8 @@ export interface VenteType {
   clientCin: string;
   nomDuCaissier: string;
   products: VenteProduct[];
+  factureCode: string | null;
+  generateFacture: boolean;
   createdAt: Date;
   updatedAt: Date | null;
 }
@@ -79,6 +83,24 @@ export const columns: ColumnDef<VenteType>[] = [
     header: "Bon de livraison",
     cell: ({ row }) => {
       return <BonDeLivraison rowData={row.original} />;
+    },
+  },
+  {
+    id: "facture",
+    header: "Facture",
+    cell: ({ row }) => {
+      if (row.original.generateFacture) {
+        return (
+          <Link
+            className="bg-primary text-primary-foreground shadow hover:bg-primary/90"
+            href={`/dashboard/vente/facture/${row.original.factureCode}`}
+          >
+            <Button>Facture</Button>
+          </Link>
+        );
+      } else {
+        return null;
+      }
     },
   },
 ];

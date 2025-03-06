@@ -1,5 +1,6 @@
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -40,6 +41,7 @@ const ClientInfo = () => {
   const [selectedClient, setSelectedClient] = useState<CompanyClient | null>(
     null
   );
+  const [generateFacture, setGenerateFacture] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCompanyClient = async () => {
@@ -64,11 +66,17 @@ const ClientInfo = () => {
       clientNom: "",
       clientPrenom: "",
       clientTel: "",
+      generateFacture: false,
     },
   });
 
   const { toast } = useToast();
   const { currentStep, setCurrentStep, productsToSubmit } = useStepFormStore();
+
+  // Function to generate a unique facture code
+  const generateUniqueFactureCode = () => {
+    return `FTA-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+  };
 
   const handlePrevious = () => {
     if (currentStep === 1) {
@@ -99,7 +107,6 @@ const ClientInfo = () => {
       form.setValue("clientTel", selected.tel);
     }
   };
-
   const handleSubmit = async (data: z.infer<typeof addClientVenteSchema>) => {
     setLoading(true);
     const allData = {
@@ -108,6 +115,7 @@ const ClientInfo = () => {
       paymentType: value,
       products: productsToSubmit,
       nomDuCaissier,
+      factureCode: data.generateFacture ? generateUniqueFactureCode() : null,
     };
 
     try {
@@ -122,7 +130,12 @@ const ClientInfo = () => {
           variant: "success",
           className: "toast-container",
         });
-        router.push("/dashboard/vente");
+
+        if (data.generateFacture) {
+          router.push(`/dashboard/vente/facture/${allData.factureCode}`);
+        } else {
+          router.push("/dashboard/vente");
+        }
       }
     } catch (__error) {
       setLoading(false);
@@ -247,6 +260,21 @@ const ClientInfo = () => {
                 </div>
               ) : null}
             </div>
+            <FormField
+              name="generateFacture"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex items-center gap-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel>Générer une facture</FormLabel>
+                </FormItem>
+              )}
+            />
             {loading ? (
               <LoadingButton bgColor="bg-black" textColor="text-white" />
             ) : (
