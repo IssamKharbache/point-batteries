@@ -1,15 +1,12 @@
 "use client";
 import React, { useRef } from "react";
-
 import Image from "next/image";
 import { VenteProduct } from "@prisma/client";
 import { formatFrenchDate } from "@/lib/utils/index";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -33,6 +30,7 @@ export interface Vente {
   generateFacture: boolean;
   factureCode: string | null;
 }
+
 interface FactureProps {
   venteFacture: Vente;
 }
@@ -46,7 +44,6 @@ const Facture = ({ venteFacture }: FactureProps) => {
     factureCode,
     products,
     paymentType,
-    nomDuCaissier,
   } = venteFacture;
 
   const { totalBeforeRemise, totalAfterRemise, totalRemise } = products.reduce(
@@ -54,22 +51,17 @@ const Facture = ({ venteFacture }: FactureProps) => {
       const validPrice = product.price || 0;
       const validQty = product.qty || 0;
       const remise = product.discount || 0;
+      const productTotal = validPrice * validQty;
+      const productAfterRemise = productTotal - remise;
 
-      const productTotal = validPrice * validQty; // Total before remise for this product
-      const productAfterRemise = productTotal - remise; // Total after remise for this product
-
-      acc.totalBeforeRemise += productTotal; // Accumulate total before remise
-      acc.totalAfterRemise += productAfterRemise; // Accumulate total after remise
-      acc.totalRemise += remise; // Accumulate total remise
-
+      acc.totalBeforeRemise += productTotal;
+      acc.totalAfterRemise += productAfterRemise;
+      acc.totalRemise += remise;
       return acc;
     },
-    {
-      totalBeforeRemise: 0, // Total before remise
-      totalAfterRemise: 0, // Total after remise
-      totalRemise: 0, // Total remise
-    }
+    { totalBeforeRemise: 0, totalAfterRemise: 0, totalRemise: 0 }
   );
+
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({
     contentRef,
@@ -83,103 +75,136 @@ const Facture = ({ venteFacture }: FactureProps) => {
         type="button"
         className="flex items-center justify-end mb-6 rounded"
       >
-        Imprimer / Telecharger
+        Imprimer / Télécharger
         <Download />
       </Button>
-      <div ref={contentRef} className="p-10 m-10 bg-white border-2 ">
-        {/* Header */}
-        <div className="flex justify-between gap-8">
-          <div className="font-medium">
-            <div className="capitalize ">
-              <p>
-                CLient : {clientNom} {clientPrenom}
-              </p>
-            </div>
-            <div className="capitalize">Tel : {clientTel}</div>
-            <p className="text-sm mb-4">
-              Tanger, le {formatFrenchDate(createdAt)}
-            </p>
-            <div className="flex text-xl font-bold items-center gap-3">
-              <h1>Facture n º </h1>
-              <p>{factureCode}</p>
-            </div>
-          </div>
-          <div className="mb-8">
-            <Image
-              src="/logopbsdark.png"
-              alt="Company Logo"
-              width={240}
-              height={80}
-              className="mx-auto"
-            />
-            <div className="text-xs mt-4 flex flex-col gap-3 font-medium">
-              <p className="">
-                {" "}
-                131. Av Hafid Ibn Abdel bar B 94.R Lots Azahra N13 Souani
-              </p>
-              <p>Tanger - Maroc</p>
-              <p>Tel : +212 656 307 044 </p>
-              <p>Fix : +212 531 510 011</p>
-            </div>
-          </div>
-        </div>
+      <div
+        ref={contentRef}
+        className="p-10 m-10 bg-white min-h-[95vh] flex flex-col justify-between max-w-full"
+      >
+        {/* Header Section */}
         <div>
-          <Table className="border ">
+          <div className="flex justify-between gap-8">
+            {/* Client Details */}
+            <div className="font-medium">
+              <p>
+                Client : {clientNom} {clientPrenom}
+              </p>
+              <p>Téléphone : {clientTel}</p>
+              <p className="text-sm mb-4">
+                Tanger, le {formatFrenchDate(createdAt)}
+              </p>
+              <div className="flex flex-col text-xl font-bold gap-3">
+                <h1>Facture n º </h1>
+                <p>{factureCode}</p>
+              </div>
+            </div>
+
+            {/* Company Details */}
+            <div className="mb-8">
+              <Image
+                src="/logopbsdark.png"
+                alt="Company Logo"
+                width={240}
+                height={80}
+                className="mx-auto"
+              />
+              <div className="text-xs mt-4 flex flex-col gap-3 font-medium">
+                <p>131. Av Hafid Ibn Abdel bar B 94.R Lots Azahra N13 Souani</p>
+                <p>Tanger - Maroc</p>
+                <p>Tél : +212 656 307 044</p>
+                <p>Fix : +212 531 510 011</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Table Section */}
+          <Table className="w-full border-collapse">
             <TableHeader>
-              <TableRow>
-                <TableHead className="font-medium border">
-                  Designation
+              <TableRow className="bg-gray-100">
+                <TableHead className="border border-black p-2 text-left font-bold">
+                  Désignation
                 </TableHead>
-                <TableHead className="font-medium border">Qty</TableHead>
-                <TableHead className="font-medium border">Prix</TableHead>
-                <TableHead className="font-medium border">%Rem .</TableHead>
-                <TableHead className="font-medium border">Total</TableHead>
+                <TableHead className="border border-black p-2 text-center font-bold">
+                  Quantité
+                </TableHead>
+                <TableHead className="border border-black p-2 text-center font-bold">
+                  Prix
+                </TableHead>
+                <TableHead className="border border-black p-2 text-center font-bold">
+                  % Remise
+                </TableHead>
+                <TableHead className="border border-black p-2 text-right font-bold">
+                  Total
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {venteFacture.products.map((product, idx) => (
-                <TableRow key={idx}>
-                  <TableCell>{product.designationProduit}</TableCell>
-                  <TableCell className="border">{product.qty}</TableCell>
-                  <TableCell className="border">{product.price}</TableCell>
-                  <TableCell className="border">{product.discount}</TableCell>
-                  <TableCell className="border">
-                    {product.price &&
-                      product.discount &&
-                      product.price * product.qty - product.discount}{" "}
-                    MAD
+              {products.length > 0 ? (
+                products.map((product, idx) => (
+                  <TableRow key={idx} className="hover:bg-gray-50">
+                    <TableCell className="border border-black p-2 text-left">
+                      {product.designationProduit}
+                    </TableCell>
+                    <TableCell className="border border-black p-2 text-center">
+                      {product.qty}
+                    </TableCell>
+                    <TableCell className="border border-black p-2 text-center">
+                      {product.price}
+                    </TableCell>
+                    <TableCell className="border border-black p-2 text-center">
+                      {product.discount}
+                    </TableCell>
+                    <TableCell className="border border-black p-2 text-right">
+                      {product.price &&
+                        product.discount &&
+                        (
+                          product.price * product.qty -
+                          product.discount
+                        ).toFixed(2)}{" "}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="border border-black p-2 text-center h-64"
+                  >
+                    Aucun produit
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
-          <div className="flex justify-between mt-8">
+        </div>
+
+        {/* Footer Section */}
+        <div className="mt-8">
+          <div className="flex justify-between">
+            {/* Payment Details */}
             <div className="text-md font-semibold uppercase">
-              <p>Arretee la presence facture a la somme :</p>
+              <p>Arrêtée la présente facture à la somme de :</p>
               <p>{totalAfterRemise.toFixed(2)} DH</p>
-              <div className="flex items-center gap-2 text-md font-medium ">
-                <p>Mode de paiment : </p>
+              <div className="flex items-center gap-2 text-md font-medium">
+                <p>Mode de paiement :</p>
                 <p>{paymentType}</p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="border flex justify-between ">
-                <span className="border-r p-2  text-start w-32">
-                  Total avant remise
-                </span>
-                <span className="p-2 ">{totalBeforeRemise.toFixed(2)} DH</span>
+
+            {/* Totals Section */}
+            <div className="text-right border border-black w-64">
+              <div className="flex justify-between border-b border-black p-2">
+                <span className="text-start">Total avant remise</span>
+                <span>{totalBeforeRemise.toFixed(2)} DH</span>
               </div>
-              <div className="border flex justify-between  ">
-                <span className="border-r p-2  text-start w-32">
-                  Total remise
-                </span>
-                <span className="p-2"> -{totalRemise.toFixed(2)} DH</span>
+              <div className="flex justify-between border-b border-black p-2">
+                <span className="text-start">Total remise</span>
+                <span>-{totalRemise.toFixed(2)} DH</span>
               </div>
-              <div className="border flex justify-between font-bold gap-2">
-                <span className="border-r p-2  text-start w-32">
-                  Total après remise
-                </span>
-                <span className="p-2 ">{totalAfterRemise.toFixed(2)} DH</span>
+              <div className="flex justify-between font-bold p-2">
+                <span className="text-start">Total après remise</span>
+                <span>{totalAfterRemise.toFixed(2)} DH</span>
               </div>
             </div>
           </div>

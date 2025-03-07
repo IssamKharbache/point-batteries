@@ -91,10 +91,7 @@ export const columns: ColumnDef<VenteType>[] = [
     cell: ({ row }) => {
       if (row.original.generateFacture) {
         return (
-          <Link
-            className="bg-primary text-primary-foreground shadow hover:bg-primary/90"
-            href={`/dashboard/vente/facture/${row.original.factureCode}`}
-          >
+          <Link href={`/dashboard/vente/facture/${row.original.factureCode}`}>
             <Button>Facture</Button>
           </Link>
         );
