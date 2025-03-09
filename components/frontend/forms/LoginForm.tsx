@@ -110,12 +110,12 @@ const LoginForm = () => {
                 S&apos;inscrire
               </Link>
             </div>
-            <Link
+            {/* <Link
               className="flex text-[12px]  text-gray-500 hover:underline hover:text-black duration-200"
               href="/forgot-password"
             >
               Mot de passe perdu ?
-            </Link>
+            </Link> */}
           </div>
         </form>
       </Form>
