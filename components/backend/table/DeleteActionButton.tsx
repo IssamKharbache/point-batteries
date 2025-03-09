@@ -5,7 +5,7 @@ import { Loader2, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 interface DeleteActionButtonProps {
-  title: string;
+  title?: string;
   endpoint: string;
 }
 
@@ -67,7 +67,7 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
           className="flex items-center gap-2 font-medium"
         >
           <Trash2 className="w-4 h-4 text-red-500" />
-          <span className="text-red-500">{title}</span>
+          <span className="text-red-500">{title ?? ""}</span>
         </button>
       )}
     </>

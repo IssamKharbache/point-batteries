@@ -1,10 +1,12 @@
 "use client";
 
+import DeleteActionButton from "@/components/backend/table/DeleteActionButton";
 import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
 import { UserCreatingVente } from "@/components/backend/vente/UserCreatingVente";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils/index";
 import { ColumnDef } from "@tanstack/react-table";
+import { Trash } from "lucide-react";
 import Link from "next/link";
 
 export interface VenteType {
@@ -13,8 +15,8 @@ export interface VenteType {
   venteRef: string;
   paymentType: string;
   clientNom: string;
-  clientPrenom: string; // Add missing property
-  clientTel: string; // Add missing property
+  clientPrenom: string;
+  clientTel: string;
   clientCin: string;
   nomDuCaissier: string;
   products: VenteProduct[];
@@ -96,8 +98,19 @@ export const columns: ColumnDef<VenteType>[] = [
           </Link>
         );
       } else {
-        return null;
+        return (
+          <div className="bg-gray-200 text-center w-full rounded py-2">
+            Facture pas dispo{" "}
+          </div>
+        );
       }
+    },
+  },
+  {
+    id: "delete",
+    header: "Supprimer",
+    cell: ({ row }) => {
+      return <DeleteActionButton endpoint={`/api/vente/${row.original.id}`} />;
     },
   },
 ];

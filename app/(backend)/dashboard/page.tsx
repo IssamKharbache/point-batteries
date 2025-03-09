@@ -35,11 +35,6 @@ const MainPage = async () => {
   const delivredOrders = orders.filter(
     (order) => order.orderStatus === "EXPEDIE"
   );
-  //products
-  const products = await getData("/product");
-  const filteredProducts = products.filter(
-    (product: ProductData) => !product.isAchatProduct
-  );
 
   // Fetching ventes
   const ventes: VenteWithProducts[] = await getData("/vente");

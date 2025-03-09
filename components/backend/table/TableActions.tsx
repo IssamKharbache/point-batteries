@@ -79,12 +79,14 @@ const TableActions = ({ endpoint, editEndpoint }: TableActionsProps) => {
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <Link className="w-full cursor-pointer" href={editEndpoint ?? ""}>
-          <DropdownMenuItem className="flex items-center gap-2 py-4 px-4">
-            <UserPen />
-            <span>Modifier</span>
-          </DropdownMenuItem>
-        </Link>
+        {editEndpoint ? (
+          <Link className="w-full cursor-pointer" href={editEndpoint ?? ""}>
+            <DropdownMenuItem className="flex items-center gap-2 py-4 px-4">
+              <UserPen />
+              <span>Modifier</span>
+            </DropdownMenuItem>
+          </Link>
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );
