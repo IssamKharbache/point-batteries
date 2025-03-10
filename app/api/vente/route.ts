@@ -20,8 +20,9 @@ export const POST = async (req: NextRequest) => {
       clientNom,
       clientPrenom,
       clientTel,
-      generateFacture, // Add this field
-      factureCode, // Add this field
+      generateFacture,
+      factureCode,
+      venteBenifits,
     } = await req.json();
 
     if (
@@ -73,12 +74,14 @@ export const POST = async (req: NextRequest) => {
         price: number;
         designationProduit: string;
         discount: string;
+        productVenteBenifit: number;
       }) => ({
         productId: productMap.get(p.refProduct) as string,
         qty: parseInt(p.quantity),
         price: p.price,
         designationProduit: p.designationProduit,
         discount: parseFloat(p.discount),
+        productVenteBenifit: p.productVenteBenifit,
       })
     );
 
@@ -96,8 +99,9 @@ export const POST = async (req: NextRequest) => {
           paymentType,
           clientTel,
           nomDuCaissier,
-          generateFacture, // Include generateFacture
-          factureCode: generateFacture ? factureCode : null, // Include factureCode if generateFacture is true
+          generateFacture,
+          venteBenifits,
+          factureCode: generateFacture ? factureCode : null,
           products: {
             create: productsData,
           },

@@ -139,7 +139,9 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
   return (
     <>
-      <Button onClick={() => setIsDialogOpen(true)}>Bon de livraison</Button>
+      <Button onClick={() => setIsDialogOpen(true)} className="rounded-2xl">
+        Bon de livraison
+      </Button>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader className="text-start m-3">

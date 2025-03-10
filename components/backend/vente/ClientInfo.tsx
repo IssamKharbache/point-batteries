@@ -41,13 +41,15 @@ const ClientInfo = () => {
   const [selectedClient, setSelectedClient] = useState<CompanyClient | null>(
     null
   );
-  const [generateFacture, setGenerateFacture] = useState<boolean>(false);
+  const [loadingClient, setLoadingClient] = useState(false);
 
   useEffect(() => {
+    setLoadingClient(true);
     const fetchCompanyClient = async () => {
       try {
         const companyClients = await getData("/user/companyClient");
         setCompanyClients(companyClients);
+        setLoadingClient(false);
       } catch (error) {
         console.log(error);
       }
@@ -108,6 +110,10 @@ const ClientInfo = () => {
     }
   };
   const handleSubmit = async (data: z.infer<typeof addClientVenteSchema>) => {
+    const venteBenifits = productsToSubmit.reduce((total, product) => {
+      return total + product.productVenteBenifit;
+    }, 0);
+
     setLoading(true);
     const allData = {
       ...data,
@@ -115,6 +121,7 @@ const ClientInfo = () => {
       paymentType: value,
       products: productsToSubmit,
       nomDuCaissier,
+      venteBenifits,
       factureCode: data.generateFacture ? generateUniqueFactureCode() : null,
     };
 
@@ -244,19 +251,25 @@ const ClientInfo = () => {
 
               {isChoosingFromClient ? (
                 <div>
-                  <Label>Client enregistré</Label>
-                  <Select onValueChange={handleSelectClient}>
-                    <SelectTrigger className="w-[100px] md:w-[150px] ">
-                      <SelectValue placeholder={"Sélectionner un client"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {companyClient.map((client, idx) => (
-                        <SelectItem key={idx} value={client.id}>
-                          {client.nom} {client.prenom}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {loadingClient ? (
+                    <LoadingButton />
+                  ) : (
+                    <>
+                      <Label>Client enregistré</Label>
+                      <Select onValueChange={handleSelectClient}>
+                        <SelectTrigger className="w-[100px] md:w-[150px] ">
+                          <SelectValue placeholder={"Sélectionner un client"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {companyClient.map((client, idx) => (
+                            <SelectItem key={idx} value={client.id}>
+                              {client.nom} {client.prenom}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
                 </div>
               ) : null}
             </div>

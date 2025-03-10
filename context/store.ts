@@ -225,10 +225,16 @@ type StepFormType = {
   productsToSubmit: {
     refProduct: string;
     quantity: string;
-    discount: string; // Add the discount to the product object
+    discount: string;
+    productVenteBenifit: number;
   }[];
   setProductsToSubmit: (
-    products: { refProduct: string; quantity: string; discount: string }[]
+    products: {
+      refProduct: string;
+      quantity: string;
+      discount: string;
+      productVenteBenifit: number;
+    }[]
   ) => void;
 };
 

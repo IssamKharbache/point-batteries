@@ -63,6 +63,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
       categoryId: "",
       garantie: "",
       filterByCar: "",
+      achatPrice: "",
     },
   });
   //session data
@@ -223,19 +224,40 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+          <div className="flex flex-col md:flex-row justify-between gap-4 ">
             <FormField
               name="price"
               control={form.control}
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Prix</FormLabel>
+                    <FormLabel>Prix de vente</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         className="mt-2 px-4 text-sm"
-                        placeholder="Prix du produit"
+                        placeholder="Prix du produit de vente"
+                        min={0}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="achatPrice"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Prix d&apos;achat</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        className="mt-2 px-4 text-sm"
+                        placeholder="Prix d'achat du produit"
                         min={0}
                         {...field}
                       />
@@ -318,7 +340,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Courant d’essai de décharge</FormLabel>
+                    <FormLabel>Courant d&apos;essai de décharge</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

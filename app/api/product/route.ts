@@ -78,7 +78,7 @@ export const GET = async (request: NextRequest) => {
         message: "Products fetched successfully",
       },
       {
-        status: 200, // Use 200 for successful GET requests
+        status: 200,
       }
     );
   } catch (error) {

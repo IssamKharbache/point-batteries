@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa"; // Importing calendar icon
@@ -12,6 +12,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDate } from "@/lib/utils/index";
+import { useReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { Printer } from "lucide-react";
 
 interface Product {
   designationProduit: string;
@@ -75,9 +80,17 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
 
   CustomDatePickerButton.displayName = "CustomDatePickerButton";
 
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    documentTitle: `Journal_Vente_${
+      startDate ? formatDate(startDate || "") : ""
+    }_${startDate ? formatDate(endDate || "") : ""}`,
+  });
+
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Journal de Vente</h1>
+      <h1 className="text-3xl font-bold mb-6">Journal des Vente</h1>
 
       {/* Date pickers with button triggers */}
       <div className="mb-6 flex flex-col md:flex-row gap-8 md:items-center md:justify-end">
@@ -107,39 +120,78 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
           />
         </div>
       </div>
+      <div className="flex items-center justify-between">
+        <p></p>
+        <Button className="rounded-2xl mb-6" onClick={() => reactToPrintFn()}>
+          Imprimer/Télécharger
+          <Printer />
+        </Button>
+      </div>
+      <div ref={contentRef} className="m-0 md:m-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-center">
+          <h1 className="font-semibold text-lg text-center">
+            Journal des ventes
+          </h1>
+          <Image
+            src="/logopbsdark.png"
+            alt="Company Logo"
+            width={240}
+            height={80}
+            className="mx-auto mt-3"
+          />
+        </div>
+        <div className="flex items-center justify-between mb-4">
+          {startDate || endDate ? (
+            <div className="flex items-center gap-3 ">
+              <p>
+                De :{" "}
+                <span className="font-semibold">
+                  {startDate && formatDate(startDate || "")}
+                </span>
+              </p>
+              <p>
+                À :{" "}
+                <span className="font-semibold">
+                  {endDate && formatDate(endDate || "")}
+                </span>
+              </p>
+            </div>
+          ) : null}
+        </div>
 
-      <Table className="text-sm border rounded-lg">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Designation produit</TableHead>
-            <TableHead>Quantite</TableHead>
-            <TableHead>Prix</TableHead>
-            <TableHead>Vendue par</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="border">
-          {filteredVentes.length > 0 ? (
-            filteredVentes.map((vente) =>
-              vente.products.map((product, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium p-5 line-clamp-2">
-                    {product.designationProduit}
-                  </TableCell>
-                  <TableCell>{product.qty}</TableCell>
-                  <TableCell>{product.price}</TableCell>
-                  <TableCell>{vente.nomDuCaissier}</TableCell>
-                </TableRow>
-              ))
-            )
-          ) : (
+        <Table className="text-sm border rounded-lg">
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={10} className="h-24 text-center">
-                Aucun résultat
-              </TableCell>
+              <TableHead>Designation produit</TableHead>
+              <TableHead>Quantite</TableHead>
+              <TableHead>Prix</TableHead>
+              <TableHead>Vendue par</TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody className="border">
+            {filteredVentes.length > 0 ? (
+              filteredVentes.map((vente) =>
+                vente.products.map((product, index) => (
+                  <TableRow key={index} className="border-b-2">
+                    <TableCell className="font-medium p-5 line-clamp-2 ">
+                      {product.designationProduit}
+                    </TableCell>
+                    <TableCell>{product.qty}</TableCell>
+                    <TableCell>{product.price}</TableCell>
+                    <TableCell>{vente.nomDuCaissier}</TableCell>
+                  </TableRow>
+                ))
+              )
+            ) : (
+              <TableRow>
+                <TableCell colSpan={10} className="h-24 text-center">
+                  Aucune Vente
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

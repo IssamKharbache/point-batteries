@@ -180,8 +180,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     const incompleteProducts = Object.entries(productSelected).filter(
       ([, { quantity }]) => !quantity
     );
-    console.log("Product Selected:", productSelected);
-    console.log("Zero Quantity Products:", zeroQuantityProducts);
     if (incompleteProducts.length > 0) {
       toast({
         title: "Erreur",
@@ -192,22 +190,28 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
       return;
     }
 
-    // Include the price and discount from productsVente
     const productsToSubmit = Object.keys(productSelected)
       .map((refProduct) => {
         const product = productsVente.find((p) => p.refProduct === refProduct);
-        return product
-          ? {
-              refProduct,
-              quantity: productSelected[refProduct].quantity,
-              price: calculateDiscountedPrice(
-                product.price,
-                productSelected[refProduct].discount
-              ),
-              designationProduit: product.designationProduit,
-              discount: productSelected[refProduct].discount, // Add the discount here
-            }
-          : null;
+        if (!product) return null;
+
+        const quantity = parseInt(productSelected[refProduct].quantity);
+        const discount = parseFloat(productSelected[refProduct].discount);
+
+        const totalAchatPrice = product.achatPrice * quantity;
+
+        const totalPriceAfterDiscount = product.price * quantity - discount;
+
+        const productVenteBenifit = totalPriceAfterDiscount - totalAchatPrice;
+
+        return {
+          refProduct,
+          quantity: productSelected[refProduct].quantity,
+          price: product.price,
+          designationProduit: product.designationProduit,
+          discount: productSelected[refProduct].discount,
+          productVenteBenifit,
+        };
       })
       .filter(
         (
@@ -218,6 +222,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           price: number;
           designationProduit: string;
           discount: string;
+          productVenteBenifit: number;
         } => product !== null
       );
 
@@ -237,13 +242,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   };
 
   // Calculate the discounted price
-  const calculateDiscountedPrice = (price: number, discount: string) => {
-    const discountValue = parseFloat(discount);
-    if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) {
-      return price; // Return the original price if the discount is invalid
-    }
-    return price - (price * discountValue) / 100;
-  };
 
   return (
     <div>
@@ -384,3 +382,19 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
 };
 
 export default SelectProductStep;
+
+const calculateBenefit = (
+  price: number,
+  achatPrice: number,
+  discount: string,
+  quantity: number
+) => {
+  // Calculate the sale price after discount (apply discount only once)
+  const salePrice = price - Number(discount);
+
+  // Calculate the benefit per unit (sale price - achat price)
+  const benefitPerUnit = salePrice - achatPrice;
+
+  // Calculate total benefit by multiplying by quantity
+  return benefitPerUnit * quantity;
+};

@@ -36,6 +36,7 @@ export type ProductData = {
   imageUrl: string | null;
   imageKey: string | null;
   price: number;
+  achatPrice: number;
   stock: number | null;
   capacite: number | null;
   courantDessai: number | null;

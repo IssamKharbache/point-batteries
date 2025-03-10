@@ -42,6 +42,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
   );
 
   const priceToString = String(productData.price);
+  const achatPriceToString = String(productData.achatPrice);
   const capaciteToString = String(productData.capacite);
   const stockToString = String(productData.stock);
   const cdes = String(productData.courantDessai);
@@ -53,6 +54,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
     defaultValues: {
       ...productData,
       price: priceToString,
+      achatPrice: achatPriceToString,
       capacite: capaciteToString,
       stock: stockToString,
       courantDessai: cdes,
@@ -85,6 +87,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       productData.marque === allData.marque &&
       productData.categoryId === allData.categoryId &&
       productData.price === Number(allData.price) &&
+      productData.achatPrice === Number(allData.achatPrice) &&
       productData.stock === Number(allData.stock) &&
       productData.capacite === Number(allData.capacite) &&
       productData.voltage === Number(allData.voltage) &&
@@ -221,19 +224,40 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+          <div className="flex flex-col md:flex-row justify-between gap-4">
             <FormField
               name="price"
               control={form.control}
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Prix</FormLabel>
+                    <FormLabel>Prix de vente</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4"
-                        placeholder="Prix du produit"
+                        className="mt-2 px-4 text-sm"
+                        placeholder="Prix du produit de vente"
+                        min={0}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="achatPrice"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Prix d&apos;achat</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        className="mt-2 px-4 text-sm"
+                        placeholder="Prix d'achat du produit"
                         min={0}
                         {...field}
                       />

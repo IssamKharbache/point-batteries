@@ -22,6 +22,7 @@ export const POST = async (req: NextRequest) => {
       refProduct,
       isAchat,
       filterByCar,
+      achatPrice,
     } = await req.json();
     //CHECK IF THE PRODUCT ALREADY EXISTS
     const alreadyExist = await db.product.findUnique({
@@ -40,7 +41,6 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    //creating normal product
     const newProduct = await db.product.create({
       data: {
         title,
@@ -49,6 +49,7 @@ export const POST = async (req: NextRequest) => {
         imageUrl,
         imageKey,
         price: parseFloat(price),
+        achatPrice: parseFloat(achatPrice),
         stock: parseInt(stock),
         capacite: parseInt(capacite),
         voltage: parseInt(voltage),

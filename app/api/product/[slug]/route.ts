@@ -14,6 +14,7 @@ export const PUT = async (
       description,
       imageUrl,
       price,
+      achatPrice,
       stock,
       capacite,
       marque,
@@ -32,6 +33,7 @@ export const PUT = async (
       !description &&
       !imageUrl &&
       !price &&
+      !achatPrice &&
       !stock &&
       !capacite &&
       !marque &&
@@ -71,6 +73,7 @@ export const PUT = async (
         imageUrl,
         imageKey,
         price: parseFloat(price),
+        achatPrice: parseFloat(achatPrice),
         stock: parseInt(stock),
         capacite: parseInt(capacite),
         voltage: parseInt(voltage),
@@ -119,6 +122,7 @@ export const GET = async (
         title: true,
         description: true,
         price: true,
+        achatPrice: true,
         stock: true,
         capacite: true,
         courantDessai: true,

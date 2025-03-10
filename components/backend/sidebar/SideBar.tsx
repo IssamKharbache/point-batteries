@@ -20,6 +20,7 @@ import {
   Users,
   UsersRound,
   Contact,
+  BadgeDollarSign,
 } from "lucide-react";
 import { FaCashRegister } from "react-icons/fa6";
 import {
@@ -65,6 +66,12 @@ const SideBar = () => {
         href: "/dashboard/produit",
         icon: ShoppingBasket,
         isMainAdmin: false,
+      },
+      {
+        name: "Frais",
+        href: "/dashboard/frais",
+        icon: BadgeDollarSign,
+        isMainAdmin: true,
       },
       {
         name: "Notre staff",

@@ -30,8 +30,8 @@ export const POST = async (req: NextRequest) => {
 
     const newCategorie = await db.category.create({
       data: {
-        title,
-        description,
+        title: title.toLowerCase(),
+        description: description.toLowerCase(),
         slug,
       },
     });

@@ -24,6 +24,7 @@ export type ProductData = {
     imageUrl: string;
     marque: string;
     price: number;
+    achatPrice: number;
     stock: number;
     designationProduit: string;
     voltage: number;

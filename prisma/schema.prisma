@@ -42,6 +42,7 @@ model Product {
   imageUrl           String?
   imageKey           String?   @unique
   price              Float?
+  achatPrice         Float?
   stock              Int?
   capacite           Int?
   marque             String?
@@ -197,6 +198,7 @@ model Vente {
   clientPrenom    String
   clientTel       String?
   nomDuCaissier   String?
+  venteBenifits   Float?
   venteRef        String         @unique
   paymentType     PaymentType
   generateFacture Boolean        @default(false) // Add this field
@@ -207,11 +209,13 @@ model Vente {
 }
 
 model VenteProduct {
-  venteId            String  @db.Uuid
-  productId          String  @db.Uuid
-  qty                Int
-  price              Float?
-  discount           Float?
+  venteId             String @db.Uuid
+  productId           String @db.Uuid
+  qty                 Int
+  price               Float?
+  productVenteBenifit Float?
+  discount            Float?
+
   designationProduit String?
 
   vente   Vente   @relation(fields: [venteId], references: [id], onDelete: Cascade)
@@ -235,4 +239,13 @@ enum PaymentType {
   ESPECE
   CHECK
   VIREMENT
+}
+
+model Cost {
+  id            String    @id @default(uuid()) @db.Uuid
+  natureDuFrais String
+  date          DateTime
+  montant       Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
 }

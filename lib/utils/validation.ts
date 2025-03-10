@@ -50,7 +50,10 @@ export const addBannerSchema = z.object({
 export const addProductSchema = z.object({
   title: z.string().min(1, "Titre est obligatoire"),
   description: z.string().min(1, "Description est obligatoire"),
-  price: z.string().min(1, "Le prix doit être supérieur ou égal à 1"),
+  price: z.string().min(1, "Le prix de vente doit être supérieur ou égal à 1"),
+  achatPrice: z
+    .string()
+    .min(1, "Le prix d'achat doit être supérieur ou égal à 1"),
   stock: z.string().min(1, "Le stock doit être supérieur ou égal à 1"),
   capacite: z.string().min(1, "La capacite doit être supérieur ou égal à 1"),
   courantDessai: z
@@ -125,4 +128,15 @@ export const addClientRepSchema = z.object({
     .min(10, "Numero de telephone est invalide")
     .max(10, "Numero de telephone est invalide") // Check if it’s at least 9 digits
     .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
+});
+const today = new Date().toISOString().split("T")[0];
+
+export const addCostSchema = z.object({
+  natureDuFrais: z.string().min(1, "Nature des frais est obligatoire"),
+  date: z.string().refine((value) => value !== today, {
+    message: "Vous devez sélectionner une date.",
+  }),
+  montant: z
+    .string()
+    .min(1, "Le montant de vente doit être supérieur ou égal à 1"),
 });
