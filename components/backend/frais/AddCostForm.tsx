@@ -35,13 +35,13 @@ const AddCostForm = () => {
   const [error, setError] = useState<string>("");
   const { toast } = useToast();
   const router = useRouter();
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date();
 
   const form = useForm<z.infer<typeof addCostSchema>>({
     resolver: zodResolver(addCostSchema),
     defaultValues: {
       natureDuFrais: "",
-      date: today,
+      date: today.toISOString(),
       montant: "",
     },
   });
@@ -155,6 +155,22 @@ const AddCostForm = () => {
                         }
                         initialFocus
                         locale={fr}
+                        disabled={(date) => {
+                          const today = new Date();
+                          const firstDayOfMonth = new Date(
+                            today.getFullYear(),
+                            today.getMonth(),
+                            1
+                          );
+                          const lastDayOfMonth = new Date(
+                            today.getFullYear(),
+                            today.getMonth() + 1,
+                            0
+                          );
+                          return (
+                            date < firstDayOfMonth || date > lastDayOfMonth
+                          );
+                        }}
                       />
                     </PopoverContent>
                   </Popover>

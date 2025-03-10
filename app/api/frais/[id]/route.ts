@@ -2,11 +2,10 @@ import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export const DELETE = async (
-  req: NextRequest,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) => {
   const id = (await context.params).id;
-
   try {
     const isExisting = await db.cost.findUnique({
       where: {
@@ -16,12 +15,11 @@ export const DELETE = async (
     if (!isExisting) {
       return NextResponse.json(
         {
-          message: "Frais n'existe pas ",
+          message: "Frais non trouve",
         },
-        { status: 404, statusText: "Frais n'existe pas " }
+        { status: 404, statusText: "Frais non trouve" }
       );
     }
-
     await db.cost.delete({
       where: {
         id,
@@ -41,7 +39,7 @@ export const DELETE = async (
     return NextResponse.json(
       {
         message:
-          "Erreur pendant la supprimation du frais, veuillez essayer apres.",
+          "Erreur pendant la supprimation de Frais , veuillez essayer apres.",
         error,
       },
       { status: 500 }

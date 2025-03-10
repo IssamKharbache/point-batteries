@@ -129,14 +129,34 @@ export const addClientRepSchema = z.object({
     .max(10, "Numero de telephone est invalide") // Check if it’s at least 9 digits
     .regex(/^\d+$/, "Le numéro de téléphone ne doit contenir que des chiffres"),
 });
-const today = new Date().toISOString().split("T")[0];
 
 export const addCostSchema = z.object({
   natureDuFrais: z.string().min(1, "Nature des frais est obligatoire"),
-  date: z.string().refine((value) => value !== today, {
-    message: "Vous devez sélectionner une date.",
-  }),
-  montant: z
+  date: z
     .string()
-    .min(1, "Le montant de vente doit être supérieur ou égal à 1"),
+    .refine(
+      (value) => {
+        const date = new Date(value);
+        return !isNaN(date.getTime()); // Check if the date is valid
+      },
+      {
+        message: "Date invalide",
+      }
+    )
+    .refine((value) => {
+      const date = new Date(value);
+      const today = new Date();
+      const firstDayOfMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+      const lastDayOfMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        0
+      );
+      return date >= firstDayOfMonth && date <= lastDayOfMonth;
+    }, "Vous ne pouvez ajouter des frais que pour le mois en cours"),
+  montant: z.string().min(0, "Montant doit être positif"),
 });
