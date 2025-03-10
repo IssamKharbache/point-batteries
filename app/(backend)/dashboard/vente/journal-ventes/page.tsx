@@ -4,6 +4,8 @@ import React from "react";
 
 const page = async () => {
   const ventes = await getData("/vente");
+  //fetching ventes here
+  console.log(ventes);
 
   return (
     <div>
