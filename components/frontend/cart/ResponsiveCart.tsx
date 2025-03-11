@@ -9,6 +9,7 @@ interface CartItem {
     title: string;
     imageUrl: string;
     price: number;
+    stock: number;
     quantity: number;
     userId: string;
   };
@@ -56,9 +57,14 @@ const ResponsiveCart = ({ item }: CartItem) => {
             </button>
             <p>{item.quantity}</p>
             <button>
-              {" "}
               <Plus
-                onClick={() => incrementQty(item.id)}
+                onClick={() => {
+                  if (item.stock <= item.quantity) {
+                    return;
+                  } else {
+                    incrementQty(item.id);
+                  }
+                }}
                 className="size-5 bg-gray-300 rounded-full cursor-pointer"
               />
             </button>

@@ -77,54 +77,66 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
               <p className="text-center md:text-start text-2xl md:text-3xl font-semibold text-green-500 mt-4">
                 {product.price}dhs
               </p>
+              {product.stock === 0 ? (
+                <div className="mt-4">
+                  <p className="flex items-center  gap-2 bg-red-600 rounded text-center text-white px-5 py-2 w-fit">
+                    <span className="text-sm font-semibold">
+                      Rupture du stock
+                    </span>
+                    <X size={20} />
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between gap-4 bg-gray-200 p-3 mt-4 w-full md:w-[120px] ">
+                    <Minus
+                      onClick={() => {
+                        if (quantity <= 1) {
+                          return;
+                        }
+                        setQuantity((prev) => prev - 1);
+                      }}
+                      size={12}
+                      className="hover:bg-slate-100 w-5 h-5 rounded-full duration-300 p-[2px] cursor-pointer "
+                    />
+                    {quantity}
 
-              <div className="flex items-center justify-between gap-4 bg-gray-200 p-3 mt-4 w-full md:w-[120px] ">
-                <Minus
-                  onClick={() => {
-                    if (quantity <= 1) {
-                      return;
-                    }
-                    setQuantity((prev) => prev - 1);
-                  }}
-                  size={12}
-                  className="hover:bg-slate-100 w-5 h-5 rounded-full duration-300 p-[2px] cursor-pointer "
-                />
-                {quantity}
-
-                <Plus
-                  onClick={() => {
-                    if (product.stock && product.stock <= quantity) {
-                      return;
-                    }
-                    setQuantity((prev) => prev + 1);
-                  }}
-                  size={12}
-                  className="hover:bg-slate-100 w-5 h-5 rounded-full duration-300 p-[2px] cursor-pointer"
-                />
-              </div>
-              <button
-                onClick={() => {
-                  toast({
-                    title: "Produit ajouter au panier",
-                    variant: "success",
-                    className: "custom-toast-container",
-                    position: "top-left",
-                  });
-                  addItem({
-                    id: product.id,
-                    title: product.title,
-                    imageUrl: product.imageUrl || "",
-                    price: product.price,
-                    quantity,
-                    userId: session?.user.id || "",
-                    stock: product.stock || 0,
-                  });
-                }}
-                className="flex gap-6 items-center justify-center bg-slate-800 w-full py-3 mt-4 text-white font-semibold hover:bg-slate-900  px-5  duration-500"
-              >
-                <span>Ajouter au panier</span>
-                <FaCartPlus />
-              </button>
+                    <Plus
+                      onClick={() => {
+                        if (product.stock && product.stock <= quantity) {
+                          return;
+                        }
+                        setQuantity((prev) => prev + 1);
+                      }}
+                      size={12}
+                      className="hover:bg-slate-100 w-5 h-5 rounded-full duration-300 p-[2px] cursor-pointer"
+                    />
+                  </div>
+                  <button
+                    onClick={() => {
+                      toast({
+                        title: "Produit ajouter au panier",
+                        variant: "success",
+                        className: "custom-toast-container",
+                        position: "top-left",
+                      });
+                      addItem({
+                        id: product.id,
+                        title: product.title,
+                        imageUrl: product.imageUrl || "",
+                        price: product.price,
+                        quantity,
+                        userId: session?.user.id || "",
+                        stock: product.stock || 0,
+                      });
+                    }}
+                    className="flex gap-6 items-center justify-center bg-slate-800 w-full py-3 mt-4 text-white font-semibold hover:bg-slate-900  px-5  duration-500"
+                  >
+                    <span>Ajouter au panier</span>
+                    <FaCartPlus />
+                  </button>
+                </>
+              )}
 
               {session?.user.role !== "USER" ? (
                 <div>
@@ -144,16 +156,6 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                   )}
                 </div>
               ) : null}
-              <div className="mt-4">
-                {product.stock && product.stock == 0 && (
-                  <p className="flex items-center  gap-2 bg-red-600 rounded text-center text-white px-5 py-2 w-fit">
-                    <span className="text-sm font-semibold">
-                      Rupture du stock
-                    </span>
-                    <X size={20} />
-                  </p>
-                )}
-              </div>
             </div>
           </div>
         </div>

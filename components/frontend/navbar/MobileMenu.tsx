@@ -110,10 +110,6 @@ const MobileMenu = ({ isOpen, setisOpen }: MobileMenuProps) => {
           )}
         </div>
         <hr />
-        <div className="flex flex-col items-center justify-center m-auto w-full h-16">
-          <p className="text-sm text-gray-400">Nous appeler </p>
-          <p className="mt-1 font-se text-md">05 60 00 00 00</p>
-        </div>
       </motion.div>
       <MonCompte />
     </>

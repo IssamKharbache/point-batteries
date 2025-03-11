@@ -141,7 +141,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
                     <BiCartAdd className="text-2xl" />
                   </button>
                 ) : (
-                  <p className="text-red-500 text-xs">Rupture de stock</p>
+                  <p className="text-red-500 text-xs">Rupture du stock</p>
                 )}
               </div>
             </SwiperSlide>

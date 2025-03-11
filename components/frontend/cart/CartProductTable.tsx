@@ -34,13 +34,13 @@ const CartProductTable = () => {
             alt="Pannier vide"
             width={500}
             height={500}
-            className="w-72"
+            className="w-52"
           />
         </div>
         <h1 className="font-semibold text-2xl md:text-4xl mt-8 text-center">
           Votre panier est vide
         </h1>
-        <p className="text-sm text-gray-400 mt-4 text-center">
+        <p className="text-wrap text-sm text-gray-400 mt-4 text-center">
           Il semble que vous n&apos;ayez rien ajouté à votre panier
         </p>
         <Link href="/" className="mt-4">
