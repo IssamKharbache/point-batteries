@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface addAchatProps {
   productsAchat: ProductData[];
@@ -167,8 +168,13 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
         <hr className="text-gray-400 " />
         <div className="container mx-auto py-10 ">
           {filteredProducts.length === 0 && (
-            <div className="text-center font-semibold text-2xl">
-              Aucun resultat
+            <div className="flex flex-col items-center justify-center">
+              <div className="text-center font-semibold text-md text-gray-500">
+                Aucun produit d&apos;achat n&apos;est disponible
+              </div>
+              <Link href="/dashboard/achat/produit/ajouter">
+                <Button className="mt-4 rounded-2xl px-5">Ajouter</Button>
+              </Link>
             </div>
           )}
           {filteredProducts.map((product, idx) => (

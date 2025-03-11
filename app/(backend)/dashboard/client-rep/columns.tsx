@@ -43,4 +43,12 @@ export const columns: ColumnDef<CompanyClient>[] = [
       }
     },
   },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const id = row.original.id;
+      return <TableActions endpoint={`/user/client-rep/${id}`} />;
+    },
+  },
 ];

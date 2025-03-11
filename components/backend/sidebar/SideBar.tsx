@@ -39,10 +39,16 @@ const SideBar = () => {
   if (session.user.role === "CAISSIER") {
     sideBarMenu.push(
       {
-        name: "Vente",
-        href: "/dashboard/vente",
-        icon: FaCashRegister,
-        isMainAdmin: false,
+        name: "Client Repititive",
+        href: "/dashboard/client-rep",
+        icon: Contact,
+        isMainAdmin: true,
+      },
+      {
+        name: "Frais",
+        href: "/dashboard/frais",
+        icon: BadgeDollarSign,
+        isMainAdmin: true,
       },
       {
         name: "Boutique",
@@ -74,15 +80,15 @@ const SideBar = () => {
         isMainAdmin: true,
       },
       {
-        name: "Notre staff",
-        href: "/dashboard/notre-staff",
-        icon: UsersRound,
-        isMainAdmin: true,
-      },
-      {
         name: "Client Repititive",
         href: "/dashboard/client-rep",
         icon: Contact,
+        isMainAdmin: true,
+      },
+      {
+        name: "Notre staff",
+        href: "/dashboard/notre-staff",
+        icon: UsersRound,
         isMainAdmin: true,
       },
 
@@ -178,39 +184,39 @@ const SideBar = () => {
                 </Link>
               </CollapsibleContent>
             </Collapsible>
-            <Collapsible>
-              <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
-                <div className="flex items-center gap-4">
-                  <FaCashRegister />
-                  <span>Vente</span>
-                </div>
-                <ChevronDown />
-              </CollapsibleTrigger>
-              <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5">
-                <Link
-                  className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-md duration-200 ${
-                    "/dashboard/vente" === path ? "text-blue-400" : ""
-                  }`}
-                  href="/dashboard/vente"
-                >
-                  <FaCashRegister size={18} />
-                  Les Ventes
-                </Link>
-                <Link
-                  className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-sm duration-200 ${
-                    "/dashboard/vente/journal-ventes" === path
-                      ? "text-blue-400"
-                      : ""
-                  }`}
-                  href="/dashboard/vente/journal-ventes"
-                >
-                  <Notebook size={18} />
-                  Journal des ventes
-                </Link>
-              </CollapsibleContent>
-            </Collapsible>
           </>
         ) : null}
+        <Collapsible>
+          <CollapsibleTrigger className="flex items-center justify-between gap-4 hover:bg-slate-800 w-full py-5 px-8">
+            <div className="flex items-center gap-4">
+              <FaCashRegister />
+              <span>Vente</span>
+            </div>
+            <ChevronDown />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="ml-8 bg-gray-700 rounded-l mt-5">
+            <Link
+              className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-md duration-200 ${
+                "/dashboard/vente" === path ? "text-blue-400" : ""
+              }`}
+              href="/dashboard/vente"
+            >
+              <FaCashRegister size={18} />
+              Les Ventes
+            </Link>
+            <Link
+              className={`flex items-center gap-4 hover:text-blue-400 w-full py-4 px-5 text-sm duration-200 ${
+                "/dashboard/vente/journal-ventes" === path
+                  ? "text-blue-400"
+                  : ""
+              }`}
+              href="/dashboard/vente/journal-ventes"
+            >
+              <Notebook size={18} />
+              Journal des ventes
+            </Link>
+          </CollapsibleContent>
+        </Collapsible>
         {sideBarMenu.map((menu, index) => {
           const Icon = menu.icon;
           return (

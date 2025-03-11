@@ -35,7 +35,7 @@ export const POST = async (req: NextRequest) => {
     const username = generateUsername(nom, prenom);
     const newUser = await db.user.create({
       data: {
-        email,
+        email: email.toLowerCase(),
         password: hashedPassword,
         nom,
         prenom,

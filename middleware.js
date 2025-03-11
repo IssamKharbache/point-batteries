@@ -33,7 +33,11 @@ export default withAuth(
       // Restrict non-admin users from accessing any other /dashboard paths
       if (token.role !== "ADMIN" && token.role !== "STAFF") {
         // Allow /dashboard/commandes, restrict others
-        if (!req.nextUrl.pathname.startsWith("/dashboard/vente")) {
+        if (
+          !req.nextUrl.pathname.startsWith("/dashboard/vente") &&
+          !req.nextUrl.pathname.startsWith("/dashboard/client-rep") &&
+          !req.nextUrl.pathname.startsWith("/dashboard/frais")
+        ) {
           // Prevent redirect loop by checking if the user is already on the unauthorized page
           if (!req.nextUrl.pathname.startsWith("/dashboard/unauthorized")) {
             return NextResponse.redirect(

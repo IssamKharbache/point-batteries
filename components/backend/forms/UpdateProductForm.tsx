@@ -146,6 +146,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                       className="mt-2 px-4"
                       placeholder="Titre du produit"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -167,6 +168,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                       className="mt-2 px-4"
                       placeholder="Marque du produit"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -207,7 +209,10 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                 <FormItem>
                   <FormLabel>Garantie</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? ""}
+                    >
                       <SelectTrigger className="w-full md:w-[290px]">
                         <SelectValue placeholder="Garantie" />
                       </SelectTrigger>
@@ -239,6 +244,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Prix du produit de vente"
                         min={0}
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -260,6 +266,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Prix d'achat du produit"
                         min={0}
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -281,6 +288,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Combien de produit en stock ?"
                         min={0}
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -304,6 +312,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Capacité (Ah) du produit"
                         min={0}
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -325,6 +334,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Voltage (V) du produit"
                         min={0}
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -348,6 +358,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         placeholder="Courant d’essai de décharge à froid EN (A)"
                         min={0}
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -367,6 +378,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         className="mt-2 px-4"
                         placeholder="Designation du produit"
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -389,6 +401,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         className="mt-2 px-4"
                         placeholder="Description du produit"
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -408,6 +421,7 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         className="mt-2 px-4"
                         placeholder="Mercedes, audi, dacia..."
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
