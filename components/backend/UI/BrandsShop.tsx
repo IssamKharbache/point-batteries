@@ -16,31 +16,31 @@ const brands = [
     name: "Bosch",
     src: "/brands/bosch.png",
     link: "/produits/marque/bosch",
-    color: "bg-yellow-300",
+    color: "bg-[#26355e]",
   },
   {
     name: "Exide",
     src: "/brands/exide.png",
     link: "/produits/marque/exide",
-    color: "bg-purple-300",
+    color: "bg-[#568ed8]",
   },
   {
     name: "Leoch",
     src: "/brands/leoch.png",
     link: "/produits/marque/leoch",
-    color: "bg-blue-300",
+    color: "bg-blue-100",
   },
   {
     name: "Varta",
     src: "/brands/varta.png",
     link: "/produits/marque/varta",
-    color: "bg-purple-200",
+    color: "bg-[#345892]",
   },
   {
     name: "Electra",
     src: "/brands/electra.png",
     link: "/produits/marque/electra",
-    color: "bg-purple-500",
+    color: "bg-blue-500",
   },
   {
     name: "Amaron",
@@ -115,10 +115,11 @@ const BrandsShop = () => {
 
         {/* Swiper */}
         <Swiper
+          spaceBetween={20}
           slidesPerView={1}
           breakpoints={{
             640: { slidesPerView: 1 },
-            1024: { slidesPerView: 2 },
+            1024: { slidesPerView: 4 },
           }}
           modules={[Navigation, Autoplay]}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -128,18 +129,18 @@ const BrandsShop = () => {
           {brands.map((brand, index) => (
             <SwiperSlide
               key={index}
-              className={`flex items-center justify-center p-10 opacity-90 hover:opacity-100 duration-300 mt-4 ${brand.color}`}
+              className={`flex items-center justify-center  duration-300 mt-4 rounded-lg mb-12 ${brand.color}`}
             >
               <Link
                 href={brand.link}
-                className="flex items-center justify-center w-full h-full"
+                className="flex items-center justify-center "
               >
                 <Image
                   src={brand.src}
                   alt={brand.name}
-                  width={400}
-                  height={400}
-                  className="object-contain h-44 mx-auto"
+                  width={300}
+                  height={300}
+                  className="object-contain h-40  w-full mx-auto p-3"
                 />
               </Link>
             </SwiperSlide>
