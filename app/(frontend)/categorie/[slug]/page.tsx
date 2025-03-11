@@ -64,9 +64,6 @@ export async function generateStaticParams() {
   try {
     const res = await axios.get("https://www.pointbatteries.com/api/product");
 
-    if (res.status !== 201) {
-      throw new Error(`Failed to fetch products : ${res.statusText}`);
-    }
     const products = res.data.data;
     if (products.length === 0) return [];
 
