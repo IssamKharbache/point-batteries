@@ -23,10 +23,8 @@ const PaginationWithFilters = ({
 }: PaginationTestProps) => {
   const searchParams = useSearchParams();
 
-  const min = searchParams.get("min") || "0"; // Make sure min is a string
-  const max = searchParams.get("max") || ""; // Make sure max is a string
-  const sort = searchParams.get("sort") || "asc";
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const q = searchParams.get("q") || "";
 
   // Calculate the actual number of pages based on the filtered count
   const actualPages = Math.ceil(count / pageSize);
@@ -48,16 +46,12 @@ const PaginationWithFilters = ({
             href={
               currentPage === 1
                 ? `?${new URLSearchParams({
+                    q: q ? q : "",
                     page: "1", // Convert page to string
-                    sort,
-                    min,
-                    max,
                   })}`
                 : `?${new URLSearchParams({
+                    q: q ? q : "",
                     page: (currentPage - 1).toString(), // Convert page to string
-                    sort,
-                    min,
-                    max,
                   })}`
             }
           />
@@ -102,16 +96,12 @@ const PaginationWithFilters = ({
             href={
               currentPage === totalPages
                 ? `?${new URLSearchParams({
+                    q: q ? q : "",
                     page: totalPages.toString(), // Convert page to string
-                    sort,
-                    min,
-                    max,
                   })}`
                 : `?${new URLSearchParams({
+                    q: q ? q : "",
                     page: (currentPage + 1).toString(), // Convert page to string
-                    sort,
-                    min,
-                    max,
                   })}`
             }
           />

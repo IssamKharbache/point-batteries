@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import Fuse from "fuse.js";
+import Fuse from "fuse.js"; // Import Fuse.js
 
 export const GET = async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
@@ -30,13 +30,8 @@ export const GET = async (request: NextRequest) => {
     where.categoryId = categoryId;
   }
 
-  // Filter by marque
-  if (marque) {
-    where.filterByCar = { contains: marque, mode: "insensitive" };
-  }
-
   try {
-    // Fetch all products (without search filter initially)
+    // Fetch all products (without marque or search filters initially)
     let products = await db.product.findMany({
       where,
       include: {
@@ -44,7 +39,23 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    // Apply fuzzy search if `search` parameter is provided
+    // Apply fuzzy search for `marque` if provided
+    if (marque) {
+      const fuseOptions = {
+        keys: ["filterByCar"], // Field to search (marque is stored in filterByCar)
+        threshold: 0.3, // Adjust threshold for fuzziness (0 = exact match, 1 = very loose)
+        includeMatches: true, // Include match details in results
+        ignoreLocation: true, // Ignore location of matches in the string
+      };
+
+      const fuse = new Fuse(products, fuseOptions);
+      const marqueResults = fuse.search(marque);
+
+      // Extract the matched products
+      products = marqueResults.map((result) => result.item);
+    }
+
+    // Apply fuzzy search for `search` parameter if provided
     if (search) {
       const fuseOptions = {
         keys: [
@@ -53,14 +64,51 @@ export const GET = async (request: NextRequest) => {
           "marque",
           "filterByCar",
           "category.title",
-        ],
+        ], // Fields to search
+        threshold: 0.3, // Adjust threshold for fuzziness
+        includeMatches: true, // Include match details in results
+        ignoreLocation: true, // Ignore location of matches in the string
+      };
+
+      const fuse = new Fuse(products, fuseOptions);
+      const searchResults = fuse.search(search);
+
+      // Extract the matched products
+      products = searchResults.map((result) => result.item);
+    }
+
+    // If both `marque` and `search` are provided, ensure the results match both criteria
+    if (marque && search) {
+      const fuseMarqueOptions = {
+        keys: ["filterByCar"], // Field to search for marque
         threshold: 0.3,
         includeMatches: true,
         ignoreLocation: true,
       };
 
-      const fuse = new Fuse(products, fuseOptions);
-      const searchResults = fuse.search(search);
+      const fuseSearchOptions = {
+        keys: [
+          "title",
+          "description",
+          "marque",
+          "filterByCar",
+          "category.title",
+        ], // Fields to search for search
+        threshold: 0.3,
+        includeMatches: true,
+        ignoreLocation: true,
+      };
+
+      // Apply fuzzy search for marque
+      const fuseMarque = new Fuse(products, fuseMarqueOptions);
+      const marqueResults = fuseMarque.search(marque);
+
+      // Apply fuzzy search for search
+      const fuseSearch = new Fuse(
+        marqueResults.map((result) => result.item),
+        fuseSearchOptions
+      );
+      const searchResults = fuseSearch.search(search);
 
       // Extract the matched products
       products = searchResults.map((result) => result.item);
