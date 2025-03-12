@@ -4,7 +4,6 @@ import SectionHeader from "./SectionHeader";
 import { getData } from "@/lib/getData";
 import { ProductData } from "@/components/backend/table/TableActions";
 import ProductCard from "./ProductCard";
-import { Loader2 } from "lucide-react";
 interface SimilarProcuts {
   marque: string;
 }
@@ -23,17 +22,9 @@ const SimilarProducts = ({ marque }: SimilarProcuts) => {
   }, []);
 
   return (
-    <div className="m-8  xl:m-10">
-      {loading ? (
-        <div className="flex items-center justify-center w-full h-full md:h-[500px] md:w-[500px]">
-          <Loader2 className="animate-spin" size={45} />
-        </div>
-      ) : (
-        <>
-          <SectionHeader header="Produits similaire" />
-          <ProductCard productsData={products} />
-        </>
-      )}
+    <div className="mx-auto max-w-[1200px] p-10 lg:p-0 ">
+      <SectionHeader header="Produits similaire" />
+      <ProductCard productsData={products} />
     </div>
   );
 };

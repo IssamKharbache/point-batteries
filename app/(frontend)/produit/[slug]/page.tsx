@@ -13,7 +13,7 @@ const page = async ({ params }: PageProps) => {
   const product = await getData(`/product/${slug}`);
 
   return (
-    <section className="max-w-[1200px] mx-auto">
+    <section>
       <ProductDetails product={product} />
       <SimilarProducts marque={product.marque} />
     </section>
