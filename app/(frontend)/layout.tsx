@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Point Batterie Service - Vente de Batteries",
     description:
-      "Entreprise de vente de batteries de différentes catégories au Maroc.",
+      "Bienvenue sur Point Batterie Service, votre fournisseur de batteries de qualité au Maroc.",
     url: "https://pointbatteries.com",
     siteName: "Point Batterie Service",
     images: [
@@ -44,6 +44,13 @@ export const metadata: Metadata = {
       },
     ],
     type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://pointbatteries.com",
   },
 };
 
