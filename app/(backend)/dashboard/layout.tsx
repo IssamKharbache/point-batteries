@@ -11,10 +11,44 @@ const poppins = Poppins({
   display: "swap",
 });
 export const metadata: Metadata = {
-  title: "Point Batteries Services Dashboard",
-  description:
-    "Entreprise de vente de batteries de différentes catégories au Maroc",
+  metadataBase: new URL("https://pointbatteries.com"),
+  keywords: [
+    "pointbatteries",
+    "batteries",
+    "vente batteries",
+    "batteries maroc",
+    "batterie",
+    "top vendeur batterie",
+  ],
+  title: {
+    default: "Point Batterie Service",
+    template: `%s | Point Batterie Service`,
+  },
+  openGraph: {
+    title: "Point Batterie Service - Vente de Batteries",
+    description:
+      "Bienvenue sur Point Batterie Service, votre fournisseur de batteries de qualité au Maroc.",
+    url: "https://pointbatteries.com",
+    siteName: "Point Batterie Service",
+    images: [
+      {
+        url: "https://pointbatteries.com/og-image.jpg", // Replace with actual image
+        width: 1200,
+        height: 630,
+        alt: "Point Batterie Service",
+      },
+    ],
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://pointbatteries.com",
+  },
 };
+
 export default async function RootBackendLayout({
   children,
 }: Readonly<{
