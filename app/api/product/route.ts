@@ -1,6 +1,7 @@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import Fuse from "fuse.js";
 
 export const GET = async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
@@ -29,54 +30,53 @@ export const GET = async (request: NextRequest) => {
     where.categoryId = categoryId;
   }
 
-  // Filter by price range
+  // Filter by marque
   if (marque) {
     where.filterByCar = { contains: marque, mode: "insensitive" };
   }
 
-  // Filter by search term (case-insensitive)
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: "insensitive" } }, // Search in product name
-      { description: { contains: search, mode: "insensitive" } }, // Search in product description
-      { marque: { contains: search, mode: "insensitive" } }, // Search in product marque
-      { filterByCar: { contains: search, mode: "insensitive" } }, // Search in product car brand
-      { category: { title: { contains: search, mode: "insensitive" } } }, //search in category product
-    ];
-  }
-  if (search && marque) {
-    where.filterByCar = { contains: marque, mode: "insensitive" };
-    where.OR = [
-      { title: { contains: search, mode: "insensitive" } }, // Search in product name
-      { description: { contains: search, mode: "insensitive" } }, // Search in product description
-      { marque: { contains: search, mode: "insensitive" } }, // Search in product marque
-      { filterByCar: { contains: search, mode: "insensitive" } }, // Search in product car brand
-      { category: { title: { contains: search, mode: "insensitive" } } }, //search in category product
-    ];
-  }
   try {
-    // Fetch products with filters, sorting, and pagination
-    const products = await db.product.findMany({
+    // Fetch all products (without search filter initially)
+    let products = await db.product.findMany({
       where,
-      orderBy: {
-        createdAt: "asc", // Sort by creation date
-      },
-      skip: (page - 1) * pageSize, // Pagination: skip items
-      take: pageSize, // Pagination: take items
       include: {
         category: true,
       },
     });
 
-    // Get total count of products matching the filters (for pagination)
-    const totalCount = await db.product.count({ where });
+    // Apply fuzzy search if `search` parameter is provided
+    if (search) {
+      const fuseOptions = {
+        keys: [
+          "title",
+          "description",
+          "marque",
+          "filterByCar",
+          "category.title",
+        ],
+        threshold: 0.3,
+        includeMatches: true,
+        ignoreLocation: true,
+      };
 
-    // Calculate total pages for pagination
+      const fuse = new Fuse(products, fuseOptions);
+      const searchResults = fuse.search(search);
+
+      // Extract the matched products
+      products = searchResults.map((result) => result.item);
+    }
+
+    // Paginate the results
+    const totalCount = products.length;
     const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedProducts = products.slice(
+      (page - 1) * pageSize,
+      page * pageSize
+    );
 
     return NextResponse.json(
       {
-        data: products,
+        data: paginatedProducts,
         totalCount,
         totalPages,
         currentPage: page,
