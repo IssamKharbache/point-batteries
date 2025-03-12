@@ -30,17 +30,18 @@ const brands = [
     link: "/produits/marque/varta",
     color: "bg-[#345892]",
   },
-  {
-    name: "Electra",
-    src: "/brands/electra.png",
-    link: "/produits/marque/electra",
-    color: "bg-blue-500",
-  },
+
   {
     name: "Amaron",
     src: "/brands/amaron.jpg",
     link: "/produits/marque/amaron",
     color: "bg-white",
+  },
+  {
+    name: "Electra",
+    src: "/brands/electra.png",
+    link: "/produits/marque/electra",
+    color: "bg-blue-500",
   },
   {
     name: "Alma",
