@@ -9,7 +9,7 @@ import { getData } from "@/lib/getData";
 import { ProductData } from "@/components/backend/table/TableActions";
 
 const page = async () => {
-  const data: ProductData[] = await getData("/product");
+  const data: ProductData[] = await getData("/product/all");
   const filteredProducts = data.filter((product) => !product.isAchatProduct);
 
   return (

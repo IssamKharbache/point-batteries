@@ -153,8 +153,7 @@ export const GET = async (
     });
   } catch (error) {
     return NextResponse.json({
-      message:
-        "Erreur pendant la supprimation de staff , veuillez essayer apres.",
+      message: "Erreur pendant le retrer de user , veuillez essayer apres.",
       error,
     });
   }

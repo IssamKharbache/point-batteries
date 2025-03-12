@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { getData } from "@/lib/getData";
 import ProductDetails from "@/components/frontend/products/ProductDetails";
+import SimilarProducts from "@/components/frontend/products/SimilarProducts";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -12,8 +13,9 @@ const page = async ({ params }: PageProps) => {
   const product = await getData(`/product/${slug}`);
 
   return (
-    <section className="flex flex-col gap-4 max-w-[85rem] mx-auto">
+    <section className="max-w-[1200px] mx-auto">
       <ProductDetails product={product} />
+      <SimilarProducts marque={product.marque} />
     </section>
   );
 };

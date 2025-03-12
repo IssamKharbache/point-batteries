@@ -43,6 +43,12 @@ const brands = [
     color: "bg-white",
   },
   {
+    name: "Alma",
+    src: "/brands/alma.jpeg",
+    link: "/produits/marque/alma",
+    color: "bg-[#2c2e83]",
+  },
+  {
     name: "Fiamm",
     src: "/brands/fiamm.png",
     link: "/produits/marque/fiamm",
@@ -59,12 +65,6 @@ const brands = [
     src: "/brands/ad.png",
     link: "/produits/marque/ad",
     color: "bg-[#131343]",
-  },
-  {
-    name: "Almabat",
-    src: "/brands/almabat.png",
-    link: "/produits/marque/almabat",
-    color: "bg-red-400",
   },
 ];
 
