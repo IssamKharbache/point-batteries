@@ -75,9 +75,7 @@ const FiltersCopy = ({ slug, marque }: { slug?: string; marque?: string }) => {
         {/* custom price */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(submit)} className="space-y-4 mt-8">
-            <h1 className="font-medium text-md mb-4">
-              Votre marque de Vehicule
-            </h1>
+            <h1 className="font-medium text-md mb-4">Marque de batterie</h1>
 
             <FormField
               name="marque"
@@ -87,7 +85,7 @@ const FiltersCopy = ({ slug, marque }: { slug?: string; marque?: string }) => {
                   <FormItem>
                     <FormControl>
                       <Input
-                        placeholder="Audi, Dacia, Kia..."
+                        placeholder="Exide, Bosch, Alma..."
                         className="px-2 md:px-4 placeholder:text-xs"
                         {...field}
                         value={field.value || ""}

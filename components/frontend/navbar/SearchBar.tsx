@@ -75,8 +75,8 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
         onKeyDown={handleKeyDown}
         onChange={(e) => setQuery(e.target.value)}
         value={query}
-        className="w-full placeholder:text-gray-400 outline-none  px-8 focus:bg-gray-300 h-11 hover:bg-gray-300 focus:border-none"
-        placeholder="Recherche..."
+        className="w-full placeholder:text-gray-500 outline-none  px-5 focus:bg-gray-300 h-11 hover:bg-gray-300 focus:border-none"
+        placeholder="Rechercher par marque, titre, categorie..."
       />
       <div className="p-1  border-l border-gray-300">
         <button

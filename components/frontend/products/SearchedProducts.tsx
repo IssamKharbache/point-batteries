@@ -40,6 +40,8 @@ const SearchedProducts = ({ products, pageSize }: SearchedProductsProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
+    setLoading(true);
+    setLoadingStore(true);
     const fetchProducts = async () => {
       const res = await axios.get(
         `/api/product?search=${searchQ}&pageNum=${currentPage}&marque=${marque}&pageSize=${pageSize}`
@@ -86,13 +88,13 @@ const SearchedProducts = ({ products, pageSize }: SearchedProductsProps) => {
           </div>
         </div>
       )}
-      {loading ||
-        (loadingStore && (
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading && (
           <div className="flex items-center justify-center w-full h-full md:h-[500px] md:w-[500px]">
             <Loader2 className="animate-spin" size={45} />
           </div>
-        ))}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        )}
         {!loading &&
           !loadingStore &&
           products.map((product) => (

@@ -29,6 +29,9 @@ export const GET = async (request: NextRequest) => {
   if (categoryId) {
     where.categoryId = categoryId;
   }
+  if (marque) {
+    where.marque = marque;
+  }
 
   try {
     // Fetch all products (without marque or search filters initially)
@@ -39,22 +42,6 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    // Apply fuzzy search for `marque` if provided
-    if (marque) {
-      const fuseOptions = {
-        keys: ["filterByCar"],
-        threshold: 0.3,
-        includeMatches: true,
-        ignoreLocation: true,
-      };
-
-      const fuse = new Fuse(products, fuseOptions);
-      const marqueResults = fuse.search(marque);
-
-      // Extract the matched products
-      products = marqueResults.map((result) => result.item);
-    }
-
     // Apply fuzzy search for `search` parameter if provided
     if (search) {
       const fuseOptions = {
@@ -64,51 +51,17 @@ export const GET = async (request: NextRequest) => {
           "marque",
           "filterByCar",
           "category.title",
-        ], // Fields to search
+        ],
         threshold: 0.3,
-        includeMatches: true,
+        distance: 30,
         ignoreLocation: true,
+        minMatchCharLength: 2,
+        shouldSort: true,
+        includeMatches: true,
       };
 
       const fuse = new Fuse(products, fuseOptions);
       const searchResults = fuse.search(search);
-
-      // Extract the matched products
-      products = searchResults.map((result) => result.item);
-    }
-
-    // If both `marque` and `search` are provided, ensure the results match both criteria
-    if (marque && search) {
-      const fuseMarqueOptions = {
-        keys: ["filterByCar"], // Field to search for marque
-        threshold: 0.3,
-        includeMatches: true,
-        ignoreLocation: true,
-      };
-
-      const fuseSearchOptions = {
-        keys: [
-          "title",
-          "description",
-          "marque",
-          "filterByCar",
-          "category.title",
-        ], // Fields to search for search
-        threshold: 0.3,
-        includeMatches: true,
-        ignoreLocation: true,
-      };
-
-      // Apply fuzzy search for marque
-      const fuseMarque = new Fuse(products, fuseMarqueOptions);
-      const marqueResults = fuseMarque.search(marque);
-
-      // Apply fuzzy search for search
-      const fuseSearch = new Fuse(
-        marqueResults.map((result) => result.item),
-        fuseSearchOptions
-      );
-      const searchResults = fuseSearch.search(search);
 
       // Extract the matched products
       products = searchResults.map((result) => result.item);
