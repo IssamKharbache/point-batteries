@@ -25,12 +25,6 @@ const brands = [
     color: "bg-[#568ed8]",
   },
   {
-    name: "Leoch",
-    src: "/brands/leoch.png",
-    link: "/produits/marque/leoch",
-    color: "bg-blue-100",
-  },
-  {
     name: "Varta",
     src: "/brands/varta.png",
     link: "/produits/marque/varta",

@@ -75,7 +75,7 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
 
   return (
     <div>
-      <h1 className="p-2 bg-slate-200 rounded text-center font-semibold mb-8 capitalize text-3xl">
+      <h1 className="p-2 bg-slate-200 rounded text-center font-semibold mb-8 capitalize text-3xl m-10 lg:m-0 lg:mb-8">
         {marque}
       </h1>
       {loadingStore ||
@@ -109,7 +109,7 @@ const MarqueProductCard = ({ products, marque }: MarqueProductCardProps) => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-10 lg:m-0">
         {!loading &&
           !loadingStore &&
           productsState.map((product) => (

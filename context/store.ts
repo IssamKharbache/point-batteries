@@ -214,7 +214,7 @@ type CategoryProductPageType = {
 };
 export const useCategoryProductPageStore = create<CategoryProductPageType>(
   (set) => ({
-    loading: true,
+    loading: false,
     setLoading: (loading: boolean) => set({ loading }),
   })
 );

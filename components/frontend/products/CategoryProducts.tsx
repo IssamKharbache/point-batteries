@@ -36,18 +36,21 @@ const CategoryProducts = ({
 
   const [resultLength, setResultLength] = useState<number>(0);
   const totalPages = Math.ceil(resultLength / pageSize);
-  const min = searchParams.get("min") || "0"; // Make sure min is a string
-  const max = searchParams.get("max") || ""; // Make sure max is a string
+  const marque = searchParams.get("marque") || "";
+
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
   const { data: session } = useSession();
   const { addItem } = useCartStore();
   const { toast } = useToast();
   const useParams = useSearchParams();
 
   useEffect(() => {
+    setLoading(true);
+    setLoadingStore(true);
     const fetchProducts = async () => {
       const res = await axios.get(
-        `/api/product?catId=${catId}&pageNum=${currentPage}&min=${min}&max=${max}&pageSize=${pageSize}`
+        `/api/product?catId=${catId}&pageNum=${currentPage}&marque=${marque}&pageSize=${pageSize}`
       );
       if (res.status === 201) {
         setProductsState(res.data.data);
@@ -66,7 +69,7 @@ const CategoryProducts = ({
     };
 
     fetchProducts();
-  }, [min, max, currentPage, catId, pageSize]);
+  }, [marque, currentPage, catId, pageSize]);
 
   useEffect(() => {
     if (productsState.length > 0) {
@@ -78,17 +81,7 @@ const CategoryProducts = ({
 
   return (
     <div>
-      {loadingStore && (
-        <div className="flex items-center justify-center h-[500px] w-[500px]">
-          <Loader2 className="animate-spin" size={45} />
-        </div>
-      )}
-      {loading && (
-        <div className="flex items-center justify-center h-[500px] w-[500px]">
-          <Loader2 className="animate-spin" size={45} />
-        </div>
-      )}
-      {!loading && productsState.length === 0 && (
+      {!loading && !loadingStore && productsState.length === 0 && (
         <div className="flex flex-col gap-8  items-center">
           <Image
             src="/noproduct.png"
@@ -98,8 +91,8 @@ const CategoryProducts = ({
             className="w-40 self-center "
             loading="eager"
           />
-          <p className="text-center font-semibold text-xl mt-6 text-gray-500">
-            Il n&apos;y a aucun produit
+          <p className="text-center font-semibold text-sm mt-6 text-gray-500">
+            Aucun produit disponible sous cette marque, essayez une autre
           </p>
           <Link href="/">
             <Button>Poursuivez vos achats</Button>
@@ -107,12 +100,13 @@ const CategoryProducts = ({
         </div>
       )}
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 x gap-6">
-        {loading && (
-          <div className="flex items-center justify-center h-[500px] w-[500px]">
-            <Loader2 className="animate-spin" size={45} />
-          </div>
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  gap-6">
+        {loading ||
+          (loadingStore && (
+            <div className="flex items-center justify-center w-full h-full md:h-[500px] md:w-[500px]">
+              <Loader2 className="animate-spin" size={45} />
+            </div>
+          ))}
         {!loading &&
           !loadingStore &&
           productsState.map((product) => (
@@ -123,9 +117,9 @@ const CategoryProducts = ({
                   alt="image du produit"
                   width={500}
                   height={500}
-                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12 h-72 w-full"
+                  className="flex items-center justify-center group-hover:scale-105 duration-300 object-contain mb-12 h-52 w-full"
                 />
-                <h1 className="line-clamp-2 font-semibold uppercase text-start md:text-center mb-4 text-sm">
+                <h1 className="line-clamp-2 font-semibold uppercase text-center md:text-start text-sm min-h-20">
                   {product.title}
                 </h1>
               </Link>
@@ -161,7 +155,7 @@ const CategoryProducts = ({
           ))}
       </div>
 
-      {productsState.length !== 0 && (
+      {!loading && !loadingStore && productsState.length !== 0 && (
         <div className="mt-8">
           <PaginationWithFilters
             count={resultLength}

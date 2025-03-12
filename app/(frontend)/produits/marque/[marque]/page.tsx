@@ -1,4 +1,4 @@
-import Filters from "@/components/frontend/products/Filters";
+import FiltersCopy from "@/components/frontend/products/FiltersCopy";
 import MarqueProductCard from "@/components/frontend/products/MarqueProductCard";
 import { getData } from "@/lib/getData";
 
@@ -10,23 +10,16 @@ type Props = {
 };
 const page = async ({ params, searchParams }: Props) => {
   const marque = (await params).marque;
-  const { sort = "asc", min = 0, max = "", page = 1 } = await searchParams;
+  const { page = 1 } = await searchParams;
   const products = await getData(
-    `/product/marque?marque=${marque}&sort=${sort}&min=${min}&max=${max}&page=${page}`
+    `/product/marque?marque=${marque}&page=${page}`
   );
 
   return (
     <section className="max-w-[1200px] mx-auto">
-      <div className="grid grid-cols-12">
-        {/*  filters */}
-        <div className="col-span-12 md:col-span-4 mt-8">
-          <Filters marque={marque} />
-        </div>
-
-        {/* product */}
-        <div className={"col-span-12 md:col-span-8 p-8 "}>
-          <MarqueProductCard products={products} marque={marque} />
-        </div>
+      {/* product */}
+      <div className="w-full">
+        <MarqueProductCard products={products} marque={marque} />
       </div>
     </section>
   );

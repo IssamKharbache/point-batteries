@@ -73,9 +73,9 @@ const BookmarkButton = ({ product, userId }: BookmarkButtonProps) => {
       className="hover:bg-slate-100 p-2 border rounded group/heart"
     >
       <Heart
-        className={`group-hover/heart:fill-red-500 group-hover/heart:text-red-500 duration-300 ${
+        className={` duration-300 ${
           isBookmarked
-            ? "fill-red-500 text-red-500 group-hover/heart:!fill-gray-300 group-hover/heart:!text-gray-300"
+            ? "fill-red-500 text-red-500 "
             : "fill-gray-300 text-gray-300"
         }`}
       />

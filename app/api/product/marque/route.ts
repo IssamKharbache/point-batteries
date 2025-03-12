@@ -9,9 +9,6 @@ export const GET = async (request: NextRequest) => {
   // Extract query parameters
   const marque = searchParams.get("marque"); // Get marque from query params
   const search = searchParams.get("search");
-  const min = searchParams.get("min");
-  const max = searchParams.get("max");
-  const sortBy = searchParams.get("sort") || "desc"; // Default sorting
   const page = parseInt(searchParams.get("pageNum") || "1");
   const pageSize = parseInt(searchParams.get("pageSize") || "10");
 
@@ -21,13 +18,6 @@ export const GET = async (request: NextRequest) => {
   // Filter by marque
   if (marque) {
     where.marque = marque;
-  }
-
-  // Filter by price range
-  if (min || max) {
-    where.price = {};
-    if (min) where.price.gte = parseFloat(min);
-    if (max) where.price.lte = parseFloat(max);
   }
 
   // Filter by search term (case-insensitive)
@@ -45,7 +35,7 @@ export const GET = async (request: NextRequest) => {
     const products = await db.product.findMany({
       where,
       orderBy: {
-        createdAt: sortBy === "asc" ? "asc" : "desc", // Sort by creation date
+        createdAt: "asc", // Sort by creation date
       },
       skip: (page - 1) * pageSize, // Pagination: skip items
       take: pageSize, // Pagination: take items

@@ -9,11 +9,9 @@ export const GET = async (request: NextRequest) => {
   // Extract query parameters
   const categoryId = searchParams.get("catId");
   const search = searchParams.get("search");
-  const min = searchParams.get("min");
-  const max = searchParams.get("max");
-  const sortBy = searchParams.get("sort") || "desc"; // Default sorting
   const page = parseInt(searchParams.get("pageNum") || "1");
   const pageSize = parseInt(searchParams.get("pageSize") || "10");
+  const marque = searchParams.get("marque") || "";
 
   // Validate page and pageSize
   if (isNaN(page) || isNaN(pageSize) || page < 1 || pageSize < 1) {
@@ -32,10 +30,8 @@ export const GET = async (request: NextRequest) => {
   }
 
   // Filter by price range
-  if (min || max) {
-    where.price = {};
-    if (min) where.price.gte = parseFloat(min);
-    if (max) where.price.lte = parseFloat(max);
+  if (marque) {
+    where.filterByCar = { contains: marque, mode: "insensitive" };
   }
 
   // Filter by search term (case-insensitive)
@@ -45,20 +41,30 @@ export const GET = async (request: NextRequest) => {
       { description: { contains: search, mode: "insensitive" } }, // Search in product description
       { marque: { contains: search, mode: "insensitive" } }, // Search in product marque
       { filterByCar: { contains: search, mode: "insensitive" } }, // Search in product car brand
+      { category: { title: { contains: search, mode: "insensitive" } } }, //search in category product
     ];
   }
-
+  if (search && marque) {
+    where.filterByCar = { contains: marque, mode: "insensitive" };
+    where.OR = [
+      { title: { contains: search, mode: "insensitive" } }, // Search in product name
+      { description: { contains: search, mode: "insensitive" } }, // Search in product description
+      { marque: { contains: search, mode: "insensitive" } }, // Search in product marque
+      { filterByCar: { contains: search, mode: "insensitive" } }, // Search in product car brand
+      { category: { title: { contains: search, mode: "insensitive" } } }, //search in category product
+    ];
+  }
   try {
     // Fetch products with filters, sorting, and pagination
     const products = await db.product.findMany({
       where,
       orderBy: {
-        createdAt: sortBy === "asc" ? "asc" : "desc", // Sort by creation date
+        createdAt: "asc", // Sort by creation date
       },
       skip: (page - 1) * pageSize, // Pagination: skip items
       take: pageSize, // Pagination: take items
       include: {
-        category: true, // Include category details if needed
+        category: true,
       },
     });
 

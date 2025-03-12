@@ -19,7 +19,7 @@ const BreadCrumpComponent = ({ links }: BreadCrumpComponentProps) => {
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           {links.map((link, idx) => (
-            <BreadcrumbLink key={idx} href={link.href}>
+            <BreadcrumbLink className="capitalize" key={idx} href={link.href}>
               {link.name}
             </BreadcrumbLink>
           ))}

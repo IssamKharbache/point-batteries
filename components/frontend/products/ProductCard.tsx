@@ -81,7 +81,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
             swiperRef.current = swiper; // Assigning swiper to the ref
           }}
         >
-          {notAchatProducts.slice(0, 5).map((product, idx) => (
+          {notAchatProducts.slice(0, 10).map((product, idx) => (
             <SwiperSlide
               key={idx}
               className="shadow p-6 bg-white mb-8 group min-h-[400px]"

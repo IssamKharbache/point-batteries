@@ -3,8 +3,7 @@ export const dynamic = "force-dynamic";
 import { ProductData } from "@/components/backend/table/TableActions";
 import BreadCrumpComponent from "@/components/frontend/breadcrump/BreadCrumpComponent";
 import CategoryProducts from "@/components/frontend/products/CategoryProducts";
-import Filters from "@/components/frontend/products/Filters";
-import SimilarProcuts from "@/components/frontend/products/SimilarProcuts";
+import FiltersCopy from "@/components/frontend/products/FiltersCopy";
 import { getData } from "@/lib/getData";
 import axios from "axios";
 import React from "react";
@@ -77,12 +76,12 @@ export async function generateStaticParams() {
 }
 const Page = async ({ params, searchParams }: Props) => {
   const slug = (await params).slug;
-  const { sort = "asc", min = 0, max = "", page = 1 } = await searchParams;
+  const { marque, page = 1 } = await searchParams;
 
   const categorie: catData = await getData(`/categorie/${slug}`);
 
   const products = await getData(
-    `/product?catId=${categorie.id}&pageNum=${page}&sort=${sort}&min=${min}&max=${max}`
+    `/product?catId=${categorie.id}&pageNum=${page}&marque=${marque}`
   );
 
   return (
@@ -95,7 +94,7 @@ const Page = async ({ params, searchParams }: Props) => {
       <div className="grid grid-cols-12">
         {/*  filters */}
         <div className="col-span-12 md:col-span-4 mt-8">
-          <Filters slug={slug} />
+          <FiltersCopy slug={slug} />
         </div>
 
         {/* product */}

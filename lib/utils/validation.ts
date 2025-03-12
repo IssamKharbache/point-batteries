@@ -90,9 +90,8 @@ export const orderDetailsSchema = z.object({
   notesCommande: z.optional(z.string()),
 });
 
-export const filterPriceSchema = z.object({
-  min: z.string().min(0, "Le prix doit être supérieur ou égal à 0"),
-  max: z.string().min(0, "Le prix doit être supérieur ou égal à 0"),
+export const filterInputMarque = z.object({
+  marque: z.string().min(1, "Entrer une marque"),
 });
 
 export const addAchatSchema = z.object({

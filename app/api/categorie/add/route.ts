@@ -27,11 +27,12 @@ export const POST = async (req: NextRequest) => {
         data: null,
         message: "All fields are required",
       });
-
+    const titleLower = title.toLowerCase();
+    const descLower = description.toLowerCase();
     const newCategorie = await db.category.create({
       data: {
-        title: title.toLowerCase(),
-        description: description.toLowerCase(),
+        title: titleLower,
+        description: descLower,
         slug,
       },
     });
