@@ -42,10 +42,10 @@ export const GET = async (request: NextRequest) => {
     // Apply fuzzy search for `marque` if provided
     if (marque) {
       const fuseOptions = {
-        keys: ["filterByCar"], // Field to search (marque is stored in filterByCar)
-        threshold: 0.3, // Adjust threshold for fuzziness (0 = exact match, 1 = very loose)
-        includeMatches: true, // Include match details in results
-        ignoreLocation: true, // Ignore location of matches in the string
+        keys: ["filterByCar"],
+        threshold: 0.3,
+        includeMatches: true,
+        ignoreLocation: true,
       };
 
       const fuse = new Fuse(products, fuseOptions);
@@ -65,9 +65,9 @@ export const GET = async (request: NextRequest) => {
           "filterByCar",
           "category.title",
         ], // Fields to search
-        threshold: 0.3, // Adjust threshold for fuzziness
-        includeMatches: true, // Include match details in results
-        ignoreLocation: true, // Ignore location of matches in the string
+        threshold: 0.3,
+        includeMatches: true,
+        ignoreLocation: true,
       };
 
       const fuse = new Fuse(products, fuseOptions);
