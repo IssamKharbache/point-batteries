@@ -53,6 +53,32 @@ export const metadata: Metadata = {
     canonical: "https://pointbatteries.com",
   },
 };
+const globalStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Point Batterie Service",
+  url: "https://pointbatteries.com",
+  description:
+    "Votre partenaire de confiance pour la vente de batteries de haute qualité.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://pointbatteries.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
+const organizationStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Point Batterie Service",
+  url: "https://pointbatteries.com",
+  logo: "https://pointbatteries.com/logopbsdark.png",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+212656307044",
+    contactType: "customer service",
+  },
+};
 
 export default async function FrontLayout({
   children,
@@ -62,6 +88,21 @@ export default async function FrontLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
+      <head>
+        {/* Global structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(globalStructuredData),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationStructuredData),
+          }}
+        />
+      </head>
       <body className={`${montSerrat.className} antialiased `}>
         <AuthProvider>
           <NextTopLoader color="#ffffff" height={5} />
