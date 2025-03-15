@@ -30,7 +30,10 @@ export const GET = async (request: NextRequest) => {
     where.categoryId = categoryId;
   }
   if (marque) {
-    where.marque = marque;
+    where.marque = {
+      contains: marque,
+      mode: "insensitive",
+    };
   }
 
   try {

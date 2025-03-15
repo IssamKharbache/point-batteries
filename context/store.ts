@@ -331,3 +331,13 @@ export const useProductAchatDialogStore = create<ProductAchatDialogStore>(
     setDate: (date: Date) => set({ date }),
   })
 );
+
+type FiltersStoreType = {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+};
+
+export const useFiltersStore = create<FiltersStoreType>((set) => ({
+  isOpen: false,
+  setIsOpen: (isOpen: boolean) => set({ isOpen }),
+}));
