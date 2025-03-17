@@ -1,8 +1,7 @@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import Fuse from "fuse.js"; // Import Fuse.js
-
+import Fuse from "fuse.js";
 export const GET = async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
   type ProductWhereInput = Prisma.ProductWhereInput;
@@ -40,6 +39,9 @@ export const GET = async (request: NextRequest) => {
     // Fetch all products (without marque or search filters initially)
     let products = await db.product.findMany({
       where,
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         category: true,
       },

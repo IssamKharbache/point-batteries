@@ -53,7 +53,7 @@ const brands = [
     name: "Fiamm",
     src: "/brands/fiamm.png",
     link: "/produits/marque/fiamm",
-    color: "bg-red-600",
+    color: "bg-[#e00032]",
   },
   {
     name: "Banner",
