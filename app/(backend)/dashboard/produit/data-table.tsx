@@ -166,7 +166,6 @@ export function DataTable<TData extends ProductData>({
           <TableHeader>
             <TableRow className="py-4 px-4">
               <TableHead>Titre</TableHead>
-              <TableHead>Image du produit</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -179,17 +178,6 @@ export function DataTable<TData extends ProductData>({
                 >
                   <TableCell className="py-4 px-4" key="title">
                     {row.getValue("title")}
-                  </TableCell>
-                  <TableCell className="py-4 px-4" key="imageUrl">
-                    <div>
-                      <Image
-                        src={row.getValue("imageUrl")}
-                        alt="produit image"
-                        width={500}
-                        height={500}
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
-                    </div>
                   </TableCell>
 
                   <TableCell className="py-4 px-4">

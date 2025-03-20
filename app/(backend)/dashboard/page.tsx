@@ -19,6 +19,9 @@ interface VenteWithProducts extends Vente {
 
 const MainPage = async () => {
   const session = await getServerSession(authOptions);
+
+  const data: ProductData[] = await getData("/product/all");
+  const filteredProducts = data.filter((product) => !product.isAchatProduct);
   //users
   const users: User[] = await getData("/user");
   //getting only the users that are normal clients
@@ -80,7 +83,7 @@ const MainPage = async () => {
         total={totalRevenue}
       />
       <OrdersStats orders={orders} />
-      <ProductsStockData />
+      <ProductsStockData filteredProducts={filteredProducts} />
     </div>
   );
 };
