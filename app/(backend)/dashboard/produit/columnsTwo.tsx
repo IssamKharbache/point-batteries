@@ -5,7 +5,6 @@ import TableActions, {
 import { useToast } from "@/hooks/use-toast";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { CheckCheck, Copy } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 
 // CopyableCell Component (Handles Copying Logic)
@@ -53,7 +52,6 @@ export const columns: ColumnDef<ProductData>[] = [
   {
     accessorKey: "title",
     header: "Titre",
-    cell: ({ row }) => <div className="line-clamp-2">{row.original.title}</div>,
   },
 
   {
