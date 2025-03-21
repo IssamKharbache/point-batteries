@@ -182,10 +182,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
           </TableHeader>
           {loading && (
             <TableRow>
-              <TableCell
-                colSpan={10}
-                className="h-24 flex items-center justify-center"
-              >
+              <TableCell className="flex items-center justify-center py-4 h-52">
                 <Loader2 className="text-center animate-spin" />
               </TableCell>
             </TableRow>
