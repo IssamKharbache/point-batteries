@@ -51,13 +51,19 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
   const handlePrint = async () => {
     try {
-      await qz.websocket.connect();
+      // Check if QZ Tray is already connected
+      if (!qz.websocket.isActive()) {
+        await qz.websocket.connect();
+      }
+
+      // Find available printers
       const printers = await qz.printers.find();
 
       if (!printers || printers.length === 0) {
         throw new Error("No printers found.");
       }
 
+      // Set up printer configuration
       const config = qz.configs.create("NCR 7197 Receipt");
 
       const columnWidth = 20; // Adjust as needed for alignment
@@ -71,6 +77,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       const finalTotalLine =
         `TOTAL FINAL:`.padEnd(columnWidth, " ") +
         `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
+
       const data = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
@@ -93,9 +100,8 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
           `${product.refProduct.toUpperCase()} : ${product.marque.toUpperCase()} x${
             product.qty
           } x ${product.price?.toFixed(2)} DH`.padEnd(30) + // Product details
-          product.discount
-            ? `Remise: ${product.discount.toFixed(2)} DH\n`
-            : "", // Discount (if applicable)
+            `${(product.price * product.qty).toFixed(2)} DH\n`, // Total price
+          product.discount ? `Remise: ${product.discount.toFixed(2)} DH\n` : "", // Discount (if applicable)
           "--------------------------------------------\n",
         ]),
         "\n",
@@ -118,18 +124,33 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "\x1D\x56\x41\x10", // Full cut
       ];
 
+      // Send print job
       await qz.print(config, data);
-      await qz.websocket.disconnect();
-    } catch (error: any) {
-      console.error("Error during printing:", error);
-      if (error.message.includes("No printers found")) {
-        alert("No printers found. Please ensure a printer is connected.");
-      } else if (error.message.includes("Connection to QZ Tray failed")) {
-        alert(
-          "Failed to connect to QZ Tray. Please ensure QZ Tray is running."
-        );
+
+      console.log("Print job sent successfully");
+    } catch (error) {
+      // Narrow down the type of the error
+      if (error instanceof Error) {
+        console.error("Error during printing:", error.message);
+
+        if (error.message.includes("No printers found")) {
+          alert("No printers found. Please ensure a printer is connected.");
+        } else if (error.message.includes("Connection to QZ Tray failed")) {
+          alert(
+            "Failed to connect to QZ Tray. Please ensure QZ Tray is running."
+          );
+        } else {
+          alert("An error occurred while printing. Please try again.");
+        }
       } else {
-        alert("An error occurred while printing. Please try again.");
+        // Handle cases where the error is not an instance of Error
+        console.error("An unknown error occurred:", error);
+        alert("An unknown error occurred. Please try again.");
+      }
+    } finally {
+      // Close the connection after printing
+      if (qz.websocket.isActive()) {
+        await qz.websocket.disconnect();
       }
     }
   };
