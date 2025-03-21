@@ -46,6 +46,27 @@ export const GET = async (request: NextRequest) => {
         category: true,
       },
     });
+    // Move products with marque "BOSCH" to the top
+    products = products.sort((a, b) => {
+      const marqueA = a.marque?.toUpperCase();
+      const marqueB = b.marque?.toUpperCase();
+
+      // Prioritize BOSCH first
+      if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
+      if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
+
+      // Then prioritize AMARON
+      if (marqueA === "AMARON" && marqueB !== "AMARON") return -1;
+      if (marqueA !== "AMARON" && marqueB === "AMARON") return 1;
+      // Then prioritize Fiamm
+      if (marqueA === "FIAMM" && marqueB !== "FIAMM") return -1;
+      if (marqueA !== "FIAMM" && marqueB === "FIAMM") return 1;
+      // Then prioritize Exide
+      if (marqueA === "EXIDE" && marqueB !== "EXIDE") return -1;
+      if (marqueA !== "EXIDE" && marqueB === "EXIDE") return 1;
+
+      return 0;
+    });
 
     // Apply fuzzy search for `search` parameter if provided
     if (search) {

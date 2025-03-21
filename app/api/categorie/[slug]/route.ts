@@ -110,10 +110,27 @@ export const GET = async (
       where: {
         slug,
       },
+
       include: {
         products: true,
       },
     });
+    if (category?.products) {
+      category.products.sort((a, b) => {
+        const marqueA = a.marque?.toUpperCase();
+        const marqueB = b.marque?.toUpperCase();
+
+        // Prioritize BOSCH first
+        if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
+        if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
+
+        // Then prioritize AMARON
+        if (marqueA === "AMARON" && marqueB !== "AMARON") return -1;
+        if (marqueA !== "AMARON" && marqueB === "AMARON") return 1;
+
+        return 0;
+      });
+    }
     if (!category) {
       return NextResponse.json({
         data: null,

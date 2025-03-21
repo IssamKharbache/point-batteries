@@ -15,10 +15,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useCategoryProductPageStore, useFiltersStore } from "@/context/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const FiltersCopy = ({ slug, marque }: { slug?: string; marque?: string }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const form = useForm<z.infer<typeof filterInputMarque>>({
     resolver: zodResolver(filterInputMarque),
     defaultValues: {
@@ -73,7 +78,7 @@ const FiltersCopy = ({ slug, marque }: { slug?: string; marque?: string }) => {
 
       {/* Filters */}
       <AnimatePresence>
-        {(isOpen || window.innerWidth >= 768) && (
+        {(isOpen || (isClient && window.innerWidth >= 768)) && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

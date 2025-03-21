@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+
+import LogoWhite from "@/public//logo_white.svg";
 interface FooterProps {
   username: string;
 }
@@ -12,13 +14,9 @@ const Footer = ({ username }: FooterProps) => {
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-[1500px]">
         <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="">
-            <Image
-              src="/logopbslight.png"
-              alt="Logo"
-              width={384}
-              height={384}
-              className="w-96"
-            />
+            <Link href="/">
+              <LogoWhite />
+            </Link>
 
             <p className="text-sm leading-relaxed text-gray-600 mt-7">
               Bienvenue sur Point Batteries Services, votre partenaire de

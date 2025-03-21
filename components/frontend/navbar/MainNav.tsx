@@ -12,6 +12,7 @@ import {
   useSearchBarStore,
 } from "@/context/store";
 import { useSession } from "next-auth/react";
+import LogoDark from "@/public/logo_dark.svg";
 
 const MainNav = () => {
   const { status } = useSession();
@@ -23,14 +24,7 @@ const MainNav = () => {
     <nav className="h-25 border-b  shadow-sm ">
       <div className="flex items-center justify-between py-3 max-w-[1500px] mx-auto px-4 md:px-8 gap-8  ">
         <Link href="/">
-          <Image
-            src="/logopbsdark.png"
-            alt="Logo"
-            width={1000}
-            height={1000}
-            className="w-60 md:w-72"
-            priority
-          />
+          <LogoDark />
         </Link>
         <div className="items-center gap-4 hidden lg:flex">
           <button

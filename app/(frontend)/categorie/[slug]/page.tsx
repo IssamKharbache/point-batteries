@@ -81,7 +81,7 @@ const Page = async ({ params, searchParams }: Props) => {
   const categorie: catData = await getData(`/categorie/${slug}`);
 
   const products = await getData(
-    `/product?catId=${categorie.id}&pageNum=${page}&marque=${marque}`
+    `/product?catId=${categorie?.id}&pageNum=${page}&marque=${marque}`
   );
 
   return (
