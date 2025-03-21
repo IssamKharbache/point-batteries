@@ -93,8 +93,9 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
           `${product.refProduct.toUpperCase()} : ${product.marque.toUpperCase()} x${
             product.qty
           } x ${product.price?.toFixed(2)} DH`.padEnd(30) + // Product details
-            `${(product.price * product.qty).toFixed(2)} DH\n`, // Total price
-          product.discount ? `Remise: ${product.discount.toFixed(2)} DH\n` : "", // Discount (if applicable)
+          product.discount
+            ? `Remise: ${product.discount.toFixed(2)} DH\n`
+            : "", // Discount (if applicable)
           "--------------------------------------------\n",
         ]),
         "\n",

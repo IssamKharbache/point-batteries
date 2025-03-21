@@ -16,7 +16,7 @@ import { formatDate } from "@/lib/utils/index";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Printer } from "lucide-react";
+import { Loader2, Printer } from "lucide-react";
 import axios from "axios";
 
 interface Product {
@@ -45,14 +45,17 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [ventesList, setVentesList] = useState<Vente[]>(ventes);
+  const [loading, setLoading] = useState(false);
 
   // Get today's date
   const today = new Date();
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       const res = await axios.get("/api/vente");
       setVentesList(res.data.data);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -177,27 +180,38 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
               <TableHead>Vendue par</TableHead>
             </TableRow>
           </TableHeader>
+          {loading && (
+            <TableRow>
+              <TableCell
+                colSpan={10}
+                className="h-24 flex items-center justify-center"
+              >
+                <Loader2 className="text-center animate-spin" />
+              </TableCell>
+            </TableRow>
+          )}
+          {!loading && filteredVentes.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={10} className="h-24 text-center">
+                Aucune Vente
+              </TableCell>
+            </TableRow>
+          )}
           <TableBody className="border">
-            {filteredVentes.length > 0 ? (
-              filteredVentes.map((vente) =>
-                vente.products.map((product, index) => (
-                  <TableRow key={index} className="border-b-2">
-                    <TableCell className="font-medium p-5 line-clamp-2 ">
-                      {product.designationProduit}
-                    </TableCell>
-                    <TableCell>{product.qty}</TableCell>
-                    <TableCell>{product.price}</TableCell>
-                    <TableCell>{vente.nomDuCaissier}</TableCell>
-                  </TableRow>
-                ))
-              )
-            ) : (
-              <TableRow>
-                <TableCell colSpan={10} className="h-24 text-center">
-                  Aucune Vente
-                </TableCell>
-              </TableRow>
-            )}
+            {!loading && filteredVentes.length > 0
+              ? filteredVentes.map((vente) =>
+                  vente.products.map((product, index) => (
+                    <TableRow key={index} className="border-b-2">
+                      <TableCell className="font-medium p-5 line-clamp-2 ">
+                        {product.designationProduit}
+                      </TableCell>
+                      <TableCell>{product.qty}</TableCell>
+                      <TableCell>{product.price}</TableCell>
+                      <TableCell>{vente.nomDuCaissier}</TableCell>
+                    </TableRow>
+                  ))
+                )
+              : null}
           </TableBody>
         </Table>
       </div>
