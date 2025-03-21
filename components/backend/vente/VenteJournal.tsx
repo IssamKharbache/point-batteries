@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa"; // Importing calendar icon
@@ -17,6 +17,7 @@ import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Printer } from "lucide-react";
+import axios from "axios";
 
 interface Product {
   designationProduit: string;
@@ -43,11 +44,20 @@ interface VenteJournalProps {
 const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [ventesList, setVentesList] = useState<Vente[]>(ventes);
 
   // Get today's date
   const today = new Date();
 
-  const filteredVentes = ventes.filter((vente) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get("/api/vente");
+      setVentesList(res.data.data);
+    };
+    fetchData();
+  }, []);
+
+  const filteredVentes = ventesList.filter((vente) => {
     const venteDate = new Date(vente.createdAt);
     const start = startDate ? startDate : null;
     const end = endDate ? endDate : null;
@@ -62,7 +72,6 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
 
     return true;
   });
-
   // Custom button component for the date picker
   const CustomDatePickerButton = React.forwardRef<
     HTMLButtonElement,

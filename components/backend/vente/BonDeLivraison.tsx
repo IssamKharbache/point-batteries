@@ -71,7 +71,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       const finalTotalLine =
         `TOTAL FINAL:`.padEnd(columnWidth, " ") +
         `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
-
       const data = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
@@ -90,21 +89,17 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         `Servi par: ${nomDuCaissier} \n`, // Cashier name
         "\n",
         "--------------------------------------------\n",
-        ...products.map(
-          (product) =>
-            `${product.marque
-              .toUpperCase()
-              .trim()} : ${product.refProduct.toUpperCase()}\n` + // Product name
-            `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Qty & price
-            `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total price aligned
-            `Remise: ${
-              product.discount ? product.discount?.toFixed(2) : 0
-            } DH\n`.padStart(40) + // Show Remise below price
-            "--------------------------------------------\n"
-        ),
+        ...products.flatMap((product) => [
+          `${product.refProduct.toUpperCase()} : ${product.marque.toUpperCase()} x${
+            product.qty
+          } x ${product.price?.toFixed(2)} DH`.padEnd(30) + // Product details
+            `${(product.price * product.qty).toFixed(2)} DH\n`, // Total price
+          product.discount ? `Remise: ${product.discount.toFixed(2)} DH\n` : "", // Discount (if applicable)
+          "--------------------------------------------\n",
+        ]),
         "\n",
-        "\x1B\x61\x01",
-        "\x1B\x21\x10",
+        "\x1B\x61\x01", // Center alignment for totals
+        "\x1B\x21\x10", // Double height and width text
         totalLine,
         remiseLine,
         finalTotalLine,
