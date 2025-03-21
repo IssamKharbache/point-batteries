@@ -30,6 +30,8 @@ interface VenteProduct {
   price: number;
   designationProduit: string;
   discount: number;
+  marque: string;
+  refProduct: string;
 }
 
 export const columns: ColumnDef<VenteType>[] = [

@@ -255,19 +255,25 @@ const ClientInfo = () => {
                     <LoadingButton />
                   ) : (
                     <>
-                      <Label>Client enregistré</Label>
-                      <Select onValueChange={handleSelectClient}>
-                        <SelectTrigger className="w-[100px] md:w-[150px] ">
-                          <SelectValue placeholder={"Sélectionner un client"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {companyClient.map((client, idx) => (
-                            <SelectItem key={idx} value={client.id}>
-                              {client.nom} {client.prenom}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {companyClient.length > 0 ? (
+                        <>
+                          <Label>Client enregistré</Label>
+                          <Select onValueChange={handleSelectClient}>
+                            <SelectTrigger className="w-[100px] md:w-[150px] ">
+                              <SelectValue
+                                placeholder={"Sélectionner un client"}
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {companyClient.map((client, idx) => (
+                                <SelectItem key={idx} value={client.id}>
+                                  {client.nom} {client.prenom}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </>
+                      ) : null}
                     </>
                   )}
                 </div>

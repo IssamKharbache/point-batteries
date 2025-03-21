@@ -71,11 +71,14 @@ export const POST = async (req: NextRequest) => {
       (p: {
         refProduct: string;
         quantity: string;
+        marque: string;
         price: number;
         designationProduit: string;
         discount: string;
         productVenteBenifit: number;
       }) => ({
+        refProduct: p.refProduct,
+        marque: p.marque,
         productId: productMap.get(p.refProduct) as string,
         qty: parseInt(p.quantity),
         price: p.price,

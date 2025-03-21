@@ -23,6 +23,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     useState<ProductData[]>(productsVente);
+
   const [validationErrors, setValidationErrors] = useState<{
     [refProduct: string]: string;
   }>({});
@@ -200,7 +201,8 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
 
         const totalAchatPrice = product.achatPrice * quantity;
 
-        const totalPriceAfterDiscount = product.price * quantity - discount;
+        const totalPriceAfterDiscount =
+          product.price * quantity - (discount || 0);
 
         const productVenteBenifit = totalPriceAfterDiscount - totalAchatPrice;
 
@@ -209,6 +211,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           quantity: productSelected[refProduct].quantity,
           price: product.price,
           designationProduit: product.designationProduit,
+          marque: product.marque,
           discount: productSelected[refProduct].discount,
           productVenteBenifit,
         };
@@ -221,6 +224,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           quantity: string;
           price: number;
           designationProduit: string;
+          marque: string;
           discount: string;
           productVenteBenifit: number;
         } => product !== null

@@ -3,7 +3,7 @@ import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { Download, Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 import Image from "next/image";
 import qz from "qz-tray";
 
@@ -92,13 +92,14 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "--------------------------------------------\n",
         ...products.map(
           (product) =>
-            `${product.designationProduit
+            `${product.marque
               .toUpperCase()
-              .replace(/batterie/gi, "")
-              .trim()}\n` + // Product name
+              .trim()} : ${product.refProduct.toUpperCase()}\n` + // Product name
             `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Qty & price
             `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total price aligned
-            `Remise: ${product.discount?.toFixed(2)} DH\n`.padStart(40) + // Show Remise below price
+            `Remise: ${
+              product.discount ? product.discount?.toFixed(2) : 0
+            } DH\n`.padStart(40) + // Show Remise below price
             "--------------------------------------------\n"
         ),
         "\n",
@@ -206,9 +207,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               <tbody>
                 {products.map((product, index) => (
                   <tr key={index}>
-                    <td style={{ textAlign: "left" }}>
-                      {product.designationProduit}
-                    </td>
+                    <td style={{ textAlign: "left" }}>{product.marque}</td>
                     <td style={{ textAlign: "center" }}>{product.qty}</td>
                     <td style={{ textAlign: "right" }}>
                       {product.price?.toFixed(2)} DH

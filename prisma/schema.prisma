@@ -217,6 +217,8 @@ model VenteProduct {
   discount            Float?
 
   designationProduit String?
+  marque             String?
+  refProduct         String?
 
   vente   Vente   @relation(fields: [venteId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)

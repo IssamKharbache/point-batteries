@@ -5,7 +5,7 @@ import { getData } from "@/lib/getData";
 import React from "react";
 
 const page = async () => {
-  const products: ProductData[] = await getData("/product");
+  const products: ProductData[] = await getData("/product/all");
 
   const filterProducts = products.filter((product) => !product.isAchatProduct);
 
