@@ -1,6 +1,11 @@
 import React, { useRef, useState } from "react";
 import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+} from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
@@ -93,17 +98,16 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         `Servi par: ${nomDuCaissier} \n`, // Cashier name
         "\n",
         "--------------------------------------------\n",
-        ...products.map(
-          (product) =>
-            `${extractTextInParentheses(
-              product.designationProduit
-            )?.toUpperCase()}\n` + // Product name
-            `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Qty & price
-            `Remise: ${
-              product.discount ? product.discount?.toFixed(2) : 0
-            } DH\n`.padStart(40) + // Show Remise below price
-            "--------------------------------------------\n"
-        ),
+        ...products.flatMap((product) => [
+          `${extractTextInParentheses(
+            product.designationProduit.toUpperCase()
+          )}`.padEnd(30) + // Designation
+            `x${product.qty} x ${product.price?.toFixed(2)} DH\n`, // Quantity and price
+          product.discount
+            ? `Remise: ${product.discount.toFixed(2)} DH\n` // Discount (if any)
+            : "",
+          "--------------------------------------------\n",
+        ]),
         "\n",
         "\x1B\x61\x01", // Center alignment for totals
         "\x1B\x21\x10", // Double height and width text
@@ -164,6 +168,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         <DialogContent>
           <DialogHeader className="text-start m-3">
             <DialogTitle>Bon de Livraison</DialogTitle>
+            <DialogDescription></DialogDescription>
           </DialogHeader>
           <div className="flex justify-between items-center p-5">
             <h1 className="text-xl">
@@ -235,13 +240,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
             {/* Products Table */}
             <table style={{ width: "100%", marginBottom: "10px" }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: "left" }}>Produit</th>
-                  <th style={{ textAlign: "center" }}>Qty</th>
-                  <th style={{ textAlign: "right" }}>Prix UN</th>
-                </tr>
-              </thead>
               <tbody>
                 {products.map((product, index) => (
                   <tr key={index}>
