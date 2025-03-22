@@ -155,7 +155,7 @@ const ClientInfo = () => {
           className: "toast-container",
         });
 
-        if (data.generateFacture) {
+        if (isGeneratingFac) {
           router.push(`/dashboard/vente/facture/${allData.factureCode}`);
         } else {
           router.push("/dashboard/vente");
