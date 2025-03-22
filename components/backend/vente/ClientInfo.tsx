@@ -35,6 +35,7 @@ import { z } from "zod";
 const ClientInfo = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [value, setValue] = useState("ESPECE");
+  const [isGeneratingFac, setIsGeneratingFac] = useState(false);
   const [companyClient, setCompanyClients] = useState<CompanyClient[]>([]);
   const [isChoosingFromClient, setIsChoosingFromClient] =
     useState<boolean>(false);
@@ -42,6 +43,8 @@ const ClientInfo = () => {
     null
   );
   const [loadingClient, setLoadingClient] = useState(false);
+
+  const [ice, setIce] = useState<string>("");
 
   useEffect(() => {
     setLoadingClient(true);
@@ -72,12 +75,23 @@ const ClientInfo = () => {
     },
   });
 
+  const handleGenerateFac = () => {
+    setIsGeneratingFac(!isGeneratingFac);
+  };
+
   const { toast } = useToast();
   const { currentStep, setCurrentStep, productsToSubmit } = useStepFormStore();
 
-  // Function to generate a unique facture code
   const generateUniqueFactureCode = () => {
-    return `FTA-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    const randomNumber = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, "0"); // e.g., "206"
+
+    return `FA-${day}-${month}-${randomNumber}`;
   };
 
   const handlePrevious = () => {
@@ -98,7 +112,7 @@ const ClientInfo = () => {
   const onChange = (selectedValue: "ESPECE" | "CHECK" | "VIREMENT") => {
     setValue(selectedValue);
   };
-
+  //
   const handleSelectClient = (clientId: string) => {
     const selected = companyClient.find((client) => client.id === clientId);
     if (selected) {
@@ -109,6 +123,7 @@ const ClientInfo = () => {
       form.setValue("clientTel", selected.tel);
     }
   };
+  //submit function
   const handleSubmit = async (data: z.infer<typeof addClientVenteSchema>) => {
     const venteBenifits = productsToSubmit.reduce((total, product) => {
       return total + product.productVenteBenifit;
@@ -122,7 +137,9 @@ const ClientInfo = () => {
       products: productsToSubmit,
       nomDuCaissier,
       venteBenifits,
-      factureCode: data.generateFacture ? generateUniqueFactureCode() : null,
+      ice,
+      generateFacture: isGeneratingFac,
+      factureCode: isGeneratingFac ? generateUniqueFactureCode() : null,
     };
 
     try {
@@ -273,7 +290,9 @@ const ClientInfo = () => {
                             </SelectContent>
                           </Select>
                         </>
-                      ) : null}
+                      ) : (
+                        <p>Aucun client</p>
+                      )}
                     </>
                   )}
                 </div>
@@ -286,14 +305,25 @@ const ClientInfo = () => {
                 <FormItem className="flex items-center gap-2">
                   <FormControl>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                      checked={isGeneratingFac}
+                      onCheckedChange={handleGenerateFac}
                     />
                   </FormControl>
                   <FormLabel>Générer une facture</FormLabel>
                 </FormItem>
               )}
             />
+            {isGeneratingFac ? (
+              <div className="mt-3">
+                <Label>ICE </Label>
+                <Input
+                  onChange={(e) => setIce(e.target.value)}
+                  value={ice}
+                  className="px-3"
+                  placeholder="ICE"
+                />
+              </div>
+            ) : null}
             {loading ? (
               <LoadingButton bgColor="bg-black" textColor="text-white" />
             ) : (

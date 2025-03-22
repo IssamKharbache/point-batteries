@@ -22,6 +22,7 @@ export const POST = async (req: NextRequest) => {
       clientTel,
       generateFacture,
       factureCode,
+      ice,
       venteBenifits,
     } = await req.json();
 
@@ -104,6 +105,7 @@ export const POST = async (req: NextRequest) => {
           nomDuCaissier,
           generateFacture,
           venteBenifits,
+          ice: ice || null,
           factureCode: generateFacture ? factureCode : null,
           products: {
             create: productsData,
