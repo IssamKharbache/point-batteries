@@ -39,7 +39,7 @@ const SideBar = () => {
   if (session.user.role === "CAISSIER") {
     sideBarMenu.push(
       {
-        name: "Client Repititive",
+        name: "Client",
         href: "/dashboard/client-rep",
         icon: Contact,
         isMainAdmin: true,
@@ -80,7 +80,7 @@ const SideBar = () => {
         isMainAdmin: true,
       },
       {
-        name: "Client Repititive",
+        name: "Client",
         href: "/dashboard/client-rep",
         icon: Contact,
         isMainAdmin: true,
@@ -92,12 +92,6 @@ const SideBar = () => {
         isMainAdmin: true,
       },
 
-      {
-        name: "Client",
-        href: "/dashboard/client",
-        icon: Users,
-        isMainAdmin: false,
-      },
       {
         name: "Commande",
         href: "/dashboard/commandes",

@@ -1,4 +1,4 @@
-import { CircleDollarSign, ShoppingCart, User } from "lucide-react";
+import { CircleDollarSign, ShoppingCart } from "lucide-react";
 import React from "react";
 
 interface StatsProps {
@@ -7,7 +7,7 @@ interface StatsProps {
   total: number;
 }
 
-const Statistics = ({ numberClient, ordersNumber, total }: StatsProps) => {
+const Statistics = ({ ordersNumber, total }: StatsProps) => {
   const data = [
     {
       name: "Revenu total",
@@ -21,15 +21,9 @@ const Statistics = ({ numberClient, ordersNumber, total }: StatsProps) => {
       icon: ShoppingCart,
       bgColor: "bg-green-200",
     },
-    {
-      name: "Nombre total de clients",
-      number: numberClient,
-      icon: User,
-      bgColor: "bg-purple-200",
-    },
   ];
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
       {data.map((item, index) => {
         const Icon = item.icon;
         return (
