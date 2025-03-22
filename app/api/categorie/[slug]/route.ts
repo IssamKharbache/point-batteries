@@ -120,13 +120,13 @@ export const GET = async (
         const marqueA = a.marque?.toUpperCase();
         const marqueB = b.marque?.toUpperCase();
 
-        // Prioritize BOSCH first
-        if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
-        if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
-
-        // Then prioritize AMARON
+        // Prioritize AMARON
         if (marqueA === "AMARON" && marqueB !== "AMARON") return -1;
         if (marqueA !== "AMARON" && marqueB === "AMARON") return 1;
+
+        // then BOSCH
+        if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
+        if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
 
         return 0;
       });

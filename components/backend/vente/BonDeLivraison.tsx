@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
-import Image from "next/image";
 import qz from "qz-tray";
 
 interface BonDeLivraisonProps {
@@ -46,8 +45,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       totalRemise: 0,
     }
   );
-
-  const contentRef = useRef<HTMLInputElement | null>(null);
 
   const handlePrint = async () => {
     try {
@@ -92,11 +89,10 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "--------------------------------------------\n",
         ...products.map(
           (product) =>
-            `${product.marque
-              .toUpperCase()
-              .trim()} : ${product.refProduct.toUpperCase()}\n` + // Product name
+            `${extractTextInParentheses(
+              product.designationProduit
+            )?.toUpperCase()}\n` + // Product name
             `x${product.qty} x ${product.price?.toFixed(2)} DH`.padStart(20) + // Qty & price
-            `${(product.price * product.qty).toFixed(2).padStart(20)} DH\n` + // Total price aligned
             `Remise: ${
               product.discount ? product.discount?.toFixed(2) : 0
             } DH\n`.padStart(40) + // Show Remise below price
@@ -161,103 +157,136 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
           <div
             className="thermal-receipt"
-            ref={contentRef}
             style={{
               fontFamily: "monospace",
               margin: "auto",
               padding: "10px",
               border: "1px solid #000",
+              width: "400px", // Adjust width to match receipt width
+              textAlign: "center", // Center align all text
             }}
           >
-            <div className="header text-center">
-              <Image
-                src="/logopbsdark.png"
-                alt="Logo"
-                width={240}
-                height={80}
-                className="mx-auto"
-              />
-            </div>
-
-            <div className="meta-info" style={{ marginTop: "10px" }}>
-              <div className="flex justify-between">
-                <span>Date: {formatISODate(rowData.createdAt)}</span>
-                <span>Ref: {rowData.venteRef}</span>
-              </div>
-              <div className="mt-1">
-                Client: {clientNom} {clientPrenom}
-              </div>
-            </div>
-
-            <table
+            {/* Company Name */}
+            <div
               style={{
-                width: "100%",
-                marginTop: "10px",
-                borderCollapse: "collapse",
+                fontSize: "24px",
+                fontWeight: "bold",
+                marginBottom: "10px",
               }}
             >
+              Point Batteries
+            </div>
+            <div
+              style={{
+                fontSize: "24px",
+                marginBottom: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              Services
+            </div>
+
+            {/* Title */}
+            <div
+              style={{
+                fontSize: "15px",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
+            >
+              Bon de Livraison
+            </div>
+
+            {/* Meta Info */}
+            <div className="meta-info" style={{ marginBottom: "10px" }}>
+              <div>Date: {formatISODate(rowData.createdAt)}</div>
+              <div>Ref: {rowData.venteRef}</div>
+              <div>
+                Client: {clientNom} {clientPrenom}
+              </div>
+              <div>Servi par: {nomDuCaissier}</div>
+            </div>
+
+            {/* Separator */}
+            <div
+              style={{ borderBottom: "1px solid #000", marginBottom: "10px" }}
+            ></div>
+
+            {/* Products Table */}
+            <table style={{ width: "100%", marginBottom: "10px" }}>
               <thead>
                 <tr>
                   <th style={{ textAlign: "left" }}>Produit</th>
                   <th style={{ textAlign: "center" }}>Qty</th>
                   <th style={{ textAlign: "right" }}>Prix UN</th>
-                  <th style={{ textAlign: "right" }}>Total</th>
                 </tr>
               </thead>
               <tbody>
                 {products.map((product, index) => (
                   <tr key={index}>
-                    <td style={{ textAlign: "left" }}>{product.marque}</td>
-                    <td style={{ textAlign: "center" }}>{product.qty}</td>
+                    <td style={{ textAlign: "left" }}>
+                      {` ${extractTextInParentheses(
+                        product.designationProduit
+                      )?.toUpperCase()}  `}
+                    </td>
+                    <td style={{ textAlign: "center" }}>x{product.qty}</td>
                     <td style={{ textAlign: "right" }}>
                       {product.price?.toFixed(2)} DH
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      {(product.price * product.qty).toFixed(2)} DH
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Show Remise Information */}
-            <div style={{ marginTop: "10px", textAlign: "right" }}>
+            {/* Discount Information */}
+            <div style={{ marginBottom: "10px", textAlign: "right" }}>
               {products.map((product, index) =>
                 product.discount ? (
-                  <p key={index} style={{ fontSize: "12px", color: "red" }}>
-                    Remise sur {product.designationProduit}: -
-                    {product.discount.toFixed(2)} DH
-                  </p>
+                  <div key={index} style={{ fontSize: "12px", color: "red" }}>
+                    Remise sur {product.marque}: -{product.discount.toFixed(2)}{" "}
+                    DH
+                  </div>
                 ) : null
               )}
             </div>
 
-            {/* Show Total, Remise Totale, and Final Total */}
-            <div className="total-section" style={{ marginTop: "10px" }}>
-              <div className="flex justify-between mt-1 font-bold">
-                <span>Mode:</span>
-                <span>{paymentType}</span>
+            {/* Separator */}
+            <div
+              style={{ borderBottom: "1px solid #000", marginBottom: "10px" }}
+            ></div>
+
+            {/* Total Section */}
+            <div className="total-section" style={{ marginBottom: "10px" }}>
+              <div style={{ fontWeight: "bold", marginBottom: "5px" }}>
+                Mode: {paymentType.toUpperCase()}
               </div>
-              <div className="flex justify-between">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>Total:</span>
                 <span>{(overallTotal + totalRemise).toFixed(2)} DH</span>
               </div>
-              <div className="flex justify-between mt-1">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>Remise Totale:</span>
                 <span>-{totalRemise.toFixed(2)} DH</span>
               </div>
-              <div className="flex justify-between mt-1 font-bold">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontWeight: "bold",
+                }}
+              >
                 <span>Total Final:</span>
                 <span>{overallTotal.toFixed(2)} DH</span>
               </div>
             </div>
 
+            {/* Footer */}
             <div
               className="footer"
               style={{ marginTop: "10px", textAlign: "center" }}
             >
-              <p>Merci pour votre confiance!</p>
-              <p>Service après-vente: Tel : 0656307044 Fix : 0531510011</p>
+              <div>Merci pour votre confiance!</div>
+              <div>Service après-vente: Tel : 0656307044 Fix : 0531510011</div>
             </div>
           </div>
         </DialogContent>
@@ -280,4 +309,16 @@ function formatISODate(isoDate: Date): string {
   const seconds = String(date.getSeconds()).padStart(2, "0");
 
   return `${day}.${month}.${year}/${hours}:${minutes}:${seconds}`;
+}
+
+function extractTextInParentheses(designation: string) {
+  // Use a regular expression to match text between parentheses
+  const regex = /\((.*?)\)/;
+  const match = designation.match(regex);
+
+  // If a match is found, return the text inside the parentheses
+  if (match && match[1]) {
+    return match[1];
+  }
+  return null;
 }

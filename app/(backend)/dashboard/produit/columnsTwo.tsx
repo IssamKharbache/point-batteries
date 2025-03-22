@@ -51,7 +51,7 @@ const CopyableCell = ({ row }: { row: Row<ProductData> }) => {
 export const columns: ColumnDef<ProductData>[] = [
   {
     accessorKey: "title",
-    header: "Titre",
+    header: "Designation",
   },
 
   {

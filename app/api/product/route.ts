@@ -51,13 +51,12 @@ export const GET = async (request: NextRequest) => {
       const marqueA = a.marque?.toUpperCase();
       const marqueB = b.marque?.toUpperCase();
 
-      // Prioritize BOSCH first
-      if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
-      if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
-
-      // Then prioritize AMARON
+      // Prioritize AMARON
       if (marqueA === "AMARON" && marqueB !== "AMARON") return -1;
       if (marqueA !== "AMARON" && marqueB === "AMARON") return 1;
+      // then Prioritize BOSCH
+      if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
+      if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
       // Then prioritize Fiamm
       if (marqueA === "FIAMM" && marqueB !== "FIAMM") return -1;
       if (marqueA !== "FIAMM" && marqueB === "FIAMM") return 1;

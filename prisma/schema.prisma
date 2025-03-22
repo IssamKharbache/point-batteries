@@ -201,8 +201,8 @@ model Vente {
   venteBenifits   Float?
   venteRef        String         @unique
   paymentType     PaymentType
-  generateFacture Boolean        @default(false) // Add this field
-  factureCode     String?        @unique // Add this field
+  generateFacture Boolean        @default(false)
+  factureCode     String?        @unique
   products        VenteProduct[]
   createdAt       DateTime       @default(now())
   updatedAt       DateTime?      @updatedAt
