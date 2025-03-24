@@ -55,7 +55,7 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
       description: "",
       price: "",
       stock: "",
-      capacite: "",
+      capacite: 0,
       courantDessai: "",
       marque: "",
       designationProduit: "",
@@ -300,10 +300,21 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
                     <FormControl>
                       <Input
                         type="number"
-                        className="mt-2 px-4 text-sm"
+                        className="mt-2 px-4"
                         placeholder="Capacité (Ah) du produit"
                         min={0}
+                        step="0.01"
                         {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === "") {
+                            field.onChange(null);
+                          } else {
+                            const numValue = parseFloat(value);
+                            field.onChange(isNaN(numValue) ? null : numValue);
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
