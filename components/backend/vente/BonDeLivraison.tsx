@@ -230,7 +230,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               <div>
                 Client: {clientNom} {clientPrenom}
               </div>
-              <div>Servi par: {nomDuCaissier}</div>
+              <div>Servi par : {nomDuCaissier}</div>
             </div>
 
             {/* Separator */}
