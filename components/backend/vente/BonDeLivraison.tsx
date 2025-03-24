@@ -99,7 +99,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "\n",
         "--------------------------------------------\n",
         ...products.flatMap((product) => [
-          `${extractTextInParentheses(
+          `${product.marque.toUpperCase()}: ${extractTextInParentheses(
             product.designationProduit.toUpperCase()
           )}`.padEnd(30) + // Designation
             `x${product.qty} x ${product.price?.toFixed(2)} DH\n`, // Quantity and price
@@ -244,7 +244,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
                 {products.map((product, index) => (
                   <tr key={index}>
                     <td style={{ textAlign: "left" }}>
-                      {` ${extractTextInParentheses(
+                      {` ${product.marque.toUpperCase()}: ${extractTextInParentheses(
                         product.designationProduit
                       )?.toUpperCase()}  `}
                     </td>

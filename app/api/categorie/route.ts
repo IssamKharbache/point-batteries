@@ -22,11 +22,22 @@ export const GET = async () => {
     categorie.forEach((category) => {
       if (category.products) {
         category.products.sort((a, b) => {
-          const isBoschA = a.marque?.toUpperCase() === "BOSCH";
-          const isBoschB = b.marque?.toUpperCase() === "BOSCH";
+          const marqueA = a.marque?.toUpperCase();
+          const marqueB = b.marque?.toUpperCase();
+          b;
 
-          if (isBoschA && !isBoschB) return -1;
-          if (!isBoschA && isBoschB) return 1;
+          // Prioritize AMARON
+          if (marqueA === "AMARON" && marqueB !== "AMARON") return -1;
+          if (marqueA !== "AMARON" && marqueB === "AMARON") return 1;
+          // then Prioritize BOSCH
+          if (marqueA === "BOSCH" && marqueB !== "BOSCH") return -1;
+          if (marqueA !== "BOSCH" && marqueB === "BOSCH") return 1;
+          // Then prioritize Fiamm
+          if (marqueA === "FIAMM" && marqueB !== "FIAMM") return -1;
+          if (marqueA !== "FIAMM" && marqueB === "FIAMM") return 1;
+          // Then prioritize Exide
+          if (marqueA === "EXIDE" && marqueB !== "EXIDE") return -1;
+          if (marqueA !== "EXIDE" && marqueB === "EXIDE") return 1;
           return 0;
         });
       }
