@@ -75,7 +75,7 @@ export const PUT = async (
         price: parseFloat(price),
         achatPrice: parseFloat(achatPrice),
         stock: parseInt(stock),
-        capacite: parseInt(capacite),
+        capacite: parseFloat(capacite),
         voltage: parseInt(voltage),
         marque,
         designationProduit,

@@ -24,7 +24,7 @@ const ProductsStockData = ({ filteredProducts }: ProductsStockDataProps) => {
       <div className="flex items-end justify-end">
         <Button className="mb-4 rounded-xl" onClick={() => reactToPrintFn()}>
           <Printer />
-          <span> Imprimer</span>
+          <span>Imprimer</span>
         </Button>
       </div>
       <DataTable columns={columns} data={filteredProducts} name="Produits" />

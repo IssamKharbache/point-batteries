@@ -1,11 +1,199 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id          String     @id @default(uuid()) @db.Uuid
+  email       String     @unique
+  nom         String?
+  prenom      String?
+  identifiant String     @unique
+  password    String
+  role        Role       @default(USER)
+  tel         String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  achat       Achat[]
+  bookmarks   Bookmark[]
+  order       Order[]
+  vente       Vente[]
+}
+
+model Product {
+  id                 String         @id @default(uuid()) @db.Uuid
+  title              String?
+  slug               String         @unique
+  description        String?
+  imageUrl           String?
+  imageKey           String?        @unique
+  price              Float?
+  stock              Int?
+  capacite           Float?
+  marque             String?
+  designationProduit String?        @unique
+  courantDessai      Int?
+  voltage            Int?
+  garantie           Garantie?      @default(NOGARANTIE)
+  vente              Int?           @default(0)
+  filterByCar        String?        @default("")
+  isAchatProduct     Boolean        @default(false)
+  refProduct         String         @unique
+  userId             String         @db.Uuid
+  categoryId         String         @db.Uuid
+  achatPrice         Float?
+  achatId            String?        @db.Uuid
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime?      @updatedAt
+  achats             AchatProduct[]
+  bookmarks          Bookmark[]
+  orderItem          OrderItem[]
+  ventes             VenteProduct[]
+  category           Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id          String    @id @default(uuid()) @db.Uuid
+  title       String
+  slug        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  products    Product[]
+}
+
+model Banner {
+  id        String    @id @default(uuid()) @db.Uuid
+  title     String?
+  slug      String    @unique
+  link      String
+  imageUrl  String
+  imageKey  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Order {
+  id            String      @id @default(uuid()) @db.Uuid
+  userId        String      @db.Uuid
+  prenom        String
+  nom           String
+  telephone     String
+  adresse       String
+  ville         String
+  codePostal    String
+  notesCommande String
+  email         String
+  orderNumber   String      @unique
+  orderStatus   OrderStatus @default(EN_ATTENTE)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderItems    OrderItem[]
+}
+
+model Vente {
+  id              String         @id @default(uuid()) @db.Uuid
+  userId          String?        @db.Uuid
+  clientNom       String
+  clientPrenom    String
+  clientTel       String?
+  nomDuCaissier   String?
+  venteRef        String         @unique
+  paymentType     PaymentType
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime?      @updatedAt
+  factureCode     String?        @unique
+  generateFacture Boolean        @default(false)
+  venteBenifits   Float?
+  ice             String?
+  user            User?          @relation(fields: [userId], references: [id])
+  products        VenteProduct[]
+}
+
+model VenteProduct {
+  venteId             String  @db.Uuid
+  productId           String  @db.Uuid
+  qty                 Int
+  price               Float?
+  discount            Float?
+  designationProduit  String?
+  productVenteBenifit Float?
+  marque              String?
+  refProduct          String?
+  product             Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  vente               Vente   @relation(fields: [venteId], references: [id], onDelete: Cascade)
+
+  @@id([venteId, productId])
+}
+
+model OrderItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String?
+  orderId   String   @db.Uuid
+  productId String   @db.Uuid
+  quantity  Int
+  price     Float
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Bookmark {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  productId String   @db.Uuid
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+}
+
+model Achat {
+  id        String         @id @default(uuid()) @db.Uuid
+  userId    String         @db.Uuid
+  refAchat  String         @unique
+  createdAt DateTime       @default(now())
+  updatedAt DateTime?      @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products  AchatProduct[]
+}
+
+model AchatProduct {
+  achatId   String  @db.Uuid
+  productId String  @db.Uuid
+  qty       Int
+  achat     Achat   @relation(fields: [achatId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([achatId, productId])
+}
+
+model CompanyClient {
+  id          String    @id @default(uuid()) @db.Uuid
+  nom         String
+  prenom      String
+  tel         String
+  identifiant String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+model Cost {
+  id            String    @id @default(uuid()) @db.Uuid
+  natureDuFrais String
+  date          DateTime
+  montant       Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
 }
 
 enum Role {
@@ -15,115 +203,10 @@ enum Role {
   CAISSIER
 }
 
-model User {
-  id          String  @id @default(uuid()) @db.Uuid
-  email       String  @unique
-  nom         String?
-  prenom      String?
-  identifiant String  @unique
-  password    String
-  role        Role    @default(USER)
-  tel         String?
-
-  order     Order[]
-  bookmarks Bookmark[]
-  product   Product[]
-  achat     Achat[]
-  vente     Vente[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-}
-
-model Product {
-  id                 String    @id @default(uuid()) @db.Uuid
-  title              String?
-  slug               String    @unique
-  description        String?
-  imageUrl           String?
-  imageKey           String?   @unique
-  price              Float?
-  achatPrice         Float?
-  stock              Int?
-  capacite           Int?
-  marque             String?
-  designationProduit String?   @unique
-  courantDessai      Int?
-  voltage            Int?
-  garantie           Garantie? @default(NOGARANTIE)
-  vente              Int?      @default(0)
-  filterByCar        String?   @default("")
-  isAchatProduct     Boolean   @default(false)
-  refProduct         String    @unique
-  user               User      @relation(fields: [userId], references: [id])
-  userId             String    @db.Uuid
-
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  categoryId String   @db.Uuid
-
-  achats  AchatProduct[]
-  achatId String?        @db.Uuid
-
-  orderItem OrderItem[]
-  bookmarks Bookmark[]
-  ventes    VenteProduct[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
 enum Garantie {
   NOGARANTIE
   ONEYEAR
   TWOYEARS
-}
-
-model Category {
-  id          String    @id @default(uuid()) @db.Uuid
-  title       String
-  slug        String    @unique
-  description String?
-  products    Product[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
-model Banner {
-  id       String  @id @default(uuid()) @db.Uuid
-  title    String?
-  slug     String  @unique
-  link     String
-  imageUrl String
-  imageKey String
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
-model Order {
-  id     String @id @default(uuid()) @db.Uuid
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  //personal details
-  prenom String
-  nom    String
-
-  telephone     String
-  //shipping details
-  adresse       String
-  ville         String
-  codePostal    String
-  notesCommande String
-  email         String
-  orderNumber   String @unique
-
-  //order items
-  orderItems  OrderItem[]
-  //status
-  orderStatus OrderStatus @default(EN_ATTENTE)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 enum OrderStatus {
@@ -135,119 +218,8 @@ enum OrderStatus {
   ANNULLE
 }
 
-model OrderItem {
-  id    String  @id @default(uuid()) @db.Uuid
-  title String?
-
-  orderId   String @db.Uuid
-  productId String @db.Uuid
-  quantity  Int
-  price     Float
-
-  imageUrl String?
-
-  //relations
-  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Bookmark {
-  id String @id @default(uuid()) @db.Uuid
-
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  productId String  @db.Uuid
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-
-  @@unique([userId, productId])
-}
-
-model Achat {
-  id        String         @id @default(uuid()) @db.Uuid
-  userId    String         @db.Uuid
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  products  AchatProduct[]
-  refAchat  String         @unique
-  createdAt DateTime       @default(now())
-  updatedAt DateTime?      @updatedAt
-}
-
-model AchatProduct {
-  achatId   String @db.Uuid
-  productId String @db.Uuid
-  qty       Int
-
-  achat   Achat   @relation(fields: [achatId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@id([achatId, productId])
-}
-
-model Vente {
-  id              String         @id @default(uuid()) @db.Uuid
-  userId          String?        @db.Uuid
-  user            User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
-  clientNom       String
-  clientPrenom    String
-  clientTel       String?
-  nomDuCaissier   String?
-  venteBenifits   Float?
-  venteRef        String         @unique
-  paymentType     PaymentType
-  generateFacture Boolean        @default(false)
-  factureCode     String?        @unique
-  ice             String?
-  products        VenteProduct[]
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime?      @updatedAt
-}
-
-model VenteProduct {
-  venteId             String @db.Uuid
-  productId           String @db.Uuid
-  qty                 Int
-  price               Float?
-  productVenteBenifit Float?
-  discount            Float?
-
-  designationProduit String?
-  marque             String?
-  refProduct         String?
-
-  vente   Vente   @relation(fields: [venteId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@id([venteId, productId])
-}
-
-model CompanyClient {
-  id          String @id @default(uuid()) @db.Uuid
-  nom         String
-  prenom      String
-  tel         String
-  identifiant String @unique
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
 enum PaymentType {
   ESPECE
   CHECK
   VIREMENT
-}
-
-model Cost {
-  id            String    @id @default(uuid()) @db.Uuid
-  natureDuFrais String
-  date          DateTime
-  montant       Float
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
 }

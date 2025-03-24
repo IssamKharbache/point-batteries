@@ -55,7 +55,14 @@ export const addProductSchema = z.object({
     .string()
     .min(1, "Le prix d'achat doit être supérieur ou égal à 1"),
   stock: z.string().min(1, "Le stock doit être supérieur ou égal à 1"),
-  capacite: z.string().min(1, "La capacite doit être supérieur ou égal à 1"),
+  capacite: z.union([
+    z.number().min(0).nullable(),
+    z
+      .string()
+      .transform((val) => parseFloat(val))
+      .pipe(z.number().min(0))
+      .nullable(),
+  ]),
   courantDessai: z
     .string()
     .min(1, "Le courant d’essai doit être supérieur ou égal à 1"),

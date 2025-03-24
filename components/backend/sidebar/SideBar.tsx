@@ -21,6 +21,7 @@ import {
   UsersRound,
   Contact,
   BadgeDollarSign,
+  Undo2,
 } from "lucide-react";
 import { FaCashRegister } from "react-icons/fa6";
 import {
@@ -90,6 +91,12 @@ const SideBar = () => {
         href: "/dashboard/notre-staff",
         icon: UsersRound,
         isMainAdmin: true,
+      },
+      {
+        name: "Retour",
+        href: "/dashboard/retour",
+        icon: Undo2,
+        isMainAdmin: false,
       },
 
       {

@@ -43,7 +43,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
 
   const priceToString = String(productData.price);
   const achatPriceToString = String(productData.achatPrice);
-  const capaciteToString = String(productData.capacite);
   const stockToString = String(productData.stock);
   const cdes = String(productData.courantDessai);
   const voltageToString = String(productData.voltage);
@@ -55,7 +54,6 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
       ...productData,
       price: priceToString,
       achatPrice: achatPriceToString,
-      capacite: capaciteToString,
       stock: stockToString,
       courantDessai: cdes,
       voltage: voltageToString,
@@ -311,8 +309,18 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
                         className="mt-2 px-4"
                         placeholder="Capacité (Ah) du produit"
                         min={0}
+                        step="0.01"
                         {...field}
                         value={field.value ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === "") {
+                            field.onChange(null);
+                          } else {
+                            const numValue = parseFloat(value);
+                            field.onChange(isNaN(numValue) ? null : numValue);
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

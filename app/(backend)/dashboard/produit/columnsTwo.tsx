@@ -69,7 +69,7 @@ export const columns: ColumnDef<ProductData>[] = [
     header: "Actions",
     cell: ({ row }) => (
       <TableActions
-        editEndpoint={`produit/modifier/${row.original.slug}`}
+        editEndpoint={`/dashboard/produit/modifier/${row.original.slug}`}
         endpoint={`product/${row.original.slug}`}
       />
     ),
