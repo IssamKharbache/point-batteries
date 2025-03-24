@@ -6,7 +6,7 @@ import db from "@/lib/db";
 const prisma = new PrismaClient();
 
 type CreateAchatProduct = {
-  productId: string; // Assuming product ID is a string (change to number if needed)
+  productId: string;
   qty: number;
 };
 export const POST = async (req: NextRequest) => {
