@@ -24,7 +24,13 @@ const MainNav = () => {
     <nav className="h-25 border-b  shadow-sm ">
       <div className="flex items-center justify-between py-3 max-w-[1500px] mx-auto px-4 md:px-8 gap-8  ">
         <Link href="/">
-          <LogoDark />
+          <Image
+            src="/logopbsdark.png"
+            alt="Logo"
+            width={300}
+            height={48}
+            priority
+          />
         </Link>
         <div className="items-center gap-4 hidden lg:flex">
           <button

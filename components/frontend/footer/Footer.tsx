@@ -113,6 +113,7 @@ const Footer = ({ username }: FooterProps) => {
                   <div>
                     <p className="text-gray-400">Horaires de Travail</p>
                     <p className="text-white">Lun-Sam 09:00 - 20:00</p>
+                    <p className="text-white">Dim 09:00 - 17:00</p>
                   </div>
                 </div>
               </div>
