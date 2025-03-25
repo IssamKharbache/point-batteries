@@ -30,6 +30,7 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "../RichTextEditor";
 
 interface ProductDataProps {
   categorieData?: CategorieData;
@@ -389,25 +390,6 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
 
           <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
             <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="mt-2 px-4"
-                        placeholder="Description du produit"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
               name="filterByCar"
               control={form.control}
               render={({ field }) => {
@@ -427,6 +409,25 @@ const AjouterProduit = ({ categorieData }: ProductDataProps) => {
               }}
             />
           </div>
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      content={field.value}
+                      onChange={field.onChange}
+                      placeholder="Description du Produit ..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
           <div>
             <FormLabel className="mb-4   md:mb-2">Image du produit</FormLabel>
 

@@ -1,6 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { UploadDropzone } from "@/lib/uploadthing";
+import { X } from "lucide-react";
 
 import Image from "next/image";
 
@@ -19,18 +21,30 @@ const UploadImageButton = ({
   setIsImageUploading,
   setImageKey,
 }: UploadImageButtonProps) => {
+  const handleRemoveImage = () => {
+    setImage("");
+    setImageKey("");
+  };
   return (
     <>
       {image ? (
-        <>
+        <div className="relative mt-8">
+          {" "}
+          {/* This wrapper is crucial */}
+          <Button
+            className="absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center p-0"
+            onClick={handleRemoveImage}
+          >
+            <X />
+          </Button>
           <Image
             src={image}
             alt="product image"
             width={1000}
             height={667}
-            className="w-full h-72 object-cover overflow-hidden rounded-md mt-8"
+            className="w-full h-72 object-cover rounded-md"
           />
-        </>
+        </div>
       ) : (
         <UploadDropzone
           onUploadBegin={() => {

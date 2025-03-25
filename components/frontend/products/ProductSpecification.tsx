@@ -9,7 +9,7 @@ const ProductSpecification = ({ product }: ProductSpecificationProps) => {
       <TableBody>
         <TableRow className="hover:bg-transparent">
           <TableCell className="font-medium p-5">Marque</TableCell>
-          <TableCell>{product.marque}</TableCell>
+          <TableCell className="capitalize">{product.marque}</TableCell>
         </TableRow>
         <TableRow className="hover:bg-transparent">
           <TableCell className="font-medium p-5">Voltage</TableCell>
@@ -24,7 +24,9 @@ const ProductSpecification = ({ product }: ProductSpecificationProps) => {
           <TableCell className="font-medium p-5 ">
             Designation du produit
           </TableCell>
-          <TableCell>{product.designationProduit}</TableCell>
+          <TableCell className="capitalize">
+            {product.designationProduit}
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>

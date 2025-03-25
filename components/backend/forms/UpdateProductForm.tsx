@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import CheckBoxToggle from "./CheckBoxToggle";
 import { mutate } from "swr";
+import { RichTextEditor } from "../RichTextEditor";
 
 const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
   const [image, setImage] = useState(productData.imageUrl);
@@ -396,48 +397,46 @@ const UpdateProductForm = ({ productData, categoryData }: ProductData) => {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
-            <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="mt-2 px-4"
-                        placeholder="Description du produit"
-                        {...field}
-                        value={field.value ?? ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              name="filterByCar"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Marque de voiture pour cette batterie</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="mt-2 px-4"
-                        placeholder="Mercedes, audi, dacia..."
-                        {...field}
-                        value={field.value ?? ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
+          <FormField
+            name="filterByCar"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Marque de voiture pour cette batterie</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="mt-2 px-4"
+                      placeholder="Mercedes, audi, dacia..."
+                      {...field}
+                      value={field.value ?? ""}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      content={field.value}
+                      onChange={field.onChange}
+                      placeholder="Description du Produit ..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
           <CheckBoxToggle
             isChecked={isProductAchat}
             setIsChecked={setIsProductAchat}

@@ -20,6 +20,9 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { FaCartPlus } from "react-icons/fa6";
 
+import DOMPurify from "dompurify";
+import { RichTextRenderer } from "../RichTextRenderer";
+
 interface ProductDetailsProps {
   product: ProductData;
 }
@@ -187,9 +190,10 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                 <TabsContent value="description">
                   <div className="p-4">
                     <h1 className="mt-8 font-semibold ">Description</h1>
-                    <p className="text-sm font-medium mt-4">
-                      {product.description}
-                    </p>
+                    <RichTextRenderer
+                      content={product.description || ""}
+                      className="mt-4 text-sm font-medium"
+                    />
                   </div>
                 </TabsContent>
               </div>
