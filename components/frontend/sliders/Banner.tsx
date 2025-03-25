@@ -17,51 +17,54 @@ interface CustomCSSProperties extends CSSProperties {
 }
 
 interface BannerProps {
-  bannerData: [
-    {
-      title: string;
-      imageUrl: string;
-      link: string;
-    }
-  ];
+  bannerData: {
+    title: string;
+    imageUrl: string;
+    link: string;
+  }[];
 }
 
 const Banner = ({ bannerData }: BannerProps) => {
   const swiperStyles: CustomCSSProperties = {
     "--swiper-pagination-bottom": "2px",
   };
+
   return (
-    <Swiper
-      modules={[Pagination]}
-      className="h-full"
-      draggable={true}
-      spaceBetween={20}
-      slidesPerView={1}
-      pagination={{
-        clickable: true,
-      }}
-      scrollbar={{ draggable: true }}
-      autoplay={{
-        delay: 2000,
-      }}
-      loop={true}
-      style={swiperStyles}
-    >
-      {bannerData.map((banner, idx) => (
-        <SwiperSlide key={idx}>
-          <Link href={banner.link}>
-            <Image
-              priority
-              src={banner.imageUrl}
-              alt="banner"
-              width={4000}
-              height={4000}
-              className="w-full object-cover h-[300px] md:h-full rounded"
-            />
-          </Link>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="relative w-full h-[400px]">
+      {" "}
+      {/* Fixed container height */}
+      <Swiper
+        modules={[Pagination]}
+        draggable={true}
+        spaceBetween={20}
+        slidesPerView={1}
+        pagination={{
+          clickable: true,
+        }}
+        scrollbar={{ draggable: true }}
+        loop={true}
+        autoplay={{ delay: 2000, disableOnInteraction: false }}
+        style={swiperStyles}
+        className="h-full"
+      >
+        {bannerData.map((banner, idx) => (
+          <SwiperSlide key={idx} className="h-full">
+            <Link href={banner.link} className="block h-full">
+              <div className="relative w-full h-full">
+                <Image
+                  priority
+                  src={banner.imageUrl}
+                  alt={banner.title || "banner"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
+                />
+              </div>
+            </Link>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 };
 
