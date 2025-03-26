@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import { Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { CSSProperties } from "react";
 import Link from "next/link";
 
@@ -31,10 +31,8 @@ const Banner = ({ bannerData }: BannerProps) => {
 
   return (
     <div className="relative w-full h-[400px] hidden md:block">
-      {" "}
-      {/* Fixed container height */}
       <Swiper
-        modules={[Pagination]}
+        modules={[Pagination, Autoplay]}
         draggable={true}
         spaceBetween={20}
         slidesPerView={1}
@@ -43,7 +41,7 @@ const Banner = ({ bannerData }: BannerProps) => {
         }}
         scrollbar={{ draggable: true }}
         loop={true}
-        autoplay={{ delay: 2000, disableOnInteraction: false }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
         style={swiperStyles}
         className="h-full"
       >

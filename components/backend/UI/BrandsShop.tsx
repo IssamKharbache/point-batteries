@@ -33,7 +33,7 @@ const brands = [
 
   {
     name: "Amaron",
-    src: "/brands/amaron.jpg",
+    src: "/brands/amaron.webp",
     link: "/produits/marque/amaron",
     color: "bg-white",
   },
