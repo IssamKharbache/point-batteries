@@ -22,13 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Filter, Loader2 } from "lucide-react";
 import { useLoadingStore } from "@/context/store";
 import TableActions, {
   ProductData,
 } from "@/components/backend/table/TableActions";
-import Image from "next/image";
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 interface DataTableProps<TData, ProductData> {
@@ -50,7 +48,6 @@ export function DataTable<TData extends ProductData>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
@@ -198,7 +195,6 @@ export function DataTable<TData extends ProductData>({
           </TableBody>
         </Table>
       </div>
-      <PaginationDataTable table={table} />
     </div>
   );
 }
