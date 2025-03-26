@@ -341,3 +341,17 @@ export const useFiltersStore = create<FiltersStoreType>((set) => ({
   isOpen: false,
   setIsOpen: (isOpen: boolean) => set({ isOpen }),
 }));
+
+type SourceRetourStoreType = {
+  source: string;
+  setSource: (source: string) => void;
+  step: number;
+  setStep: (step: number) => void;
+};
+
+export const useSourceRetourStore = create<SourceRetourStoreType>((set) => ({
+  source: "",
+  setSource: (source: string) => set({ source }),
+  step: 1,
+  setStep: (step: number) => set({ step }),
+}));
