@@ -105,7 +105,7 @@ const Footer = ({ username }: FooterProps) => {
                 <div>
                   <p className="text-gray-400">Notre Adresse</p>
                   <p className="text-white">
-                    131. Av Hafid Ibn Abdel bar B 94.R Lots Azahra N13 Souani
+                    131. Av Hafid Ibn Abdel bar B 94.R Lots Azahra Nº13 Souani
                     Tanger
                   </p>
                 </div>

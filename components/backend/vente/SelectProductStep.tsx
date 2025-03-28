@@ -386,19 +386,3 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
 };
 
 export default SelectProductStep;
-
-const calculateBenefit = (
-  price: number,
-  achatPrice: number,
-  discount: string,
-  quantity: number
-) => {
-  // Calculate the sale price after discount (apply discount only once)
-  const salePrice = price - Number(discount);
-
-  // Calculate the benefit per unit (sale price - achat price)
-  const benefitPerUnit = salePrice - achatPrice;
-
-  // Calculate total benefit by multiplying by quantity
-  return benefitPerUnit * quantity;
-};

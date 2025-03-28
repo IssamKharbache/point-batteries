@@ -1,12 +1,10 @@
 import React from "react";
 import { ReturnFormProps } from "./ReturnForm";
 import { useSourceRetourStore } from "@/context/store";
-import { Button } from "@/components/ui/button";
-import SelectProductStep from "../vente/SelectProductStep";
 import SelectProductForReturn from "./SelectProductForReturn";
 
 const DetailsOfSource = ({ products, ventes }: ReturnFormProps) => {
-  const { source, setStep } = useSourceRetourStore();
+  const { source } = useSourceRetourStore();
 
   return (
     <div>
@@ -24,8 +22,6 @@ const DetailsOfSource = ({ products, ventes }: ReturnFormProps) => {
           </select>
         </div>
       )}
-
-      <Button onClick={() => setStep(1)}>Précédent</Button>
     </div>
   );
 };

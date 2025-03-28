@@ -23,38 +23,40 @@ model User {
   bookmarks   Bookmark[]
   order       Order[]
   vente       Vente[]
+  return      Return[]
 }
 
 model Product {
-  id                 String         @id @default(uuid()) @db.Uuid
+  id                 String          @id @default(uuid()) @db.Uuid
   title              String?
-  slug               String         @unique
+  slug               String          @unique
   description        String?
   imageUrl           String?
-  imageKey           String?        @unique
+  imageKey           String?         @unique
   price              Float?
   stock              Int?
   capacite           Float?
   marque             String?
-  designationProduit String?        @unique
+  designationProduit String?         @unique
   courantDessai      Int?
   voltage            Int?
-  garantie           Garantie?      @default(NOGARANTIE)
-  vente              Int?           @default(0)
-  filterByCar        String?        @default("")
-  isAchatProduct     Boolean        @default(false)
-  refProduct         String         @unique
-  userId             String         @db.Uuid
-  categoryId         String         @db.Uuid
+  garantie           Garantie?       @default(NOGARANTIE)
+  vente              Int?            @default(0)
+  filterByCar        String?         @default("")
+  isAchatProduct     Boolean         @default(false)
+  refProduct         String          @unique
+  userId             String          @db.Uuid
+  categoryId         String          @db.Uuid
   achatPrice         Float?
-  achatId            String?        @db.Uuid
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime?      @updatedAt
+  achatId            String?         @db.Uuid
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime?       @updatedAt
   achats             AchatProduct[]
   bookmarks          Bookmark[]
   orderItem          OrderItem[]
   ventes             VenteProduct[]
-  category           Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  returns            ReturnProduct[]
+  category           Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model Category {
@@ -194,6 +196,34 @@ model Cost {
   montant       Float
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
+}
+
+model Return {
+  id            String          @id @default(uuid()) @db.Uuid
+  products      ReturnProduct[]
+  returnRef     String          @unique
+  userId        String?         @db.Uuid
+  user          User?           @relation(fields: [userId], references: [id])
+  returnFrom    String?
+  nomDuCaissier String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model ReturnProduct {
+  returnId  String @db.Uuid
+  productId String @db.Uuid
+
+  qty                Int
+  price              Float?
+  designationProduit String?
+  marque             String?
+  refProduct         String?
+  product            Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  return             Return  @relation(fields: [returnId], references: [id], onDelete: Cascade)
+
+  @@id([returnId, productId])
 }
 
 enum Role {

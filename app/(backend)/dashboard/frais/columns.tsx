@@ -1,12 +1,10 @@
 "use client";
 
 import TableActions from "@/components/backend/table/TableActions";
-import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils/index";
 import { Cost } from "@prisma/client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<Cost>[] = [
   {

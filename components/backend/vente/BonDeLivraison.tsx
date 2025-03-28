@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
 import {
   Dialog,
@@ -99,10 +99,10 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "\n",
         "--------------------------------------------\n",
         ...products.flatMap((product) => [
-          `${product.marque.toUpperCase()}: ${extractTextInParentheses(
+          `${product.marque.toUpperCase()} ${extractTextInParentheses(
             product.designationProduit.toUpperCase()
           )}`.padEnd(30) + // Designation
-            `x${product.qty} x ${product.price?.toFixed(2)} DH\n`, // Quantity and price
+            `x${product.qty} x${product.price?.toFixed(2)}DH\n`, // Quantity and price
           product.discount
             ? `Remise: ${product.discount.toFixed(2)} DH\n` // Discount (if any)
             : "",
@@ -316,7 +316,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
 export default BonDeLivraison;
 
-function formatISODate(isoDate: Date): string {
+export function formatISODate(isoDate: Date): string {
   const date = new Date(isoDate);
 
   const day = String(date.getDate()).padStart(2, "0");

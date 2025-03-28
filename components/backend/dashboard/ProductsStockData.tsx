@@ -27,12 +27,21 @@ const ProductsStockData = ({ filteredProducts }: ProductsStockDataProps) => {
           <span>Imprimer</span>
         </Button>
       </div>
+      <p className="text-xl">
+        <span className="font-semibold">{filteredProducts.length}</span> Produit
+      </p>
       <DataTable columns={columns} data={filteredProducts} name="Produits" />
 
       {/* Hidden Table for Printing */}
       <div style={{ display: "none" }}>
         <div className="m-5" ref={contentRef}>
-          <h1 className="mb-8 text-3xl font-semibold">Fiche de stock</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="mb-8 text-3xl font-semibold">Fiche de stock</h1>
+            <p className="text-xl">
+              <span className="font-semibold">{filteredProducts.length}</span>{" "}
+              Produit
+            </p>
+          </div>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr>

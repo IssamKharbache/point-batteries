@@ -1,43 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
-import { generateUniqueVenteRef } from "@/lib/utils/index";
+import { generateReturnReference } from "@/lib/utils/index";
+import { NextRequest, NextResponse } from "next/server";
 
-type CreateVenteProduct = {
+type CreateReturnProduct = {
   productId: string;
   qty: number;
-  price: number;
   designationProduit: string;
-  discount: number;
+  marque: string;
 };
-
 export const POST = async (req: NextRequest) => {
   try {
-    const {
-      userId,
-      products,
-      nomDuCaissier,
-      paymentType,
-      clientNom,
-      clientPrenom,
-      clientTel,
-      generateFacture,
-      factureCode,
-      ice,
-      venteBenifits,
-    } = await req.json();
+    const { userId, products, returnFrom, nomDuCaissier } = await req.json();
 
-    if (
-      !userId ||
-      !paymentType ||
-      !clientNom ||
-      !clientPrenom ||
-      !clientTel ||
-      !nomDuCaissier
-    ) {
-      return NextResponse.json(
-        { error: "All fields are required" },
-        { status: 400 }
-      );
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 400 });
     }
 
     if (!products || products.length === 0) {
@@ -68,48 +44,35 @@ export const POST = async (req: NextRequest) => {
     );
 
     // Prepare the data for VenteProduct relation, including price
-    const productsData: CreateVenteProduct[] = products.map(
+    const productsData: CreateReturnProduct[] = products.map(
       (p: {
         refProduct: string;
         quantity: string;
         marque: string;
-        price: number;
         designationProduit: string;
-        discount: string;
-        productVenteBenifit: number;
       }) => ({
         refProduct: p.refProduct,
         marque: p.marque,
         productId: productMap.get(p.refProduct) as string,
         qty: parseInt(p.quantity),
-        price: p.price,
         designationProduit: p.designationProduit,
-        discount: parseFloat(p.discount),
-        productVenteBenifit: p.productVenteBenifit,
       })
     );
 
     // Generate a unique vente reference
-    const venteRef = await generateUniqueVenteRef();
+    const returnRef = await generateReturnReference();
 
     // Create the vente and link products, then update stock & vente count
-    const newVente = await db.$transaction(async (prisma) => {
-      const createdVente = await prisma.vente.create({
+    const newReturn = await db.$transaction(async (prisma) => {
+      const createdReturn = await prisma.return.create({
         data: {
           userId,
-          clientNom,
-          clientPrenom,
-          venteRef,
-          paymentType,
-          clientTel,
-          nomDuCaissier,
-          generateFacture,
-          venteBenifits,
-          ice: ice || null,
-          factureCode: generateFacture ? factureCode : null,
           products: {
             create: productsData,
           },
+          returnRef,
+          returnFrom,
+          nomDuCaissier,
         },
         include: {
           products: true,
@@ -122,25 +85,24 @@ export const POST = async (req: NextRequest) => {
           where: { id: item.productId },
           data: {
             stock: { decrement: item.qty },
-            vente: { increment: item.qty },
           },
         });
       }
 
-      return createdVente;
+      return createdReturn;
     });
 
     return NextResponse.json(
       {
-        data: newVente,
-        message: "Vente creer avec succès",
+        data: newReturn,
+        message: "Retour créé avec succès",
       },
       {
         status: 201,
       }
     );
   } catch (error) {
-    console.error("Error creating vente:", error);
+    console.error("Error creating return :", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -150,7 +112,7 @@ export const POST = async (req: NextRequest) => {
 
 export const GET = async () => {
   try {
-    const lesVentes = await db.vente.findMany({
+    const lesRetour = await db.return.findMany({
       orderBy: {
         createdAt: "desc",
       },
@@ -159,11 +121,11 @@ export const GET = async () => {
       },
     });
     return NextResponse.json({
-      data: lesVentes,
-      message: "Vente details",
+      data: lesRetour,
+      message: "Return details",
     });
   } catch (error) {
-    console.error("Error getting vente:", error);
+    console.error("Error getting return:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

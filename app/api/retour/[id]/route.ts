@@ -6,47 +6,46 @@ export const DELETE = async (
   context: { params: Promise<{ id: string }> }
 ) => {
   try {
-    const venteId = (await context.params).id;
+    const returnId = (await context.params).id;
 
-    // Fetch the existing vente
-    const existingVente = await db.vente.findUnique({
-      where: { id: venteId },
+    // Fetch the existing return
+    const existingReturn = await db.return.findUnique({
+      where: { id: returnId },
       include: { products: true },
     });
 
-    if (!existingVente) {
-      return NextResponse.json({ error: "Vente not found" }, { status: 404 });
+    if (!existingReturn) {
+      return NextResponse.json({ error: "Return  not found" }, { status: 404 });
     }
 
-    // Delete the vente and its associated products
+    // Delete the return and its associated products
     await db.$transaction(async (prisma) => {
       // Restore product stock
-      for (const item of existingVente.products) {
+      for (const item of existingReturn.products) {
         await prisma.product.update({
           where: { id: item.productId },
           data: {
             stock: { increment: item.qty },
-            vente: { decrement: item.qty },
           },
         });
       }
 
-      // Delete the vente
-      await prisma.vente.delete({
-        where: { id: venteId },
+      // Delete the return
+      await prisma.return.delete({
+        where: { id: returnId },
       });
     });
 
     return NextResponse.json(
       {
-        message: "Vente deleted successfully",
+        message: "Return deleted successfully",
       },
       {
         status: 201,
       }
     );
   } catch (error) {
-    console.error("Error deleting vente:", error);
+    console.error("Error deleting Return:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

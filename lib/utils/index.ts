@@ -43,12 +43,13 @@ export const generateProductReference = (marque: string): string => {
   const prefix = "PB";
   const randomString = Math.random().toString(36).substring(2, 6).toUpperCase();
   const uniqueId = `${randomString}`;
-  return `${prefix}-${marque.toUpperCase()}-${uniqueId}`;
+  const formattedMarque = marque.replace(/\s+/g, "-").toUpperCase();
+  return `${prefix}-${formattedMarque}-${uniqueId}`;
 };
 
 export const generateReferenceAchat = () => {
   const prefix = "ACHAT";
-  const uniqueId = Math.floor(10000 + Math.random() * 90000); // Generates a 5-digit number
+  const uniqueId = Math.floor(10000 + Math.random() * 90000);
   return `${prefix}-${uniqueId}`;
 };
 
@@ -93,6 +94,12 @@ export const generateUniqueVenteRef = async (): Promise<string> => {
   }
 
   return venteRef;
+};
+
+export const generateReturnReference = async (): Promise<string> => {
+  const yearShort = new Date().getFullYear().toString().slice(-2);
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+  return `R${yearShort}-${randomDigits}`;
 };
 
 export function formatFrenchDate(isoDate: Date) {
