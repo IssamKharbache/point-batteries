@@ -30,7 +30,7 @@ export const RichTextEditor = ({
     editorProps: {
       attributes: {
         class:
-          "rounded-md border border-gray-300 p-2 focus:outline-none focus:border-black text-sm",
+          "rounded-md border border-gray-300 p-2 focus:outline-none focus:border-black text-sm min-h-[200px]",
       },
     },
     content: content,

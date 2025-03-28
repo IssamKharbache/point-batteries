@@ -116,6 +116,7 @@ model Vente {
   ice             String?
   user            User?          @relation(fields: [userId], references: [id])
   products        VenteProduct[]
+  returns         Return[]
 }
 
 model VenteProduct {
@@ -207,6 +208,9 @@ model Return {
   returnFrom    String?
   nomDuCaissier String?
 
+  sourceId String? @db.Uuid
+  vente    Vente?  @relation(fields: [sourceId], references: [id])
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
@@ -252,4 +256,5 @@ enum PaymentType {
   ESPECE
   CHECK
   VIREMENT
+  ACREDIT
 }

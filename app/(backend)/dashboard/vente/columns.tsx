@@ -47,6 +47,11 @@ export const columns: ColumnDef<VenteType>[] = [
     accessorKey: "clientNom",
     header: "Nom du client",
   },
+  {
+    accessorKey: "paymentType",
+    header: "",
+    cell: () => null,
+  },
 
   {
     accessorKey: "createdAt",
@@ -101,7 +106,17 @@ export const columns: ColumnDef<VenteType>[] = [
           </Link>
         );
       } else {
-        return <p className="text-red-500 text-sm">X</p>;
+        return (
+          <p
+            className={`${
+              row.original.paymentType === "ACREDIT"
+                ? "text-white"
+                : "text-red-500"
+            }  text-sm`}
+          >
+            X
+          </p>
+        );
       }
     },
   },

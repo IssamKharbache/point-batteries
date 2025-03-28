@@ -8,6 +8,21 @@ export const DELETE = async (
   try {
     const venteId = (await context.params).id;
 
+    // Check if any returns reference this vente as source
+    const hasReturns = await db.return.findFirst({
+      where: {
+        returnFrom: "vente",
+        sourceId: venteId,
+      },
+    });
+
+    if (hasReturns) {
+      return NextResponse.json(
+        { error: "Cannot delete vente with associated returns" },
+        { status: 400 }
+      );
+    }
+
     // Fetch the existing vente
     const existingVente = await db.vente.findUnique({
       where: { id: venteId },

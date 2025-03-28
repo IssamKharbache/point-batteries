@@ -26,18 +26,19 @@ import { Filter, Loader2 } from "lucide-react";
 import { useLoadingStore } from "@/context/store";
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 import { Cost, Return } from "@prisma/client";
+import { ReturnType } from "@/components/backend/retour/BonDeRetour";
 
-interface DataTableProps<TData, Return> {
+interface DataTableProps<TData, ReturnType> {
   columns: ColumnDef<TData, Return>[];
   data: TData[];
   name: string;
 }
 
-export function DataTable<TData extends Return>({
+export function DataTable<TData extends ReturnType>({
   columns,
   data,
   name,
-}: DataTableProps<TData, Return>) {
+}: DataTableProps<TData, ReturnType>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

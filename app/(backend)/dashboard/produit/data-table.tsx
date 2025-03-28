@@ -69,14 +69,15 @@ export function DataTable<TData extends ProductData>({
           </h2>
           <div className="relative flex items-center py-4">
             <Input
-              placeholder="Filtrer par reference..."
+              placeholder="Filtrer par Designation..."
               value={
-                (table.getColumn("refProduct")?.getFilterValue() as string) ??
-                ""
+                (table
+                  .getColumn("designationProduit")
+                  ?.getFilterValue() as string) ?? ""
               }
               onChange={(event) =>
                 table
-                  .getColumn("refProduct")
+                  .getColumn("designationProduit")
                   ?.setFilterValue(event.target.value)
               }
               className="w-36 px-4 mr-8 py-1 h-10 md:h-12 md:w-60  placeholder:text-xs md:placeholder:text-[14px] "
@@ -144,12 +145,16 @@ export function DataTable<TData extends ProductData>({
           <h2 className="px-4 py-4 font-semibold text-xl">{name}</h2>
           <div className="relative flex items-center py-4">
             <Input
-              placeholder="Filtrer par titre..."
+              placeholder="Filtrer par designation..."
               value={
-                (table.getColumn("title")?.getFilterValue() as string) ?? ""
+                (table
+                  .getColumn("designationProduit")
+                  ?.getFilterValue() as string) ?? ""
               }
               onChange={(event) =>
-                table.getColumn("title")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("designationProduit")
+                  ?.setFilterValue(event.target.value)
               }
               className="w-36 px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
             />
@@ -162,7 +167,7 @@ export function DataTable<TData extends ProductData>({
         <Table>
           <TableHeader>
             <TableRow className="py-4 px-4">
-              <TableHead>Titre</TableHead>
+              <TableHead>Designation</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -173,8 +178,8 @@ export function DataTable<TData extends ProductData>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  <TableCell className="py-4 px-4" key="title">
-                    {row.getValue("title")}
+                  <TableCell className="py-4 px-4" key="designationProduit">
+                    {row.getValue("designationProduit")}
                   </TableCell>
 
                   <TableCell className="py-4 px-4">

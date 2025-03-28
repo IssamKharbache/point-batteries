@@ -41,11 +41,13 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
           } else {
             setLoading(false);
           }
-        } catch (__error) {
+        } catch (error) {
+          const errorMessage = getErrorMessage(error);
+
           toast({
-            title: "Une erreur s'est produite",
-            variant: "error",
-            description: "Une erreur s'est produite contactez le staff",
+            title: "Erreur",
+            description: errorMessage,
+            variant: "destructive",
             className: "toast-container",
           });
 
@@ -64,9 +66,9 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
       ) : (
         <button
           onClick={handleDelete}
-          className="flex items-center gap-2 font-medium"
+          className="flex items-center justify-center  font-medium bg-white rounded-full  w-8 h-8"
         >
-          <Trash2 className="w-4 h-4 text-red-500" />
+          <Trash2 className="w-4 h-4 text-red-500 " />
           <span className="text-red-500">{title ?? ""}</span>
         </button>
       )}
@@ -75,3 +77,29 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
 };
 
 export default DeleteActionButton;
+
+function getErrorMessage(error: unknown): string {
+  if (axios.isAxiosError(error)) {
+    // Handle Axios errors
+    const errorMessage = error.response?.data?.error;
+
+    if (errorMessage === "Cannot delete vente with associated returns") {
+      return "Impossible de supprimer une vente avec des retours associés";
+    }
+
+    if (error.response?.status === 400) {
+      return "Requête incorrecte";
+    }
+
+    if (error.response?.status === 404) {
+      return "Ressource non trouvée";
+    }
+
+    if (error.response?.status === 500) {
+      return "Erreur interne du serveur";
+    }
+  }
+
+  // Default message for unknown errors
+  return "Une erreur s'est produite. Contactez le staff";
+}

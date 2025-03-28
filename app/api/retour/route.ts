@@ -10,10 +10,26 @@ type CreateReturnProduct = {
 };
 export const POST = async (req: NextRequest) => {
   try {
-    const { userId, products, returnFrom, nomDuCaissier } = await req.json();
+    const { userId, products, returnFrom, nomDuCaissier, sourceId } =
+      await req.json();
+
+    // Validate sourceId for vente returns
+    if (returnFrom === "vente" && !sourceId) {
+      return NextResponse.json(
+        { error: "Source ID is required for vente returns" },
+        { status: 400 }
+      );
+    }
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 400 });
+    }
+    // Validate venteId if returning from vente
+    if (returnFrom === "vente" && !sourceId) {
+      return NextResponse.json(
+        { error: "Vente ID is required for vente returns" },
+        { status: 400 }
+      );
     }
 
     if (!products || products.length === 0) {
@@ -67,6 +83,7 @@ export const POST = async (req: NextRequest) => {
       const createdReturn = await prisma.return.create({
         data: {
           userId,
+          sourceId: returnFrom === "vente" ? sourceId : null,
           products: {
             create: productsData,
           },
@@ -83,9 +100,13 @@ export const POST = async (req: NextRequest) => {
       for (const item of productsData) {
         await prisma.product.update({
           where: { id: item.productId },
-          data: {
-            stock: { decrement: item.qty },
-          },
+          data:
+            returnFrom === "product"
+              ? { stock: { decrement: item.qty } }
+              : {
+                  stock: { increment: item.qty },
+                  vente: { decrement: item.qty },
+                },
         });
       }
 

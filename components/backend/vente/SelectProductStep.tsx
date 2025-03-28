@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ProductData } from "../table/TableActions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useStepFormStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,8 +32,10 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     useStepFormStore();
   const { toast } = useToast();
 
-  // Load data from local storage when the component mounts
   useEffect(() => {
+    // Clear localStorage when component mounts
+    localStorage.removeItem("selectedProducts");
+    // Then load any saved products (if you still want this feature)
     const savedProducts = localStorage.getItem("selectedProducts");
     if (savedProducts) {
       setProductsSelected(JSON.parse(savedProducts));
@@ -245,8 +247,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     }
   };
 
-  // Calculate the discounted price
-
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center m-10 gap-8">
@@ -308,9 +308,18 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                     product && (
                       <div
                         key={refProduct}
-                        className="flex gap-4 bg-slate-100 m-4 rounded-lg p-5 shadow-md"
+                        className="flex gap-4 bg-slate-100 m-4 rounded-lg p-5 shadow-md relative"
                       >
                         <div className="flex flex-col gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSelectedProduct(refProduct);
+                            }}
+                            className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                          >
+                            <X size={18} />
+                          </button>
                           <h1 className="font-semibold text-gray-700 text-sm md:text-md uppercase ">
                             {product.designationProduit}
                           </h1>

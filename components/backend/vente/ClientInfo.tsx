@@ -255,6 +255,7 @@ const ClientInfo = () => {
                     <SelectItem value="ESPECE">Espece</SelectItem>
                     <SelectItem value="CHECK">Check</SelectItem>
                     <SelectItem value="VIREMENT">Virement</SelectItem>
+                    <SelectItem value="ACREDIT">A Crédit</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

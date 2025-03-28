@@ -2,6 +2,7 @@ import React from "react";
 import { ReturnFormProps } from "./ReturnForm";
 import { useSourceRetourStore } from "@/context/store";
 import SelectProductForReturn from "./SelectProductForReturn";
+import SelectFromVenteForReturn from "./SelectFromVenteForReturn";
 
 const DetailsOfSource = ({ products, ventes }: ReturnFormProps) => {
   const { source } = useSourceRetourStore();
@@ -11,16 +12,7 @@ const DetailsOfSource = ({ products, ventes }: ReturnFormProps) => {
       {source === "produit" ? (
         <SelectProductForReturn productsVente={products} />
       ) : (
-        <div>
-          <h1>Vente</h1>
-          <select>
-            {ventes.map((vente) => (
-              <option key={vente.id} value={vente.id}>
-                {vente.id}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectFromVenteForReturn ventes={ventes} />
       )}
     </div>
   );

@@ -93,7 +93,7 @@ const SideBar = () => {
         isMainAdmin: true,
       },
       {
-        name: "Retour",
+        name: "Bon de Retour",
         href: "/dashboard/retour",
         icon: Undo2,
         isMainAdmin: false,

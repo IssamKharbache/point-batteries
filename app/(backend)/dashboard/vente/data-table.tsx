@@ -38,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import { Filter, Loader2 } from "lucide-react";
 import { useLoadingStore } from "@/context/store";
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
+import { PaymentType } from "@prisma/client";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -151,21 +152,33 @@ export function DataTable<TData>({
             </TableHeader>
             <TableBody>
               {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell className="py-4 px-4" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
+                table.getRowModel().rows.map((row) => {
+                  const paymentType = row.getValue(
+                    "paymentType"
+                  ) as PaymentType;
+                  return (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className={
+                        paymentType === "ACREDIT"
+                          ? "bg-red-500 hover:bg-red-400 text-white"
+                          : "hover:bg-gray-50"
+                      }
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <TableCell className="py-4 px-4" key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })
               ) : (
                 <TableRow>
                   <TableCell

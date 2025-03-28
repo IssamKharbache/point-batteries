@@ -4,10 +4,10 @@ import React from "react";
 import SourceSelection from "./SourceSelection";
 import DetailsOfSource from "./DetailsOfSource";
 import { ProductData } from "../table/TableActions";
-import { Vente } from "@prisma/client";
+import { VenteType } from "./SelectFromVenteForReturn";
 export interface ReturnFormProps {
   products: ProductData[];
-  ventes: Vente[];
+  ventes: VenteType[];
 }
 const ReturnForm = ({ products, ventes }: ReturnFormProps) => {
   const { step } = useSourceRetourStore();
