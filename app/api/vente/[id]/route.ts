@@ -54,7 +54,7 @@ export const DELETE = async (
 
     return NextResponse.json(
       {
-        message: "Vente deleted successfully",
+        message: "Vente supprimer aven success",
       },
       {
         status: 201,

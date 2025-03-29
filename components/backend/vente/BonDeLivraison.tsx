@@ -257,7 +257,15 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
                 ))}
               </tbody>
             </table>
-
+            <div style={{ marginBottom: "10px", textAlign: "right" }}>
+              {products.map((product, index) =>
+                product.codeGarantie ? (
+                  <div key={index} style={{ fontSize: "12px" }}>
+                    <p>Code Garantie : {product.codeGarantie}</p>
+                  </div>
+                ) : null
+              )}
+            </div>
             {/* Discount Information */}
             <div style={{ marginBottom: "10px", textAlign: "right" }}>
               {products.map((product, index) =>
