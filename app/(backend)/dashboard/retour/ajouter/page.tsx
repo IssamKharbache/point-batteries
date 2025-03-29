@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ReturnForm from "@/components/backend/retour/ReturnForm";
 import { ProductData } from "@/components/backend/table/TableActions";
 import { getData } from "@/lib/getData";
