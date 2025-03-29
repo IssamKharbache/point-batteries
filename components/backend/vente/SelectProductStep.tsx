@@ -399,7 +399,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-center mt-4 gap-4 max-w-xl mx-auto">
         <Button
           variant="outline"
           className="w-full md:w-32"
