@@ -83,6 +83,10 @@ export function DataTable<TData>({
           <h2 className="px-4 py-4 font-semibold text-md md:text-2xl">
             {name}
           </h2>
+          <div className="flex items-center">
+            <div className="bg-red-500 w-3 h-3 rounded" />
+            <h1 className="text-sm ml-2">A Crédit</h1>
+          </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button

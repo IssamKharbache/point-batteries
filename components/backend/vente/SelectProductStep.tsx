@@ -10,7 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 interface ProductSelection {
   quantity: string;
   selected: boolean;
-  discount: string; // New discount field for each selected product
+  discount: string;
+  codeGarantie: string;
 }
 interface SelectProductProps {
   productsVente: ProductData[];
@@ -68,7 +69,12 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         ? omit(prev, refProduct)
         : {
             ...prev,
-            [refProduct]: { quantity: "", selected: true, discount: "" },
+            [refProduct]: {
+              quantity: "",
+              selected: true,
+              discount: "",
+              codeGarantie: "",
+            },
           };
 
       // Save the updated selection to localStorage
@@ -83,7 +89,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   // Handle changes to quantity input for a product
   const handleInputChange = (
     refProduct: string | null | undefined,
-    field: "quantity" | "discount",
+    field: "quantity" | "discount" | "codeGarantie",
     value: string
   ) => {
     if (!refProduct) return;
@@ -215,6 +221,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           designationProduit: product.designationProduit,
           marque: product.marque,
           discount: productSelected[refProduct].discount,
+          codeGarantie: productSelected[refProduct].codeGarantie,
           productVenteBenifit,
         };
       })
@@ -229,6 +236,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           marque: string;
           discount: string;
           productVenteBenifit: number;
+          codeGarantie: string;
         } => product !== null
       );
 
@@ -347,6 +355,21 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                                 {validationErrors[refProduct]}
                               </div>
                             )}
+                          </div>
+                          <div>
+                            <Input
+                              placeholder="Code Garantie"
+                              className="px-4 bg-white w-full md:w-52 border-2 border-gray-300 rounded-md h-8 md:h-12 mt-2"
+                              value={productSelected[refProduct].codeGarantie}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  refProduct,
+                                  "codeGarantie",
+                                  e.target.value
+                                )
+                              }
+                            />
                           </div>
 
                           <div>

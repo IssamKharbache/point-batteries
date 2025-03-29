@@ -292,7 +292,7 @@ const ClientInfo = () => {
                           </Select>
                         </>
                       ) : (
-                        <p>Aucun client</p>
+                        <p className="text-red-500">Aucun client</p>
                       )}
                     </>
                   )}

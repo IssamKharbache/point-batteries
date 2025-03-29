@@ -77,6 +77,7 @@ export const POST = async (req: NextRequest) => {
         designationProduit: string;
         discount: string;
         productVenteBenifit: number;
+        codeGarantie: string;
       }) => ({
         refProduct: p.refProduct,
         marque: p.marque,
@@ -86,6 +87,7 @@ export const POST = async (req: NextRequest) => {
         designationProduit: p.designationProduit,
         discount: parseFloat(p.discount),
         productVenteBenifit: p.productVenteBenifit,
+        codeGarantie: p.codeGarantie,
       })
     );
 

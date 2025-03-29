@@ -12,6 +12,7 @@ const page = async () => {
   return (
     <section>
       <PageHeader name="Vente" href="vente/ajouter" />
+
       <div className="container mx-auto py-10 ">
         <DataTable columns={columns} data={data} name="Vente" />
       </div>

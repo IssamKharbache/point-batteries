@@ -102,7 +102,8 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
           `${product.marque.toUpperCase()} ${extractTextInParentheses(
             product.designationProduit.toUpperCase()
           )}`.padEnd(30) + // Designation
-            `x${product.qty} x${product.price?.toFixed(2)}DH\n`, // Quantity and price
+            `x${product.qty} x${product.price?.toFixed(2)}DH\n`,
+          `Code Garantie: ${product.codeGarantie}\n`,
           product.discount
             ? `Remise: ${product.discount.toFixed(2)} DH\n` // Discount (if any)
             : "",
@@ -262,8 +263,11 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               {products.map((product, index) =>
                 product.discount ? (
                   <div key={index} style={{ fontSize: "12px", color: "red" }}>
-                    Remise sur {product.marque}: -{product.discount.toFixed(2)}{" "}
-                    DH
+                    <p>
+                      {" "}
+                      Remise sur {product.marque}: -
+                      {product.discount.toFixed(2)} DH
+                    </p>
                   </div>
                 ) : null
               )}
