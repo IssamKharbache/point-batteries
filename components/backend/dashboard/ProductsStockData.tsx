@@ -7,6 +7,10 @@ import React from "react";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
+
+import { CSVDownload, CSVLink } from "react-csv";
+
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 interface ProductsStockDataProps {
   filteredProducts: ProductData[];
 }
@@ -17,15 +21,23 @@ const ProductsStockData = ({ filteredProducts }: ProductsStockDataProps) => {
     contentRef,
     documentTitle: `Fiche de stock`,
   });
+  console.log(filteredProducts, "filteredProducts");
 
   return (
     <div className="container mx-auto py-10 ">
       {/* Print Button */}
-      <div className="flex items-end justify-end">
+      <div className="flex items-center justify-end">
         <Button className="mb-4 rounded-xl" onClick={() => reactToPrintFn()}>
           <Printer />
           <span>Imprimer</span>
         </Button>
+
+        <CSVLink filename="Fiche de stock" data={filteredProducts}>
+          <Button className="mb-4 rounded-xl ml-2 bg-green-600 hover:bg-green-700">
+            <PiMicrosoftExcelLogoFill />
+            <span>Exporter</span>
+          </Button>
+        </CSVLink>
       </div>
       <p className="text-xl">
         <span className="font-semibold">{filteredProducts.length}</span> Produit

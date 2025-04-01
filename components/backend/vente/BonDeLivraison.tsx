@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
+import { EyeIcon, Printer } from "lucide-react";
 import qz from "qz-tray";
 
 interface BonDeLivraisonProps {
@@ -20,173 +20,140 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
   const { clientNom, clientPrenom, products, paymentType, nomDuCaissier } =
     rowData;
 
-  const { individualTotals, overallTotal, totalRemise } = products.reduce(
+  // Calculate totals
+  const { overallTotal, totalRemise } = products.reduce(
     (acc, product) => {
-      const validPrice = product.price || 0;
-      const validQty = product.qty || 0;
-      const remise = product.discount || 0; // Ensure remise exists
+      const price = product.price || 0;
+      const qty = product.qty || 0;
+      const discount = product.discount || 0;
 
-      const productTotal = validPrice * validQty;
-      const productAfterRemise = productTotal - remise;
-
-      acc.individualTotals.push({
-        productId: product.productId,
-        total: productAfterRemise,
-        remise,
-      });
-
-      acc.totalRemise += remise;
-      acc.overallTotal += productAfterRemise;
-
+      acc.overallTotal += price * qty - discount;
+      acc.totalRemise += discount;
       return acc;
     },
-    {
-      individualTotals: [] as {
-        productId: string;
-        total: number;
-        remise: number;
-      }[],
-      overallTotal: 0,
-      totalRemise: 0,
-    }
+    { overallTotal: 0, totalRemise: 0 }
   );
+
+  // Printer configuration
+  const ESC = "\x1B";
+  const GS = "\x1D";
+  const printer = {
+    reset: ESC + "@",
+    center: ESC + "a" + "\x01",
+    left: ESC + "a" + "\x00",
+    doubleHeight: ESC + "!" + "\x30",
+    normalText: ESC + "!" + "\x00",
+    cut: GS + "V" + "A" + "\x10",
+  };
+
+  // Alignment settings
+  const COLUMNS = {
+    width: 36,
+    label: 15,
+    product: 20,
+    price: 16,
+  };
+
+  // Helper functions
+  const createLine = (label: string, value: string) => {
+    const padding = " ".repeat(COLUMNS.label - label.length);
+    const valueSpace = COLUMNS.width - COLUMNS.label;
+    const alignedValue = value.padStart(valueSpace, " ");
+    return label + padding + alignedValue;
+  };
+
+  const createProductLine = (product: any) => {
+    const name =
+      product.marque.toUpperCase() +
+      " " +
+      (extractTextInParentheses(product.designationProduit) || "")
+        .slice(0, COLUMNS.product)
+        .padEnd(COLUMNS.product, " ");
+
+    const price = `x${product.qty} ${product.price?.toFixed(2)}DH`.padStart(
+      COLUMNS.price,
+      " "
+    );
+
+    return name + price;
+  };
 
   const handlePrint = async () => {
     try {
-      // Check if QZ Tray is already connected
       if (!qz.websocket.isActive()) {
         await qz.websocket.connect();
       }
 
-      // Find available printers
       const printers = await qz.printers.find();
-
       if (!printers || printers.length === 0) {
         throw new Error("No printers found.");
       }
 
-      // Set up printer configuration
       const config = qz.configs.create("NCR 7197 Receipt");
 
-      const columnWidth = 36;
-      const labelWidth = 18;
-
-      const data = [
-        "\x1B\x40", // Reset printer
-        "\x1B\x61\x01", // Center alignment
-        "\x1B\x21\x30", // Double height and width text
+      // Build receipt data
+      const receiptData = [
+        printer.reset,
+        printer.center + printer.doubleHeight,
         "Point Batteries\n",
         "Services\n",
-        "\x1B\x21\x00", // Reset text size
+        printer.normalText,
         "\n",
-        "\x1B\x61\x01", // Center alignment for title
+        printer.center,
         "Bon de Livraison\n",
         "\n",
-
-        // Header Data - Centered but with left/right alignment
-        "\x1B\x61\x01", // Center alignment block
-        `Date:`.padEnd(labelWidth, " ") +
-          `${formatISODate(rowData.createdAt)}\n`,
-        `Ref:`.padEnd(labelWidth, " ") + `${rowData.venteRef}\n`,
-        `Client:`.padEnd(labelWidth, " ") + `${clientNom} ${clientPrenom}\n`,
-        `Servi par:`.padEnd(labelWidth, " ") + `${nomDuCaissier}\n`,
+        printer.center,
+        createLine("Date:", formatISODate(rowData.createdAt)) + "\n",
+        createLine("Ref:", rowData.venteRef) + "\n",
+        createLine("Client:", `${clientNom} ${clientPrenom}`) + "\n",
+        createLine("Servi par:", nomDuCaissier) + "\n",
         "\n",
-
-        // Products section - Left aligned with perfect columns
-        "\x1B\x61\x00", // Left alignment
-        "-".repeat(columnWidth) + "\n",
+        printer.left,
+        "-".repeat(COLUMNS.width) + "\n",
         ...products.flatMap((product) => {
-          const productLine =
-            `${product.marque.toUpperCase()} ${extractTextInParentheses(
-              product.designationProduit.toUpperCase()
-            )}`
-              .slice(0, columnWidth - 14)
-              .padEnd(columnWidth - 14, " ") +
-            `x${product.qty} ${product.price?.toFixed(2)}DH`;
+          const lines = [createProductLine(product) + "\n"];
 
-          const warrantyLine = product.codeGarantie
-            ? `Code Garantie:`.padEnd(labelWidth, " ") +
-              `${product.codeGarantie}`.padStart(columnWidth - labelWidth, " ")
-            : null;
+          if (product.codeGarantie) {
+            lines.push(
+              createLine("Code Garantie:", product.codeGarantie) + "\n"
+            );
+          }
 
-          const discountLine = product.discount
-            ? `Remise:`.padEnd(labelWidth, " ") +
-              `${product.discount.toFixed(2)} DH`.padStart(
-                columnWidth - labelWidth,
-                " "
-              )
-            : null;
+          if (product.discount) {
+            lines.push(
+              createLine("Remise:", `${product.discount.toFixed(2)} DH`) + "\n"
+            );
+          }
 
-          return [
-            productLine + "\n",
-            ...(warrantyLine ? [warrantyLine + "\n"] : []),
-            ...(discountLine ? [discountLine + "\n"] : []),
-            "-".repeat(columnWidth) + "\n",
-          ];
+          lines.push("-".repeat(COLUMNS.width) + "\n");
+          return lines;
         }),
-
-        // Totals section
-        "\x1B\x61\x01", // Center alignment
-        "\x1B\x21\x10", // Double height and width text
-        // Now using your variable names but with consistent calculation
-        `TOTAL:`.padEnd(labelWidth, " ") +
-          `${overallTotal.toFixed(2)} DH`.padStart(
-            columnWidth - labelWidth,
-            " "
-          ) +
-          "\n",
-
-        `REMISE TOTALE:`.padEnd(labelWidth, " ") +
-          `-${totalRemise.toFixed(2)} DH`.padStart(
-            columnWidth - labelWidth,
-            " "
-          ) +
-          "\n",
-
-        `TOTAL FINAL:`.padEnd(labelWidth, " ") +
-          `${(overallTotal - totalRemise).toFixed(2)} DH`.padStart(
-            columnWidth - labelWidth,
-            " "
-          ) +
-          "\n",
-        // Footer
-        "\x1B\x21\x00",
         "\n",
-        "\x1B\x61\x01",
+        printer.center + printer.doubleHeight,
+        createLine("TOTAL:", `${overallTotal.toFixed(2)} DH`) + "\n",
+        createLine("REMISE TOTALE:", `-${totalRemise.toFixed(2)} DH`) + "\n",
+        createLine("TOTAL FINAL:", `${overallTotal.toFixed(2)} DH`) + "\n",
+        printer.normalText,
+        "\n",
+        printer.center,
         `Mode de paiement: ${paymentType.toUpperCase()}\n`,
         "\n",
         "Merci pour votre confiance!\n",
         "Service apres-vente: \n",
         "Tel : 0656307044 Fix : 0531510011\n",
         "\n",
-        "\x1D\x56\x41\x10", // Full cut
+        printer.cut,
       ];
 
-      // Send print job
-      await qz.print(config, data);
-
+      await qz.print(config, receiptData);
       console.log("Print job sent successfully");
     } catch (error) {
-      // Narrow down the type of the error
-      if (error instanceof Error) {
-        console.error("Error during printing:", error.message);
-
-        if (error.message.includes("No printers found")) {
-          alert("No printers found. Please ensure a printer is connected.");
-        } else if (error.message.includes("Connection to QZ Tray failed")) {
-          alert(
-            "Failed to connect to QZ Tray. Please ensure QZ Tray is running."
-          );
-        } else {
-          alert("An error occurred while printing. Please try again.");
-        }
-      } else {
-        // Handle cases where the error is not an instance of Error
-        console.error("An unknown error occurred:", error);
-        alert("An unknown error occurred. Please try again.");
-      }
+      console.error("Error during printing:", error);
+      alert(
+        "Printing error: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
     } finally {
-      // Close the connection after printing
       if (qz.websocket.isActive()) {
         await qz.websocket.disconnect();
       }
@@ -215,142 +182,73 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
             </Button>
           </div>
 
-          <div
-            className="thermal-receipt"
-            style={{
-              fontFamily: "monospace",
-              margin: "auto",
-              padding: "10px",
-              border: "1px solid #000",
-              width: "400px", // Adjust width to match receipt width
-              textAlign: "center", // Center align all text
-            }}
-          >
-            {/* Company Name */}
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                marginBottom: "10px",
-              }}
-            >
+          {/* Preview of the receipt */}
+          <div className="thermal-receipt-preview">
+            <div className="text-center font-bold text-xl mb-2">
               Point Batteries
             </div>
-            <div
-              style={{
-                fontSize: "24px",
-                marginBottom: "10px",
-                fontWeight: "bold",
-              }}
-            >
-              Services
-            </div>
-
-            {/* Title */}
-            <div
-              style={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                marginBottom: "10px",
-              }}
-            >
+            <div className="text-center font-bold text-xl mb-4">Services</div>
+            <div className="text-center font-bold text-lg mb-4">
               Bon de Livraison
             </div>
 
-            {/* Meta Info */}
-            <div className="meta-info" style={{ marginBottom: "10px" }}>
+            <div className="mb-4">
               <div>Date: {formatISODate(rowData.createdAt)}</div>
               <div>Ref: {rowData.venteRef}</div>
               <div>
                 Client: {clientNom} {clientPrenom}
               </div>
-              <div>Servi par : {nomDuCaissier}</div>
+              <div>Servi par: {nomDuCaissier}</div>
             </div>
 
-            {/* Separator */}
-            <div
-              style={{ borderBottom: "1px solid #000", marginBottom: "10px" }}
-            ></div>
+            <hr className="my-2" />
 
-            {/* Products Table */}
-            <table style={{ width: "100%", marginBottom: "10px" }}>
-              <tbody>
-                {products.map((product, index) => (
-                  <tr key={index}>
-                    <td style={{ textAlign: "left" }}>
-                      {` ${product.marque.toUpperCase()}: ${extractTextInParentheses(
-                        product.designationProduit
-                      )?.toUpperCase()}  `}
-                    </td>
-                    <td style={{ textAlign: "center" }}>x{product.qty}</td>
-                    <td style={{ textAlign: "right" }}>
-                      {product.price?.toFixed(2)} DH
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ marginBottom: "10px", textAlign: "right" }}>
-              {products.map((product, index) =>
-                product.codeGarantie ? (
-                  <div key={index} style={{ fontSize: "12px" }}>
-                    <p>Code Garantie : {product.codeGarantie}</p>
+            {products.map((product, index) => (
+              <div key={index} className="mb-2">
+                <div className="flex justify-between">
+                  <span>
+                    {product.marque.toUpperCase()}{" "}
+                    {extractTextInParentheses(
+                      product.designationProduit
+                    )?.toUpperCase()}
+                  </span>
+                  <span>
+                    x{product.qty} {product.price?.toFixed(2)}DH
+                  </span>
+                </div>
+                {product.codeGarantie && (
+                  <div className="text-sm">
+                    Code Garantie: {product.codeGarantie}
                   </div>
-                ) : null
-              )}
-            </div>
-            {/* Discount Information */}
-            <div style={{ marginBottom: "10px", textAlign: "right" }}>
-              {products.map((product, index) =>
-                product.discount ? (
-                  <div key={index} style={{ fontSize: "12px", color: "red" }}>
-                    <p>
-                      {" "}
-                      Remise sur {product.marque}: -
-                      {product.discount.toFixed(2)} DH
-                    </p>
+                )}
+                {product.discount && (
+                  <div className="text-sm text-red-500">
+                    Remise: -{product.discount.toFixed(2)} DH
                   </div>
-                ) : null
-              )}
-            </div>
-
-            {/* Separator */}
-            <div
-              style={{ borderBottom: "1px solid #000", marginBottom: "10px" }}
-            ></div>
-
-            {/* Total Section */}
-            <div className="total-section" style={{ marginBottom: "10px" }}>
-              <div style={{ fontWeight: "bold", marginBottom: "5px" }}>
-                Mode: {paymentType.toUpperCase()}
+                )}
+                <hr className="my-2" />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Total:</span>
+            ))}
+
+            <div className="mt-4">
+              <div className="flex justify-between font-bold">
+                <span>TOTAL:</span>
                 <span>{(overallTotal + totalRemise).toFixed(2)} DH</span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Remise Totale:</span>
+              <div className="flex justify-between">
+                <span>REMISE TOTALE:</span>
                 <span>-{totalRemise.toFixed(2)} DH</span>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontWeight: "bold",
-                }}
-              >
-                <span>Total Final:</span>
+              <div className="flex justify-between font-bold">
+                <span>TOTAL FINAL:</span>
                 <span>{overallTotal.toFixed(2)} DH</span>
               </div>
             </div>
 
-            {/* Footer */}
-            <div
-              className="footer"
-              style={{ marginTop: "10px", textAlign: "center" }}
-            >
-              <div>Merci pour votre confiance!</div>
-              <div>Service après-vente: Tel : 0656307044 Fix : 0531510011</div>
+            <div className="mt-4 text-center">
+              <div>Mode de paiement: {paymentType.toUpperCase()}</div>
+              <div className="mt-2">Merci pour votre confiance!</div>
+              <div>Service apres-vente: Tel : 0656307044 Fix : 0531510011</div>
             </div>
           </div>
         </DialogContent>
@@ -359,30 +257,18 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
   );
 };
 
-export default BonDeLivraison;
-
-export function formatISODate(isoDate: Date): string {
+// Helper functions
+function formatISODate(isoDate: Date): string {
   const date = new Date(isoDate);
-
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
-
-  return `${day}.${month}.${year}/${hours}:${minutes}:${seconds}`;
+  const pad = (num: number) => num.toString().padStart(2, "0");
+  return `${pad(date.getDate())}/${pad(
+    date.getMonth() + 1
+  )}/${date.getFullYear()}`;
 }
 
 function extractTextInParentheses(designation: string) {
-  // Use a regular expression to match text between parentheses
-  const regex = /\((.*?)\)/;
-  const match = designation.match(regex);
-
-  // If a match is found, return the text inside the parentheses
-  if (match && match[1]) {
-    return match[1];
-  }
-  return null;
+  const match = designation?.match(/\((.*?)\)/);
+  return match ? match[1] : "";
 }
+
+export default BonDeLivraison;
