@@ -38,7 +38,7 @@ model Product {
   capacite           Float?
   marque             String?
   designationProduit String?         @unique
-  courantDessai      Int?
+  courantDessai      Float?
   voltage            Int?
   garantie           Garantie?       @default(NOGARANTIE)
   vente              Int?            @default(0)
@@ -100,16 +100,15 @@ model Order {
 }
 
 model Vente {
-  id              String         @id @default(uuid()) @db.Uuid
-  userId          String?        @db.Uuid
-  clientNom       String
-  clientPrenom    String
-  clientTel       String?
-  nomDuCaissier   String?
-  venteRef        String         @unique
-  paymentType     PaymentType
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime?      @updatedAt
+  id            String      @id @default(uuid()) @db.Uuid
+  userId        String?     @db.Uuid
+  clientNom     String
+  clientPrenom  String
+  clientTel     String?
+  nomDuCaissier String?
+  venteRef      String      @unique
+  paymentType   PaymentType
+
   factureCode     String?        @unique
   generateFacture Boolean        @default(false)
   venteBenifits   Float?
@@ -117,6 +116,16 @@ model Vente {
   user            User?          @relation(fields: [userId], references: [id])
   products        VenteProduct[]
   returns         Return[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([createdAt])
+}
+
+model VenteCounter {
+  year    String @id
+  counter Int    @default(1)
 }
 
 model VenteProduct {

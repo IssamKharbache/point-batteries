@@ -70,31 +70,49 @@ export const formatNumber = (num: number): string => {
   return num.toString(); // Return as-is if less than 1k
 };
 
-export const generateUniqueVenteRef = async (): Promise<string> => {
-  const prefix = "V";
-  const datePart = new Date().toISOString().slice(2, 10).replace(/-/g, "");
-  const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+export async function generateUniqueVenteRef() {
+  const currentYear = new Date().getFullYear().toString().slice(-2);
 
-  let venteRef = `${prefix}${datePart}${randomPart}`;
-
-  let existingVente = await db.vente.findUnique({
-    where: { venteRef },
+  // 1. Check if any ventes exist for current year
+  const existingVentesCount = await db.vente.count({
+    where: {
+      venteRef: {
+        contains: `/${currentYear}`,
+      },
+    },
   });
 
-  while (existingVente) {
-    const newRandomPart = Math.random()
-      .toString(36)
-      .substring(2, 6)
-      .toUpperCase();
-    venteRef = `${prefix}${datePart}${newRandomPart}`;
+  // 2. Get the counter value
+  const counter = await db.venteCounter.upsert({
+    where: { year: currentYear },
+    update: {
+      counter: {
+        // Only increment if ventes exist, otherwise reset to 1
+        increment: existingVentesCount > 0 ? 1 : 0,
+      },
+    },
+    create: {
+      year: currentYear,
+      counter: 1,
+    },
+  });
 
-    existingVente = await db.vente.findUnique({
-      where: { venteRef },
+  // 3. Determine next number
+  let nextNumber;
+  if (existingVentesCount === 0) {
+    // Reset to 1 if no ventes exist
+    nextNumber = 1;
+    await db.venteCounter.update({
+      where: { year: currentYear },
+      data: { counter: 1 },
     });
+  } else {
+    // Use counter value if ventes exist
+    nextNumber = counter.counter;
   }
 
-  return venteRef;
-};
+  return `VT-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
+}
 
 export const generateReturnReference = async (): Promise<string> => {
   const yearShort = new Date().getFullYear().toString().slice(-2);

@@ -68,65 +68,94 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       // Set up printer configuration
       const config = qz.configs.create("NCR 7197 Receipt");
 
-      const columnWidth = 20; // Adjust as needed for alignment
+      const columnWidth = 36;
+      const labelWidth = 18;
 
-      const totalLine =
-        `TOTAL:`.padEnd(columnWidth, " ") +
-        `${overallTotal.toFixed(2)} DH\n`.padStart(15);
-      const remiseLine =
-        `REMISE TOTALE:`.padEnd(columnWidth, " ") +
-        `-${totalRemise.toFixed(2)} DH\n`.padStart(15);
-      const finalTotalLine =
-        `TOTAL FINAL:`.padEnd(columnWidth, " ") +
-        `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
       const data = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
         "\x1B\x21\x30", // Double height and width text
-        "Point Batteries\n", // Company name in large font
+        "Point Batteries\n",
         "Services\n",
         "\x1B\x21\x00", // Reset text size
         "\n",
         "\x1B\x61\x01", // Center alignment for title
-        "Bon de Livraison\n", // Title
+        "Bon de Livraison\n",
         "\n",
-        "\x1B\x61\x01", // Center alignment for header data
-        `Date: ${formatISODate(rowData.createdAt)}\n`, // Date
-        `Ref: ${rowData.venteRef}\n`, // Reference
-        `Client: ${clientNom} ${clientPrenom}\n`, // Client name
-        `Servi par: ${nomDuCaissier} \n`, // Cashier name
+
+        // Header Data - Centered but with left/right alignment
+        "\x1B\x61\x01", // Center alignment block
+        `Date:`.padEnd(labelWidth, " ") +
+          `${formatISODate(rowData.createdAt)}\n`,
+        `Ref:`.padEnd(labelWidth, " ") + `${rowData.venteRef}\n`,
+        `Client:`.padEnd(labelWidth, " ") + `${clientNom} ${clientPrenom}\n`,
+        `Servi par:`.padEnd(labelWidth, " ") + `${nomDuCaissier}\n`,
         "\n",
-        "--------------------------------------------\n",
-        ...products.flatMap((product) => [
-          // Product name (left) + quantity & price (right)
-          `${product.marque.toUpperCase()} ${extractTextInParentheses(
-            product.designationProduit.toUpperCase()
-          )}`.padEnd(30, " ") +
-            `x${product.qty}  ${product.price?.toFixed(2)}DH\n`,
-          // Code Garantie (left) + value (right)
-          product.codeGarantie
-            ? `Code Garantie:`.padEnd(30, " ") + `${product.codeGarantie}\n`
-            : "",
-          // Remise (left) + value (right)
-          product.discount
-            ? `Remise:`.padEnd(30, " ") + `${product.discount.toFixed(2)} DH\n`
-            : "",
-          "--------------------------------------------\n",
-        ]),
-        "\n",
-        "\x1B\x61\x01", // Center alignment for totals
+
+        // Products section - Left aligned with perfect columns
+        "\x1B\x61\x00", // Left alignment
+        "-".repeat(columnWidth) + "\n",
+        ...products.flatMap((product) => {
+          const productLine =
+            `${product.marque.toUpperCase()} ${extractTextInParentheses(
+              product.designationProduit.toUpperCase()
+            )}`
+              .slice(0, columnWidth - 14)
+              .padEnd(columnWidth - 14, " ") +
+            `x${product.qty} ${product.price?.toFixed(2)}DH`;
+
+          const warrantyLine = product.codeGarantie
+            ? `Code Garantie:`.padEnd(labelWidth, " ") +
+              `${product.codeGarantie}`.padStart(columnWidth - labelWidth, " ")
+            : null;
+
+          const discountLine = product.discount
+            ? `Remise:`.padEnd(labelWidth, " ") +
+              `${product.discount.toFixed(2)} DH`.padStart(
+                columnWidth - labelWidth,
+                " "
+              )
+            : null;
+
+          return [
+            productLine + "\n",
+            ...(warrantyLine ? [warrantyLine + "\n"] : []),
+            ...(discountLine ? [discountLine + "\n"] : []),
+            "-".repeat(columnWidth) + "\n",
+          ];
+        }),
+
+        // Totals section
+        "\x1B\x61\x01", // Center alignment
         "\x1B\x21\x10", // Double height and width text
-        totalLine,
-        remiseLine,
-        finalTotalLine,
-        "\x1B\x21\x00", // Reset text size
+        // Now using your variable names but with consistent calculation
+        `TOTAL:`.padEnd(labelWidth, " ") +
+          `${overallTotal.toFixed(2)} DH`.padStart(
+            columnWidth - labelWidth,
+            " "
+          ) +
+          "\n",
+
+        `REMISE TOTALE:`.padEnd(labelWidth, " ") +
+          `-${totalRemise.toFixed(2)} DH`.padStart(
+            columnWidth - labelWidth,
+            " "
+          ) +
+          "\n",
+
+        `TOTAL FINAL:`.padEnd(labelWidth, " ") +
+          `${(overallTotal - totalRemise).toFixed(2)} DH`.padStart(
+            columnWidth - labelWidth,
+            " "
+          ) +
+          "\n",
+        // Footer
+        "\x1B\x21\x00",
         "\n",
-        "\x1B\x61\x01", // Center alignment for footer
+        "\x1B\x61\x01",
         `Mode de paiement: ${paymentType.toUpperCase()}\n`,
         "\n",
-        "\x1B\x61\x01", // Center alignment for footer
         "Merci pour votre confiance!\n",
-        "\x1B\x61\x01", // Center alignment for footer
         "Service apres-vente: \n",
         "Tel : 0656307044 Fix : 0531510011\n",
         "\n",

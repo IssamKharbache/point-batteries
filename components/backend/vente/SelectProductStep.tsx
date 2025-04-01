@@ -400,14 +400,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         </div>
       </div>
       <div className="flex justify-between items-center mt-4 gap-4 max-w-xl mx-auto">
-        <Button
-          variant="outline"
-          className="w-full md:w-32"
-          onClick={handlePrevious}
-        >
-          <ChevronLeft size={18} />
-          Précédent
-        </Button>
         <Button className="w-full md:w-32" onClick={submit}>
           Valider
           <ChevronRight size={18} />
