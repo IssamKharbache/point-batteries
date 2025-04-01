@@ -258,7 +258,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 };
 
 // Helper functions
-function formatISODate(isoDate: Date): string {
+export function formatISODate(isoDate: Date): string {
   const date = new Date(isoDate);
   const pad = (num: number) => num.toString().padStart(2, "0");
   return `${pad(date.getDate())}/${pad(
@@ -266,7 +266,7 @@ function formatISODate(isoDate: Date): string {
   )}/${date.getFullYear()}`;
 }
 
-function extractTextInParentheses(designation: string) {
+export function extractTextInParentheses(designation: string) {
   const match = designation?.match(/\((.*?)\)/);
   return match ? match[1] : "";
 }
