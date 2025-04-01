@@ -66,9 +66,9 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
       ) : (
         <button
           onClick={handleDelete}
-          className="flex items-center justify-center  font-medium bg-white rounded-full  w-8 h-8"
+          className="flex items-center justify-center  font-medium  rounded-full gap-2"
         >
-          <Trash2 className="w-4 h-4 text-red-500 " />
+          <Trash2 className="w-4 h-4 text-red-500  " />
           <span className="text-red-500">{title ?? ""}</span>
         </button>
       )}

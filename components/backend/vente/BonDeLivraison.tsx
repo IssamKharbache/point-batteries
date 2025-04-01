@@ -79,7 +79,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       const finalTotalLine =
         `TOTAL FINAL:`.padEnd(columnWidth, " ") +
         `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
-
       const data = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
@@ -99,13 +98,18 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "\n",
         "--------------------------------------------\n",
         ...products.flatMap((product) => [
+          // Product name (left) + quantity & price (right)
           `${product.marque.toUpperCase()} ${extractTextInParentheses(
             product.designationProduit.toUpperCase()
-          )}`.padEnd(30) + // Designation
-            `x${product.qty} x${product.price?.toFixed(2)}DH\n`,
-          `Code Garantie: ${product.codeGarantie}\n`,
+          )}`.padEnd(30, " ") +
+            `x${product.qty}  ${product.price?.toFixed(2)}DH\n`,
+          // Code Garantie (left) + value (right)
+          product.codeGarantie
+            ? `Code Garantie:`.padEnd(30, " ") + `${product.codeGarantie}\n`
+            : "",
+          // Remise (left) + value (right)
           product.discount
-            ? `Remise: ${product.discount.toFixed(2)} DH\n` // Discount (if any)
+            ? `Remise:`.padEnd(30, " ") + `${product.discount.toFixed(2)} DH\n`
             : "",
           "--------------------------------------------\n",
         ]),
@@ -118,12 +122,12 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "\x1B\x21\x00", // Reset text size
         "\n",
         "\x1B\x61\x01", // Center alignment for footer
-        `Mode de paiement: ${paymentType.toUpperCase()}\n`, // Payment method
+        `Mode de paiement: ${paymentType.toUpperCase()}\n`,
         "\n",
         "\x1B\x61\x01", // Center alignment for footer
-        "Merci pour votre confiance!\n", // Thank you message
+        "Merci pour votre confiance!\n",
         "\x1B\x61\x01", // Center alignment for footer
-        "Service apres-vente: \n", // Contact info
+        "Service apres-vente: \n",
         "Tel : 0656307044 Fix : 0531510011\n",
         "\n",
         "\x1D\x56\x41\x10", // Full cut
