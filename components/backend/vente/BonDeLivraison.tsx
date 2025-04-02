@@ -91,22 +91,50 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
       const config = qz.configs.create("NCR 7197 Receipt");
 
+      const columnWidth = 36;
+      const labelWidth = 15;
+
+      const totalLine =
+        `TOTAL:`.padEnd(labelWidth, " ") +
+        `${overallTotal.toFixed(2)} DH`.padStart(
+          columnWidth - labelWidth,
+          " "
+        ) +
+        "\n";
+      const remiseLine =
+        `REMISE TOTALE:`.padEnd(labelWidth, " ") +
+        `-${totalRemise.toFixed(2)} DH`.padStart(
+          columnWidth - labelWidth,
+          " "
+        ) +
+        "\n";
+      const finalTotalLine =
+        `TOTAL FINAL:`.padEnd(labelWidth, " ") +
+        `${(overallTotal - totalRemise).toFixed(2)} DH`.padStart(
+          columnWidth - labelWidth,
+          " "
+        ) +
+        "\n";
+
+      `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
+
       // Build receipt data
       const receiptData = [
-        printer.reset,
-        printer.center + printer.doubleHeight,
-        "Point Batteries\n",
+        "\x1B\x40", // Reset printer
+        "\x1B\x61\x01", // Center alignment
+        "\x1B\x21\x30", // Double height and width text
+        "Point Batteries\n", // Company name in large font
         "Services\n",
-        printer.normalText,
+        "\x1B\x21\x00", // Reset text size
         "\n",
-        printer.center,
-        "Bon de Livraison\n",
+        "\x1B\x61\x01", // Center alignment for title
+        "Bon de Livraison\n", // Title
         "\n",
-        printer.center,
-        createLine("Date:", formatISODate(rowData.createdAt)) + "\n",
-        createLine("Ref:", rowData.venteRef) + "\n",
-        createLine("Client:", `${clientNom} ${clientPrenom}`) + "\n",
-        createLine("Servi par:", nomDuCaissier) + "\n",
+        "\x1B\x61\x01", // Center alignment for header data
+        `Date: ${formatISODate(rowData.createdAt)}\n`, // Date
+        `Ref: ${rowData.venteRef}\n`, // Reference
+        `Client: ${clientNom} ${clientPrenom}\n`, // Client name
+        `Servi par: ${nomDuCaissier} \n`, // Cashier name
         "\n",
         printer.left,
         "-".repeat(COLUMNS.width) + "\n",
@@ -129,13 +157,13 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
           return lines;
         }),
         "\n",
-        printer.center + printer.doubleHeight,
-        createLine("TOTAL:", `${overallTotal.toFixed(2)} DH`) + "\n",
-        createLine("REMISE TOTALE:", `-${totalRemise.toFixed(2)} DH`) + "\n",
-        createLine("TOTAL FINAL:", `${overallTotal.toFixed(2)} DH`) + "\n",
-        printer.normalText,
+        "\x1B\x61\x01", // Center alignment for totals
+        "\x1B\x21\x10", // Double height and width text
+        totalLine,
+        remiseLine,
+        finalTotalLine,
+        "\x1B\x21\x00", // Reset text size
         "\n",
-        printer.center,
         `Mode de paiement: ${paymentType.toUpperCase()}\n`,
         "\n",
         "Merci pour votre confiance!\n",
