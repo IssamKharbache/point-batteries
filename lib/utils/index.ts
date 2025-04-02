@@ -73,43 +73,36 @@ export const formatNumber = (num: number): string => {
 export async function generateUniqueVenteRef() {
   const currentYear = new Date().getFullYear().toString().slice(-2);
 
-  // 1. Check if any ventes exist for current year
-  const existingVentesCount = await db.vente.count({
+  // 1. Find the highest existing venteRef for current year
+  const lastVente = await db.vente.findFirst({
     where: {
       venteRef: {
+        startsWith: "VT-",
         contains: `/${currentYear}`,
       },
     },
-  });
-
-  // 2. Get the counter value
-  const counter = await db.venteCounter.upsert({
-    where: { year: currentYear },
-    update: {
-      counter: {
-        // Only increment if ventes exist, otherwise reset to 1
-        increment: existingVentesCount > 0 ? 1 : 0,
-      },
+    orderBy: {
+      venteRef: "desc",
     },
-    create: {
-      year: currentYear,
-      counter: 1,
+    select: {
+      venteRef: true,
     },
   });
 
-  // 3. Determine next number
-  let nextNumber;
-  if (existingVentesCount === 0) {
-    // Reset to 1 if no ventes exist
-    nextNumber = 1;
-    await db.venteCounter.update({
-      where: { year: currentYear },
-      data: { counter: 1 },
-    });
-  } else {
-    // Use counter value if ventes exist
-    nextNumber = counter.counter;
+  // 2. Determine next number
+  let nextNumber = 1;
+  if (lastVente) {
+    const lastRef = lastVente.venteRef;
+    const lastNumber = parseInt(lastRef.split("/")[0].split("-")[1]);
+    nextNumber = lastNumber + 1;
   }
+
+  // 3. Update counter (for tracking only)
+  await db.venteCounter.upsert({
+    where: { year: currentYear },
+    update: { counter: nextNumber },
+    create: { year: currentYear, counter: nextNumber },
+  });
 
   return `VT-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
 }
