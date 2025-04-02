@@ -7,6 +7,9 @@ export const GET = async () => {
       orderBy: {
         createdAt: "desc",
       },
+      where: {
+        isAchatProduct: false,
+      },
     });
     return NextResponse.json(
       {

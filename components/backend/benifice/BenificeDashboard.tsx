@@ -11,11 +11,13 @@ import { useBenificeStore } from "@/context/store";
 interface BenificeDashboardProps {
   initialSales: Vente[];
   initialCosts: Cost[];
+  overallTotal: number;
 }
 
 const BenificeDashboard = ({
   initialSales,
   initialCosts,
+  overallTotal,
 }: BenificeDashboardProps) => {
   const { selectedMonth, selectedYear } = useBenificeStore();
   const [filteredSales, setFilteredSales] = useState<Vente[]>([]);
@@ -58,14 +60,14 @@ const BenificeDashboard = ({
 
   return (
     <>
-      <MonthYearSelector /> {/* Updated component name */}
+      <MonthYearSelector />
       <BenificeCards
         grossBenefit={grossBenefit}
         netBenefit={netBenefit}
         salesCount={salesCount}
         totalCosts={totalCosts}
       />
-      <BenificesGraphs avgSale={avgSale} />
+      <BenificesGraphs overallTotal={overallTotal} avgSale={avgSale} />
       <RecentVentes sales={filteredSales} />
     </>
   );

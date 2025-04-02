@@ -1,7 +1,12 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const BenificesGraphs = ({ avgSale }: { avgSale: number }) => {
+interface BenificesGraphsProps {
+  avgSale: number;
+  overallTotal: number;
+}
+
+const BenificesGraphs = ({ avgSale, overallTotal }: BenificesGraphsProps) => {
   return (
     <>
       {/* Additional Metrics Section */}
@@ -16,6 +21,18 @@ const BenificesGraphs = ({ avgSale }: { avgSale: number }) => {
           <CardContent>
             <div className="text-2xl font-bold">{avgSale.toFixed(2)} DH</div>
             <p className="text-xs text-gray-500 mt-1">Par transaction</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-gray-200 rounded-lg shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-500">
+              Total frais d&apos;achat
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {overallTotal.toFixed(2)} DH
+            </div>
           </CardContent>
         </Card>
 
