@@ -355,3 +355,17 @@ export const useSourceRetourStore = create<SourceRetourStoreType>((set) => ({
   step: 1,
   setStep: (step: number) => set({ step }),
 }));
+
+interface BenificeStore {
+  selectedMonth: string;
+  selectedYear: string;
+  setSelectedMonth: (month: string) => void;
+  setSelectedYear: (year: string) => void;
+}
+
+export const useBenificeStore = create<BenificeStore>((set) => ({
+  selectedMonth: (new Date().getMonth() + 1).toString(),
+  selectedYear: new Date().getFullYear().toString(),
+  setSelectedMonth: (month) => set({ selectedMonth: month }),
+  setSelectedYear: (year) => set({ selectedYear: year }),
+}));
