@@ -28,7 +28,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       const qty = product.qty || 0;
       const discount = product.discount || 0;
 
-      acc.overallTotal += price * qty - discount;
+      acc.overallTotal += price * qty;
       acc.totalRemise += discount;
       return acc;
     },
@@ -105,6 +105,16 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
       const finalTotalLine =
         `TOTAL FINAL:`.padEnd(columnWidth, " ") +
         `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15); // Build receipt data
+
+      console.log(
+        "Total : ",
+        totalLine,
+        "Remise total : ",
+        remiseLine,
+        "Final total : ",
+        finalTotalLine
+      );
+
       const receiptData = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
@@ -248,7 +258,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
             <div className="mt-4">
               <div className="flex justify-between font-bold">
                 <span>TOTAL:</span>
-                <span>{(overallTotal + totalRemise).toFixed(2)} DH</span>
+                <span>{overallTotal.toFixed(2)} DH</span>
               </div>
               <div className="flex justify-between">
                 <span>REMISE TOTALE:</span>
@@ -256,7 +266,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
               </div>
               <div className="flex justify-between font-bold">
                 <span>TOTAL FINAL:</span>
-                <span>{overallTotal.toFixed(2)} DH</span>
+                <span>{(overallTotal - totalRemise).toFixed(2)} DH</span>
               </div>
             </div>
 
