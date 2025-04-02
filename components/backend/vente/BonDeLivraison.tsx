@@ -106,15 +106,6 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         `TOTAL FINAL:`.padEnd(columnWidth, " ") +
         `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15); // Build receipt data
 
-      console.log(
-        "Total : ",
-        totalLine,
-        "Remise total : ",
-        remiseLine,
-        "Final total : ",
-        finalTotalLine
-      );
-
       const receiptData = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
