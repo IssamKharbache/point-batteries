@@ -20,7 +20,7 @@ const BenificesGraphs = ({ avgSale }: { avgSale: number }) => {
         </Card>
 
         {/* Monthly Trend Card */}
-        <Card className="border border-gray-200 rounded-lg shadow-sm">
+        {/* <Card className="border border-gray-200 rounded-lg shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-500">
               Tendance Mensuelle
@@ -33,7 +33,7 @@ const BenificesGraphs = ({ avgSale }: { avgSale: number }) => {
               </p>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </>
   );
