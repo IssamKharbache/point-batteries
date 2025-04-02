@@ -22,6 +22,7 @@ import {
   Contact,
   BadgeDollarSign,
   Undo2,
+  DollarSign,
 } from "lucide-react";
 import { FaCashRegister } from "react-icons/fa6";
 import {
@@ -90,6 +91,12 @@ const SideBar = () => {
         name: "Notre staff",
         href: "/dashboard/notre-staff",
         icon: UsersRound,
+        isMainAdmin: true,
+      },
+      {
+        name: "Bénéfice",
+        href: "/dashboard/benifice",
+        icon: DollarSign,
         isMainAdmin: true,
       },
       {

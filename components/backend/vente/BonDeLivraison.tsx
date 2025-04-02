@@ -10,6 +10,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, Printer } from "lucide-react";
 import qz from "qz-tray";
+import { ProductData } from "../table/TableActions";
 
 interface BonDeLivraisonProps {
   rowData: VenteType;
@@ -66,11 +67,11 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
     const name =
       product.marque.toUpperCase() +
       " " +
-      (extractTextInParentheses(product.designationProduit) || "")
+      (extractTextInParentheses(product.designationProduit || "") || "")
         .slice(0, COLUMNS.product)
         .padEnd(COLUMNS.product, " ");
 
-    const price = `x${product.qty} ${product.price?.toFixed(2)}DH`.padStart(
+    const price = `x${product.qty} x${product.price?.toFixed(2)}DH`.padStart(
       COLUMNS.price,
       " "
     );

@@ -49,6 +49,7 @@ export type ProductData = {
   vente: number;
   refProduct: string | null;
   isAchatProduct: boolean;
+  qty: number;
   bookmarks: [
     {
       id: string;
