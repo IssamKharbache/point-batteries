@@ -91,34 +91,19 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
 
       const config = qz.configs.create("NCR 7197 Receipt");
 
-      const columnWidth = 36;
-      const labelWidth = 15;
+      const columnWidth = 20;
 
       const totalLine =
-        `TOTAL:`.padEnd(labelWidth, " ") +
-        `${overallTotal.toFixed(2)} DH`.padStart(
-          columnWidth - labelWidth,
-          " "
-        ) +
-        "\n";
+        `TOTAL:`.padEnd(columnWidth, " ") +
+        `${overallTotal.toFixed(2)} DH\n`.padStart(15);
+
       const remiseLine =
-        `REMISE TOTALE:`.padEnd(labelWidth, " ") +
-        `-${totalRemise.toFixed(2)} DH`.padStart(
-          columnWidth - labelWidth,
-          " "
-        ) +
-        "\n";
+        `REMISE TOTALE:`.padEnd(columnWidth, " ") +
+        `-${totalRemise.toFixed(2)} DH\n`.padStart(15);
+
       const finalTotalLine =
-        `TOTAL FINAL:`.padEnd(labelWidth, " ") +
-        `${(overallTotal - totalRemise).toFixed(2)} DH`.padStart(
-          columnWidth - labelWidth,
-          " "
-        ) +
-        "\n";
-
-      `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15);
-
-      // Build receipt data
+        `TOTAL FINAL:`.padEnd(columnWidth, " ") +
+        `${(overallTotal - totalRemise).toFixed(2)} DH\n`.padStart(15); // Build receipt data
       const receiptData = [
         "\x1B\x40", // Reset printer
         "\x1B\x61\x01", // Center alignment
@@ -169,6 +154,7 @@ const BonDeLivraison = ({ rowData }: BonDeLivraisonProps) => {
         "Merci pour votre confiance!\n",
         "Service apres-vente: \n",
         "Tel : 0656307044 Fix : 0531510011\n",
+        "Site web : www.pointbatteries.com\n",
         "\n",
         printer.cut,
       ];
