@@ -23,6 +23,7 @@ interface Product {
   designationProduit: string;
   qty: number;
   price: number;
+  discount: number;
 }
 
 interface Vente {
@@ -203,7 +204,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
                         {product.designationProduit}
                       </TableCell>
                       <TableCell>{product.qty}</TableCell>
-                      <TableCell>{product.price}</TableCell>
+                      <TableCell>{product.price - product.discount}</TableCell>
                       <TableCell>{vente.nomDuCaissier}</TableCell>
                     </TableRow>
                   ))
