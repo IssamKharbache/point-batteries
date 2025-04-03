@@ -44,8 +44,6 @@ const BenificeDashboard = ({
       ]);
 
       setSales(newSales);
-      console.log(sales);
-
       setCosts(newCosts);
       setProducts(newProducts);
 
