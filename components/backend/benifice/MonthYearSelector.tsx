@@ -1,11 +1,18 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useBenificeStore } from "@/context/store";
 import React from "react";
 
 const MonthYearSelector = () => {
-  const { selectedMonth, setSelectedMonth, selectedYear, setSelectedYear } =
-    useBenificeStore();
+  const {
+    selectedMonth,
+    setSelectedMonth,
+    selectedYear,
+    setSelectedYear,
+    isAllTime,
+    setIsAllTime,
+  } = useBenificeStore();
 
   // Generate months data
   const months = [
@@ -27,6 +34,9 @@ const MonthYearSelector = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
+  const resetAllTime = () => {
+    setIsAllTime(false);
+  };
   return (
     <div className="mb-8 flex flex-col sm:flex-row gap-4">
       {/* Month Selector */}
@@ -37,31 +47,15 @@ const MonthYearSelector = () => {
         >
           Mois:
         </label>
-        <div className="relative w-full min-w-[120px]  font-sans">
+        <div className="relative w-full min-w-[120px] font-sans">
           <select
             id="month-select"
             value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="
-              w-full
-              h-10
-              pl-3 pr-8
-              rounded-lg
-              border border-gray-300
-              bg-white
-              text-gray-700
-              font-medium
-              text-sm
-              appearance-none
-              focus:outline-none
-              focus:ring-2
-              focus:ring-blue-500
-              focus:border-blue-500
-              transition-all
-              duration-200
-              cursor-pointer
-              hover:border-gray-400
-            "
+            onChange={(e) => {
+              setSelectedMonth(e.target.value);
+              resetAllTime();
+            }}
+            className="w-full h-10 pl-3 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer hover:border-gray-400"
           >
             {months.map((month) => (
               <option key={month.value} value={month.value}>
@@ -98,27 +92,11 @@ const MonthYearSelector = () => {
           <select
             id="year-select"
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="
-              w-full
-              h-10
-              pl-3 pr-8
-              rounded-lg
-              border border-gray-300
-              bg-white
-              text-gray-700
-              font-medium
-              text-sm
-              appearance-none
-              focus:outline-none
-              focus:ring-2
-              focus:ring-blue-500
-              focus:border-blue-500
-              transition-all
-              duration-200
-              cursor-pointer
-              hover:border-gray-400
-            "
+            onChange={(e) => {
+              setSelectedYear(e.target.value);
+              resetAllTime();
+            }}
+            className="w-full h-10 pl-3 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer hover:border-gray-400"
           >
             {years.map((year) => (
               <option key={year} value={year}>
@@ -142,6 +120,23 @@ const MonthYearSelector = () => {
           </div>
         </div>
       </div>
+      <button
+        onClick={() => setIsAllTime(!isAllTime)}
+        className={`relative px-6 py-2 font-semibold transition-all duration-300 rounded-lg
+        ${
+          isAllTime
+            ? "bg-blue-600 text-white shadow-lg"
+            : "bg-gray-200 text-gray-700"
+        }
+      `}
+      >
+        <span
+          className={`absolute inset-0 w-full h-full transition-all duration-300
+          ${isAllTime ? "bg-blue-800 opacity-20" : "bg-transparent"}
+        `}
+        />
+        {isAllTime ? "Vue mensuelle" : "Historique complet"}
+      </button>
     </div>
   );
 };

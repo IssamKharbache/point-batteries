@@ -8,6 +8,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -133,9 +134,15 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
     }`,
   });
 
-  const ventesWithProducts = filteredVentes.filter(
-    (vente) => vente.products && vente.products.length > 0
-  );
+  // Add this calculation right before your return statement
+  const totalNetSales = filteredVentes.reduce((total, vente) => {
+    return (
+      total +
+      vente.products.reduce((venteTotal, product) => {
+        return venteTotal + (product.price - product.discount) * product.qty;
+      }, 0)
+    );
+  }, 0);
 
   return (
     <div className="container mx-auto p-6">
@@ -163,7 +170,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
             <FaCalendarAlt />
-            Aujourd'hui
+            Aujourd&apos;hui
           </Button>
         </div>
 
@@ -233,8 +240,9 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
           <div>
             <h2 className="text-xl font-bold">Journal des ventes</h2>
             <p className="text-md font-semibold">
-              {ventesWithProducts.length} ventes
+              {filteredVentes.length} Produits vendue
             </p>
+
             <div className="flex items-center gap-4">
               {startDate || endDate ? (
                 <p className="text-sm text-muted-foreground">
@@ -300,6 +308,18 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
               )
             )}
           </TableBody>
+          {/* Add this table footer */}
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={2} className="text-right font-medium">
+                Total:
+              </TableCell>
+              <TableCell className="font-bold">
+                {totalNetSales.toFixed(2)} DH
+              </TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </div>
     </div>

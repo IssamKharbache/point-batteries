@@ -361,6 +361,8 @@ interface BenificeStore {
   selectedYear: string;
   setSelectedMonth: (month: string) => void;
   setSelectedYear: (year: string) => void;
+  isAllTime: boolean;
+  setIsAllTime: (isAllTime: boolean) => void;
 }
 
 export const useBenificeStore = create<BenificeStore>((set) => ({
@@ -368,4 +370,6 @@ export const useBenificeStore = create<BenificeStore>((set) => ({
   selectedYear: new Date().getFullYear().toString(),
   setSelectedMonth: (month) => set({ selectedMonth: month }),
   setSelectedYear: (year) => set({ selectedYear: year }),
+  isAllTime: false,
+  setIsAllTime: (isAllTime: boolean) => set({ isAllTime }),
 }));

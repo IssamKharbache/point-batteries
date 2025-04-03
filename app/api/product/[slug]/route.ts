@@ -170,6 +170,28 @@ export const DELETE = async (
       where: {
         slug,
       },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        price: true,
+        achatPrice: true,
+        stock: true,
+        capacite: true,
+        courantDessai: true,
+        marque: true,
+        designationProduit: true,
+        voltage: true,
+        categoryId: true,
+        imageUrl: true,
+        garantie: true,
+        imageKey: true,
+        isAchatProduct: true,
+        filterByCar: true,
+        refProduct: true,
+        ventes: true,
+      },
     });
     if (!isExisting) {
       return NextResponse.json(
@@ -182,6 +204,18 @@ export const DELETE = async (
 
     if (isExisting.imageKey) {
       await uatpi.deleteFiles(isExisting.imageKey);
+    }
+    if (isExisting.ventes.length > 0) {
+      return NextResponse.json(
+        {
+          message:
+            "Le produit est lié à une vente, impossible de le supprimer.",
+        },
+        {
+          status: 409,
+          statusText: "conflict",
+        }
+      );
     }
 
     await db.product.delete({

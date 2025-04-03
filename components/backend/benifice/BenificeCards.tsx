@@ -11,8 +11,8 @@ interface BenificeCardProps {
 const BenificeCards = ({
   grossBenefit,
   netBenefit,
-  salesCount,
   totalCosts,
+  salesCount,
 }: BenificeCardProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full">
@@ -27,7 +27,9 @@ const BenificeCards = ({
           <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
             {grossBenefit.toFixed(2)} DH
           </div>
-          <p className="text-xs text-gray-500 mt-1 truncate">Ce mois-ci</p>
+          <p className="text-xs text-gray-500 mt-1 truncate">
+            Bénéfice des ventes
+          </p>
         </CardContent>
       </Card>
 
@@ -42,9 +44,7 @@ const BenificeCards = ({
           <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
             {totalCosts.toFixed(2)} DH
           </div>
-          <p className="text-xs text-gray-500 mt-1 truncate">
-            Dépenses ce mois-ci
-          </p>
+          <p className="text-xs text-gray-500 mt-1 truncate">Dépenses</p>
         </CardContent>
       </Card>
 
@@ -81,7 +81,7 @@ const BenificeCards = ({
             {salesCount}
           </div>
           <p className="text-xs text-gray-500 mt-1 truncate">
-            Transactions ce mois-ci
+            Total des ventes
           </p>
         </CardContent>
       </Card>
