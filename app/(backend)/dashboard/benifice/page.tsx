@@ -9,7 +9,7 @@ const page = async () => {
   const costs = await getData("/frais");
 
   const salesWithNoReturns = sales.filter(
-    (vente) => vente.returns.length === 0
+    (vente) => vente.returns && vente.returns.length === 0
   );
   const products: Product[] = await getData("/product/all");
   const overallTotal = products.reduce(
