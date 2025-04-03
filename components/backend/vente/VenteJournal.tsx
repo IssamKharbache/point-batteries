@@ -28,18 +28,6 @@ interface Product {
   discount: number;
 }
 
-interface Vente {
-  id: string;
-  clientNom: string;
-  clientPrenom: string;
-  clientTel: string;
-  createdAt: string;
-  nomDuCaissier: string;
-  paymentType: string;
-  products: Product[];
-  venteRef: string;
-}
-
 interface VenteJournalProps {
   ventes: VenteType[];
 }
@@ -56,7 +44,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
     setStartDate(todayStart);
-    setEndDate(new Date(todayStart)); // Clone the date
+    setEndDate(new Date(todayStart));
   };
 
   // Clear filters
@@ -80,11 +68,16 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
     fetchData();
   }, []);
 
-  // Improved filtering logic
   const filteredVentes = ventesList.filter((vente) => {
+    // First check if there are any returns for this vente
+    const hasReturns = vente.returns && vente.returns.length > 0;
+
+    // Skip ventes that have returns
+    if (hasReturns) return false;
+
     const venteDate = new Date(vente.createdAt);
 
-    // If no dates are selected, show all
+    // If no dates are selected, show all non-returned ventes
     if (!startDate && !endDate) return true;
 
     // If only start date is selected, show from that date onward
@@ -109,7 +102,6 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
 
     return true;
   });
-
   const CustomDatePickerButton = React.forwardRef<
     HTMLButtonElement,
     { value?: string; onClick?: () => void }

@@ -25,8 +25,10 @@ const CategoryProducts = ({
   catId,
   pageSize,
 }: CategoryProductsProps) => {
-  // Pagination State
-  const [productsState, setProductsState] = useState<ProductData[]>(products);
+  // Initialize with filtered products (stock > 0)
+  const [productsState, setProductsState] = useState<ProductData[]>(
+    products.filter((product) => (product.stock || 0) > 0)
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const searchParams = useSearchParams();
 
@@ -53,7 +55,14 @@ const CategoryProducts = ({
         `/api/product?catId=${catId}&pageNum=${currentPage}&marque=${marque}&pageSize=${pageSize}`
       );
       if (res.status === 201) {
-        setProductsState(res.data.data);
+        // Filter products with stock > 0
+        const filteredProducts = res.data.data.filter(
+          (product: ProductData) => {
+            const hasStock = (product.stock || 0) > 0;
+            return hasStock;
+          }
+        );
+        setProductsState(filteredProducts);
         setResultLength(res.data.totalCount);
         setLoading(false);
         setLoadingStore(false);
@@ -82,13 +91,13 @@ const CategoryProducts = ({
   return (
     <div>
       {!loading && !loadingStore && productsState.length === 0 && (
-        <div className="flex flex-col gap-8  items-center">
+        <div className="flex flex-col gap-8 items-center">
           <Image
             src="/noproduct.png"
             alt="Icon"
             width={500}
             height={500}
-            className="w-40 self-center "
+            className="w-40 self-center"
             loading="eager"
           />
           <p className="text-center font-semibold text-sm mt-6 text-gray-500">
@@ -100,17 +109,14 @@ const CategoryProducts = ({
         </div>
       )}
       {/* Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  gap-6">
-        {loading ||
-          (loadingStore && (
-            <div className="flex items-center justify-center w-full h-full md:h-[500px] md:w-[500px]">
-              <Loader2 className="animate-spin" size={45} />
-            </div>
-          ))}
-        {!loading &&
-          !loadingStore &&
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading || loadingStore ? (
+          <div className="flex items-center justify-center w-full h-full md:h-[500px] md:w-[500px]">
+            <Loader2 className="animate-spin" size={45} />
+          </div>
+        ) : (
           productsState.map((product) => (
-            <div key={product.id} className="group bg-white p-5 ">
+            <div key={product.id} className="group bg-white p-5">
               <Link href={`/produit/${product.slug}`}>
                 <Image
                   src={product.imageUrl || ""}
@@ -152,7 +158,8 @@ const CategoryProducts = ({
                 )}
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
 
       {!loading && !loadingStore && productsState.length !== 0 && (

@@ -22,7 +22,11 @@ export const GET = async (request: NextRequest) => {
   }
 
   // Build the `where` clause dynamically
-  const where: ProductWhereInput = {};
+  const where: ProductWhereInput = {
+    stock: {
+      gt: 0,
+    },
+  };
 
   // Filter by category
   if (categoryId) {

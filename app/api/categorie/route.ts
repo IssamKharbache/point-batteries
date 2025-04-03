@@ -2,12 +2,6 @@ import db from "@/lib/db";
 import { Product } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-interface Category {
-  id: string;
-  title: string;
-  description: string;
-  products: Product[];
-}
 export const GET = async () => {
   try {
     const categorie = await db.category.findMany({
@@ -15,7 +9,13 @@ export const GET = async () => {
         createdAt: "asc",
       },
       include: {
-        products: true,
+        products: {
+          where: {
+            stock: {
+              gt: 0,
+            },
+          },
+        },
       },
     });
     // Loop through each category and sort its products
