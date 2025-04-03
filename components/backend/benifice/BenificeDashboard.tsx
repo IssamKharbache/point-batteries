@@ -8,6 +8,10 @@ import RecentVentes from "./RecentVentes";
 import { useBenificeStore } from "@/context/store";
 import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
 import MonthYearSelector from "./MonthYearSelector";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
+import { getData } from "@/lib/getData";
+import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 
 interface BenificeDashboardProps {
   initialSales: VenteType[];
@@ -21,20 +25,66 @@ const BenificeDashboard = ({
   initialProducts,
 }: BenificeDashboardProps) => {
   const { selectedMonth, selectedYear, isAllTime } = useBenificeStore();
+  const [sales, setSales] = useState<VenteType[]>(initialSales);
+  const [costs, setCosts] = useState<Cost[]>(initialCosts);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [filteredSales, setFilteredSales] = useState<VenteType[]>([]);
   const [filteredCosts, setFilteredCosts] = useState<Cost[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [overallTotal, setOverallTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [newSales, newCosts, newProducts] = await Promise.all([
+        getData("/vente"),
+        getData("/frais"),
+        getData("/product/all"),
+      ]);
+
+      setSales(newSales);
+      console.log(sales);
+
+      setCosts(newCosts);
+      setProducts(newProducts);
+
+      // Filter out returns immediately
+      const salesWithNoReturns = newSales.filter(
+        (vente: VenteType) =>
+          Array.isArray(vente?.returns) && vente.returns.length === 0
+      );
+      setFilteredSales(salesWithNoReturns);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // Initial filtering based on props
+    const salesWithNoReturns = initialSales.filter(
+      (vente) => Array.isArray(vente?.returns) && vente.returns.length === 0
+    );
+    setFilteredSales(salesWithNoReturns);
+    setFilteredCosts(initialCosts);
+    setFilteredProducts(initialProducts);
+  }, [initialSales, initialCosts, initialProducts]);
 
   useEffect(() => {
     if (isAllTime) {
-      // Show all data when "All Time" is selected
-      setFilteredSales(initialSales);
-      setFilteredCosts(initialCosts);
-      setFilteredProducts(initialProducts);
+      setFilteredSales(
+        sales.filter((v) => Array.isArray(v?.returns) && v.returns.length === 0)
+      );
+      setFilteredCosts(costs);
+      setFilteredProducts(products);
 
-      // Calculate all-time stock value
-      const total = initialProducts.reduce(
+      const total = products.reduce(
         (acc, product) =>
           acc + (product.achatPrice || 0) * (product.stock || 0),
         0
@@ -50,43 +100,34 @@ const BenificeDashboard = ({
     const lastDay = new Date(year, month, 0);
     lastDay.setHours(23, 59, 59, 999);
 
-    // Filter sales
-    const sales = initialSales.filter((vente) => {
-      const saleDate = new Date(vente.createdAt);
-      return saleDate >= firstDay && saleDate <= lastDay;
-    });
+    const filteredSales = sales
+      .filter((vente) => {
+        const saleDate = new Date(vente.createdAt);
+        return saleDate >= firstDay && saleDate <= lastDay;
+      })
+      .filter((v) => Array.isArray(v?.returns) && v.returns.length === 0);
 
-    // Filter costs
-    const costs = initialCosts.filter((cost) => {
+    const filteredCosts = costs.filter((cost) => {
       const costDate = new Date(cost.date);
       return costDate >= firstDay && costDate <= lastDay;
     });
 
-    // Filter products
-    const products = initialProducts.filter((product) => {
+    const filteredProducts = products.filter((product) => {
       if (!product.createdAt) return false;
       const productDate = new Date(product.createdAt);
       return productDate >= firstDay && productDate <= lastDay;
     });
 
-    // Calculate total stock value
-    const total = products.reduce(
+    const total = filteredProducts.reduce(
       (acc, product) => acc + (product.achatPrice || 0) * (product.stock || 0),
       0
     );
 
-    setFilteredSales(sales);
-    setFilteredCosts(costs);
-    setFilteredProducts(products);
+    setFilteredSales(filteredSales);
+    setFilteredCosts(filteredCosts);
+    setFilteredProducts(filteredProducts);
     setOverallTotal(total);
-  }, [
-    selectedMonth,
-    selectedYear,
-    isAllTime,
-    initialSales,
-    initialCosts,
-    initialProducts,
-  ]);
+  }, [selectedMonth, selectedYear, isAllTime, sales, costs, products]);
 
   // Calculate statistics
   const grossBenefit = filteredSales.reduce(
@@ -105,7 +146,15 @@ const BenificeDashboard = ({
 
   return (
     <>
-      <MonthYearSelector />
+      <div className="flex justify-between items-center mb-4">
+        <MonthYearSelector />
+        <Button onClick={fetchData} variant="outline" disabled={loading}>
+          <RefreshCw
+            className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`}
+          />
+          {loading ? "Actualisation..." : "Actualiser"}
+        </Button>
+      </div>
 
       <div className="mb-4 p-3 bg-blue-50 text-blue-800 rounded-lg text-sm">
         {isAllTime
@@ -116,15 +165,21 @@ const BenificeDashboard = ({
             ).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}`}
       </div>
 
-      <BenificeCards
-        grossBenefit={grossBenefit}
-        netBenefit={netBenefit}
-        salesCount={salesCount}
-        totalCosts={totalCosts}
-      />
+      {loading ? (
+        <LoadingButton />
+      ) : (
+        <>
+          <BenificeCards
+            grossBenefit={grossBenefit}
+            netBenefit={netBenefit}
+            salesCount={salesCount}
+            totalCosts={totalCosts}
+          />
 
-      <BenificesGraphs stockValue={overallTotal} avgSale={avgSale} />
-      <RecentVentes sales={filteredSales} />
+          <BenificesGraphs stockValue={overallTotal} avgSale={avgSale} />
+          <RecentVentes sales={filteredSales} />
+        </>
+      )}
     </>
   );
 };
