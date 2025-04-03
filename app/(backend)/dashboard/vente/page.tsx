@@ -3,17 +3,20 @@ export const dynamic = "force-dynamic";
 import PageHeader from "@/components/backend/UI/PageHeader";
 import React from "react";
 import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { columns, VenteType } from "./columns";
 import { getData } from "@/lib/getData";
 
 const page = async () => {
-  const data = await getData("/vente");
+  const data: VenteType[] = await getData("/vente");
+
+  const filteredData = data.filter((vente) => vente.returns.length === 0);
+  console.log(filteredData);
 
   return (
     <section>
       <PageHeader name="Vente" href="vente/ajouter" />
       <div className="container mx-auto py-10 ">
-        <DataTable columns={columns} data={data} name="Vente" />
+        <DataTable columns={columns} data={filteredData} name="Vente" />
       </div>
     </section>
   );

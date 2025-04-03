@@ -7,9 +7,10 @@ import BenificesGraphs from "./BenificesGraphs";
 import RecentVentes from "./RecentVentes";
 import MonthYearSelector from "./MonthYearSelector";
 import { useBenificeStore } from "@/context/store";
+import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
 
 interface BenificeDashboardProps {
-  initialSales: Vente[];
+  initialSales: VenteType[];
   initialCosts: Cost[];
   overallTotal: number;
 }
@@ -20,7 +21,7 @@ const BenificeDashboard = ({
   overallTotal,
 }: BenificeDashboardProps) => {
   const { selectedMonth, selectedYear } = useBenificeStore();
-  const [filteredSales, setFilteredSales] = useState<Vente[]>([]);
+  const [filteredSales, setFilteredSales] = useState<VenteType[]>([]);
   const [filteredCosts, setFilteredCosts] = useState<Cost[]>([]);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const BenificeDashboard = ({
         totalCosts={totalCosts}
       />
       <BenificesGraphs overallTotal={overallTotal} avgSale={avgSale} />
+      <RecentVentes sales={filteredSales} />
       <RecentVentes sales={filteredSales} />
     </>
   );

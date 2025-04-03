@@ -41,9 +41,6 @@ const NavBar = () => {
           >
             <MenuIcon size={25} className="mr-4" />
           </button>
-          <p className="capitalize font-semibold md:text-xl">
-            {path === "/dashboard" ? path.replace("/", "") : path.split("/")[2]}
-          </p>
         </div>
 
         <div

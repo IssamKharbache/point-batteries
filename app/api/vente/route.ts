@@ -158,6 +158,7 @@ export const GET = async () => {
       },
       include: {
         products: true,
+        returns: true,
       },
     });
     return NextResponse.json({

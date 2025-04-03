@@ -77,11 +77,11 @@ const MainPage = async () => {
   return (
     <div>
       <h1 className="text-4xl font-semibold mb-8">Overview</h1>
-      <Statistics
+      {/* <Statistics
         numberClient={filteredUsers.length}
         ordersNumber={filteredOrders.length}
         total={totalRevenue}
-      />
+      /> */}
       <OrdersStats orders={orders} />
       <ProductsStockData filteredProducts={filteredProducts} />
     </div>

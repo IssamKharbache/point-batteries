@@ -2,11 +2,15 @@ import React from "react";
 import { getData } from "@/lib/getData";
 import BenificeDashboard from "@/components/backend/benifice/BenificeDashboard";
 import { Product } from "@prisma/client";
+import { VenteType } from "../vente/columns";
 
 const page = async () => {
-  const sales = await getData("/vente");
+  const sales: VenteType[] = await getData("/vente");
   const costs = await getData("/frais");
 
+  const salesWithNoReturns = sales.filter(
+    (vente) => vente.returns.length === 0
+  );
   const products: Product[] = await getData("/product/all");
   const overallTotal = products.reduce(
     (acc, product) => (product.achatPrice ? acc + product.achatPrice : 0),
@@ -18,7 +22,7 @@ const page = async () => {
       <h1 className="text-3xl font-bold mb-8">Statistiques de vente</h1>
       <BenificeDashboard
         overallTotal={overallTotal}
-        initialSales={sales}
+        initialSales={salesWithNoReturns}
         initialCosts={costs}
       />
     </section>

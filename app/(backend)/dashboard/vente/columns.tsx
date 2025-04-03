@@ -4,6 +4,7 @@ import DeleteActionButton from "@/components/backend/table/DeleteActionButton";
 import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils/index";
+import { Return } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
@@ -19,6 +20,7 @@ export interface VenteType {
   nomDuCaissier: string;
   venteBenifits: number;
   products: VenteProduct[];
+  returns: Return[];
   factureCode: string | null;
   generateFacture: boolean;
   createdAt: Date;

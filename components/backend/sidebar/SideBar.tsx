@@ -24,6 +24,7 @@ import {
   Undo2,
   DollarSign,
 } from "lucide-react";
+import { IoStatsChart } from "react-icons/io5";
 import { FaCashRegister } from "react-icons/fa6";
 import {
   Collapsible,
@@ -94,9 +95,9 @@ const SideBar = () => {
         isMainAdmin: true,
       },
       {
-        name: "Bénéfice",
+        name: "Statistiques",
         href: "/dashboard/benifice",
-        icon: DollarSign,
+        icon: IoStatsChart,
         isMainAdmin: true,
       },
       {
