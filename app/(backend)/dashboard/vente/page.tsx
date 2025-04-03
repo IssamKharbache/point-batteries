@@ -9,8 +9,7 @@ import { getData } from "@/lib/getData";
 const page = async () => {
   const data: VenteType[] = await getData("/vente");
 
-  const filteredData = data.filter((vente) => vente.returns.length === 0);
-  console.log(filteredData);
+  const filteredData = data.filter((vente) => vente?.returns?.length === 0);
 
   return (
     <section>

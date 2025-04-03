@@ -70,7 +70,6 @@ const BenificeDashboard = ({
       />
       <BenificesGraphs overallTotal={overallTotal} avgSale={avgSale} />
       <RecentVentes sales={filteredSales} />
-      <RecentVentes sales={filteredSales} />
     </>
   );
 };
