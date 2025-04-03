@@ -134,7 +134,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
   });
 
   const ventesWithProducts = filteredVentes.filter(
-    (vente) => vente.products.length > 0
+    (vente) => vente.products && vente.products.length > 0
   );
 
   return (
