@@ -27,7 +27,6 @@ import { useLoadingStore } from "@/context/store";
 import TableActions, {
   ProductData,
 } from "@/components/backend/table/TableActions";
-import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 
 interface DataTableProps<TData, ProductData> {
   columns: ColumnDef<TData, ProductData>[];
@@ -44,6 +43,8 @@ export function DataTable<TData extends ProductData>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [globalFilter, setGlobalFilter] = React.useState("");
+
   const table = useReactTable({
     data,
     columns,
@@ -53,9 +54,25 @@ export function DataTable<TData extends ProductData>({
     state: {
       sorting,
       columnFilters,
+      globalFilter,
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: (row, filterValue) => {
+      // Create a search string combining multiple fields
+      const searchString =
+        `${row.original.designationProduit} ${row.original.refProduct} ${row.original.marque}`.toLowerCase();
+
+      // Split the filter value into individual terms
+      const searchTerms = filterValue
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      // Return true if all search terms are found in the search string
+      return searchTerms.every((term: string) => searchString.includes(term));
+    },
   });
 
   const { loading } = useLoadingStore();
@@ -67,22 +84,14 @@ export function DataTable<TData extends ProductData>({
           <h2 className="px-4 py-4 font-semibold text-md md:text-2xl">
             {name}
           </h2>
-          <div className="relative flex items-center py-4">
+          <div className="relative flex items-center py-4 mr-8">
             <Input
-              placeholder="Filtrer par Designation..."
-              value={
-                (table
-                  .getColumn("designationProduit")
-                  ?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table
-                  .getColumn("designationProduit")
-                  ?.setFilterValue(event.target.value)
-              }
-              className="w-36 px-4 mr-8 py-1 h-10 md:h-12 md:w-60  placeholder:text-xs md:placeholder:text-[14px] "
+              placeholder="Filtrer par designation..."
+              value={globalFilter ?? ""}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+              className="w-52 px-4 pr-10 py-1 h-10 md:h-12 md:w-60 placeholder:text-xs md:placeholder:text-[14px] "
             />
-            <Filter size={15} className="absolute text-gray-400 right-12" />
+            <Filter size={15} className="absolute text-gray-400 right-2" />
           </div>
         </div>
         {loading ? (
@@ -145,18 +154,10 @@ export function DataTable<TData extends ProductData>({
           <h2 className="px-4 py-4 font-semibold text-xl">{name}</h2>
           <div className="relative flex items-center py-4">
             <Input
-              placeholder="Filtrer par designation..."
-              value={
-                (table
-                  .getColumn("designationProduit")
-                  ?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table
-                  .getColumn("designationProduit")
-                  ?.setFilterValue(event.target.value)
-              }
-              className="w-36 px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
+              placeholder="Rechercher (designation, référence, marque)..."
+              value={globalFilter ?? ""}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+              className="w-36 px-4 mr-8 py-1 placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
             />
             <Filter
               size={15}

@@ -68,6 +68,11 @@ export function DataTable<TData>({
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 50,
+      },
+    },
   });
 
   const { loading } = useLoadingStore();

@@ -44,17 +44,19 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   }, []);
 
   useEffect(() => {
+    const searchWords = search.toLowerCase().split(/\s+/).filter(Boolean);
+
     setFilteredProducts(
-      productsVente.filter(
-        (product) =>
-          product.stock &&
-          product.stock > 0 &&
-          ((product.refProduct &&
-            product.refProduct.toLowerCase().includes(search.toLowerCase())) ||
-            product.designationProduit
-              ?.toLocaleLowerCase()
-              .includes(search.toLowerCase()))
-      )
+      productsVente.filter((product) => {
+        if (!product.stock || product.stock <= 0) return false;
+
+        const productName = product.designationProduit?.toLowerCase() || "";
+        const productRef = product.refProduct?.toLowerCase() || "";
+
+        return searchWords.every(
+          (word) => productName.includes(word) || productRef.includes(word)
+        );
+      })
     );
   }, [search, productsVente]);
 
