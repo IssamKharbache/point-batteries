@@ -142,6 +142,8 @@ const ClientInfo = () => {
       factureCode: isGeneratingFac ? generateUniqueFactureCode() : null,
     };
 
+    console.log(allData);
+
     try {
       const res = await axios.post("/api/vente", allData);
       if (res.status === 201) {

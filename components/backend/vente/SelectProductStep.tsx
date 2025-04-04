@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ProductData } from "../table/TableActions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { useStepFormStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 
@@ -12,7 +12,10 @@ interface ProductSelection {
   selected: boolean;
   discount: string;
   codeGarantie: string;
+  useManualPrice: boolean;
+  manualPrice: string;
 }
+
 interface SelectProductProps {
   productsVente: ProductData[];
 }
@@ -24,7 +27,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     useState<ProductData[]>(productsVente);
-
   const [validationErrors, setValidationErrors] = useState<{
     [refProduct: string]: string;
   }>({});
@@ -34,9 +36,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Clear localStorage when component mounts
     localStorage.removeItem("selectedProducts");
-    // Then load any saved products (if you still want this feature)
     const savedProducts = localStorage.getItem("selectedProducts");
     if (savedProducts) {
       setProductsSelected(JSON.parse(savedProducts));
@@ -58,7 +58,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     );
   }, [search, productsVente]);
 
-  // Handle selecting or deselecting a product
   const handleSelectedProduct = (refProduct: string) => {
     const product = productsVente.find((p) => p.refProduct === refProduct);
     if (product && product.stock === 0) return;
@@ -74,19 +73,16 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
               selected: true,
               discount: "",
               codeGarantie: "",
+              useManualPrice: false,
+              manualPrice: "",
             },
           };
 
-      // Save the updated selection to localStorage
-      if (typeof window !== "undefined") {
-        localStorage.setItem("selectedProducts", JSON.stringify(newSelection));
-      }
-
+      localStorage.setItem("selectedProducts", JSON.stringify(newSelection));
       return newSelection;
     });
   };
 
-  // Handle changes to quantity input for a product
   const handleInputChange = (
     refProduct: string | null | undefined,
     field: "quantity" | "discount" | "codeGarantie",
@@ -94,10 +90,8 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   ) => {
     if (!refProduct) return;
 
-    // Get the product details to check the stock
     const product = productsVente.find((p) => p.refProduct === refProduct);
 
-    // If field is 'quantity' and exceeds stock, show error message
     if (field === "quantity" && product) {
       const quantity = parseInt(value);
       if (product.stock && quantity > product.stock) {
@@ -109,12 +103,11 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
       } else {
         setValidationErrors((prev) => ({
           ...prev,
-          [refProduct]: "", // Clear error if valid
+          [refProduct]: "",
         }));
       }
     }
 
-    // Continue with normal input update
     setProductsSelected((prev) => {
       const updatedSelection = {
         ...prev,
@@ -124,24 +117,48 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         },
       };
 
-      // Save the updated selection to localStorage
-      if (typeof window !== "undefined") {
-        localStorage.setItem(
-          "selectedProducts",
-          JSON.stringify(updatedSelection)
-        );
-      }
-
+      localStorage.setItem(
+        "selectedProducts",
+        JSON.stringify(updatedSelection)
+      );
       return updatedSelection;
     });
   };
 
-  const handlePrevious = () => {
-    if (currentStep === 1) {
-      return;
-    } else {
-      setCurrentStep(currentStep - 1);
-    }
+  const handleCheckboxChange = (refProduct: string, checked: boolean) => {
+    setProductsSelected((prev) => {
+      const updatedSelection = {
+        ...prev,
+        [refProduct]: {
+          ...prev[refProduct],
+          useManualPrice: checked,
+        },
+      };
+
+      localStorage.setItem(
+        "selectedProducts",
+        JSON.stringify(updatedSelection)
+      );
+      return updatedSelection;
+    });
+  };
+
+  const handleManualPriceChange = (refProduct: string, value: string) => {
+    setProductsSelected((prev) => {
+      const updatedSelection = {
+        ...prev,
+        [refProduct]: {
+          ...prev[refProduct],
+          manualPrice: value,
+        },
+      };
+
+      localStorage.setItem(
+        "selectedProducts",
+        JSON.stringify(updatedSelection)
+      );
+      return updatedSelection;
+    });
   };
 
   const handleNext = () => {
@@ -152,7 +169,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
     let hasErrors = false;
     const newValidationErrors: { [refProduct: string]: string } = {};
 
-    // Check if the quantity exceeds stock for any product
     Object.entries(productSelected).forEach(([refProduct, { quantity }]) => {
       const product = productsVente.find((p) => p.refProduct === refProduct);
       if (product?.stock && parseInt(quantity) > product.stock) {
@@ -168,7 +184,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         ...prev,
         ...newValidationErrors,
       }));
-      return; // Prevent form submission if errors exist
+      return;
     }
 
     const zeroQuantityProducts = Object.entries(productSelected).filter(
@@ -185,7 +201,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
       return;
     }
 
-    // Validate if all selected products have both price and quantity filled
     const incompleteProducts = Object.entries(productSelected).filter(
       ([, { quantity }]) => !quantity
     );
@@ -207,17 +222,21 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         const quantity = parseInt(productSelected[refProduct].quantity);
         const discount = parseFloat(productSelected[refProduct].discount);
 
+        const price =
+          productSelected[refProduct].useManualPrice &&
+          productSelected[refProduct].manualPrice &&
+          !isNaN(parseFloat(productSelected[refProduct].manualPrice))
+            ? parseFloat(productSelected[refProduct].manualPrice)
+            : product.price;
+
         const totalAchatPrice = product.achatPrice * quantity;
-
-        const totalPriceAfterDiscount =
-          product.price * quantity - (discount || 0);
-
+        const totalPriceAfterDiscount = price * quantity - (discount || 0);
         const productVenteBenifit = totalPriceAfterDiscount - totalAchatPrice;
 
         return {
           refProduct,
           quantity: productSelected[refProduct].quantity,
-          price: product.price,
+          price,
           designationProduit: product.designationProduit,
           marque: product.marque,
           discount: productSelected[refProduct].discount,
@@ -226,30 +245,19 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
         };
       })
       .filter(
-        (
-          product
-        ): product is {
-          refProduct: string;
-          quantity: string;
-          price: number;
-          designationProduit: string;
-          marque: string;
-          discount: string;
-          productVenteBenifit: number;
-          codeGarantie: string;
-        } => product !== null
+        (product): product is NonNullable<typeof product> => product !== null
       );
 
-    // Update the store with productsToSubmit that includes discount
     setProductsToSubmit(productsToSubmit);
 
-    const isAnyProductSelected = Object.keys(productSelected).length > 0;
-    if (isAnyProductSelected) {
+    setProductsToSubmit(productsToSubmit);
+
+    if (productsToSubmit.length > 0) {
       handleNext();
     } else {
       toast({
         title: "Erreur",
-        description: "Veuillez  sélectionner un produit au minimum.",
+        description: "Veuillez sélectionner un produit au minimum.",
         variant: "error",
       });
     }
@@ -258,10 +266,10 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center m-10 gap-8">
-        {/* Right Side: Available Products */}
-        <div className=" bg-white p-8 rounded-md border-2 w-full shadow-lg md:w-[50%] ">
+        {/* Available Products */}
+        <div className="bg-white p-8 rounded-md border-2 w-full shadow-lg md:w-[50%]">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-5">
-            <h1 className="text-xl font-semibold text-gray-600 ">
+            <h1 className="text-xl font-semibold text-gray-600">
               Produits Disponibles
             </h1>
             <Input
@@ -295,8 +303,9 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
             ))}
           </div>
         </div>
-        {/* Left Side: Selected Products */}
-        <div className="space-y-4 bg-white p-8 rounded-md border-2  w-full   shadow-lg md:w-[50%] ">
+
+        {/* Selected Products */}
+        <div className="space-y-4 bg-white p-8 rounded-md border-2 w-full shadow-lg md:w-[50%]">
           <h1 className="text-xl font-semibold text-gray-600 mb-4">
             Produits Sélectionnés
           </h1>
@@ -318,7 +327,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                         key={refProduct}
                         className="flex gap-4 bg-slate-100 m-4 rounded-lg p-5 shadow-md relative"
                       >
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 w-full">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -328,14 +337,14 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                           >
                             <X size={18} />
                           </button>
-                          <h1 className="font-semibold text-gray-700 text-sm md:text-md uppercase ">
+                          <h1 className="font-semibold text-gray-700 text-sm md:text-md uppercase">
                             {product.designationProduit}
                           </h1>
 
                           <div>
                             <Input
                               placeholder="Quantité"
-                              className="px-4 bg-white w-full md:w-52 border-2 border-gray-300 rounded-md h-8 md:h-12 "
+                              className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12"
                               type="number"
                               min={0}
                               max={product.stock || 0}
@@ -348,7 +357,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                                   e.target.value
                                 )
                               }
-                              disabled={product.stock === 0} // Disable input if stock is 0
+                              disabled={product.stock === 0}
                             />
                             {validationErrors[refProduct] && (
                               <div className="text-red-500 text-sm mt-1">
@@ -356,10 +365,11 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               </div>
                             )}
                           </div>
+
                           <div>
                             <Input
                               placeholder="Code Garantie"
-                              className="px-4 bg-white w-full md:w-52 border-2 border-gray-300 rounded-md h-8 md:h-12 mt-2"
+                              className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12 mt-2"
                               value={productSelected[refProduct].codeGarantie}
                               onClick={(e) => e.stopPropagation()}
                               onChange={(e) =>
@@ -375,7 +385,7 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                           <div>
                             <Input
                               placeholder="Remise"
-                              className="px-4 bg-white w-full md:w-52 border-2 border-gray-300 rounded-md h-8 md:h-12 "
+                              className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12"
                               type="number"
                               min={0}
                               value={discount}
@@ -389,6 +399,51 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               }
                             />
                           </div>
+
+                          <div className="flex items-center gap-2 mt-2">
+                            <input
+                              type="checkbox"
+                              id={`manual-price-${refProduct}`}
+                              checked={
+                                productSelected[refProduct].useManualPrice
+                              }
+                              onChange={(e) =>
+                                handleCheckboxChange(
+                                  refProduct,
+                                  e.target.checked
+                                )
+                              }
+                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                            <label
+                              htmlFor={`manual-price-${refProduct}`}
+                              className="text-sm text-gray-700"
+                            >
+                              Prix manuel
+                            </label>
+                          </div>
+
+                          {productSelected[refProduct].useManualPrice && (
+                            <div className="mt-2">
+                              <p className="text-xs text-muted-foreground mb-1">
+                                Prix normal: {product.price} DH
+                              </p>
+                              <Input
+                                placeholder="Prix manuel"
+                                className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12"
+                                type="number"
+                                min={0}
+                                value={productSelected[refProduct].manualPrice}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                  handleManualPriceChange(
+                                    refProduct,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                     )

@@ -31,8 +31,12 @@ const BenificeDashboard = ({
   const [filteredSales, setFilteredSales] = useState<VenteType[]>([]);
   const [filteredCosts, setFilteredCosts] = useState<Cost[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [overallTotal, setOverallTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const total = products.reduce(
+    (acc, product) => acc + (product.achatPrice || 0) * (product.stock || 0),
+    0
+  );
 
   const fetchData = async () => {
     setLoading(true);
@@ -82,12 +86,6 @@ const BenificeDashboard = ({
       setFilteredCosts(costs);
       setFilteredProducts(products);
 
-      const total = products.reduce(
-        (acc, product) =>
-          acc + (product.achatPrice || 0) * (product.stock || 0),
-        0
-      );
-      setOverallTotal(total);
       return;
     }
 
@@ -124,7 +122,6 @@ const BenificeDashboard = ({
     setFilteredSales(filteredSales);
     setFilteredCosts(filteredCosts);
     setFilteredProducts(filteredProducts);
-    setOverallTotal(total);
   }, [selectedMonth, selectedYear, isAllTime, sales, costs, products]);
 
   // Calculate statistics
@@ -174,7 +171,7 @@ const BenificeDashboard = ({
             totalCosts={totalCosts}
           />
 
-          <BenificesGraphs stockValue={overallTotal} avgSale={avgSale} />
+          <BenificesGraphs stockValue={total} avgSale={avgSale} />
           <RecentVentes sales={filteredSales} />
         </>
       )}

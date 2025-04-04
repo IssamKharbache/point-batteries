@@ -10,8 +10,6 @@ interface BenificesGraphsProps {
 }
 
 const BenificesGraphs = ({ avgSale, stockValue }: BenificesGraphsProps) => {
-  const { isAllTime } = useBenificeStore();
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       {/* Average Sale Card (unchanged) */}
@@ -49,9 +47,7 @@ const BenificesGraphs = ({ avgSale, stockValue }: BenificesGraphsProps) => {
         <CardContent>
           <div className="text-2xl font-bold">{stockValue.toFixed(2)} DH</div>
           <p className="text-xs text-muted-foreground">
-            {isAllTime
-              ? "Valeur totale du stock"
-              : "Valeur des produits du mois"}
+            Valeur totale du stock
           </p>
         </CardContent>
       </Card>
