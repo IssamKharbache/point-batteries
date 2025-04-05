@@ -103,8 +103,11 @@ export const columns: ColumnDef<VenteType>[] = [
     header: `Facture`,
     cell: ({ row }) => {
       if (row.original.generateFacture) {
+        const code = row.original.factureCode;
+        const encodedCode = encodeURIComponent(code || "");
+        const url = `/dashboard/vente/facture/${encodedCode}`;
         return (
-          <Link href={`/dashboard/vente/facture/${row.original.factureCode}`}>
+          <Link href={url}>
             <Button className="rounded-2xl">Facture</Button>
           </Link>
         );

@@ -17,15 +17,14 @@ import {
   Package2,
   ShoppingBasket,
   Store,
-  Users,
   UsersRound,
   Contact,
   BadgeDollarSign,
   Undo2,
-  DollarSign,
 } from "lucide-react";
 import { IoStatsChart } from "react-icons/io5";
 import { FaCashRegister } from "react-icons/fa6";
+import { LuNewspaper } from "react-icons/lu";
 import {
   Collapsible,
   CollapsibleContent,
@@ -51,6 +50,12 @@ const SideBar = () => {
         name: "Frais",
         href: "/dashboard/frais",
         icon: BadgeDollarSign,
+        isMainAdmin: true,
+      },
+      {
+        name: "Devis",
+        href: "/dashboard/devis",
+        icon: LuNewspaper,
         isMainAdmin: true,
       },
       {
@@ -98,6 +103,12 @@ const SideBar = () => {
         name: "Statistiques",
         href: "/dashboard/benifice",
         icon: IoStatsChart,
+        isMainAdmin: true,
+      },
+      {
+        name: "Devis",
+        href: "/dashboard/devis",
+        icon: LuNewspaper,
         isMainAdmin: true,
       },
       {

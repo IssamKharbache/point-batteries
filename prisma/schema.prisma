@@ -24,6 +24,7 @@ model User {
   order       Order[]
   vente       Vente[]
   return      Return[]
+  devis       Devis[]
 }
 
 model Product {
@@ -56,6 +57,7 @@ model Product {
   orderItem          OrderItem[]
   ventes             VenteProduct[]
   returns            ReturnProduct[]
+  devis              DevisProduct[]
   category           Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
@@ -238,6 +240,41 @@ model ReturnProduct {
   return             Return  @relation(fields: [returnId], references: [id], onDelete: Cascade)
 
   @@id([returnId, productId])
+}
+
+model Devis {
+  id            String  @id @default(uuid()) @db.Uuid
+  userId        String? @db.Uuid
+  clientNom     String
+  clientPrenom  String
+  clientTel     String?
+  nomDuCaissier String?
+  devisRef      String  @unique
+
+  user     User?          @relation(fields: [userId], references: [id])
+  products DevisProduct[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([createdAt])
+}
+
+model DevisProduct {
+  devisId            String  @db.Uuid
+  productId          String  @db.Uuid
+  qty                Int
+  price              Float?
+  designationProduit String?
+  marque             String?
+  refProduct         String?
+  product            Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  devis              Devis   @relation(fields: [devisId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([devisId, productId])
 }
 
 enum Role {

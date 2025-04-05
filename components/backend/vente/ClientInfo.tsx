@@ -20,7 +20,9 @@ import {
 } from "@/components/ui/select";
 import { useStepFormStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
+import db from "@/lib/db";
 import { getData } from "@/lib/getData";
+import { generateUniqueFactureCode } from "@/lib/utils/generateFactureCode";
 import { addClientVenteSchema } from "@/lib/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CompanyClient } from "@prisma/client";
@@ -82,18 +84,6 @@ const ClientInfo = () => {
   const { toast } = useToast();
   const { currentStep, setCurrentStep, productsToSubmit } = useStepFormStore();
 
-  const generateUniqueFactureCode = () => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-
-    const randomNumber = Math.floor(Math.random() * 1000)
-      .toString()
-      .padStart(3, "0"); // e.g., "206"
-
-    return `FA-${day}-${month}-${randomNumber}`;
-  };
-
   const handlePrevious = () => {
     if (currentStep === 1) {
       return;
@@ -139,7 +129,7 @@ const ClientInfo = () => {
       venteBenifits,
       ice,
       generateFacture: isGeneratingFac,
-      factureCode: isGeneratingFac ? generateUniqueFactureCode() : null,
+      factureCode: isGeneratingFac ? await generateUniqueFactureCode() : null,
     };
 
     try {
@@ -156,7 +146,10 @@ const ClientInfo = () => {
         });
 
         if (isGeneratingFac) {
-          router.push(`/dashboard/vente/facture/${allData.factureCode}`);
+          const code = allData.factureCode;
+          const encodedCode = encodeURIComponent(code || "");
+          const url = `/dashboard/vente/facture/${encodedCode}`;
+          router.push(url);
         } else {
           router.push("/dashboard/vente");
         }
@@ -176,6 +169,7 @@ const ClientInfo = () => {
       <div className="space-y-2 bg-white p-10 rounded-md border-2 md:w-[750px] mt-8 ">
         <h1 className="text-xl text-start text-gray-600 ">Details du client</h1>
         <hr className="text-gray-400 " />
+
         <Form {...form}>
           <form
             className="space-y-8"

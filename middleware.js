@@ -36,7 +36,8 @@ export default withAuth(
         if (
           !req.nextUrl.pathname.startsWith("/dashboard/vente") &&
           !req.nextUrl.pathname.startsWith("/dashboard/client-rep") &&
-          !req.nextUrl.pathname.startsWith("/dashboard/frais")
+          !req.nextUrl.pathname.startsWith("/dashboard/frais") &&
+          !req.nextUrl.pathname.startsWith("/dashboard/devis")
         ) {
           // Prevent redirect loop by checking if the user is already on the unauthorized page
           if (!req.nextUrl.pathname.startsWith("/dashboard/unauthorized")) {
