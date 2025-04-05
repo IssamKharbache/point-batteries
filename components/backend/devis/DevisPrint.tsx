@@ -83,7 +83,7 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
           <h2 className="text-xl font-bold">Prévisualisation du Devis</h2>
           <div className="flex gap-2">
             <Button
-              onClick={() => handlePrint}
+              onClick={() => handlePrint()}
               className="flex items-center gap-2"
               size="sm"
             >
