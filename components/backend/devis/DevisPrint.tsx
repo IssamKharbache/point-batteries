@@ -102,16 +102,15 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
           </div>
         </div>
 
-        <div ref={contentRef} className="p-8 print:p-0">
+        <div ref={contentRef} className="p-8">
           {/* Header Section */}
-          <div className="mb-8">
+          <div>
             <Image
               src="/logopbsdark.png"
               alt="Company Logo"
               width={240}
               height={80}
               className="mx-auto mb-12"
-              priority
             />
             <div className="flex justify-between gap-8">
               {/* Client Details */}
@@ -150,7 +149,7 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
               </div>
             </div>
 
-            {/* Table Section */}
+            {/* Table Section - Original Styling */}
             <table className="w-full border-collapse border border-gray-300 mt-6">
               <thead>
                 <tr className="bg-gray-100">
@@ -176,16 +175,16 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
                   products.map((product, idx) => (
                     <tr key={idx} className="hover:bg-gray-50">
                       <td className="border border-gray-300 p-2 text-left">
-                        {product.refProduct || "N/A"}
+                        {product.refProduct}
                       </td>
                       <td className="border border-gray-300 p-2 text-left">
-                        {product?.designationProduit || "N/A"}
+                        {product.designationProduit}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
                         {product.qty}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
-                        {(product.price || 0).toFixed(2)} DH
+                        {product.price?.toFixed(2)} DH
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
                         {((product.price || 0) * product.qty).toFixed(2)} DH
