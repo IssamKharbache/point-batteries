@@ -300,6 +300,13 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                   <h1 className="font-semibold text-gray-700 text-xs md:text-md uppercase">
                     {product.designationProduit}
                   </h1>
+                  <div className="flex gap-2 text-xs text-gray-500 mb-2">
+                    <span>Ref: {product.refProduct}</span>
+                    <span>|</span>
+                    <span>Marque: {product.marque}</span>
+                    <span>|</span>
+                    <span>Prix: {product.price} DH</span>
+                  </div>
                 </div>
               </div>
             ))}

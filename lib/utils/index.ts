@@ -107,6 +107,34 @@ export async function generateUniqueVenteRef() {
   return `VT-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
 }
 
+export async function generateUniqueDevisRef() {
+  const currentYear = new Date().getFullYear().toString().slice(-2);
+
+  const lastDevis = await db.devis.findFirst({
+    where: {
+      devisRef: {
+        startsWith: "DV-",
+        contains: `/${currentYear}`,
+      },
+    },
+    orderBy: {
+      devisRef: "desc",
+    },
+    select: {
+      devisRef: true,
+    },
+  });
+
+  let nextNumber = 1;
+  if (lastDevis) {
+    const lastRef = lastDevis.devisRef;
+    const lastNumber = parseInt(lastRef.split("/")[0].split("-")[1]);
+    nextNumber = lastNumber + 1;
+  }
+
+  return `DV-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
+}
+
 export const generateReturnReference = async (): Promise<string> => {
   const yearShort = new Date().getFullYear().toString().slice(-2);
   const randomDigits = Math.floor(1000 + Math.random() * 9000);

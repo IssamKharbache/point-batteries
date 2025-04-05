@@ -244,6 +244,35 @@ export const useStepFormStore = create<StepFormType>((set) => ({
   productsToSubmit: [],
   setProductsToSubmit: (products) => set({ productsToSubmit: products }),
 }));
+
+type DevisStepForm = {
+  currentStep: number;
+  setCurrentStep: (currentStep: number) => void;
+  productsToSubmit: {
+    refProduct: string;
+    quantity: string;
+    price: number;
+    designationProduct: string;
+    marque: string;
+  }[];
+  setProductsToSubmit: (
+    products: {
+      refProduct: string;
+      quantity: string;
+      price: number;
+      designationProduct: string;
+      marque: string;
+    }[]
+  ) => void;
+};
+
+export const useDevisStepFormStore = create<DevisStepForm>((set) => ({
+  currentStep: 1,
+  setCurrentStep: (currentStep: number) => set({ currentStep }),
+  productsToSubmit: [],
+  setProductsToSubmit: (products) => set({ productsToSubmit: products }),
+}));
+
 //
 type OrderPaginationData = {
   page: number;
