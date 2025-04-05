@@ -79,7 +79,7 @@ const LoginForm = () => {
                     <Input
                       type="text"
                       className="mt-2 px-4 "
-                      placeholder="Address email"
+                      placeholder="example@gmail.com"
                       {...field}
                     />
                   </FormControl>

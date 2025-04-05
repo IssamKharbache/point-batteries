@@ -43,7 +43,8 @@ export function DataTable<TData extends ProductData>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [globalFilter, setGlobalFilter] = React.useState("");
+
+  const [globalFilter, setGlobalFilter] = React.useState<string>("");
 
   const table = useReactTable({
     data,
@@ -59,19 +60,16 @@ export function DataTable<TData extends ProductData>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: (row, filterValue) => {
-      // Create a search string combining multiple fields
-      const searchString =
-        `${row.original.designationProduit} ${row.original.refProduct} ${row.original.marque}`.toLowerCase();
+    globalFilterFn: (row) => {
+      const rowValue = row.getValue("designationProduit") as string;
+      const search = globalFilter.toLowerCase().trim();
+      // Split search into words
+      const searchWords = search.split(/\s+/);
 
-      // Split the filter value into individual terms
-      const searchTerms = filterValue
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
-
-      // Return true if all search terms are found in the search string
-      return searchTerms.every((term: string) => searchString.includes(term));
+      // Check if every word is found somewhere in the row value
+      return searchWords.every((word: string) =>
+        rowValue.toLowerCase().includes(word)
+      );
     },
   });
 
@@ -88,7 +86,9 @@ export function DataTable<TData extends ProductData>({
             <Input
               placeholder="Filtrer par designation..."
               value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              onChange={(e) => {
+                setGlobalFilter(e.target.value);
+              }}
               className="w-52 px-4 pr-10 py-1 h-10 md:h-12 md:w-60 placeholder:text-xs md:placeholder:text-[14px] "
             />
             <Filter size={15} className="absolute text-gray-400 right-2" />
@@ -150,18 +150,20 @@ export function DataTable<TData extends ProductData>({
         )}
       </div>
       <div className="md:hidden rounded-md border">
-        <div className="flex justify-between items-center border-b">
+        <div className="flex flex-col justify-between md:items-center border-b m-2 md:m-0">
           <h2 className="px-4 py-4 font-semibold text-xl">{name}</h2>
-          <div className="relative flex items-center py-4">
+          <div className="relative flex  items-center py-4 mr-8">
             <Input
-              placeholder="Rechercher (designation, référence, marque)..."
+              placeholder="Filtrer par designation..."
               value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
-              className="w-36 px-4 mr-8 py-1 placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
+              onChange={(e) => {
+                setGlobalFilter(e.target.value);
+              }}
+              className="w-52 px-4 pr-10 py-1 h-10 md:h-12 md:w-60 placeholder:text-xs md:placeholder:text-[14px] "
             />
             <Filter
               size={15}
-              className="absolute text-gray-400 right-10 md:right-12"
+              className="absolute text-gray-400 right-2 hidden md:block"
             />
           </div>
         </div>

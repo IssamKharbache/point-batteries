@@ -22,46 +22,45 @@ const MainPage = async () => {
 
   const data: ProductData[] = await getData("/product/all");
   const filteredProducts = data.filter((product) => !product.isAchatProduct);
-  //users
-  const users: User[] = await getData("/user");
+
   //getting only the users that are normal clients
-  const filteredUsers = users.filter((user) => user.role === "USER");
+  // const filteredUsers = users.filter((user) => user.role === "USER");
 
   //orders
   const orders: OrderWithItems[] = await getData("/order");
 
   //filter orders
-  const filteredOrders = orders.filter(
-    (order) => order.orderStatus !== "ANNULLE"
-  );
+  // const filteredOrders = orders.filter(
+  //   (order) => order.orderStatus !== "ANNULLE"
+  // );
 
-  const delivredOrders = orders.filter(
-    (order) => order.orderStatus === "EXPEDIE"
-  );
+  // const delivredOrders = orders.filter(
+  //   (order) => order.orderStatus === "EXPEDIE"
+  // );
 
   // Fetching ventes
-  const ventes: VenteWithProducts[] = await getData("/vente");
+  // const ventes: VenteWithProducts[] = await getData("/vente");
 
   // Calculate total revenue from orders
-  const orderRevenue = delivredOrders.reduce((acc, order) => {
-    const orderTotal = order.orderItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-    return acc + orderTotal;
-  }, 0);
+  // const orderRevenue = delivredOrders.reduce((acc, order) => {
+  //   const orderTotal = order.orderItems.reduce(
+  //     (sum, item) => sum + item.price * item.quantity,
+  //     0
+  //   );
+  //   return acc + orderTotal;
+  // }, 0);
 
   // Calculate total revenue from ventes
-  const venteRevenue = ventes.reduce((acc, vente) => {
-    const venteTotal = vente.products.reduce(
-      (sum, product) => sum + (product.price ?? 0) * product.qty,
-      0
-    );
-    return acc + venteTotal;
-  }, 0);
+  // const venteRevenue = ventes.reduce((acc, vente) => {
+  //   const venteTotal = vente.products.reduce(
+  //     (sum, product) => sum + (product.price ?? 0) * product.qty,
+  //     0
+  //   );
+  //   return acc + venteTotal;
+  // }, 0);
 
   // Final total revenue
-  const totalRevenue = orderRevenue + venteRevenue;
+  // const totalRevenue = orderRevenue + venteRevenue;
   if (session?.user.role === "CAISSIER") {
     return (
       <div>

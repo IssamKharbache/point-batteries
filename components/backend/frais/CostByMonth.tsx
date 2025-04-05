@@ -24,7 +24,8 @@ const CostsByMonth = () => {
   const [selectedMonth, setSelectedMonth] = useState<string>(
     format(new Date(), "yyyy-MM") // Default to current month
   );
-  const [filteredCosts, setFilteredCosts] = useState<any[]>([]);
+  const [filteredCosts, setFilteredCosts] = useState<Cost[]>([]);
+  const [monthlyTotal, setMonthlyTotal] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const { loading: loadingStore, setLoading: setLoadingStore } =
     useLoadingStore();
@@ -44,12 +45,15 @@ const CostsByMonth = () => {
     }
   };
 
+  const calculateMonthlyTotal = (costs: Cost[]) => {
+    return costs.reduce((total, cost) => total + (cost.montant || 0), 0);
+  };
+
   // Fetch costs on component mount
   useEffect(() => {
     fetchCosts();
   }, []);
 
-  // Filter costs based on the selected month
   useEffect(() => {
     if (costs.length > 0) {
       const startDate = startOfMonth(new Date(selectedMonth));
@@ -61,8 +65,10 @@ const CostsByMonth = () => {
       });
 
       setFilteredCosts(filtered);
+      setMonthlyTotal(calculateMonthlyTotal(filtered));
     } else {
       setFilteredCosts([]);
+      setMonthlyTotal(0);
     }
   }, [selectedMonth, costs]);
 
@@ -156,6 +162,7 @@ const CostsByMonth = () => {
             Frais pour mois ,
             {format(new Date(selectedMonth), "MMMM yyyy", { locale: fr })}
           </h2>
+
           <table className="w-full border-collapse">
             <thead>
               <tr>
@@ -193,6 +200,15 @@ const CostsByMonth = () => {
               )}
             </tbody>
           </table>
+          <div className="flex items-center justify-end  py-2 ">
+            <span className="text-muted-foreground m-2">
+              {`Total des frais pour le mois`}{" "}
+              <span className="capitalize font-semibold text-blue-500">
+                {format(new Date(selectedMonth), "MMMM yyyy", { locale: fr })} :
+              </span>
+            </span>
+            <span className="font-bold ">{monthlyTotal.toFixed(2)} DH</span>
+          </div>
         </div>
       )}
     </div>

@@ -55,6 +55,9 @@ export function DataTable<TData>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  const [globalFilter, setGlobalFilter] = React.useState("");
+
   const table = useReactTable({
     data,
     columns,
@@ -65,13 +68,25 @@ export function DataTable<TData>({
     state: {
       sorting,
       columnFilters,
+      globalFilter,
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+
     initialState: {
       pagination: {
         pageSize: 50,
       },
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: (row) => {
+      const venteRef = String(row.getValue("venteRef")).toLowerCase();
+      const nomClient = String(row.getValue("clientNom")).toLowerCase();
+      const search = globalFilter.toLowerCase().trim();
+      const searchWords = search.split(/\s+/);
+      return searchWords.every(
+        (word: string) => venteRef.includes(word) || nomClient.includes(word)
+      );
     },
   });
 
@@ -123,14 +138,12 @@ export function DataTable<TData>({
 
           <div className="relative flex items-center py-4">
             <Input
-              placeholder="Filtrer par ref..."
-              value={
-                (table.getColumn("venteRef")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("venteRef")?.setFilterValue(event.target.value)
-              }
-              className="w-36 px-4 mr-8 py-1 h-10 md:h-10 md:w-60  placeholder:text-xs md:placeholder:text-[14px] "
+              placeholder="Filtrer par vente ref ou nom du client..."
+              value={globalFilter ?? ""}
+              onChange={(e) => {
+                setGlobalFilter(e.target.value);
+              }}
+              className="w-full px-5 mr-8 py-1 placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12 pr-10"
             />
             <Filter size={15} className="absolute text-gray-400 right-12" />
           </div>
@@ -207,14 +220,12 @@ export function DataTable<TData>({
           <h2 className="px-4 py-4 font-semibold text-xl">{name}</h2>
           <div className="relative flex items-center py-4">
             <Input
-              placeholder="Filtrer par red..."
-              value={
-                (table.getColumn("venteRef")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("venteRef")?.setFilterValue(event.target.value)
-              }
-              className="w-36 px-4 mr-8 py-1  placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
+              placeholder="Filtrer par ref ou client..."
+              value={globalFilter ?? ""}
+              onChange={(e) => {
+                setGlobalFilter(e.target.value);
+              }}
+              className="w-36 px-4 mr-8 py-1 placeholder:text-xs md:placeholder:text-[14px] h-10 md:h-12"
             />
             <Filter
               size={15}
