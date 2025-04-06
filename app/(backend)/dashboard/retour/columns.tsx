@@ -84,4 +84,9 @@ export const columns: ColumnDef<ReturnType>[] = [
       return <p>{formatDate(date)}</p>;
     },
   },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => <TableActions endpoint={`retour/${row.original.id}`} />,
+  },
 ];

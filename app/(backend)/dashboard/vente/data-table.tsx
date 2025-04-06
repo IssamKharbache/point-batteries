@@ -103,9 +103,15 @@ export function DataTable<TData>({
           <h2 className="px-4 py-4 font-semibold text-md md:text-2xl">
             {name}
           </h2>
-          <div className="flex items-center">
-            <div className="bg-red-500 w-3 h-3 rounded" />
-            <h1 className="text-sm ml-2">A Crédit</h1>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center">
+              <div className="bg-red-500 w-3 h-3 rounded" />
+              <h1 className="text-sm ml-2">A Crédit</h1>
+            </div>
+            <div className="flex items-center">
+              <div className="bg-yellow-100 w-3 h-3 rounded" />
+              <h1 className="text-sm ml-2">Avec Retour</h1>
+            </div>
           </div>
           <Popover>
             <PopoverTrigger asChild>
@@ -178,15 +184,18 @@ export function DataTable<TData>({
                   const paymentType = row.getValue(
                     "paymentType"
                   ) as PaymentType;
+                  const hasReturns = (row.original as any)?.returns?.length > 0;
+
                   return (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className={
+                      className={cn(
                         paymentType === "ACREDIT"
                           ? "bg-red-500 hover:bg-red-400 text-white"
-                          : "hover:bg-gray-50"
-                      }
+                          : "hover:bg-gray-50",
+                        hasReturns && "bg-yellow-50 hover:bg-yellow-100"
+                      )}
                     >
                       {row.getVisibleCells().map((cell) => {
                         return (

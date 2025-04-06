@@ -30,19 +30,13 @@ const BenificeDashboard = ({
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [filteredSales, setFilteredSales] = useState<VenteType[]>([]);
   const [filteredCosts, setFilteredCosts] = useState<Cost[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const total = products.reduce(
-    (acc, product) => acc + (product.achatPrice || 0) * (product.stock || 0),
-    0
-  );
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const [newSales, newCosts, newProducts] = await Promise.all([
-        getData("/vente"),
+        getData("/vente"), // Include returns for display purposes
         getData("/frais"),
         getData("/product/all"),
       ]);
@@ -50,13 +44,7 @@ const BenificeDashboard = ({
       setSales(newSales);
       setCosts(newCosts);
       setProducts(newProducts);
-
-      // Filter out returns immediately
-      const salesWithNoReturns = newSales.filter(
-        (vente: VenteType) =>
-          Array.isArray(vente?.returns) && vente.returns.length === 0
-      );
-      setFilteredSales(salesWithNoReturns);
+      setFilteredSales(newSales); // Don't filter here - we'll filter in the effect
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -70,22 +58,14 @@ const BenificeDashboard = ({
 
   useEffect(() => {
     // Initial filtering based on props
-    const salesWithNoReturns = initialSales.filter(
-      (vente) => Array.isArray(vente?.returns) && vente.returns.length === 0
-    );
-    setFilteredSales(salesWithNoReturns);
+    setFilteredSales(initialSales);
     setFilteredCosts(initialCosts);
-    setFilteredProducts(initialProducts);
-  }, [initialSales, initialCosts, initialProducts]);
+  }, [initialSales, initialCosts]);
 
   useEffect(() => {
     if (isAllTime) {
-      setFilteredSales(
-        sales.filter((v) => Array.isArray(v?.returns) && v.returns.length === 0)
-      );
+      setFilteredSales(sales);
       setFilteredCosts(costs);
-      setFilteredProducts(products);
-
       return;
     }
 
@@ -96,33 +76,19 @@ const BenificeDashboard = ({
     const lastDay = new Date(year, month, 0);
     lastDay.setHours(23, 59, 59, 999);
 
-    const filteredSales = sales
-      .filter((vente) => {
-        const saleDate = new Date(vente.createdAt);
-        return saleDate >= firstDay && saleDate <= lastDay;
-      })
-      .filter((v) => Array.isArray(v?.returns) && v.returns.length === 0);
+    const filteredSales = sales.filter((vente) => {
+      const saleDate = new Date(vente.createdAt);
+      return saleDate >= firstDay && saleDate <= lastDay;
+    });
 
     const filteredCosts = costs.filter((cost) => {
       const costDate = new Date(cost.date);
       return costDate >= firstDay && costDate <= lastDay;
     });
 
-    const filteredProducts = products.filter((product) => {
-      if (!product.createdAt) return false;
-      const productDate = new Date(product.createdAt);
-      return productDate >= firstDay && productDate <= lastDay;
-    });
-
-    const total = filteredProducts.reduce(
-      (acc, product) => acc + (product.achatPrice || 0) * (product.stock || 0),
-      0
-    );
-
     setFilteredSales(filteredSales);
     setFilteredCosts(filteredCosts);
-    setFilteredProducts(filteredProducts);
-  }, [selectedMonth, selectedYear, isAllTime, sales, costs, products]);
+  }, [selectedMonth, selectedYear, isAllTime, sales, costs]);
 
   // Calculate statistics
   const grossBenefit = filteredSales.reduce(
@@ -138,6 +104,12 @@ const BenificeDashboard = ({
   const netBenefit = grossBenefit - totalCosts;
   const salesCount = filteredSales.length;
   const avgSale = salesCount > 0 ? grossBenefit / salesCount : 0;
+
+  // Calculate total stock value
+  const totalStockValue = products.reduce(
+    (acc, product) => acc + (product.achatPrice || 0) * (product.stock || 0),
+    0
+  );
 
   return (
     <>
@@ -171,7 +143,7 @@ const BenificeDashboard = ({
             totalCosts={totalCosts}
           />
 
-          <BenificesGraphs stockValue={total} avgSale={avgSale} />
+          <BenificesGraphs stockValue={totalStockValue} avgSale={avgSale} />
           <RecentVentes sales={filteredSales} />
         </>
       )}

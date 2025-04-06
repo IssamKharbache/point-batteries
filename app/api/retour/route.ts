@@ -80,6 +80,7 @@ export const POST = async (req: NextRequest) => {
 
     // Create the vente and link products, then update stock & vente count
     const newReturn = await db.$transaction(async (prisma) => {
+      // 1. Create the return
       const createdReturn = await prisma.return.create({
         data: {
           userId,
@@ -93,20 +94,57 @@ export const POST = async (req: NextRequest) => {
         },
         include: {
           products: true,
+          vente: {
+            include: {
+              products: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          },
         },
       });
 
-      // Update product stock and vente count
+      // 2. Calculate and update vente benefits if this is a vente return
+      if (returnFrom === "vente" && sourceId) {
+        let totalBenefitDeduction = 0;
+
+        for (const returnedProduct of createdReturn.products) {
+          // Find the original sale of this product
+          const originalSale = createdReturn.vente?.products.find(
+            (p) => p.productId === returnedProduct.productId
+          );
+
+          if (originalSale) {
+            const salePrice = originalSale.price || 0;
+            const purchasePrice = originalSale.product.achatPrice || 0;
+            const benefitPerUnit = salePrice - purchasePrice;
+            totalBenefitDeduction += benefitPerUnit * returnedProduct.qty;
+          }
+        }
+
+        // Update the vente's benefit
+        if (totalBenefitDeduction > 0) {
+          await prisma.vente.update({
+            where: { id: sourceId },
+            data: {
+              venteBenifits: {
+                decrement: totalBenefitDeduction,
+              },
+            },
+          });
+        }
+      }
+
+      // 3. Update product stock
       for (const item of productsData) {
         await prisma.product.update({
           where: { id: item.productId },
-          data:
-            returnFrom === "product"
-              ? { stock: { decrement: item.qty } }
-              : {
-                  stock: { increment: item.qty },
-                  vente: { decrement: item.qty },
-                },
+          data: {
+            stock: { increment: item.qty },
+            vente: { decrement: item.qty },
+          },
         });
       }
 

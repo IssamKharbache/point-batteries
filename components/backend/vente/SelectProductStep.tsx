@@ -306,6 +306,8 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                     <span>Marque: {product.marque}</span>
                     <span>|</span>
                     <span>Prix: {product.price} DH</span>
+                    <span>|</span>
+                    <span>Stock: {product.stock}</span>
                   </div>
                 </div>
               </div>

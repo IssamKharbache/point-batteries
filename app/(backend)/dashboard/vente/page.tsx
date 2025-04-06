@@ -9,13 +9,11 @@ import { getData } from "@/lib/getData";
 const page = async () => {
   const data: VenteType[] = await getData("/vente");
 
-  const filteredData = data.filter((vente) => vente?.returns?.length === 0);
-
   return (
     <section>
       <PageHeader name="Vente" href="vente/ajouter" />
       <div className="container mx-auto py-10 ">
-        <DataTable columns={columns} data={filteredData} name="Vente" />
+        <DataTable columns={columns} data={data} name="Vente" />
       </div>
     </section>
   );
