@@ -7,10 +7,12 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Printer } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formatISODate } from "../vente/BonDeLivraison";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
+import { formatFrenchDate } from "@/lib/utils/index";
+import { getData } from "@/lib/getData";
 
 export type ReturnProduct = {
   productId: string;
@@ -27,6 +29,7 @@ export type ReturnType = {
   nomDuCaissier: string;
   returnFrom: string;
   products: ReturnProduct[];
+  sourceId: string | null;
   createdAt: Date;
   updatedAt: Date | null;
 };
@@ -35,6 +38,7 @@ interface BonDeRetourProps {
   rowData: ReturnType;
 }
 const BonDeRetour = ({ rowData }: BonDeRetourProps) => {
+  const [venteRef, setVenteRef] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -42,6 +46,18 @@ const BonDeRetour = ({ rowData }: BonDeRetourProps) => {
     contentRef,
     documentTitle: `${rowData.returnRef}_Bon_de_retour`,
   });
+
+  useEffect(() => {
+    const getVenteRef = async () => {
+      if (rowData.sourceId === null) return;
+      const vente = await getData(`/vente/${rowData.sourceId}`);
+
+      if (vente) {
+        setVenteRef(vente.venteRef);
+      }
+    };
+    getVenteRef();
+  }, []);
 
   return (
     <>
@@ -96,12 +112,19 @@ const BonDeRetour = ({ rowData }: BonDeRetourProps) => {
             </div>
             <div className="text-sm mt-4">
               <p>
-                <span className="font-bold">Bon de retour Nº :</span> 0001/25
+                <span className="font-bold">Bon de retour Nº :</span>{" "}
+                {rowData.returnRef}
               </p>
               <p>
                 <span className="font-bold">Date : </span>
-                24/03/2025
+                {formatFrenchDate(rowData.createdAt)}
               </p>
+              {venteRef ? (
+                <p>
+                  <span className="font-bold">Reference vente: </span>
+                  {venteRef}
+                </p>
+              ) : null}
             </div>
           </div>
         </div>

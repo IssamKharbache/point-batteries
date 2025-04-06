@@ -109,7 +109,7 @@ export function DataTable<TData>({
               <h1 className="text-sm ml-2">A Crédit</h1>
             </div>
             <div className="flex items-center">
-              <div className="bg-yellow-100 w-3 h-3 rounded" />
+              <div className="bg-yellow-200 w-3 h-3 rounded" />
               <h1 className="text-sm ml-2">Avec Retour</h1>
             </div>
           </div>

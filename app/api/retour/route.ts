@@ -137,14 +137,19 @@ export const POST = async (req: NextRequest) => {
         }
       }
 
-      // 3. Update product stock
+      // Update product stock based on return type
       for (const item of productsData) {
         await prisma.product.update({
           where: { id: item.productId },
-          data: {
-            stock: { increment: item.qty },
-            vente: { decrement: item.qty },
-          },
+          data:
+            returnFrom === "vente"
+              ? {
+                  stock: { increment: item.qty },
+                  vente: { decrement: item.qty },
+                }
+              : {
+                  stock: { decrement: item.qty },
+                },
         });
       }
 

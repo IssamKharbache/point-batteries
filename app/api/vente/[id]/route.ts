@@ -68,3 +68,31 @@ export const DELETE = async (
     );
   }
 };
+
+export const GET = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) => {
+  const venteId = (await context.params).id;
+
+  try {
+    const vente = await db.vente.findUnique({
+      where: { id: venteId },
+    });
+
+    if (!vente) {
+      return NextResponse.json({ error: "Vente not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      data: vente,
+      message: "Vente details",
+    });
+  } catch (error) {
+    console.error("Error fetching vente:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+};

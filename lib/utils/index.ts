@@ -135,11 +135,33 @@ export async function generateUniqueDevisRef() {
   return `DV-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
 }
 
-export const generateReturnReference = async (): Promise<string> => {
-  const yearShort = new Date().getFullYear().toString().slice(-2);
-  const randomDigits = Math.floor(1000 + Math.random() * 9000);
-  return `R${yearShort}-${randomDigits}`;
-};
+export async function generateReturnReference(): Promise<string> {
+  const currentYear = new Date().getFullYear().toString().slice(-2);
+  const lastReturn = await db.return.findFirst({
+    where: {
+      returnRef: {
+        startsWith: "R",
+        contains: `/${currentYear}`,
+      },
+    },
+    orderBy: {
+      returnRef: "desc",
+    },
+    select: {
+      returnRef: true,
+    },
+  });
+
+  let nextNumber = 1;
+  if (lastReturn) {
+    const lastRef = lastReturn.returnRef;
+    const lastNumber = parseInt(lastRef.split("/")[0].substring(1));
+    nextNumber = lastNumber + 1;
+  }
+
+  // 3. Format the reference
+  return `R-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
+}
 
 export function formatFrenchDate(isoDate: Date) {
   const days = [

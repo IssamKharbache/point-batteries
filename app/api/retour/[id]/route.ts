@@ -28,10 +28,15 @@ export async function DELETE(
       for (const product of returnData.products) {
         await prisma.product.update({
           where: { id: product.productId },
-          data: {
-            stock: { decrement: product.qty }, // Subtract back from stock
-            vente: { increment: product.qty }, // Add back to vente count
-          },
+          data:
+            returnData.returnFrom === "vente"
+              ? {
+                  stock: { decrement: product.qty },
+                  vente: { increment: product.qty },
+                }
+              : {
+                  stock: { increment: product.qty },
+                },
         });
       }
 
