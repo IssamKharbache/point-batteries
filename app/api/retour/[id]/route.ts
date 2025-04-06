@@ -3,11 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const returnId = params.id;
-
+    const returnId = (await context.params).id;
     await db.$transaction(async (prisma) => {
       // 1. Fetch the return with its products and linked vente
       const returnData = await prisma.return.findUnique({
