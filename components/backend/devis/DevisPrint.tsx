@@ -30,14 +30,15 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
     products = [],
   } = devis;
 
-  // Calculate totals
-  const { subtotal } = products.reduce(
-    (acc, product) => ({
-      subtotal: acc.subtotal + (product.price || 0) * product.qty,
-      totalItems: acc.totalItems + product.qty,
-    }),
-    { subtotal: 0, totalItems: 0 }
+  // Calculate total TTC (price × quantity for all products)
+  const totalTTC = products.reduce(
+    (sum, product) => sum + (product.price || 0) * product.qty,
+    0
   );
+
+  // Calculate HT and TVA (assuming 20% TVA rate)
+  const montantHT = totalTTC / 1.2;
+  const montantTVA = totalTTC - montantHT;
 
   const handlePrint = useReactToPrint({
     contentRef,
@@ -52,7 +53,6 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
     `,
   });
 
-  // Close on Escape key press
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -149,7 +149,7 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
               </div>
             </div>
 
-            {/* Table Section - Original Styling */}
+            {/* Table Section */}
             <table className="w-full border-collapse border border-gray-300 mt-6">
               <thead>
                 <tr className="bg-gray-100">
@@ -163,10 +163,10 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
                     QTE
                   </th>
                   <th className="border border-gray-300 p-2 text-center font-bold">
-                    PU
+                    PU (TTC)
                   </th>
                   <th className="border border-gray-300 p-2 text-center font-bold">
-                    TOTAL
+                    TOTAL (TTC)
                   </th>
                 </tr>
               </thead>
@@ -206,9 +206,42 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
           </div>
 
           {/* Footer Section */}
-          <div className="mt-12 flex justify-end">
-            <div className="text-lg font-bold">
-              Total: {subtotal.toFixed(2)} DH
+          <div className="mt-24">
+            <div className="flex items-center justify-between gap-12">
+              {/* Payment Details */}
+              <div className="text-md font-semibold uppercase">
+                <p>Arrêtée le présent devis à la somme de :</p>
+                <p>{totalTTC.toFixed(2)} DH</p>
+              </div>
+
+              {/* Totals Section */}
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <p className="font-semibold flex flex-col border-2 border-black rounded-2xl p-2  text-center w-28">
+                    Montant
+                    <span>HT</span>
+                  </p>
+                  <p className="font-semibold flex flex-col border-2 border-black rounded-2xl p-2  text-center w-28">
+                    Montant
+                    <span>TVA</span>
+                  </p>
+                  <p className="font-semibold flex flex-col border-2 border-black rounded-2xl p-2  text-center w-28">
+                    Montant
+                    <span>TTC</span>
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <p className="font-semibold flex flex-col border-2 border-black rounded-2xl p-2  text-center w-28">
+                    {montantHT.toFixed(2)} DH
+                  </p>
+                  <p className="font-semibold flex flex-col border-2 border-black rounded-2xl p-2  text-center w-28">
+                    {montantTVA.toFixed(2)} DH
+                  </p>
+                  <p className="font-semibold flex flex-col border-2 border-black rounded-2xl p-2  text-center w-28">
+                    {totalTTC.toFixed(2)} DH
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

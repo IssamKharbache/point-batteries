@@ -176,7 +176,9 @@ const CostsByMonth = () => {
                 filteredCosts.map((cost) => (
                   <tr key={cost.id}>
                     {/* Add key prop */}
-                    <td className="border p-2">{cost.natureDuFrais}</td>
+                    <td className="border p-2 lowercase">
+                      {cost.natureDuFrais}
+                    </td>
                     <td className="border p-2">{cost.montant}</td>
                     <td className="flex items-center justify-between border p-2">
                       {format(new Date(cost.date), "PPP", { locale: fr })}
