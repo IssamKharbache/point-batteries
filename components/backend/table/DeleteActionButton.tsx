@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 interface DeleteActionButtonProps {
   title?: string;
   endpoint: string;
-  paymentType: PaymentType | null;
+  paymentType?: PaymentType | null;
 }
 
 const DeleteActionButton = ({
