@@ -1,5 +1,6 @@
 import { useLoadingStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
+import { PaymentType } from "@prisma/client";
 import axios from "axios";
 import { Loader2, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -7,9 +8,14 @@ import Swal from "sweetalert2";
 interface DeleteActionButtonProps {
   title?: string;
   endpoint: string;
+  paymentType: PaymentType | null;
 }
 
-const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
+const DeleteActionButton = ({
+  title,
+  endpoint,
+  paymentType,
+}: DeleteActionButtonProps) => {
   const { loading, setLoading } = useLoadingStore();
   const router = useRouter();
   const { toast } = useToast();
@@ -68,7 +74,13 @@ const DeleteActionButton = ({ title, endpoint }: DeleteActionButtonProps) => {
           onClick={handleDelete}
           className="flex items-center justify-center  font-medium  rounded-full gap-2"
         >
-          <Trash2 className="w-4 h-4 text-red-500  " />
+          <Trash2
+            className={`w-4 h-4 ${
+              paymentType && paymentType === "ACREDIT"
+                ? "text-white"
+                : "text-red-500"
+            } `}
+          />
           <span className="text-red-500">{title ?? ""}</span>
         </button>
       )}

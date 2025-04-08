@@ -402,3 +402,22 @@ export const useBenificeStore = create<BenificeStore>((set) => ({
   isAllTime: false,
   setIsAllTime: (isAllTime: boolean) => set({ isAllTime }),
 }));
+
+//payment update store
+type PaymentTypeLoadingStore = {
+  loadingVentes: Record<string, boolean>; // venteId -> loading state
+  setLoadingVente: (venteId: string, loading: boolean) => void;
+};
+
+export const usePaymentTypeLoadingStore = create<PaymentTypeLoadingStore>(
+  (set) => ({
+    loadingVentes: {},
+    setLoadingVente: (venteId, loading) =>
+      set((state) => ({
+        loadingVentes: {
+          ...state.loadingVentes,
+          [venteId]: loading,
+        },
+      })),
+  })
+);

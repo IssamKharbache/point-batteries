@@ -2,17 +2,20 @@
 
 import DeleteActionButton from "@/components/backend/table/DeleteActionButton";
 import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
+import { PaymentTypeEdit } from "@/components/backend/vente/PaymentTypeEdit";
 import { Button } from "@/components/ui/button";
+import { usePaymentTypeLoadingStore } from "@/context/store";
 import { formatDate } from "@/lib/utils/index";
-import { Return } from "@prisma/client";
+import { PaymentType, Return } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export interface VenteType {
   id: string;
   userId: string;
   venteRef: string;
-  paymentType: string;
+  paymentType: PaymentType;
   clientNom: string;
   clientPrenom: string;
   clientTel: string;
@@ -50,11 +53,6 @@ export const columns: ColumnDef<VenteType>[] = [
     accessorKey: "clientNom",
     header: "Nom du client",
   },
-  {
-    accessorKey: "paymentType",
-    header: "",
-    cell: () => null,
-  },
 
   {
     accessorKey: "createdAt",
@@ -82,7 +80,7 @@ export const columns: ColumnDef<VenteType>[] = [
       return (
         <p
           className={`font-semibold text-center rounded-full w-fit py-2 px-3 ${
-            ben < 0 ? "bg-red-500 text-white" : "bg-green-500"
+            ben < 0 ? "bg-red-500 " : "bg-green-500"
           }`}
         >
           {ben < 0 ? `- ${ben}` : `+ ${ben}`}dhs
@@ -95,6 +93,20 @@ export const columns: ColumnDef<VenteType>[] = [
     header: "Bon de livraison",
     cell: ({ row }) => {
       return <BonDeLivraison rowData={row.original} />;
+    },
+  },
+  {
+    accessorKey: "paymentType",
+    header: "Méthode de paiement",
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <PaymentTypeEdit
+            currentType={row.original.paymentType}
+            venteId={row.original.id}
+          />
+        </div>
+      );
     },
   },
 
@@ -126,11 +138,17 @@ export const columns: ColumnDef<VenteType>[] = [
       }
     },
   },
+
   {
     id: "delete",
     header: "Supprimer",
     cell: ({ row }) => {
-      return <DeleteActionButton endpoint={`/api/vente/${row.original.id}`} />;
+      return (
+        <DeleteActionButton
+          paymentType={row.original.paymentType}
+          endpoint={`/api/vente/${row.original.id}`}
+        />
+      );
     },
   },
 ];
