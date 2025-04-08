@@ -10,6 +10,9 @@ import { useToast } from "@/hooks/use-toast";
 interface ProductSelection {
   quantity: string;
   selected: boolean;
+  discount: string;
+  useManualPrice: boolean;
+  manualPrice: string;
 }
 
 interface SelectProductProps {
@@ -23,6 +26,9 @@ const SelectProductsForDevis = ({ productsVente }: SelectProductProps) => {
   }>({});
   const [filteredProducts, setFilteredProducts] =
     useState<ProductData[]>(productsVente);
+  const [validationErrors, setValidationErrors] = useState<{
+    [productId: string]: string;
+  }>({});
 
   const { currentStep, setCurrentStep, setProductsToSubmit } =
     useDevisStepFormStore();
@@ -61,6 +67,9 @@ const SelectProductsForDevis = ({ productsVente }: SelectProductProps) => {
             [productId]: {
               quantity: "1",
               selected: true,
+              discount: "",
+              useManualPrice: false,
+              manualPrice: "",
             },
           };
 
@@ -72,13 +81,53 @@ const SelectProductsForDevis = ({ productsVente }: SelectProductProps) => {
     });
   };
 
-  const handleInputChange = (productId: string, value: string) => {
+  const handleInputChange = (
+    productId: string,
+    field: "quantity" | "discount",
+    value: string
+  ) => {
     setProductsSelected((prev) => {
       const updatedSelection = {
         ...prev,
         [productId]: {
           ...prev[productId],
-          quantity: value,
+          [field]: value,
+        },
+      };
+
+      localStorage.setItem(
+        "devisSelectedProducts",
+        JSON.stringify(updatedSelection)
+      );
+      return updatedSelection;
+    });
+  };
+
+  const handleCheckboxChange = (productId: string, checked: boolean) => {
+    setProductsSelected((prev) => {
+      const updatedSelection = {
+        ...prev,
+        [productId]: {
+          ...prev[productId],
+          useManualPrice: checked,
+        },
+      };
+
+      localStorage.setItem(
+        "devisSelectedProducts",
+        JSON.stringify(updatedSelection)
+      );
+      return updatedSelection;
+    });
+  };
+
+  const handleManualPriceChange = (productId: string, value: string) => {
+    setProductsSelected((prev) => {
+      const updatedSelection = {
+        ...prev,
+        [productId]: {
+          ...prev[productId],
+          manualPrice: value,
         },
       };
 
@@ -115,12 +164,20 @@ const SelectProductsForDevis = ({ productsVente }: SelectProductProps) => {
         if (!product || !product.refProduct || !product.designationProduit)
           return null;
 
+        const price =
+          productSelected[productId].useManualPrice &&
+          productSelected[productId].manualPrice &&
+          !isNaN(parseFloat(productSelected[productId].manualPrice))
+            ? parseFloat(productSelected[productId].manualPrice)
+            : product.price;
+
         return {
           refProduct: product.refProduct,
           quantity: productSelected[productId].quantity,
-          price: product.price,
+          price: price,
           designationProduct: product.designationProduit,
           marque: product.marque,
+          discount: productSelected[productId].discount || "0",
         };
       })
       .filter(
@@ -201,7 +258,7 @@ const SelectProductsForDevis = ({ productsVente }: SelectProductProps) => {
               </div>
             ) : (
               Object.entries(productSelected).map(
-                ([productId, { quantity }]) => {
+                ([productId, { quantity, discount }]) => {
                   const product = productsVente.find((p) => p.id === productId);
                   return (
                     product && (
@@ -239,10 +296,77 @@ const SelectProductsForDevis = ({ productsVente }: SelectProductProps) => {
                               value={quantity}
                               onClick={(e) => e.stopPropagation()}
                               onChange={(e) =>
-                                handleInputChange(productId, e.target.value)
+                                handleInputChange(
+                                  productId,
+                                  "quantity",
+                                  e.target.value
+                                )
                               }
                             />
                           </div>
+
+                          <div>
+                            <Input
+                              placeholder="Remise (DH)"
+                              className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12 mt-2"
+                              type="number"
+                              min="0"
+                              value={discount}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  productId,
+                                  "discount",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          <div className="flex items-center gap-2 mt-2">
+                            <input
+                              type="checkbox"
+                              id={`manual-price-${productId}`}
+                              checked={
+                                productSelected[productId].useManualPrice
+                              }
+                              onChange={(e) =>
+                                handleCheckboxChange(
+                                  productId,
+                                  e.target.checked
+                                )
+                              }
+                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                            <label
+                              htmlFor={`manual-price-${productId}`}
+                              className="text-sm text-gray-700"
+                            >
+                              Prix manuel
+                            </label>
+                          </div>
+
+                          {productSelected[productId].useManualPrice && (
+                            <div className="mt-2">
+                              <p className="text-xs text-muted-foreground mb-1">
+                                Prix normal: {product.price} DH
+                              </p>
+                              <Input
+                                placeholder="Prix manuel"
+                                className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12"
+                                type="number"
+                                min="0"
+                                value={productSelected[productId].manualPrice}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) =>
+                                  handleManualPriceChange(
+                                    productId,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                     )

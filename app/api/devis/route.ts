@@ -70,6 +70,7 @@ export const POST = async (req: NextRequest) => {
         marque: string;
         price: number;
         designationProduct: string;
+        discount: string;
       }) => ({
         refProduct: p.refProduct,
         marque: p.marque,
@@ -77,6 +78,7 @@ export const POST = async (req: NextRequest) => {
         qty: parseInt(p.quantity),
         price: p.price,
         designationProduit: p.designationProduct,
+        discount: parseInt(p.discount),
       })
     );
 

@@ -268,8 +268,10 @@ model DevisProduct {
   designationProduit String?
   marque             String?
   refProduct         String?
-  product            Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  devis              Devis   @relation(fields: [devisId], references: [id], onDelete: Cascade)
+  discount           Float?
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  devis   Devis   @relation(fields: [devisId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

@@ -30,11 +30,12 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
     products = [],
   } = devis;
 
-  // Calculate total TTC (price × quantity for all products)
-  const totalTTC = products.reduce(
-    (sum, product) => sum + (product.price || 0) * product.qty,
-    0
-  );
+  const totalTTC = products.reduce((sum, product) => {
+    const price = product.price || 0;
+    const discount = product.discount || 0; // in DH
+    const discountedPrice = price - discount;
+    return sum + discountedPrice * product.qty;
+  }, 0);
 
   // Calculate HT and TVA (assuming 20% TVA rate)
   const montantHT = totalTTC / 1.2;
@@ -166,6 +167,10 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
                     PU (TTC)
                   </th>
                   <th className="border border-gray-300 p-2 text-center font-bold">
+                    REMISE
+                  </th>
+
+                  <th className="border border-gray-300 p-2 text-center font-bold">
                     TOTAL (TTC)
                   </th>
                 </tr>
@@ -184,10 +189,20 @@ const DevisPrint = ({ devis, onClose }: DevisPrintProps) => {
                         {product.qty}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
-                        {product.price?.toFixed(2)} DH
+                        {(product.price || 0).toFixed(2)} DH
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
-                        {((product.price || 0) * product.qty).toFixed(2)} DH
+                        {product.discount
+                          ? `${product.discount.toFixed(2)} DH`
+                          : "-"}
+                      </td>
+
+                      <td className="border border-gray-300 p-2 text-center">
+                        {(
+                          (product.price! - (product.discount || 0)) *
+                          product.qty
+                        ).toFixed(2)}{" "}
+                        DH
                       </td>
                     </tr>
                   ))

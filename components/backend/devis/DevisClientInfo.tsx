@@ -1,3 +1,4 @@
+import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,15 +9,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useDevisStepFormStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
+import { getData } from "@/lib/getData";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CompanyClient } from "@prisma/client";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,10 +43,32 @@ const devisClientSchema = z.object({
 
 const DevisClientInfo = () => {
   const [loading, setLoading] = useState(false);
+  const [companyClient, setCompanyClients] = useState<CompanyClient[]>([]);
+  const [isChoosingFromClient, setIsChoosingFromClient] =
+    useState<boolean>(false);
+  const [selectedClient, setSelectedClient] = useState<CompanyClient | null>(
+    null
+  );
+  const [loadingClient, setLoadingClient] = useState(false);
+
   const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user.id;
   const nomDuCaissier = session?.user.nom;
+
+  useEffect(() => {
+    setLoadingClient(true);
+    const fetchCompanyClient = async () => {
+      try {
+        const companyClients = await getData("/user/companyClient");
+        setCompanyClients(companyClients);
+        setLoadingClient(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCompanyClient();
+  }, []);
 
   const form = useForm<z.infer<typeof devisClientSchema>>({
     resolver: zodResolver(devisClientSchema),
@@ -52,6 +85,17 @@ const DevisClientInfo = () => {
 
   const handlePrevious = () => {
     setCurrentStep(currentStep - 1);
+  };
+
+  const handleSelectClient = (clientId: string) => {
+    const selected = companyClient.find((client) => client.id === clientId);
+    if (selected) {
+      setSelectedClient(selected);
+      // Fill the form with selected client data
+      form.setValue("clientNom", selected.nom);
+      form.setValue("clientPrenom", selected.prenom);
+      form.setValue("clientTel", selected.tel);
+    }
   };
 
   const handleSubmit = async (data: z.infer<typeof devisClientSchema>) => {
@@ -165,6 +209,47 @@ const DevisClientInfo = () => {
               )}
             />
 
+            <div className="flex items-center gap-4">
+              <Button
+                type="button"
+                onClick={() => setIsChoosingFromClient((prev) => !prev)}
+                className="mt-6"
+              >
+                Choisir parmi les clients enregistrés
+              </Button>
+
+              {isChoosingFromClient ? (
+                <div>
+                  {loadingClient ? (
+                    <LoadingButton />
+                  ) : (
+                    <>
+                      {companyClient.length > 0 ? (
+                        <>
+                          <Label>Client enregistré</Label>
+                          <Select onValueChange={handleSelectClient}>
+                            <SelectTrigger className="w-[100px] md:w-[150px] ">
+                              <SelectValue
+                                placeholder={"Sélectionner un client"}
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {companyClient.map((client, idx) => (
+                                <SelectItem key={idx} value={client.id}>
+                                  {client.nom} {client.prenom}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </>
+                      ) : (
+                        <p className="text-red-500">Aucun client</p>
+                      )}
+                    </>
+                  )}
+                </div>
+              ) : null}
+            </div>
             <div className="flex justify-between">
               <Button type="button" onClick={handlePrevious} className="mt-6">
                 <ChevronLeft />
