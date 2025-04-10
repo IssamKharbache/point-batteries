@@ -31,11 +31,15 @@ const RecentVentes = ({ sales }: RecentVentesProps) => {
 
         <div className="flex gap-2">
           <div className="flex items-center gap-2">
+            <div className="bg-orange-500 w-4 h-4 rounded" />
+            <p>Avec retour et credit</p>
+          </div>
+          <div className="flex items-center gap-2">
             <div className="bg-yellow-200 w-4 h-4 rounded" />
             <p>Avec Retour</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="bg-red-500 w-4 h-4 rounded" />
+            <div className="bg-red-300 w-4 h-4 rounded" />
             <p>A Credit</p>
           </div>
         </div>
@@ -63,15 +67,17 @@ const RecentVentes = ({ sales }: RecentVentesProps) => {
               <tr
                 key={vente.id}
                 className={`
-               hover:bg-gray-100 
-               ${
-                 vente.returns.length > 0
-                   ? "bg-yellow-100 hover:bg-yellow-200 border-l-4 border-yellow-500" // Yellow with border
-                   : vente.paymentType === "ACREDIT"
-                   ? "bg-red-200 hover:bg-red-300 border-l-4 border-red-500" // Red with border
-                   : ""
-               }
-             `}
+                hover:bg-gray-100 
+                ${
+                  vente.returns.length > 0 && vente.paymentType === "ACREDIT"
+                    ? "bg-orange-100 hover:bg-orange-200 border-l-4 border-orange-500"
+                    : vente.returns.length > 0
+                    ? "bg-yellow-100 hover:bg-yellow-200 border-l-4 border-yellow-500"
+                    : vente.paymentType === "ACREDIT"
+                    ? "bg-red-100 hover:bg-red-200  border-red-500"
+                    : ""
+                }
+              `}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {vente.venteRef}
