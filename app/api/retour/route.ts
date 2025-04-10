@@ -76,7 +76,7 @@ export const POST = async (req: NextRequest) => {
     );
 
     // Generate a unique vente reference
-    const returnRef = await generateReturnReference();
+    const returnRef = await generateReturnReference(returnFrom);
 
     // Create the vente and link products, then update stock & vente count
     const newReturn = await db.$transaction(async (prisma) => {

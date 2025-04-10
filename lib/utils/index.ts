@@ -135,12 +135,17 @@ export async function generateUniqueDevisRef() {
   return `DV-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
 }
 
-export async function generateReturnReference(): Promise<string> {
+export async function generateReturnReference(
+  returnFrom: "vente" | "stock" = "vente"
+): Promise<string> {
   const currentYear = new Date().getFullYear().toString().slice(-2);
+  const prefix = returnFrom === "vente" ? "RV" : "RS";
+
+  // Find the last return with the same prefix and year
   const lastReturn = await db.return.findFirst({
     where: {
       returnRef: {
-        startsWith: "R",
+        startsWith: prefix,
         contains: `/${currentYear}`,
       },
     },
@@ -155,12 +160,16 @@ export async function generateReturnReference(): Promise<string> {
   let nextNumber = 1;
   if (lastReturn) {
     const lastRef = lastReturn.returnRef;
-    const lastNumber = parseInt(lastRef.split("/")[0].substring(1));
-    nextNumber = lastNumber + 1;
+    // Extract the number part (after prefix and before slash)
+    const numberPart = lastRef.split("-")[1].split("/")[0];
+    const lastNumber = parseInt(numberPart);
+    if (!isNaN(lastNumber)) {
+      nextNumber = lastNumber + 1;
+    }
   }
 
-  // 3. Format the reference
-  return `R-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
+  // Format the reference with 4-digit number and current year
+  return `${prefix}-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
 }
 
 export function formatFrenchDate(isoDate: Date) {
