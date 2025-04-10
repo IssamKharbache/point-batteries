@@ -131,7 +131,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
     return (
       total +
       vente.products.reduce((venteTotal, product) => {
-        return venteTotal + (product.price - product.discount) * product.qty;
+        return venteTotal + product.price * product.qty - product.discount;
       }, 0)
     );
   }, 0);
@@ -292,7 +292,10 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
                     </TableCell>
                     <TableCell>{product.qty}</TableCell>
                     <TableCell>
-                      {(product.price - product.discount).toFixed(2)} DH
+                      {(product.price * product.qty - product.discount).toFixed(
+                        2
+                      )}{" "}
+                      DH
                     </TableCell>
                     <TableCell>{vente.nomDuCaissier}</TableCell>
                   </TableRow>
