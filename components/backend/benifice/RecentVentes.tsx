@@ -1,5 +1,5 @@
 import { formatDate } from "@/lib/utils/index";
-import { Return } from "@prisma/client";
+import { PaymentType, Return } from "@prisma/client";
 import React from "react";
 
 interface RecentVente {
@@ -8,6 +8,7 @@ interface RecentVente {
   clientNom: string;
   clientPrenom: string;
   venteBenifits: number | null;
+  paymentType: PaymentType;
   returns: Return[];
   venteRef: string;
   createdAt: Date;
@@ -28,9 +29,15 @@ const RecentVentes = ({ sales }: RecentVentesProps) => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="bg-yellow-200 w-5 h-5 rounded-lg" />
-          <p>Avec Retour</p>
+        <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <div className="bg-yellow-200 w-4 h-4 rounded" />
+            <p>Avec Retour</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="bg-red-500 w-4 h-4 rounded" />
+            <p>A Credit</p>
+          </div>
         </div>
       </div>
       <div className="border rounded-lg overflow-hidden">
@@ -55,11 +62,16 @@ const RecentVentes = ({ sales }: RecentVentesProps) => {
             {sales.map((vente) => (
               <tr
                 key={vente.id}
-                className={`hover:bg-gray-100 ${
-                  vente.returns.length > 0
-                    ? "bg-yellow-100 hover:bg-yellow-200"
-                    : ""
-                }`}
+                className={`
+               hover:bg-gray-100 
+               ${
+                 vente.returns.length > 0
+                   ? "bg-yellow-100 hover:bg-yellow-200 border-l-4 border-yellow-500" // Yellow with border
+                   : vente.paymentType === "ACREDIT"
+                   ? "bg-red-200 hover:bg-red-300 border-l-4 border-red-500" // Red with border
+                   : ""
+               }
+             `}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {vente.venteRef}

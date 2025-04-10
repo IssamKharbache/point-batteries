@@ -1,27 +1,40 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Info } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface BenificeCardProps {
   grossBenefit: number;
   netBenefit: number;
   totalCosts: number;
-  salesCount: number;
+  creditSalesTotal: number;
+  creditSalesCount: number;
 }
 
 const BenificeCards = ({
   grossBenefit,
   netBenefit,
   totalCosts,
-  salesCount,
+  creditSalesTotal,
+  creditSalesCount,
 }: BenificeCardProps) => {
+  const adjustedNetBenefit = netBenefit - creditSalesTotal;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full">
       {/* Gross Benefit Card */}
       <Card className="min-w-0 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
         <CardHeader className="pb-2 px-4">
-          <CardTitle className="text-sm font-medium text-gray-500 truncate">
-            Bénéfice Brut
-          </CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-sm font-medium text-gray-500 truncate">
+              Bénéfice Brut
+            </CardTitle>
+          </div>
         </CardHeader>
         <CardContent className="px-4">
           <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
@@ -29,6 +42,35 @@ const BenificeCards = ({
           </div>
           <p className="text-xs text-gray-500 mt-1 truncate">
             Bénéfice des ventes
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Credit Sales Card */}
+      <Card className="min-w-0 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+        <CardHeader className="pb-2 px-4">
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-sm font-medium text-gray-500 truncate">
+              Ventes à Crédit
+            </CardTitle>
+            <TooltipProvider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-gray-400" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Montant total des ventes non encore payées</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </CardHeader>
+        <CardContent className="px-4">
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate text-red-600">
+            -{creditSalesTotal.toFixed(2)} DH
+          </div>
+          <p className="text-xs text-gray-500 mt-1 truncate">
+            {creditSalesCount} vente(s) à crédit
           </p>
         </CardContent>
       </Card>
@@ -41,47 +83,42 @@ const BenificeCards = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="px-4">
-          <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate text-amber-600">
             {totalCosts.toFixed(2)} DH
           </div>
           <p className="text-xs text-gray-500 mt-1 truncate">Dépenses</p>
         </CardContent>
       </Card>
 
-      {/* Net Benefit Card */}
+      {/* Adjusted Net Benefit Card */}
       <Card className="min-w-0 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
         <CardHeader className="pb-2 px-4">
-          <CardTitle className="text-sm font-medium text-gray-500 truncate">
-            Bénéfice Net
-          </CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-sm font-medium text-gray-500 truncate">
+              Bénéfice Net
+            </CardTitle>
+            <TooltipProvider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-gray-400" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Après déduction des frais et des ventes à crédit</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </CardHeader>
         <CardContent className="px-4">
           <div
             className={`text-lg sm:text-xl lg:text-2xl font-bold truncate ${
-              netBenefit >= 0 ? "text-green-600" : "text-red-600"
+              adjustedNetBenefit >= 0 ? "text-green-600" : "text-red-600"
             }`}
           >
-            {netBenefit.toFixed(2)} DH
+            {adjustedNetBenefit.toFixed(2)} DH
           </div>
           <p className="text-xs text-gray-500 mt-1 truncate">
-            Après déduction des frais
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* Sales Count Card */}
-      <Card className="min-w-0 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-        <CardHeader className="pb-2 px-4">
-          <CardTitle className="text-sm font-medium text-gray-500 truncate">
-            Nombre de Ventes
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="px-4">
-          <div className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
-            {salesCount}
-          </div>
-          <p className="text-xs text-gray-500 mt-1 truncate">
-            Total des ventes
+            Bénéfice disponible
           </p>
         </CardContent>
       </Card>

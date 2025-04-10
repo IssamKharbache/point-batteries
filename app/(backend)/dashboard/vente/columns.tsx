@@ -76,14 +76,22 @@ export const columns: ColumnDef<VenteType>[] = [
     accessorKey: "venteBenifits",
     header: "Benifices",
     cell: ({ row }) => {
-      const ben = row.original.venteBenifits;
+      let ben = row.original.venteBenifits;
+
+      if (row.original.paymentType === "ACREDIT") {
+        ben = -row.original.products.reduce(
+          (total, product) => total + product.price * product.qty,
+          0
+        );
+      }
+
       return (
         <p
           className={`font-semibold text-center rounded-full w-fit py-2 px-3 ${
-            ben < 0 ? "bg-red-500 " : "bg-green-500"
+            ben < 0 ? "bg-white  text-black  " : "bg-green-500"
           }`}
         >
-          {ben < 0 ? `- ${ben}` : `+ ${ben}`}dhs
+          {ben < 0 ? `- ${Math.abs(ben)}` : `+ ${ben}`}dhs
         </p>
       );
     },

@@ -111,6 +111,20 @@ const BenificeDashboard = ({
     0
   );
 
+  const creditSales = filteredSales.filter(
+    (vente) => vente.paymentType === "ACREDIT"
+  );
+  const creditSalesTotal = creditSales.reduce(
+    (sum, vente) =>
+      sum +
+      vente.products.reduce(
+        (productSum, product) =>
+          productSum + product.price * product.qty - product.discount,
+        0
+      ),
+    0
+  );
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -139,10 +153,10 @@ const BenificeDashboard = ({
           <BenificeCards
             grossBenefit={grossBenefit}
             netBenefit={netBenefit}
-            salesCount={salesCount}
             totalCosts={totalCosts}
+            creditSalesTotal={creditSalesTotal}
+            creditSalesCount={creditSales.length}
           />
-
           <BenificesGraphs stockValue={totalStockValue} avgSale={avgSale} />
           <RecentVentes sales={filteredSales} />
         </>
