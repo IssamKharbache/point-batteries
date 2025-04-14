@@ -39,6 +39,7 @@ import { Filter, Loader2 } from "lucide-react";
 import { useLoadingStore } from "@/context/store";
 import { PaginationDataTable } from "@/components/backend/table/PaginationDataTable";
 import { PaymentType } from "@prisma/client";
+import { fr } from "date-fns/locale";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -124,7 +125,7 @@ export function DataTable<TData>({
               >
                 <CalendarIcon />
                 {filterDate ? (
-                  format(filterDate, "PPP")
+                  format(filterDate, "PPP", { locale: fr }) // 👈 format with French locale
                 ) : (
                   <span>Choisir une date</span>
                 )}
@@ -138,10 +139,10 @@ export function DataTable<TData>({
                   table.getColumn("createdAt")?.setFilterValue(date)
                 }
                 initialFocus
+                locale={fr}
               />
             </PopoverContent>
           </Popover>
-
           <div className="relative flex items-center py-4">
             <Input
               placeholder="Filtrer par vente ref ou nom du client..."

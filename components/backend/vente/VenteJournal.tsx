@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import {
@@ -20,13 +20,7 @@ import Image from "next/image";
 import { Loader2, Printer } from "lucide-react";
 import axios from "axios";
 import { VenteType } from "@/app/(backend)/dashboard/vente/columns";
-
-interface Product {
-  designationProduit: string;
-  qty: number;
-  price: number;
-  discount: number;
-}
+import { fr } from "date-fns/locale";
 
 interface VenteJournalProps {
   ventes: VenteType[];
@@ -52,7 +46,9 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
     setStartDate(null);
     setEndDate(null);
   };
-
+  useEffect(() => {
+    registerLocale("fr", fr);
+  }, []);
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -181,6 +177,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
               dateFormat="yyyy-MM-dd"
               customInput={<CustomDatePickerButton />}
               className="w-full"
+              locale="fr"
             />
           </div>
           <div className="flex-1">
@@ -198,6 +195,7 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
               dateFormat="yyyy-MM-dd"
               customInput={<CustomDatePickerButton />}
               className="w-full"
+              locale="fr"
             />
           </div>
         </div>
