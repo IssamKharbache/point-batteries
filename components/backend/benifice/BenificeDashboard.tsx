@@ -44,7 +44,7 @@ const BenificeDashboard = ({
       setSales(newSales);
       setCosts(newCosts);
       setProducts(newProducts);
-      setFilteredSales(newSales); // Don't filter here - we'll filter in the effect
+      setFilteredSales(newSales);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {

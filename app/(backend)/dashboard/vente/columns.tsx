@@ -80,7 +80,8 @@ export const columns: ColumnDef<VenteType>[] = [
 
       if (row.original.paymentType === "ACREDIT") {
         ben = -row.original.products.reduce(
-          (total, product) => total + product.price * product.qty,
+          (total, product) =>
+            total + product.price * product.qty - product.discount,
           0
         );
       }
