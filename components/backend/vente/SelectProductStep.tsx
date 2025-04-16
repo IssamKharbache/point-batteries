@@ -14,6 +14,8 @@ interface ProductSelection {
   codeGarantie: string;
   useManualPrice: boolean;
   manualPrice: string;
+  hasCommission: boolean;
+  commission: string;
 }
 
 interface SelectProductProps {
@@ -77,11 +79,53 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
               codeGarantie: "",
               useManualPrice: false,
               manualPrice: "",
+              hasCommission: false,
+              commission: "0",
             },
           };
 
       localStorage.setItem("selectedProducts", JSON.stringify(newSelection));
       return newSelection;
+    });
+  };
+
+  const handleCommissionCheckboxChange = (
+    refProduct: string,
+    checked: boolean
+  ) => {
+    setProductsSelected((prev) => {
+      const updatedSelection = {
+        ...prev,
+        [refProduct]: {
+          ...prev[refProduct],
+          hasCommission: checked,
+          commission: checked ? prev[refProduct].commission || "0" : "0",
+        },
+      };
+
+      localStorage.setItem(
+        "selectedProducts",
+        JSON.stringify(updatedSelection)
+      );
+      return updatedSelection;
+    });
+  };
+
+  const handleCommissionChange = (refProduct: string, value: string) => {
+    setProductsSelected((prev) => {
+      const updatedSelection = {
+        ...prev,
+        [refProduct]: {
+          ...prev[refProduct],
+          commission: value,
+        },
+      };
+
+      localStorage.setItem(
+        "selectedProducts",
+        JSON.stringify(updatedSelection)
+      );
+      return updatedSelection;
     });
   };
 
@@ -223,6 +267,9 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
 
         const quantity = parseInt(productSelected[refProduct].quantity);
         const discount = parseFloat(productSelected[refProduct].discount);
+        const commission = productSelected[refProduct].hasCommission
+          ? parseFloat(productSelected[refProduct].commission) || 0
+          : 0;
 
         const price =
           productSelected[refProduct].useManualPrice &&
@@ -233,7 +280,8 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
 
         const totalAchatPrice = product.achatPrice * quantity;
         const totalPriceAfterDiscount = price * quantity - (discount || 0);
-        const productVenteBenifit = totalPriceAfterDiscount - totalAchatPrice;
+        const productVenteBenifit =
+          totalPriceAfterDiscount - totalAchatPrice - commission;
 
         return {
           refProduct,
@@ -249,13 +297,13 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
       .filter(
         (product): product is NonNullable<typeof product> => product !== null
       );
-
     setProductsToSubmit(productsToSubmit);
 
     setProductsToSubmit(productsToSubmit);
 
     if (productsToSubmit.length > 0) {
       handleNext();
+      console.log(productsToSubmit);
     } else {
       toast({
         title: "Erreur",
@@ -351,7 +399,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                           <h1 className="font-semibold text-gray-700 text-sm md:text-md uppercase">
                             {product.designationProduit}
                           </h1>
-
                           <div>
                             <Input
                               placeholder="Quantité"
@@ -376,7 +423,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               </div>
                             )}
                           </div>
-
                           <div>
                             <Input
                               placeholder="Code Garantie"
@@ -392,7 +438,6 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               }
                             />
                           </div>
-
                           <div>
                             <Input
                               placeholder="Remise"
@@ -410,16 +455,65 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               }
                             />
                           </div>
+                          <div className="flex flex-col ">
+                            {/* Manual Price Checkbox */}
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="checkbox"
+                                id={`manual-price-${refProduct}`}
+                                checked={
+                                  productSelected[refProduct].useManualPrice
+                                }
+                                onChange={(e) =>
+                                  handleCheckboxChange(
+                                    refProduct,
+                                    e.target.checked
+                                  )
+                                }
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              />
+                              <label
+                                htmlFor={`manual-price-${refProduct}`}
+                                className="text-sm font-medium text-gray-700"
+                              >
+                                Prix manuel
+                              </label>
+                            </div>
+                            {productSelected[refProduct].useManualPrice && (
+                              <div className="mt-2">
+                                <p className="text-xs text-muted-foreground mb-1">
+                                  Prix normal: {product.price} DH
+                                </p>
+                                <Input
+                                  placeholder="Prix manuel"
+                                  className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12"
+                                  type="number"
+                                  min={0}
+                                  value={
+                                    productSelected[refProduct].manualPrice
+                                  }
+                                  onClick={(e) => e.stopPropagation()}
+                                  onChange={(e) =>
+                                    handleManualPriceChange(
+                                      refProduct,
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </div>
+                            )}
 
-                          <div className="flex items-center gap-2 mt-2">
+                            {/* Commission Checkbox */}
+                          </div>
+                          <div className="flex items-center space-x-2">
                             <input
                               type="checkbox"
-                              id={`manual-price-${refProduct}`}
+                              id={`commission-${refProduct}`}
                               checked={
-                                productSelected[refProduct].useManualPrice
+                                productSelected[refProduct].hasCommission
                               }
                               onChange={(e) =>
-                                handleCheckboxChange(
+                                handleCommissionCheckboxChange(
                                   refProduct,
                                   e.target.checked
                                 )
@@ -427,27 +521,31 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
                               className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                             />
                             <label
-                              htmlFor={`manual-price-${refProduct}`}
-                              className="text-sm text-gray-700"
+                              htmlFor={`commission-${refProduct}`}
+                              className="text-sm font-medium text-gray-700"
                             >
-                              Prix manuel
+                              Commission
                             </label>
                           </div>
-
-                          {productSelected[refProduct].useManualPrice && (
-                            <div className="mt-2">
-                              <p className="text-xs text-muted-foreground mb-1">
-                                Prix normal: {product.price} DH
-                              </p>
+                          {productSelected[refProduct].hasCommission && (
+                            <div className="w-full max-w-xs">
+                              <label
+                                htmlFor={`commission-amount-${refProduct}`}
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                              >
+                                Montant de commission (DH)
+                              </label>
                               <Input
-                                placeholder="Prix manuel"
-                                className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-12"
+                                id={`commission-amount-${refProduct}`}
+                                placeholder="50.00"
+                                className="px-4 bg-white w-full border-2 border-gray-300 rounded-md h-10"
                                 type="number"
                                 min={0}
-                                value={productSelected[refProduct].manualPrice}
+                                step="0.01"
+                                value={productSelected[refProduct].commission}
                                 onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
-                                  handleManualPriceChange(
+                                  handleCommissionChange(
                                     refProduct,
                                     e.target.value
                                   )
