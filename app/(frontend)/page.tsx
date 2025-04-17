@@ -10,6 +10,7 @@ import DynamicProductList from "@/components/frontend/products/DynamicProductLis
 import DynamicCategoryProducts from "@/components/frontend/products/DynamicCategoryProducts";
 import BrandsShop from "@/components/backend/UI/BrandsShop";
 import WhatsAppPopup from "@/components/frontend/UI/WhatsAppPopup";
+import SloganHighlight from "@/components/frontend/UI/SloganHighlight";
 
 const frontHomePage = async () => {
   const banner = await getData("/banner");
@@ -28,6 +29,7 @@ const frontHomePage = async () => {
         <div>
           <Banner bannerData={banner} />
         </div>
+        <SloganHighlight />
         <BrandsShop />
 
         {/* banner */}
