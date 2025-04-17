@@ -7,12 +7,11 @@ import React from "react";
 
 const page = async () => {
   const data: ProductData[] = await getData("/product/all");
-  //getting the products that have isAchat true
-  const filteredProduct = data.filter((product) => product.isAchatProduct);
+
   return (
     <section>
       <PageHeader name="Les produit achat" />
-      <AddAchat productsAchat={filteredProduct} />
+      <AddAchat productsAchat={data} />
     </section>
   );
 };

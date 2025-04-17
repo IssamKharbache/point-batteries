@@ -20,7 +20,6 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { FaCartPlus } from "react-icons/fa6";
 
-import DOMPurify from "dompurify";
 import { RichTextRenderer } from "../RichTextRenderer";
 
 interface ProductDetailsProps {

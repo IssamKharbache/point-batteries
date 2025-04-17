@@ -11,6 +11,7 @@ import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface addAchatProps {
   productsAchat: ProductData[];
@@ -22,7 +23,6 @@ interface ProductSelection {
 }
 
 const AddAchat = ({ productsAchat }: addAchatProps) => {
-  //states
   const [search, setSearch] = React.useState("");
   const [productSelected, setProductsSelected] = React.useState<{
     [refProduct: string]: ProductSelection;
@@ -30,24 +30,38 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
   const [filteredProducts, setFilteredProducts] =
     React.useState<ProductData[]>(productsAchat);
   const [loading, setLoading] = useState<boolean>(false);
-
-  //use Effect to make search functionality
-  React.useEffect(() => {
-    setFilteredProducts(
-      productsAchat.filter(
-        (product) =>
-          product.refProduct &&
-          product.refProduct.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search, productsAchat]);
-  //router
+  const [productType, setProductType] = useState<"achat" | "all">("achat");
+  // Router and toast
   const router = useRouter();
-  //
   const { toast } = useToast();
   const { data: session } = useSession();
   const userId = session?.user.id;
 
+  // Filter products based on search and product type
+  React.useEffect(() => {
+    const searchWords = search
+      .toLowerCase()
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    let filtered = productsAchat.filter((product) => {
+      const searchableText = [product.designationProduit, product.refProduct]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchWords.every((word) => searchableText.includes(word));
+    });
+
+    filtered = filtered.filter((product) =>
+      productType === "achat" ? product.isAchatProduct : !product.isAchatProduct
+    );
+
+    setFilteredProducts(filtered);
+  }, [search, productsAchat, productType]);
+
+  // Handlers
   const handleSelectedProduct = (refProduct: string) => {
     setProductsSelected((prev) => {
       const prevProduct = prev[refProduct];
@@ -82,7 +96,7 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    // Validate if all selected products have both price and quantity filled
+    // Validate if all selected products have quantity filled
     const incompleteProducts = Object.entries(productSelected).filter(
       ([, { quantity }]) => !quantity
     );
@@ -138,100 +152,147 @@ const AddAchat = ({ productsAchat }: addAchatProps) => {
   };
 
   return (
-    <div>
-      <div className="flex gap-8 container mx-auto py-5 items-end justify-end ">
-        {loading ? (
-          <LoadingButton
-            textColor="text-white"
-            bgColor="bg-primary"
-            className="px-8"
-          />
-        ) : (
-          <Button
-            disabled={Object.values(productSelected).every(
-              (product) => !product.selected
-            )}
-            onClick={handleSubmit}
-            className="py-6 rounded"
-          >
-            Créer
-          </Button>
-        )}
-        <Input
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Chercher par reference..."
-          className="max-w-md px-4 "
-        />
-      </div>
-      <div className="space-y-2 bg-white p-10 rounded-md border-2 md:w-[750px] mt-8 container mx-auto py-5 ">
-        <h1 className="text-xl text-start text-gray-600 ">Ajouter Achat</h1>
-        <hr className="text-gray-400 " />
-        <div className="container mx-auto py-10 ">
-          {filteredProducts.length === 0 && (
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-center font-semibold text-md text-gray-500">
-                Aucun produit d&apos;achat n&apos;est disponible
-              </div>
-              <Link href="/dashboard/achat/produit/ajouter">
-                <Button className="mt-4 rounded-2xl px-5">Ajouter</Button>
-              </Link>
-            </div>
-          )}
-          {filteredProducts.map((product, idx) => (
-            <div
-              key={idx}
-              className={`flex gap-4  bg-slate-100 m-4 rounded p-5 cursor-pointer `}
-            >
-              {productSelected[product?.refProduct || ""] ? (
-                <div
-                  onClick={() => {
-                    handleSelectedProduct(product.refProduct || "");
-                  }}
-                  className="flex items-center justify-center w-5 h-5 fill-black bg-black rounded"
-                >
-                  <Check className="text-white" size={15} />
-                </div>
-              ) : (
-                <div
-                  onClick={() => {
-                    handleSelectedProduct(product.refProduct || "");
-                  }}
-                  className="p-2 border-2 border-black/60 rounded h-5"
-                ></div>
-              )}
+    <div className="container mx-auto px-4 py-8">
+      {/* Header with tabs and search */}
+      <div className="flex flex-col gap-8 mb-8">
+        <h1 className="text-2xl font-bold text-gray-800">Ajouter un Achat</h1>
 
-              <div className="space-y-4">
-                <h1 className="font-semibold">{product.designationProduit}</h1>
-                <div className="flex items-center gap-4">
-                  <p>Ref : </p>
-                  <p className="font-semibold">{product.refProduct}</p>
-                </div>
-                {productSelected[product?.refProduct || ""] && (
-                  <div className="flex items-center gap-8">
-                    <Input
-                      placeholder="Quantite"
-                      className="px-4 bg-white max-w-sm"
-                      type="number"
-                      min={0}
-                      value={
-                        productSelected[product.refProduct ?? ""]?.quantity ||
-                        ""
-                      }
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) =>
-                        handleInputChange(
-                          product.refProduct,
-                          "quantity",
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+        <div className="flex flex-col  gap-6">
+          <Tabs
+            defaultValue="achat"
+            className="w-full"
+            onValueChange={(value) => setProductType(value as "achat" | "all")}
+          >
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 h-12">
+              <TabsTrigger
+                value="achat"
+                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary"
+              >
+                Produits Achat
+              </TabsTrigger>
+              <TabsTrigger
+                value="all"
+                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary"
+              >
+                Tous les Produits
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
+            <Input
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher par référence ou designation..."
+              className="w-full md:w-80 px-5"
+            />
+
+            {loading ? (
+              <LoadingButton
+                textColor="text-white"
+                bgColor="bg-primary"
+                className="px-8 h-10"
+              />
+            ) : (
+              <Button
+                disabled={Object.values(productSelected).every(
+                  (product) => !product.selected
                 )}
-              </div>
-            </div>
-          ))}
+                onClick={handleSubmit}
+                className="h-10 px-6"
+              >
+                Créer Achat
+              </Button>
+            )}
+          </div>
         </div>
+      </div>
+
+      {/* Products list */}
+      <div className="bg-white rounded-lg shadow-sm p-6 border">
+        {filteredProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="text-center font-semibold text-lg text-gray-500 mb-4">
+              Aucun produit disponible
+            </div>
+            <Link href="/dashboard/achat/produit/ajouter">
+              <Button className="rounded-lg px-6 py-2">
+                Ajouter un Produit
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredProducts.map((product, idx) => (
+              <div
+                onClick={() => handleSelectedProduct(product.refProduct || "")}
+                key={idx}
+                className={`flex items-start gap-4 p-4 rounded-lg transition-all cursor-pointer  ${
+                  productSelected[product?.refProduct || ""]
+                    ? "bg-blue-50 border border-blue-200"
+                    : "bg-gray-50 hover:bg-gray-100"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 flex items-center justify-center w-5 h-5 mt-1 rounded ${
+                    productSelected[product?.refProduct || ""]
+                      ? "bg-primary"
+                      : "border-2 border-gray-400"
+                  }`}
+                >
+                  {productSelected[product?.refProduct || ""] && (
+                    <Check className="text-white" size={15} />
+                  )}
+                </div>
+
+                <div className="flex-grow">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-800">
+                        {product.designationProduit}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Réf: {product.refProduct}
+                      </p>
+                    </div>
+                    {product.isAchatProduct && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Produit Achat
+                      </span>
+                    )}
+                  </div>
+
+                  {productSelected[product?.refProduct || ""] && (
+                    <div className="mt-3">
+                      <div className="flex items-center gap-4">
+                        <label className="text-sm font-medium text-gray-700">
+                          Quantité:
+                        </label>
+                        <Input
+                          placeholder="Quantité"
+                          className="w-32 bg-white px-3"
+                          type="number"
+                          min={0}
+                          value={
+                            productSelected[product.refProduct ?? ""]
+                              ?.quantity || ""
+                          }
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) =>
+                            handleInputChange(
+                              product.refProduct,
+                              "quantity",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
