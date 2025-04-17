@@ -47,12 +47,33 @@ export const generateProductReference = (marque: string): string => {
   return `${prefix}-${formattedMarque}-${uniqueId}`;
 };
 
-export const generateReferenceAchat = () => {
-  const prefix = "ACHAT";
-  const uniqueId = Math.floor(10000 + Math.random() * 90000);
-  return `${prefix}-${uniqueId}`;
-};
+export const generateUniqueAchatRef = async () => {
+  const currentYear = new Date().getFullYear().toString().slice(-2);
 
+  const lastAchat = await db.achat.findFirst({
+    where: {
+      refAchat: {
+        startsWith: "ACHAT-",
+        contains: `/${currentYear}`,
+      },
+    },
+    orderBy: {
+      refAchat: "desc",
+    },
+    select: {
+      refAchat: true,
+    },
+  });
+
+  let nextNumber = 1;
+  if (lastAchat) {
+    const lastRef = lastAchat.refAchat;
+    const lastNumber = parseInt(lastRef.split("/")[0].split("-")[1]);
+    nextNumber = lastNumber + 1;
+  }
+
+  return `ACHAT-${nextNumber.toString().padStart(4, "0")}/${currentYear}`;
+};
 export const formatDate = (inputDate: string | Date): string => {
   const date = inputDate instanceof Date ? inputDate : new Date(inputDate);
   const day = String(date.getUTCDate()).padStart(2, "0");

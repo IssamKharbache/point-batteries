@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Cost, Product, Vente } from "@prisma/client";
+import { Cost, Product } from "@prisma/client";
 import BenificeCards from "./BenificeCards";
 import BenificesGraphs from "./BenificesGraphs";
 import RecentVentes from "./RecentVentes";
@@ -40,10 +40,12 @@ const BenificeDashboard = ({
         getData("/frais"),
         getData("/product/all"),
       ]);
-
+      const filtereredNewProducts = newProducts.filter(
+        (product: Product) => !product.isAchatProduct
+      );
       setSales(newSales);
       setCosts(newCosts);
-      setProducts(newProducts);
+      setProducts(filtereredNewProducts);
       setFilteredSales(newSales);
     } catch (error) {
       console.error("Error fetching data:", error);

@@ -1,5 +1,6 @@
 "use client";
 import AchatProductsDetails from "@/components/backend/achat/AchatProductsDetails";
+import TableActions from "@/components/backend/table/TableActions";
 import { formatDate } from "@/lib/utils/index";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -46,6 +47,13 @@ export const columns: ColumnDef<AchatType>[] = [
           date={row.original.createdAt}
         />
       );
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return <TableActions endpoint={`achat/${row.original.id}`} />;
     },
   },
 ];

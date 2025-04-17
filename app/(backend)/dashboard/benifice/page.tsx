@@ -9,6 +9,9 @@ const page = async () => {
   const costs = await getData("/frais");
 
   const products: Product[] = await getData("/product/all");
+  const notProductsAchat = products.filter(
+    (product) => !product.isAchatProduct
+  );
 
   return (
     <section className="container mx-auto py-8">
@@ -16,7 +19,7 @@ const page = async () => {
       <BenificeDashboard
         initialSales={sales}
         initialCosts={costs}
-        initialProducts={products}
+        initialProducts={notProductsAchat}
       />
     </section>
   );

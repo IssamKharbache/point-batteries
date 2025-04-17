@@ -1,7 +1,7 @@
-import { generateReferenceAchat } from "./../../../lib/utils/index";
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Product } from "@prisma/client";
 import db from "@/lib/db";
+import { generateUniqueAchatRef } from "@/lib/utils/index";
 
 const prisma = new PrismaClient();
 
@@ -45,7 +45,7 @@ export const POST = async (req: NextRequest) => {
       })
     );
 
-    const refAchat = generateReferenceAchat();
+    const refAchat = await generateUniqueAchatRef();
     // Create the achat and link products
     const newAchat = await prisma.achat.create({
       data: {

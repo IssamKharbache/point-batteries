@@ -55,6 +55,7 @@ const AddProductAchat = ({ categorieData }: ProductDataProps) => {
     setLoading(true);
     const refProduct = generateProductReference(data.marque);
     const productSlug = createSlug(data.designationProduit);
+
     try {
       const res = await axios.post("/api/product/add", {
         ...data,

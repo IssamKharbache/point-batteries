@@ -6,11 +6,9 @@ import { getData } from "@/lib/getData";
 import React from "react";
 
 const page = async () => {
-  const data: ProductData[] = await getData("/product");
+  const data: ProductData[] = await getData("/product/all");
   //getting the products that have isAchat true
-  const filteredProduct = data.filter(
-    (product) => product.isAchatProduct === true
-  );
+  const filteredProduct = data.filter((product) => product.isAchatProduct);
   return (
     <section>
       <PageHeader name="Les produit achat" />

@@ -8,11 +8,10 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
 const page = async () => {
-  const data: ProductData[] = await getData("/product");
+  const data: ProductData[] = await getData("/product/all");
+
   //getting the products that have isAchat true
-  const filteredProduct = data.filter(
-    (product) => product.isAchatProduct === true
-  );
+  const filteredProduct = data.filter((product) => product.isAchatProduct);
 
   return (
     <section>
