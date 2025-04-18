@@ -26,14 +26,14 @@ const frontHomePage = async () => {
       <div className="max-w-[1200px] mx-auto px-10 md:px-5 2xl:p-0">
         {/* Fetch bookmarks specifically for the logged in user */}
         {userId && <FetchBookmarks userId={userId} />}
+        {/* banner */}
         <div>
           <Banner bannerData={banner} />
         </div>
+        {/* slogan */}
         <SloganHighlight />
+        {/* brands */}
         <BrandsShop />
-
-        {/* banner */}
-
         {/* best selling products */}
         <DynamicProductList initialProducts={products} />
         {/* category products */}

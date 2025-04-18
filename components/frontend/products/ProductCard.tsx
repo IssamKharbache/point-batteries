@@ -41,7 +41,7 @@ const ProductCard = ({ productsData, categoryTitle }: ProductsProps) => {
             <ChevronLeft />
           </button>
 
-          <p className="capitalize font-semibold text-md md:hidden">
+          <p className="capitalize font-semibold text-sm text-center md:hidden">
             {categoryTitle}
           </p>
 

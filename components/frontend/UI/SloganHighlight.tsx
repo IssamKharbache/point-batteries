@@ -81,19 +81,7 @@ const PremiumSloganBanner = () => {
           <motion.div
             variants={itemVariants}
             className="w-full max-w-2xl mx-auto mb-8"
-          >
-            <div className="relative h-16 md:h-20 bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg rounded-md overflow-hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.1)_100%)]"></div>
-              <div className="h-full flex items-center justify-center">
-                <h2 className="text-2xl md:text-3xl text-white font-extrabold tracking-wider uppercase text-center">
-                  Notre Promesse
-                </h2>
-              </div>
-              {/* Ribbon ends */}
-              <div className="absolute -left-4 top-0 h-full w-8 bg-blue-800 skew-x-12 origin-top"></div>
-              <div className="absolute -right-4 top-0 h-full w-8 bg-blue-800 -skew-x-12 origin-top"></div>
-            </div>
-          </motion.div>
+          ></motion.div>
 
           {/* Words with icons in cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 px-4 md:px-0">
