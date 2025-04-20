@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { format, startOfMonth, endOfMonth } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -16,8 +16,11 @@ import LoadingButton from "@/components/frontend/buttons/LoadingButton";
 import { useLoadingStore } from "@/context/store";
 import { useToast } from "@/hooks/use-toast";
 import Swal from "sweetalert2";
-import { Trash2 } from "lucide-react";
+import { Trash2, Download } from "lucide-react";
 import { Cost } from "@prisma/client";
+import { useReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const CostsByMonth = () => {
   const [costs, setCosts] = useState<Cost[]>([]);
@@ -29,8 +32,21 @@ const CostsByMonth = () => {
   const [loading, setLoading] = useState(false);
   const { loading: loadingStore, setLoading: setLoadingStore } =
     useLoadingStore();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
+
+  const handlePrint = useReactToPrint({
+    contentRef,
+    documentTitle: `Frais_${selectedMonth}`,
+    pageStyle: `
+      @page { size: A4; margin: 10mm; }
+      @media print {
+        body { -webkit-print-color-adjust: exact; }
+        .no-print { display: none !important; }
+      }
+    `,
+  });
 
   // Fetch all costs on component mount
   const fetchCosts = async () => {
@@ -135,7 +151,14 @@ const CostsByMonth = () => {
   return (
     <div className="space-y-4">
       {/* Month Selection Dropdown */}
-      <div className="flex justify-end mt-8 mr-12">
+      <div className="flex justify-between mt-8 mx-8">
+        <Button
+          onClick={() => handlePrint()}
+          className="flex items-center gap-2 no-print"
+        >
+          <Download size={16} />
+          Imprimer/PDF
+        </Button>
         <Select
           value={selectedMonth}
           onValueChange={(value) => setSelectedMonth(value)}
@@ -157,7 +180,14 @@ const CostsByMonth = () => {
       {loading || loadingStore ? (
         <LoadingButton />
       ) : (
-        <div className="m-8">
+        <div className="m-8" ref={contentRef}>
+          <Image
+            src="/logopbsdark.png"
+            alt="Company Logo"
+            width={240}
+            height={80}
+            className="mx-auto mb-12"
+          />
           <h2 className="text-xl font-semibold mb-8 capitalize">
             Frais pour mois ,
             {format(new Date(selectedMonth), "MMMM yyyy", { locale: fr })}
@@ -175,14 +205,13 @@ const CostsByMonth = () => {
               {filteredCosts.length > 0 ? (
                 filteredCosts.map((cost) => (
                   <tr key={cost.id}>
-                    {/* Add key prop */}
                     <td className="border p-2 lowercase">
                       {cost.natureDuFrais}
                     </td>
                     <td className="border p-2">{cost.montant}</td>
                     <td className="flex items-center justify-between border p-2">
                       {format(new Date(cost.date), "PPP", { locale: fr })}
-                      <div>
+                      <div className="no-print">
                         <button
                           onClick={() => handleDelete(cost.id)}
                           className="flex items-center gap-2 font-medium"
@@ -202,14 +231,14 @@ const CostsByMonth = () => {
               )}
             </tbody>
           </table>
-          <div className="flex items-center justify-end  py-2 ">
+          <div className="flex items-center justify-end py-2">
             <span className="text-muted-foreground m-2">
               {`Total des frais pour le mois`}{" "}
               <span className="capitalize font-semibold text-blue-500">
                 {format(new Date(selectedMonth), "MMMM yyyy", { locale: fr })} :
               </span>
             </span>
-            <span className="font-bold ">{monthlyTotal.toFixed(2)} DH</span>
+            <span className="font-bold">{monthlyTotal.toFixed(2)} DH</span>
           </div>
         </div>
       )}
