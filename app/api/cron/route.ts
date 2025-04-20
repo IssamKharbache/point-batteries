@@ -27,7 +27,12 @@ export const GET = async () => {
       .filter((key) => !usedImageKeys.has(key));
 
     if (unusedImages.length === 0) {
-      return Response.json({ message: "No unused images found" });
+      return Response.json(
+        { message: "No unused images found" },
+        {
+          status: 200,
+        }
+      );
     }
 
     // Delete unused images from UploadThing
