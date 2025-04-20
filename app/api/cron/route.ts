@@ -33,10 +33,15 @@ export const GET = async () => {
     // Delete unused images from UploadThing
     await utApi.deleteFiles(unusedImages);
 
-    return Response.json({
-      message: "Unused images deleted",
-      deleted: unusedImages,
-    });
+    return Response.json(
+      {
+        message: "Unused images deleted",
+        deleted: unusedImages,
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     console.error(error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
