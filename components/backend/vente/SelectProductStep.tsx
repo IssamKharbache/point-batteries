@@ -292,6 +292,9 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
           discount: productSelected[refProduct].discount,
           codeGarantie: productSelected[refProduct].codeGarantie,
           productVenteBenifit,
+          commission: productSelected[refProduct].hasCommission
+            ? commission
+            : 0,
         };
       })
       .filter(
