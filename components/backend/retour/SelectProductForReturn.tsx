@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProductData } from "../table/TableActions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,8 @@ interface SelectProductProps {
 
 const SelectProductStep = ({ productsVente }: SelectProductProps) => {
   const [search, setSearch] = useState("");
+  const [filteredProducts, setFilteredProducts] =
+    useState<ProductData[]>(productsVente);
   const [productSelected, setProductsSelected] = useState<{
     [refProduct: string]: ProductSelection;
   }>({});
@@ -38,17 +40,22 @@ const SelectProductStep = ({ productsVente }: SelectProductProps) => {
 
   const router = useRouter();
 
-  // Filter products based on search and available stock
-  const filteredProducts = productsVente.filter(
-    (product) =>
-      product.stock &&
-      product.stock > 0 &&
-      ((product.refProduct &&
-        product.refProduct.toLowerCase().includes(search.toLowerCase())) ||
-        product.designationProduit
-          ?.toLowerCase()
-          .includes(search.toLowerCase()))
-  );
+  useEffect(() => {
+    const searchWords = search.toLowerCase().split(/\s+/).filter(Boolean);
+
+    setFilteredProducts(
+      productsVente.filter((product) => {
+        if (!product.stock || product.stock <= 0) return false;
+
+        const productName = product.designationProduit?.toLowerCase() || "";
+        const productRef = product.refProduct?.toLowerCase() || "";
+
+        return searchWords.every(
+          (word) => productName.includes(word) || productRef.includes(word)
+        );
+      })
+    );
+  }, [search, productsVente]);
 
   // Handle selecting or deselecting a product
   const handleSelectedProduct = (product: ProductData) => {
