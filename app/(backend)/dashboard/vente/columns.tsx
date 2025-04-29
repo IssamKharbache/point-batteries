@@ -3,6 +3,7 @@
 import DeleteActionButton from "@/components/backend/table/DeleteActionButton";
 import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
 import { PaymentTypeEdit } from "@/components/backend/vente/PaymentTypeEdit";
+import VenteBenefits from "@/components/backend/vente/VenteBenifice";
 import { Button } from "@/components/ui/button";
 import { usePaymentTypeLoadingStore } from "@/context/store";
 import { formatDate } from "@/lib/utils/index";
@@ -76,25 +77,7 @@ export const columns: ColumnDef<VenteType>[] = [
     accessorKey: "venteBenifits",
     header: "Benifices",
     cell: ({ row }) => {
-      let ben = row.original.venteBenifits;
-
-      if (row.original.paymentType === "ACREDIT") {
-        ben = -row.original.products.reduce(
-          (total, product) =>
-            total + product.price * product.qty - product.discount,
-          0
-        );
-      }
-
-      return (
-        <p
-          className={`font-semibold text-center rounded-full w-fit py-2 px-3 ${
-            ben < 0 ? "bg-white  text-black  " : "bg-green-500"
-          }`}
-        >
-          {ben < 0 ? `- ${Math.abs(ben)}` : `+ ${ben}`}dhs
-        </p>
-      );
+      return <VenteBenefits rowData={row.original} />;
     },
   },
   {

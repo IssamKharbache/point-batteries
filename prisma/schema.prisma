@@ -115,7 +115,7 @@ model Vente {
   generateFacture Boolean        @default(false)
   venteBenifits   Float?
   ice             String?
-  user            User?          @relation(fields: [userId], references: [id])
+  user            User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
   products        VenteProduct[]
   returns         Return[]
 
