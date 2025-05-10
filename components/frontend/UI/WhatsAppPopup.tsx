@@ -9,8 +9,8 @@ const WhatsAppPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // WhatsApp Click-to-Chat URL
-  const phoneNumber = "+212656307044"; // Replace with your phone number
-  const message = "Bonjour, j'ai une question concernant ma commande."; // Pre-filled message
+  const phoneNumber = "+212601480488"; 
+  const message = "Bonjour, j'ai une question concernant ma commande."; 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     message
   )}`;
