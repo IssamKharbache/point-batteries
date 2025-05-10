@@ -99,7 +99,7 @@ const Footer = ({ username }: FooterProps) => {
                 <div className="text-white">
                   <p className="text-gray-400">Numéro de Téléphone</p>
                   <p className="text-white">
-                    +212 656 307 044 / +212 531 510 011
+                   +212 601-480488 / +212 531 510 011
                   </p>
                 </div>
                 <div>
