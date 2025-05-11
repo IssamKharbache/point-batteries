@@ -1,17 +1,17 @@
+
 "use client";
 
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/utils/index";
+import Link from "next/link";
 import DeleteActionButton from "@/components/backend/table/DeleteActionButton";
 import BonDeLivraison from "@/components/backend/vente/BonDeLivraison";
 import { PaymentTypeEdit } from "@/components/backend/vente/PaymentTypeEdit";
 import VenteBenefits from "@/components/backend/vente/VenteBenifice";
-import { Button } from "@/components/ui/button";
-import { usePaymentTypeLoadingStore } from "@/context/store";
-import { formatDate } from "@/lib/utils/index";
 import { PaymentType, Return } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
 
+// Assuming the existing `VenteType` and `VenteProduct` definitions
 export interface VenteType {
   id: string;
   userId: string;
@@ -39,6 +39,7 @@ interface VenteProduct {
   marque: string;
   refProduct: string;
   codeGarantie: string;
+  commission : number;
 }
 
 export const columns: ColumnDef<VenteType>[] = [
@@ -54,7 +55,6 @@ export const columns: ColumnDef<VenteType>[] = [
     accessorKey: "clientNom",
     header: "Nom du client",
   },
-
   {
     accessorKey: "createdAt",
     header: "Date de creation",
@@ -80,6 +80,35 @@ export const columns: ColumnDef<VenteType>[] = [
       return <VenteBenefits rowData={row.original} />;
     },
   },
+ {
+  id: "commission",
+  header: "Commission",
+  cell: ({ row }) => {
+    const hasCommission = row.original.products.some(
+      (product) => product && product.commission > 0
+    );
+    const commissionAmount = row.original.products.reduce((total, product) => {
+      return total + (product.commission || 0);
+    }, 0);
+
+    // Determine if the background should be red based on paymentType
+    const isRedBackground = row.original.paymentType === "ACREDIT";
+
+    return (
+      <div
+        className={`p-2 rounded-lg ${
+          isRedBackground ? "bg-red-500" : "bg-white"
+        } ${commissionAmount > 0 ? 'text-green-500' : 'text-gray-500'}`}
+      >
+        {hasCommission ? (
+          <span>{commissionAmount.toFixed(2)} dhs</span>
+        ) : (
+          <span className={`${isRedBackground ? "text-white" : "text-red-500" }`}>Pas de commission</span>
+        )}
+      </div>
+    );
+  },
+},
   {
     id: "bondeliv",
     header: "Bon de livraison",
@@ -101,7 +130,6 @@ export const columns: ColumnDef<VenteType>[] = [
       );
     },
   },
-
   {
     id: "facture",
     header: `Facture`,
@@ -122,7 +150,7 @@ export const columns: ColumnDef<VenteType>[] = [
               row.original.paymentType === "ACREDIT"
                 ? "text-white"
                 : "text-red-500"
-            }  text-sm`}
+            } text-sm`}
           >
             X
           </p>
@@ -130,7 +158,6 @@ export const columns: ColumnDef<VenteType>[] = [
       }
     },
   },
-
   {
     id: "delete",
     header: "Supprimer",

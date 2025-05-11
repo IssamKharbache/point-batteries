@@ -123,14 +123,21 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
   });
 
   // Add this calculation right before your return statement
-  const totalNetSales = filteredVentes.reduce((total, vente) => {
-    return (
-      total +
-      vente.products.reduce((venteTotal, product) => {
-        return venteTotal + product.price * product.qty - product.discount;
-      }, 0)
-    );
-  }, 0);
+const totalNetSales = filteredVentes.reduce((total, vente) => {
+  return (
+    total +
+    vente.products.reduce((venteTotal, product) => {
+      // Subtract the commission from the price if it exists
+      const priceAfterCommission =
+        product.commission > 0
+          ? product.price - product.commission
+          : product.price;
+
+      // Calculate total after applying discount and commission
+      return venteTotal + priceAfterCommission * product.qty - product.discount;
+    }, 0)
+  );
+}, 0);
 
   return (
     <div className="container mx-auto p-6">
@@ -283,21 +290,28 @@ const VenteJournal: React.FC<VenteJournalProps> = ({ ventes }) => {
               </TableRow>
             ) : (
               filteredVentes.flatMap((vente) =>
-                vente.products.map((product, index) => (
+                vente.products.map((product, index) => {
+                  const priceAfterCommission =
+          product.commission > 0
+            ? product.price - product.commission
+            : product.price;
+
+                  return  (
                   <TableRow key={`${vente.id}-${index}`}>
                     <TableCell className="font-medium">
                       {product.designationProduit}
                     </TableCell>
                     <TableCell>{product.qty}</TableCell>
                     <TableCell>
-                      {(product.price * product.qty - product.discount).toFixed(
+                      {(priceAfterCommission * product.qty - product.discount).toFixed(
                         2
                       )}{" "}
                       DH
                     </TableCell>
                     <TableCell>{vente.nomDuCaissier}</TableCell>
                   </TableRow>
-                ))
+                )
+                })
               )
             )}
           </TableBody>
