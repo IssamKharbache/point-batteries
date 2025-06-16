@@ -141,15 +141,15 @@ const OrderDetailsDialog = () => {
                             <h3 className="text-lg font-bold">
                                 Articles commandés
                             </h3>
-                            {orderWithItems.orderItems.map((item, index) => (
+                            {orderWithItems.orderItems.map((item) => (
                                 <div
                                     key={item.id}
                                     className="flex flex-wrap justify-between items-center bg-gray-100/80 py-4 px-8 rounded-lg"
                                 >
                                     <div className="flex items-center gap-4 w-full md:w-auto">
                                         <img
-                                            src={item.imageUrl}
-                                            alt={item.title}
+                                            src={item.imageUrl || ""}
+                                            alt={item.title || ""}
                                             className="w-16 h-16 object-contain border rounded"
                                         />
                                         <div className="flex flex-col">
